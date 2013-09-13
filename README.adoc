@@ -1,0 +1,13 @@
+= asciidoctor-chrome-extension, AsciiDoc.js Chrome Extension
+Guillaume Grossetie
+:sources: https://github.com/Mogztter/asciidoctor-chrome-extension
+:license: https://github.com/Mogztter/asciidoctor-chrome-extension/blob/master/LICENSE
+
+This project uses https://github.com/asciidoctor/asciidoctor.js[Asciidoctor.js] to render AsciiDoc as HTML inside Chrome!
+
+== Copyright
+
+Copyright (C) 2013 Guillaume Grossetie.
+Free use of this software is granted under the terms of the MIT License.
+
+See the {license}[LICENSE] file for details.
