@@ -5,17 +5,18 @@
     });
 
     /**
-     * Render AsciiDoc content
+     * AsciiDocify the content!
      */
-    function render() {
+    function asciidocify() {
         $.ajax({
             url:location.href,
             cache:false,
-            complete:function() {
-                var data = document.body.innerText;
-                $(document.body).html('');
-                var generatedHtml = Opal.Asciidoctor.$render(data, ASCIIDOCTOR_OPTIONS);
-                $(document.body).html("<div id='content'>" + generatedHtml + "</div>");
+            complete:function(xhr) {
+                var contentType = xhr.getResponseHeader('Content-Type');
+                if(contentType && (contentType.indexOf('html') > -1)) {
+                    return;
+                }
+                render();
             }
         });
     }
@@ -37,8 +38,17 @@
         document.head.appendChild(asciidoctorLink);
     }
 
-    appendStyles();
+    /**
+     * Render AsciiDoc content as HTML
+     */
+    function render() {
+        appendStyles();
+        var data = document.body.innerText;
+        $(document.body).html('');
+        var generatedHtml = Opal.Asciidoctor.$render(data, ASCIIDOCTOR_OPTIONS);
+        $(document.body).html("<div id='content'>" + generatedHtml + "</div>");
+    }
 
-    render();
+    asciidocify();
 
 }(document));
