@@ -1,0 +1,41 @@
+{
+    "name":"AsciiDoctor.js Live Preview",
+    "version":"0.1",
+    "manifest_version":2,
+
+    "description":"Render AsciiDoc (.ad, .adoc, .asciidoc) as HTML inside Chrome!",
+
+    "content_scripts":[
+        {
+            "matches":[
+                "http://*/*.ad",
+                "http://*/*.adoc",
+                "http://*/*.asciidoc",
+                "https://*/*.ad",
+                "https://*/*.adoc",
+                "https://*/*.asciidoc",
+                "file://*/*.ad",
+                "file://*/*.adoc",
+                "file://*/*.asciidoc"
+            ],
+            "js":[
+                "js/jquery.js",
+                "js/opal.js",
+                "js/asciidoctor.js",
+                "js/asciidocify.js"
+            ]
+        }
+    ],
+    "web_accessible_resources":[
+        "css/asciidoctor.css",
+        "css/bootstrap.min.css"
+    ],
+    "permissions":[
+        "storage",
+        "tabs",
+        "<all_urls>"
+    ],
+    "browser_action":{
+        "default_title":"AsciiDoctor.js Preview"
+    }
+}
