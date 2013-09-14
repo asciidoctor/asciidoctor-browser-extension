@@ -1,5 +1,5 @@
 {
-    "name":"AsciiDoctor.js Live Preview",
+    "name":"Asciidoctor.js Live Preview",
     "version":"0.2",
     "manifest_version":2,
 
@@ -36,6 +36,6 @@
         "<all_urls>"
     ],
     "browser_action":{
-        "default_title":"AsciiDoctor.js Preview"
+        "default_title":"Asciidoctor.js Preview"
     }
 }
