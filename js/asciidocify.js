@@ -1,5 +1,7 @@
 (function (document) {
 
+    var ENABLE_RENDER_KEY = 'ENABLE_RENDER';
+
     var ASCIIDOCTOR_OPTIONS = Opal.hash2([ 'attributes' ], {
         'attributes':[ 'notitle!' ]
     });
@@ -11,12 +13,17 @@
         $.ajax({
             url:location.href,
             cache:false,
-            complete:function(xhr) {
-                var contentType = xhr.getResponseHeader('Content-Type');
-                if(contentType && (contentType.indexOf('html') > -1)) {
-                    return;
-                }
-                render();
+            complete:function (xhr) {
+                chrome.storage.local.get(ENABLE_RENDER_KEY, function (items) {
+                    var enabled = items[ENABLE_RENDER_KEY];
+                    if (enabled) {
+                        var contentType = xhr.getResponseHeader('Content-Type');
+                        if (contentType && (contentType.indexOf('html') > -1)) {
+                            return;
+                        }
+                        render();
+                    }
+                });
             }
         });
     }

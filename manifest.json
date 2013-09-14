@@ -37,5 +37,10 @@
     ],
     "browser_action":{
         "default_title":"Asciidoctor.js Preview"
+    },
+    "background":{
+        "scripts":[
+            "js/background.js"
+        ]
     }
 }
