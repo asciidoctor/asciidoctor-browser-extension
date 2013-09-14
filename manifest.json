@@ -27,8 +27,7 @@
         }
     ],
     "web_accessible_resources":[
-        "css/asciidoctor.css",
-        "css/bootstrap.min.css"
+        "css/asciidoctor.css"
     ],
     "permissions":[
         "storage",

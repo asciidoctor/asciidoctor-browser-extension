@@ -32,12 +32,6 @@
      * Append css files
      */
     function appendStyles() {
-        var bootstrapLink = document.createElement('link');
-        bootstrapLink.rel = 'stylesheet';
-        bootstrapLink.id = 'bootstrap-style';
-        bootstrapLink.href = chrome.extension.getURL('css/bootstrap.min.css');
-        document.head.appendChild(bootstrapLink);
-
         var asciidoctorLink = document.createElement('link');
         asciidoctorLink.rel = 'stylesheet';
         asciidoctorLink.id = 'asciidoctor-style';
