@@ -46,8 +46,20 @@
         appendStyles();
         var data = document.body.innerText;
         $(document.body).html('');
-        var generatedHtml = Opal.Asciidoctor.$render(data, ASCIIDOCTOR_OPTIONS);
+        var generatedHtml = undefined;
+        try {
+            generatedHtml = Opal.Asciidoctor.$render(data, ASCIIDOCTOR_OPTIONS);
+        }
+        catch (e) {
+            errorMessage(e.name + " : " + e.message);
+            return;
+        }
         $(document.body).html("<div id='content'>" + generatedHtml + "</div>");
+    }
+
+    function errorMessage(message) {
+        var messageText = "<p>" + message + "</p>";
+        $(document.body).html("<div id='content'><h4>Error</h4>" + messageText + "</div>");
     }
 
     asciidocify();
