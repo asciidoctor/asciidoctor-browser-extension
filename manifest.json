@@ -3,19 +3,22 @@
     "version":"0.2.2",
     "manifest_version":2,
 
-    "description":"Render AsciiDoc (.ad, .adoc, .asciidoc) as HTML inside Chrome!",
+    "description":"Render AsciiDoc (.ad, .adoc, .asc, .asciidoc) as HTML inside Chrome!",
 
     "content_scripts":[
         {
             "matches":[
                 "http://*/*.ad",
                 "http://*/*.adoc",
+                "http://*/*.asc",
                 "http://*/*.asciidoc",
                 "https://*/*.ad",
                 "https://*/*.adoc",
+                "https://*/*.asc",
                 "https://*/*.asciidoc",
                 "file://*/*.ad",
                 "file://*/*.adoc",
+                "file://*/*.asc",
                 "file://*/*.asciidoc"
             ],
             "js":[
