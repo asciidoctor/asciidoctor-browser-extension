@@ -2,8 +2,24 @@
 Guillaume Grossetie
 :sources: https://github.com/asciidoctor/asciidoctor-chrome-extension
 :license: https://github.com/asciidoctor/asciidoctor-chrome-extension/blob/master/LICENSE
+:webstore: https://chrome.google.com/webstore/detail/asciidoctorjs-live-previe/iaalpfgpbocpdfblpnhhgllgbdbchmia
 
 This project uses https://github.com/asciidoctor/asciidoctor.js[Asciidoctor.js] to render AsciiDoc as HTML inside Chrome!
+
+== Usage
+
+ 1. Install extension from {webstore}[Chrome Web Store]
+ 2. Check `Allow access to file URLs` in `chrome://extensions`
+ 3. Open local or remote .ad, .adoc, .asc, .asciidoc file in Chrome
+ 4. Enjoy!
+
+== Changelog
+
+=== 0.2.3
+
+ * Auto reload, you don't need to refresh your browser anymore!
+ * Shiny icon in `chrome://extensions/`
+ * Support .asc file extension (thanks @mojavelinux)
 
 == Copyright
 
