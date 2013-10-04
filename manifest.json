@@ -5,6 +5,10 @@
 
     "description":"Render AsciiDoc (.ad, .adoc, .asc, .asciidoc) as HTML inside Chrome!",
 
+    "icons": { "16": "img/asciidoc_icon_16.png",
+               "48": "img/asciidoc_icon_48.png",
+               "128": "img/asciidoc_icon_128.png" },
+
     "content_scripts":[
         {
             "matches":[
