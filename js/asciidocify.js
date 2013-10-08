@@ -29,6 +29,7 @@
             var enabled = items[ENABLE_RENDER_KEY];
             // Extension is enabled
             if (enabled) {
+                appendStyles();
                 render(document.body.innerText);
             }
             startAutoReload();
@@ -88,7 +89,6 @@
      * Render AsciiDoc content as HTML
      */
     function render(data) {
-        appendStyles();
         $(document.body).html('');
         var generatedHtml = undefined;
         try {
