@@ -3,6 +3,8 @@
     var autoReloadInterval;
     var AUTO_RELOAD_INTERVAL_TIME = 2000;
     var ENABLE_RENDER_KEY = 'ENABLE_RENDER';
+    var LIVERELOADJS_DETECTED_KEY = 'LIVERELOADJS_DETECTED';
+    var LIVERELOADJS_FILENAME = "livereload.js";
 
     var ASCIIDOCTOR_OPTIONS = Opal.hash2([ 'attributes' ], {
         'attributes':[ 'notitle!' ]
@@ -37,28 +39,34 @@
     }
 
     function reloadContent(data) {
-        var key = 'md5' + location.href;
-        chrome.storage.local.get(key, function (items) {
-            var md5sum = items[key];
-            if (md5sum && md5sum == md5(data)) {
-                return;
+        chrome.storage.local.get(LIVERELOADJS_DETECTED_KEY, function (items) {
+            var liveReloadJsDetected = items[LIVERELOADJS_DETECTED_KEY];
+            // LiveReload.js has been detected
+            if (!liveReloadJsDetected) {
+                var key = 'md5' + location.href;
+                chrome.storage.local.get(key, function (items) {
+                    var md5sum = items[key];
+                    if (md5sum && md5sum == md5(data)) {
+                        return;
+                    }
+                    // Content has changed...
+                    chrome.storage.local.get(ENABLE_RENDER_KEY, function (items) {
+                        var enabled = items[ENABLE_RENDER_KEY];
+                        // Extension is enabled
+                        if (enabled) {
+                            // Render Asciidoc in html
+                            render(data);
+                        } else {
+                            // Display plain content
+                            $(document.body).html("<pre style='word-wrap: break-word; white-space: pre-wrap;'>" + $(document.body).text(data).html() + "</pre>");
+                        }
+                        // Update md5sum
+                        var value = {};
+                        value[key] = md5(data);
+                        chrome.storage.local.set(value);
+                    });
+                });
             }
-            // Content has changed...
-            chrome.storage.local.get(ENABLE_RENDER_KEY, function (items) {
-                var enabled = items[ENABLE_RENDER_KEY];
-                // Extension is enabled
-                if (enabled) {
-                    // Render Asciidoc in html
-                    render(data);
-                } else {
-                    // Display plain content
-                    $(document.body).html("<pre style='word-wrap: break-word; white-space: pre-wrap;'>" + $(document.body).text(data).html() + "</pre>");
-                }
-                // Update md5sum
-                var value = {};
-                value[key] = md5(data);
-                chrome.storage.local.set(value);
-            });
         });
     }
 
@@ -89,6 +97,8 @@
      * Render AsciiDoc content as HTML
      */
     function render(data) {
+        var scripts = $(document.body).find("script");
+        detectLiveReloadJs(scripts);
         $(document.body).html('');
         var generatedHtml = undefined;
         try {
@@ -99,6 +109,38 @@
             return;
         }
         $(document.body).html("<div id='content'>" + generatedHtml + "</div>");
+        appendScripts(scripts);
+    }
+
+    /**
+     * Detect LiveReload.js script to avoid multiple refreshes
+     */
+    function detectLiveReloadJs(scripts) {
+        var length = scripts.length,
+            script = null;
+        var liveReloadDetected = false;
+        for (var i = 0; i < length; i++) {
+            script = scripts[i];
+            console.log(script.src);
+            if (script.src.indexOf(LIVERELOADJS_FILENAME) != -1) {
+                // LiveReload.js detected!
+                liveReloadDetected = true;
+                break;
+            }
+        }
+        var value = {};
+        value[LIVERELOADJS_DETECTED_KEY] = liveReloadDetected;
+        chrome.storage.local.set(value);
+    }
+
+    /**
+     * Append saved scripts
+     */
+    function appendScripts(scripts) {
+        var length = scripts.length;
+        for (var i = 0; i < length; i++) {
+            document.body.appendChild(scripts[i]);
+        }
     }
 
     /**
