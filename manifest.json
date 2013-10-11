@@ -5,9 +5,11 @@
 
     "description":"Render AsciiDoc (.ad, .adoc, .asc, .asciidoc) as HTML inside Chrome!",
 
-    "icons": { "16": "img/asciidoc_icon_16.png",
-               "48": "img/asciidoc_icon_48.png",
-               "128": "img/asciidoc_icon_128.png" },
+    "icons":{
+        "16":"img/asciidoc_icon_16.png",
+        "48":"img/asciidoc_icon_48.png",
+        "128":"img/asciidoc_icon_128.png"
+    },
 
     "content_scripts":[
         {
@@ -26,6 +28,7 @@
                 "file://*/*.asciidoc"
             ],
             "js":[
+                "js/highlight.min.js",
                 "js/jquery.js",
                 "js/opal.js",
                 "js/asciidoctor.js",
@@ -35,7 +38,9 @@
         }
     ],
     "web_accessible_resources":[
-        "css/asciidoctor.css"
+        "css/asciidoctor.css",
+        "css/github.min.css",
+        "js/highlight.min.js"
     ],
     "permissions":[
         "storage",

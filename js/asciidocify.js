@@ -32,6 +32,7 @@
             // Extension is enabled
             if (enabled) {
                 appendStyles();
+                appendHighlightJsScript();
                 render(document.body.innerText);
             }
             startAutoReload();
@@ -110,6 +111,7 @@
         }
         $(document.body).html("<div id='content'>" + generatedHtml + "</div>");
         appendScripts(scripts);
+        syntaxHighlighting();
     }
 
     /**
@@ -144,6 +146,25 @@
     }
 
     /**
+     * Syntax highlighting
+     */
+    function syntaxHighlighting() {
+        $('pre > code').each(function (i, e) {
+            hljs.highlightBlock(e);
+        });
+    }
+
+    /**
+     * Append highlight.js script
+     */
+    function appendHighlightJsScript() {
+        var highlightJsScript = document.createElement('script');
+        highlightJsScript.type = 'text/javascript';
+        highlightJsScript.src = chrome.extension.getURL('js/highlight.min.js');
+        document.head.appendChild(highlightJsScript);
+    }
+
+    /**
      * Append css files
      */
     function appendStyles() {
@@ -152,6 +173,11 @@
         asciidoctorLink.id = 'asciidoctor-style';
         asciidoctorLink.href = chrome.extension.getURL('css/asciidoctor.css');
         document.head.appendChild(asciidoctorLink);
+        var githubLink = document.createElement('link');
+        githubLink.rel = 'stylesheet';
+        githubLink.id = 'github-highlight-style';
+        githubLink.href = chrome.extension.getURL('css/github.min.css');
+        document.head.appendChild(githubLink);
     }
 
     /**
