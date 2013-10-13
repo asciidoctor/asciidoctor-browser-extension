@@ -45,7 +45,8 @@
     "permissions":[
         "storage",
         "tabs",
-        "<all_urls>"
+        "<all_urls>",
+        "contextMenus"
     ],
     "browser_action":{
         "default_title":"Asciidoctor.js Preview"

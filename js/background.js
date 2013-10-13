@@ -1,5 +1,11 @@
 var enableRender = true;
 
+function sendUrlToAsciidoctorEditor(info, tab) {
+    // Send tab.url to Asciidoctor Editor App
+    chrome.runtime.sendMessage("jcafjdafpaomnmpffgphdalkdhnnggln", tab.url)
+}
+chrome.contextMenus.create({"title":"Send to Asciidoctor Editor", "onclick":sendUrlToAsciidoctorEditor});
+
 function enableDisableRender() {
     // Save the status of the extension
     chrome.storage.local.set({'ENABLE_RENDER':enableRender});
