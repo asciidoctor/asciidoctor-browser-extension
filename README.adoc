@@ -15,6 +15,10 @@ This project uses https://github.com/asciidoctor/asciidoctor.js[Asciidoctor.js] 
 
 == Changelog
 
+=== 0.2.4
+ * Add highlight.js for syntax highlighting
+ * Add context menu to send the "browser content" to the Asciidoctor Editor
+
 === 0.2.3
 
  * Auto reload, you don't need to refresh your browser anymore!
