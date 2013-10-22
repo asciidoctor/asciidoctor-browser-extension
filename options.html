@@ -1,0 +1,33 @@
+<html>
+<head>
+    <title>Asciidoctor.js Live Preview Options</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1>Options</h1>
+
+    <form class="form-horizontal" role="form">
+        <div class="form-group">
+            <label for="inputCustomAttributes" class="col-lg-2 control-label">Custom attributes</label>
+
+            <div class="col-lg-10">
+                <input type="text" class="form-control" id="inputCustomAttributes">
+                <span class="help-block">String of space-separated key/value attribute pairs.</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-lg-offset-2 col-lg-10">
+                <a id="save" class="btn btn-default">Save</a>
+            </div>
+        </div>
+    </form>
+    <br/>
+
+    <div id="status"></div>
+</div>
+</body>
+<script src="js/options.js"></script>
+</html>

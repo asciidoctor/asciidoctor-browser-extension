@@ -3,12 +3,9 @@
     var autoReloadInterval;
     var AUTO_RELOAD_INTERVAL_TIME = 2000;
     var ENABLE_RENDER_KEY = 'ENABLE_RENDER';
+    var CUSTOM_ATTRIBUTES_KEY = 'CUSTOM_ATTRIBUTES';
     var LIVERELOADJS_DETECTED_KEY = 'LIVERELOADJS_DETECTED';
     var LIVERELOADJS_FILENAME = "livereload.js";
-
-    var ASCIIDOCTOR_OPTIONS = Opal.hash2([ 'attributes' ], {
-        'attributes':[ 'notitle!' ]
-    });
 
     /**
      * AsciiDocify the content!
@@ -98,20 +95,39 @@
      * Render AsciiDoc content as HTML
      */
     function render(data) {
-        var scripts = $(document.body).find("script");
-        detectLiveReloadJs(scripts);
-        $(document.body).html('');
-        var generatedHtml = undefined;
-        try {
-            generatedHtml = Opal.Asciidoctor.$render(data, ASCIIDOCTOR_OPTIONS);
+        chrome.storage.local.get(CUSTOM_ATTRIBUTES_KEY, function (items) {
+            var scripts = $(document.body).find("script");
+            detectLiveReloadJs(scripts);
+            $(document.body).html('');
+            var generatedHtml = undefined;
+            try {
+                var asciidoctorOptions = buildAsciidoctorOptions(items);
+                generatedHtml = Opal.Asciidoctor.$render(data, asciidoctorOptions);
+            }
+            catch (e) {
+                showErrorMessage(e.name + " : " + e.message);
+                return;
+            }
+            $(document.body).html("<div id='content'>" + generatedHtml + "</div>");
+            appendScripts(scripts);
+            syntaxHighlighting();
+        });
+    }
+
+    /**
+     * Build Asciidoctor options
+     */
+    function buildAsciidoctorOptions(items) {
+        var customAttributes = items[CUSTOM_ATTRIBUTES_KEY];
+        var defaultAttributes = "notitle!";
+        if (customAttributes) {
+            attributes = defaultAttributes.concat(" ").concat(customAttributes);
+        } else {
+            attributes = defaultAttributes;
         }
-        catch (e) {
-            showErrorMessage(e.name + " : " + e.message);
-            return;
-        }
-        $(document.body).html("<div id='content'>" + generatedHtml + "</div>");
-        appendScripts(scripts);
-        syntaxHighlighting();
+        return Opal.hash2([ 'attributes' ], {
+            'attributes': attributes.split(/[ ]+/)
+        });
     }
 
     /**
@@ -123,7 +139,6 @@
         var liveReloadDetected = false;
         for (var i = 0; i < length; i++) {
             script = scripts[i];
-            console.log(script.src);
             if (script.src.indexOf(LIVERELOADJS_FILENAME) != -1) {
                 // LiveReload.js detected!
                 liveReloadDetected = true;

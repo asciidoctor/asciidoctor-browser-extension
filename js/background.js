@@ -24,5 +24,10 @@ function enableDisableRender() {
     });
 }
 
+function refreshOptions() {
+    var customAttributes = localStorage.getItem("CUSTOM_ATTRIBUTES");
+    chrome.storage.local.set({'CUSTOM_ATTRIBUTES':customAttributes});
+}
+
 chrome.browserAction.onClicked.addListener(enableDisableRender);
 enableDisableRender();
