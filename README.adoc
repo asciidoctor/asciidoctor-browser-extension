@@ -13,6 +13,14 @@ This project uses https://github.com/asciidoctor/asciidoctor.js[Asciidoctor.js] 
  3. Open local or remote .ad, .adoc, .asc, .asciidoc file in Chrome
  4. Enjoy!
 
+== Options
+
+The extension can be configured via an options page.
+
+To open the options page, right-click the extension icon and choose Options on the menu. You can also go to `chrome://extensions` and click the Options link.
+
+The options page let you add custom Asciidoctor attributes or change the theme of the AsciiDoc HTML output.
+
 == Changelog
 
 === 0.2.5
