@@ -40,7 +40,19 @@
         }
     ],
     "web_accessible_resources":[
-        "css/asciidoctor.css",
+        "css/themes/asciidoctor.css",
+        "css/themes/colony.css",
+        "css/themes/foundation.css",
+        "css/themes/foundation-lime.css",
+        "css/themes/foundation-potion.css",
+        "css/themes/github.css",
+        "css/themes/golo.css",
+        "css/themes/iconic.css",
+        "css/themes/maker.css",
+        "css/themes/readthedocs.css",
+        "css/themes/riak.css",
+        "css/themes/rocket-panda.css",
+        "css/themes/rubygems.css",
         "css/github.min.css",
         "js/highlight.min.js"
     ],

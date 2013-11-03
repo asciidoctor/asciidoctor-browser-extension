@@ -1,7 +1,10 @@
 // Saves options to localStorage.
 function save_options() {
-    var input = document.getElementById("inputCustomAttributes");
-    localStorage["CUSTOM_ATTRIBUTES"] = input.value;
+    var inputCustomAttributes = document.getElementById("inputCustomAttributes");
+    localStorage["CUSTOM_ATTRIBUTES"] = inputCustomAttributes.value;
+
+    var selectTheme = document.getElementById("selectTheme");
+    localStorage["THEME"] = selectTheme.value;
 
     // Update status to let user know options were saved.
     var alert = '<div class="alert alert-success alert-dismissable fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><b>{{message}}</b></div>';
@@ -10,14 +13,18 @@ function save_options() {
     chrome.extension.getBackgroundPage().refreshOptions()
 }
 
-// Restores select box state to saved value from localStorage.
+// Restores options to saved value from localStorage.
 function restore_options() {
     var customAttributes = localStorage["CUSTOM_ATTRIBUTES"];
-    if (!customAttributes) {
-        return;
+    if (customAttributes) {
+        var inputCustomAttributes = document.getElementById("inputCustomAttributes");
+        inputCustomAttributes.value = customAttributes;
     }
-    var input = document.getElementById("inputCustomAttributes");
-    input.value = customAttributes;
+    var theme = localStorage["THEME"];
+    if (theme) {
+        var selectTheme = document.getElementById("selectTheme");
+        selectTheme.value = theme;
+    }
 }
 
 document.addEventListener('DOMContentLoaded', restore_options);

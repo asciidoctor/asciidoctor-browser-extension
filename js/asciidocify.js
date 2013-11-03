@@ -4,6 +4,7 @@
     var AUTO_RELOAD_INTERVAL_TIME = 2000;
     var ENABLE_RENDER_KEY = 'ENABLE_RENDER';
     var CUSTOM_ATTRIBUTES_KEY = 'CUSTOM_ATTRIBUTES';
+    var THEME_KEY = 'THEME';
     var LIVERELOADJS_DETECTED_KEY = 'LIVERELOADJS_DETECTED';
     var LIVERELOADJS_FILENAME = "livereload.js";
 
@@ -183,16 +184,25 @@
      * Append css files
      */
     function appendStyles() {
-        var asciidoctorLink = document.createElement('link');
-        asciidoctorLink.rel = 'stylesheet';
-        asciidoctorLink.id = 'asciidoctor-style';
-        asciidoctorLink.href = chrome.extension.getURL('css/asciidoctor.css');
-        document.head.appendChild(asciidoctorLink);
-        var githubLink = document.createElement('link');
-        githubLink.rel = 'stylesheet';
-        githubLink.id = 'github-highlight-style';
-        githubLink.href = chrome.extension.getURL('css/github.min.css');
-        document.head.appendChild(githubLink);
+        chrome.storage.local.get(THEME_KEY, function (items) {
+            var theme = items[THEME_KEY];
+            console.log("theme !");
+            if (!theme) {
+                // Default theme
+                theme = "asciidoctor";
+            }
+            var themeLink = document.createElement('link');
+            themeLink.rel = 'stylesheet';
+            themeLink.id = 'asciidoctor-style';
+            themeLink.href = chrome.extension.getURL('css/themes/' + theme + '.css');
+            document.head.appendChild(themeLink);
+
+        });
+        var githubHighlightLink = document.createElement('link');
+        githubHighlightLink.rel = 'stylesheet';
+        githubHighlightLink.id = 'github-highlight-style';
+        githubHighlightLink.href = chrome.extension.getURL('css/github.min.css');
+        document.head.appendChild(githubHighlightLink);
     }
 
     /**

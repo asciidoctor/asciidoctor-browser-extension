@@ -27,6 +27,8 @@ function enableDisableRender() {
 function refreshOptions() {
     var customAttributes = localStorage.getItem("CUSTOM_ATTRIBUTES");
     chrome.storage.local.set({'CUSTOM_ATTRIBUTES':customAttributes});
+    var theme = localStorage.getItem("THEME");
+    chrome.storage.local.set({'THEME':theme});
 }
 
 chrome.browserAction.onClicked.addListener(enableDisableRender);
