@@ -15,7 +15,13 @@ This project uses https://github.com/asciidoctor/asciidoctor.js[Asciidoctor.js] 
 
 == Changelog
 
+=== 0.2.5
+
+ * Add configuration option for specifying custom attributes
+ * Allow to change the theme of AsciiDoc HTML output
+
 === 0.2.4
+
  * Add highlight.js for syntax highlighting
  * Add context menu to send the "browser content" to the Asciidoctor Editor
 
