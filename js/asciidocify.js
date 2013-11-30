@@ -31,7 +31,7 @@
             if (enabled) {
                 appendStyles();
                 appendHighlightJsScript();
-                render(document.body.innerText);
+                render(data.responseText);
             }
             startAutoReload();
         });
