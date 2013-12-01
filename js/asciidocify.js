@@ -186,7 +186,6 @@
     function appendStyles() {
         chrome.storage.local.get(THEME_KEY, function (items) {
             var theme = items[THEME_KEY];
-            //console.log("theme !");
             if (!theme) {
                 // Default theme
                 theme = "asciidoctor";
