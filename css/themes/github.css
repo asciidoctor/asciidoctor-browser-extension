@@ -1,5 +1,4 @@
-@import url(http://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.0/css/font-awesome.css);
-/*! normalize.css v2.1.1 | MIT License | git.io/normalize */
+/* normalize.css v2.1.1 | MIT License | git.io/normalize */
 /* ========================================================================== HTML5 display definitions ========================================================================== */
 /** Correct `block` display not defined in IE 8/9. */
 article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary { display: block; }
@@ -388,12 +387,16 @@ table.tableblock #preamble > .sectionbody > .paragraph:first-of-type p { font-si
 
 .exampleblock > .content > :last-child > :last-child, .exampleblock > .content .olist > ol > li:last-child > :last-child, .exampleblock > .content .ulist > ul > li:last-child > :last-child, .exampleblock > .content .qlist > ol > li:last-child > :last-child, .sidebarblock > .content > :last-child > :last-child, .sidebarblock > .content .olist > ol > li:last-child > :last-child, .sidebarblock > .content .ulist > ul > li:last-child > :last-child, .sidebarblock > .content .qlist > ol > li:last-child > :last-child { margin-bottom: 0; }
 
-.literalblock > .content pre, .listingblock > .content pre { background: #333333; border-width: 2px; border-style: solid; border-color: #dddddd; -webkit-border-radius: 3px; border-radius: 3px; padding: 0.66667em; word-wrap: break-word; }
-.literalblock > .content pre.nowrap, .listingblock > .content pre.nowrap { overflow-x: auto; white-space: pre; word-wrap: normal; }
-.literalblock > .content pre > code, .listingblock > .content pre > code { display: block; }
-@media only screen { .literalblock > .content pre, .listingblock > .content pre { font-size: 0.69333em; } }
-@media only screen and (min-width: 768px) { .literalblock > .content pre, .listingblock > .content pre { font-size: 0.78em; } }
-@media only screen and (min-width: 1280px) { .literalblock > .content pre, .listingblock > .content pre { font-size: 0.86667em; } }
+.literalblock pre:not([class]), .listingblock pre:not([class]) { background: #333333; }
+.literalblock pre, .literalblock pre[class], .listingblock pre, .listingblock pre[class] { border-width: 2px; border-style: solid; border-color: #dddddd; -webkit-border-radius: 3px; border-radius: 3px; padding: 0.66667em; word-wrap: break-word; }
+.literalblock pre.nowrap, .literalblock pre[class].nowrap, .listingblock pre.nowrap, .listingblock pre[class].nowrap { overflow-x: auto; white-space: pre; word-wrap: normal; }
+.literalblock pre > code, .literalblock pre[class] > code, .listingblock pre > code, .listingblock pre[class] > code { display: block; }
+@media only screen { .literalblock pre, .literalblock pre[class], .listingblock pre, .listingblock pre[class] { font-size: 0.69333em; } }
+@media only screen and (min-width: 768px) { .literalblock pre, .literalblock pre[class], .listingblock pre, .listingblock pre[class] { font-size: 0.78em; } }
+@media only screen and (min-width: 1280px) { .literalblock pre, .literalblock pre[class], .listingblock pre, .listingblock pre[class] { font-size: 0.86667em; } }
+
+.listingblock pre.highlight { padding: 0; }
+.listingblock pre.highlight > code { padding: 0.66667em; }
 
 .listingblock > .content { position: relative; }
 
@@ -644,12 +647,12 @@ h2 { color: #325D72; border-bottom: 1px solid #dddddd; }
 #header, #content, #footnotes { max-width: 660px; padding-left: 0; padding-right: 0; }
 
 #content ul { list-style-type: none; }
-#content ul li { background: url('../images/github/li-chevron.png?1383495631') 0 0.4em no-repeat; padding-left: .7em; }
+#content ul li { background: url('../images/github/li-chevron.png?1372292342') 0 0.4em no-repeat; padding-left: .7em; }
 
 .olist.procedure > ol { counter-reset: li; list-style: none; position: relative; }
 .olist.procedure > ol > li { position: relative; padding: 5px 0 5px 55px; margin-bottom: 5px; }
 .olist.procedure > ol > li:before { content: counter(li); counter-increment: li; position: absolute; top: 0; left: 0; height: 100%; width: 30px; padding: 0 10px 0 0; color: #999; font-size: 1.46667em; font-weight: bold; line-height: 1.6; text-align: right; border-right: 1px solid #ddd; }
 
-.quoteblock blockquote { background: url('../images/github/blockquote-arrow.png?1383495631') 0 2px no-repeat; padding-left: 1em; }
+.quoteblock blockquote { background: url('../images/github/blockquote-arrow.png?1372292342') 0 2px no-repeat; padding-left: 1em; }
 
 .sidebarblock > .content > .title { margin-top: -20px; margin-right: -20px; margin-left: -20px; margin-bottom: 20px; padding: 1em; font-size: 0.8em; background: #eaeaea; }

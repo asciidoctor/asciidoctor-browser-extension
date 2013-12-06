@@ -6,7 +6,7 @@
     var CUSTOM_ATTRIBUTES_KEY = 'CUSTOM_ATTRIBUTES';
     var THEME_KEY = 'THEME';
     var LIVERELOADJS_DETECTED_KEY = 'LIVERELOADJS_DETECTED';
-    var LIVERELOADJS_FILENAME = "livereload.js";
+    var LIVERELOADJS_FILENAME = 'livereload.js';
 
     /**
      * AsciiDocify the content!
@@ -57,7 +57,7 @@
                             render(data);
                         } else {
                             // Display plain content
-                            $(document.body).html("<pre style='word-wrap: break-word; white-space: pre-wrap;'>" + $(document.body).text(data).html() + "</pre>");
+                            $(document.body).html('<pre style="word-wrap: break-word; white-space: pre-wrap;">' + $(document.body).text(data).html() + '</pre>');
                         }
                         // Update md5sum
                         var value = {};
@@ -97,7 +97,7 @@
      */
     function render(data) {
         chrome.storage.local.get(CUSTOM_ATTRIBUTES_KEY, function (items) {
-            var scripts = $(document.body).find("script");
+            var scripts = $(document.body).find('script');
             detectLiveReloadJs(scripts);
             $(document.body).html('');
             var generatedHtml = undefined;
@@ -106,10 +106,10 @@
                 generatedHtml = Opal.Asciidoctor.$render(data, asciidoctorOptions);
             }
             catch (e) {
-                showErrorMessage(e.name + " : " + e.message);
+                showErrorMessage(e.name + ' : ' + e.message);
                 return;
             }
-            $(document.body).html("<div id='content'>" + generatedHtml + "</div>");
+            $(document.body).html('<div id="content">' + generatedHtml + '</div>');
             appendScripts(scripts);
             syntaxHighlighting();
         });
@@ -120,14 +120,14 @@
      */
     function buildAsciidoctorOptions(items) {
         var customAttributes = items[CUSTOM_ATTRIBUTES_KEY];
-        var defaultAttributes = "notitle!";
+        var defaultAttributes = 'showtitle';
         if (customAttributes) {
-            attributes = defaultAttributes.concat(" ").concat(customAttributes);
+            attributes = defaultAttributes.concat(' ').concat(customAttributes);
         } else {
             attributes = defaultAttributes;
         }
         return Opal.hash2([ 'attributes' ], {
-            'attributes': attributes.split(/[ ]+/)
+            'attributes': attributes
         });
     }
 
@@ -188,7 +188,7 @@
             var theme = items[THEME_KEY];
             if (!theme) {
                 // Default theme
-                theme = "asciidoctor";
+                theme = 'asciidoctor';
             }
             var themeLink = document.createElement('link');
             themeLink.rel = 'stylesheet';
@@ -209,8 +209,8 @@
      * @param message The error message
      */
     function showErrorMessage(message) {
-        var messageText = "<p>" + message + "</p>";
-        $(document.body).html("<div id='content'><h4>Error</h4>" + messageText + "</div>");
+        var messageText = '<p>' + message + '</p>';
+        $(document.body).html('<div id="content"><h4>Error</h4>' + messageText + '</div>');
     }
 
     asciidocify();
