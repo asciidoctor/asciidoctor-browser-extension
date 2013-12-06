@@ -120,7 +120,7 @@
      */
     function buildAsciidoctorOptions(items) {
         var customAttributes = items[CUSTOM_ATTRIBUTES_KEY];
-        var defaultAttributes = "notitle!";
+        var defaultAttributes = "notitle! toc! toc2!";
         if (customAttributes) {
             attributes = defaultAttributes.concat(" ").concat(customAttributes);
         } else {
