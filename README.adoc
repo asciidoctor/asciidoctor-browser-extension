@@ -13,6 +13,17 @@ This project uses https://github.com/asciidoctor/asciidoctor.js[Asciidoctor.js] 
  3. Open local or remote .ad, .adoc, .asc, .asciidoc file in Chrome
  4. Enjoy!
 
+== Installation
+
+Loading your local copy of the extension on Chrome is super easy:
+
+ 1. Check `Developer mode` in `chrome://extensions`
+ 2. Click `Load unpacked extension...` and select the extension root directory
+ 3. That's all
+
+To see your changes, click the `Reload (Ctrl+R)` link in `chrome://extensions`.
+If you want to create a `Pack extension` just make a `zip` file of the extension root directory.
+
 == Options
 
 The extension can be configured via an options page.
