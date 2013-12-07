@@ -31,7 +31,7 @@
             ],
             "js":[
                 "js/highlight.min.js",
-                "js/jquery.js",
+                "js/jquery.min.js",
                 "js/opal.js",
                 "js/asciidoctor.js",
                 "js/asciidocify.js",
