@@ -34,6 +34,11 @@ The options page let you add custom Asciidoctor attributes or change the theme o
 
 == Changelog
 
+=== 0.3.0
+
+ * Upgrade to Asciidoctor 1.5.0.preview.1
+ * Add integration with Font Awesome 3.2.1
+
 === 0.2.5
 
  * Add configuration option for specifying custom attributes
