@@ -103,7 +103,11 @@
             var generatedHtml = undefined;
             try {
                 var asciidoctorOptions = buildAsciidoctorOptions(items);
-                generatedHtml = Opal.Asciidoctor.$render(data, asciidoctorOptions);
+                asciidoctorDocument = Opal.Asciidoctor.$load(data, asciidoctorOptions);
+                if (asciidoctorDocument.attributes.map['icons'] == 'font') {
+                    appendFontAwesomeStyle();
+                }
+                generatedHtml = asciidoctorDocument.$render();
             }
             catch (e) {
                 showErrorMessage(e.name + ' : ' + e.message);
@@ -120,7 +124,7 @@
      */
     function buildAsciidoctorOptions(items) {
         var customAttributes = items[CUSTOM_ATTRIBUTES_KEY];
-        var defaultAttributes = 'showtitle toc! toc2!';
+        var defaultAttributes = 'showtitle toc! toc2! icons=font@';
         if (customAttributes) {
             attributes = defaultAttributes.concat(' ').concat(customAttributes);
         } else {
@@ -202,6 +206,16 @@
         githubHighlightLink.id = 'github-highlight-style';
         githubHighlightLink.href = chrome.extension.getURL('css/github.min.css');
         document.head.appendChild(githubHighlightLink);
+    }
+
+    function appendFontAwesomeStyle() {
+        if ($('#font-awesome-style').length == 0) {
+            var fontAwesomeLink = document.createElement('link');
+            fontAwesomeLink.rel = 'stylesheet';
+            fontAwesomeLink.id = 'font-awesome-style';
+            fontAwesomeLink.href = chrome.extension.getURL('css/font-awesome.min.css');
+            document.head.appendChild(fontAwesomeLink);
+        }
     }
 
     /**
