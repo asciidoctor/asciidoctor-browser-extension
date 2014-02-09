@@ -3,7 +3,6 @@
     var autoReloadInterval;
     var AUTO_RELOAD_INTERVAL_TIME = 2000;
     var ENABLE_RENDER_KEY = 'ENABLE_RENDER';
-    var THEME_KEY = 'THEME';
 
     /**
      * AsciiDocify the content!
@@ -87,40 +86,6 @@
     function isHtmlContentType(data) {
         var contentType = data.getResponseHeader('Content-Type');
         return contentType && (contentType.indexOf('html') > -1);
-    }
-
-    /**
-     * Append highlight.js script
-     */
-    function appendHighlightJsScript() {
-        var highlightJsScript = document.createElement('script');
-        highlightJsScript.type = 'text/javascript';
-        highlightJsScript.src = chrome.extension.getURL('js/highlight.min.js');
-        document.head.appendChild(highlightJsScript);
-    }
-
-    /**
-     * Append css files
-     */
-    function appendStyles() {
-        chrome.storage.local.get(THEME_KEY, function (items) {
-            var theme = items[THEME_KEY];
-            if (!theme) {
-                // Default theme
-                theme = 'asciidoctor';
-            }
-            var themeLink = document.createElement('link');
-            themeLink.rel = 'stylesheet';
-            themeLink.id = 'asciidoctor-style';
-            themeLink.href = chrome.extension.getURL('css/themes/' + theme + '.css');
-            document.head.appendChild(themeLink);
-
-        });
-        var githubHighlightLink = document.createElement('link');
-        githubHighlightLink.rel = 'stylesheet';
-        githubHighlightLink.id = 'github-highlight-style';
-        githubHighlightLink.href = chrome.extension.getURL('css/github.min.css');
-        document.head.appendChild(githubHighlightLink);
     }
 
     asciidocify();

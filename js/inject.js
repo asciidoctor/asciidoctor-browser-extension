@@ -1,6 +1,7 @@
 var alreadyRun = false;
 function inject(data){
     if (!alreadyRun) {
+        appendStyles();
         render(data);
         alreadyRun = true; 
     }

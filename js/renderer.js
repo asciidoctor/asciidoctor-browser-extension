@@ -1,6 +1,7 @@
 var CUSTOM_ATTRIBUTES_KEY = 'CUSTOM_ATTRIBUTES';
 var LIVERELOADJS_DETECTED_KEY = 'LIVERELOADJS_DETECTED';
 var LIVERELOADJS_FILENAME = 'livereload.js';
+var THEME_KEY = 'THEME';
 
 /**
  * Render AsciiDoc content as HTML
@@ -18,7 +19,6 @@ var render = function (data) {
                 appendFontAwesomeStyle();
             }
             generatedHtml = asciidoctorDocument.$render();
-            console.log('generatedHtml '  + generatedHtml);
         }
         catch (e) {
             showErrorMessage(e.name + ' : ' + e.message);
@@ -94,6 +94,40 @@ function appendFontAwesomeStyle() {
         fontAwesomeLink.href = chrome.extension.getURL('css/font-awesome.min.css');
         document.head.appendChild(fontAwesomeLink);
     }
+}
+
+/**
+ * Append highlight.js script
+ */
+function appendHighlightJsScript() {
+    var highlightJsScript = document.createElement('script');
+    highlightJsScript.type = 'text/javascript';
+    highlightJsScript.src = chrome.extension.getURL('js/highlight.min.js');
+    document.head.appendChild(highlightJsScript);
+}
+
+/**
+ * Append css files
+ */
+function appendStyles() {
+    chrome.storage.local.get(THEME_KEY, function (items) {
+        var theme = items[THEME_KEY];
+        if (!theme) {
+            // Default theme
+            theme = 'asciidoctor';
+        }
+        var themeLink = document.createElement('link');
+        themeLink.rel = 'stylesheet';
+        themeLink.id = 'asciidoctor-style';
+        themeLink.href = chrome.extension.getURL('css/themes/' + theme + '.css');
+        document.head.appendChild(themeLink);
+
+    });
+    var githubHighlightLink = document.createElement('link');
+    githubHighlightLink.rel = 'stylesheet';
+    githubHighlightLink.id = 'github-highlight-style';
+    githubHighlightLink.href = chrome.extension.getURL('css/github.min.css');
+    document.head.appendChild(githubHighlightLink);
 }
 
 /**
