@@ -3,6 +3,9 @@ function save_options() {
     var inputCustomAttributes = document.getElementById("inputCustomAttributes");
     localStorage["CUSTOM_ATTRIBUTES"] = inputCustomAttributes.value;
 
+    var selectSafeMode = document.getElementById("selectSafeMode");
+    localStorage["SAFE_MODE"] = selectSafeMode.value;
+
     var selectTheme = document.getElementById("selectTheme");
     localStorage["THEME"] = selectTheme.value;
 
@@ -20,11 +23,14 @@ function restore_options() {
         var inputCustomAttributes = document.getElementById("inputCustomAttributes");
         inputCustomAttributes.value = customAttributes;
     }
-    var theme = localStorage["THEME"];
-    if (theme) {
-        var selectTheme = document.getElementById("selectTheme");
-        selectTheme.value = theme;
-    }
+
+    var safeMode = localStorage["SAFE_MODE"] || 'secure';
+    var selectSafeMode = document.getElementById("selectSafeMode");
+    selectSafeMode.value = safeMode;
+
+    var theme = localStorage["THEME"] || 'asciidoctor';
+    var selectTheme = document.getElementById("selectTheme");
+    selectTheme.value = theme;
 }
 
 document.addEventListener('DOMContentLoaded', restore_options);

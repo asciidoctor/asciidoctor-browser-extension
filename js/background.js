@@ -61,10 +61,11 @@ function enableDisableRender() {
 }
 
 function refreshOptions() {
-    var customAttributes = localStorage.getItem("CUSTOM_ATTRIBUTES");
-    chrome.storage.local.set({'CUSTOM_ATTRIBUTES':customAttributes});
-    var theme = localStorage.getItem("THEME");
-    chrome.storage.local.set({'THEME':theme});
+    chrome.storage.local.set({
+        'CUSTOM_ATTRIBUTES': localStorage['CUSTOM_ATTRIBUTES'],
+        'SAFE_MODE': localStorage['SAFE_MODE'],
+        'THEME': localStorage['THEME']
+    });
 }
 
 chrome.browserAction.onClicked.addListener(enableDisableRender);
