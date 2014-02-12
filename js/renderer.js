@@ -1,4 +1,5 @@
 var CUSTOM_ATTRIBUTES_KEY = 'CUSTOM_ATTRIBUTES';
+var SAFE_MODE_KEY = 'SAFE_MODE';
 var LIVERELOADJS_DETECTED_KEY = 'LIVERELOADJS_DETECTED';
 var LIVERELOADJS_FILENAME = 'livereload.js';
 var THEME_KEY = 'THEME';
@@ -7,13 +8,13 @@ var THEME_KEY = 'THEME';
  * Render AsciiDoc content as HTML
  */
 var render = function (data) {
-    chrome.storage.local.get(CUSTOM_ATTRIBUTES_KEY, function (items) {
+    chrome.storage.local.get([CUSTOM_ATTRIBUTES_KEY, SAFE_MODE_KEY], function (settings) {
         var scripts = $(document.body).find('script');
         detectLiveReloadJs(scripts);
         $(document.body).html('');
         var generatedHtml = undefined;
         try {
-            var asciidoctorOptions = buildAsciidoctorOptions(items);
+            var asciidoctorOptions = buildAsciidoctorOptions(settings);
             asciidoctorDocument = Opal.Asciidoctor.$load(data, asciidoctorOptions);
             if (asciidoctorDocument.attributes.map['icons'] == 'font') {
                 appendFontAwesomeStyle();
@@ -33,16 +34,21 @@ var render = function (data) {
 /**
  * Build Asciidoctor options
  */
-function buildAsciidoctorOptions(items) {
-    var customAttributes = items[CUSTOM_ATTRIBUTES_KEY];
+function buildAsciidoctorOptions(settings) {
+    var customAttributes = settings[CUSTOM_ATTRIBUTES_KEY];
+    var safeMode = settings[SAFE_MODE_KEY] || 'secure';
     var defaultAttributes = 'showtitle toc! toc2! icons=font@';
     if (customAttributes) {
         attributes = defaultAttributes.concat(' ').concat(customAttributes);
     } else {
         attributes = defaultAttributes;
     }
-    return Opal.hash2([ 'attributes' ], {
-        'attributes':attributes
+    // prevent include directives from being processed regardless of safe mode for now
+    attributes = attributes.concat(' max-include-depth=0');
+    return Opal.hash2(['base_dir', 'safe', 'attributes'], {
+        'base_dir': window.location.href.replace(/\/[^\/]+$/, ''),
+        'safe': safeMode,
+        'attributes': attributes
     });
 }
 
@@ -110,18 +116,13 @@ function appendHighlightJsScript() {
  * Append css files
  */
 function appendStyles() {
-    chrome.storage.local.get(THEME_KEY, function (items) {
-        var theme = items[THEME_KEY];
-        if (!theme) {
-            // Default theme
-            theme = 'asciidoctor';
-        }
+    chrome.storage.local.get(THEME_KEY, function (settings) {
+        var theme = settings[THEME_KEY] || 'asciidoctor';
         var themeLink = document.createElement('link');
         themeLink.rel = 'stylesheet';
         themeLink.id = 'asciidoctor-style';
         themeLink.href = chrome.extension.getURL('css/themes/' + theme + '.css');
         document.head.appendChild(themeLink);
-
     });
     var githubHighlightLink = document.createElement('link');
     githubHighlightLink.rel = 'stylesheet';

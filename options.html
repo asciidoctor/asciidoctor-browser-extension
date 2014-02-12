@@ -15,11 +15,23 @@
 
             <div class="col-lg-10">
                 <input type="text" class="form-control" id="inputCustomAttributes">
-                <span class="help-block">String of space-separated key/value attribute pairs.</span>
+                <span class="help-block">A string of space-separated key/value attribute pairs (e.g., source-highlighter=highlightjs). <a href="http://asciidoctor.org/docs/user-manual/#attributes">Learn more</a> about attributes.</span>
             </div>
         </div>
         <div class="form-group">
-            <label for="selectTheme" class="col-lg-2 control-label">Theme</label>
+            <label for="selectSafeMode" class="col-lg-2 control-label">Safe mode</label>
+            <div class="col-lg-10">
+                <select class="form-control" id="selectSafeMode">
+                  <option value="unsafe">unsafe</option>
+                  <option value="safe">safe</option>
+                  <option value="server">server</option>
+                  <option value="secure">secure</option>
+                </select>
+                <span class="help-block">Controls features related to security. <a href="http://asciidoctor.org/docs/user-manual/#running-asciidoctor-securely">Learn more</a> about these values.</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="selectTheme" class="col-lg-2 control-label">Theme / Stylesheet</label>
 
             <div class="col-lg-10">
                 <select class="form-control" id="selectTheme">
@@ -37,6 +49,7 @@
 		    <option>rocket-panda</option>
 		    <option>rubygems</option>
 		</select>
+                <span class="help-block">The CSS styles to apply to the rendered HTML.</span>
             </div>
         </div>
         <div class="form-group">
