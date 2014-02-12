@@ -1,10 +1,10 @@
-= asciidoctor-chrome-extension, Asciidoctor Chrome Extension
+= Asciidoctor Chrome Extension
 Guillaume Grossetie
 :sources: https://github.com/asciidoctor/asciidoctor-chrome-extension
 :license: https://github.com/asciidoctor/asciidoctor-chrome-extension/blob/master/LICENSE
 :webstore: https://chrome.google.com/webstore/detail/asciidoctorjs-live-previe/iaalpfgpbocpdfblpnhhgllgbdbchmia
 
-This project uses https://github.com/asciidoctor/asciidoctor.js[Asciidoctor.js] to render AsciiDoc as HTML inside Chrome!
+This project uses https://github.com/asciidoctor/asciidoctor.js[Asciidoctor.js] to preview AsciiDoc as HTML inside the Chrome (or Chromium) web browser!
 
 == Usage
 
