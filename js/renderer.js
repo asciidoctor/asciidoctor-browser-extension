@@ -86,8 +86,13 @@ function appendScripts(scripts) {
  * Syntax highlighting
  */
 function syntaxHighlighting() {
-    $('pre > code').each(function (i, e) {
-        hljs.highlightBlock(e);
+    $('pre.highlight > code').each(function (i, e) {
+        if ((match = /language-(\S+)/.exec(e.className)) != null && hljs.getLanguage(match[1]) != null) {
+            hljs.highlightBlock(e);
+        }
+        else {
+            e.className += ' hljs'
+        }
     });
 }
 
@@ -124,11 +129,12 @@ function appendStyles() {
         themeLink.href = chrome.extension.getURL('css/themes/' + theme + '.css');
         document.head.appendChild(themeLink);
     });
-    var githubHighlightLink = document.createElement('link');
-    githubHighlightLink.rel = 'stylesheet';
-    githubHighlightLink.id = 'github-highlight-style';
-    githubHighlightLink.href = chrome.extension.getURL('css/github.min.css');
-    document.head.appendChild(githubHighlightLink);
+    var highlightTheme = 'default'
+    var highlightStylesheetLink = document.createElement('link');
+    highlightStylesheetLink.rel = 'stylesheet';
+    highlightStylesheetLink.id = highlightTheme + '-highlight-style';
+    highlightStylesheetLink.href = chrome.extension.getURL('css/' + highlightTheme + '.min.css');
+    document.head.appendChild(highlightStylesheetLink);
 }
 
 /**

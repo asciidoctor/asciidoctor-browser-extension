@@ -54,7 +54,7 @@
         "css/themes/riak.css",
         "css/themes/rocket-panda.css",
         "css/themes/rubygems.css",
-        "css/github.min.css",
+        "css/default.min.css",
         "css/font-awesome.min.css",
         "js/highlight.min.js",
         "font/FontAwesome.otf",
