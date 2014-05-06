@@ -23,6 +23,7 @@ var render = function (data) {
         }
         catch (e) {
             showErrorMessage(e.name + ' : ' + e.message);
+            console.error(e.stack);
             return;
         }
         $(document.body).html('<div id="content">' + generatedHtml + '</div>');
