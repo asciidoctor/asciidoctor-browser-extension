@@ -9389,7 +9389,15 @@
         result = string.match(/[A-Z]{3,4}/)[0];
       }
       else {
-        result = string.match(/\([^)]+\)/)[0].match(/[A-Z]/g).join('');
+        var timezoneRegexp = /[A-Z]/g;
+        var insideParentheses = string.match(/\([^)]+\)/)[0];
+        var timezone = insideParentheses.match(timezoneRegexp);
+        if (!timezoneRegexp.test(insideParentheses)) {
+          // Timezone is unknown... fallback to GMT
+          result = 'GMT';
+        } else {
+          result = timezone.join('');
+        }
       }
 
       if (result == "GMT" && /(GMT\W*\d{4})/.test(string)) {
