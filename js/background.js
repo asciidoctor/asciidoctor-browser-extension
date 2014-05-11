@@ -1,14 +1,5 @@
 var enableRender = true;
 
-function sendUrlToAsciidoctorEditor(info, tab) {
-    // Send tab.url to Asciidoctor Editor App
-    chrome.runtime.sendMessage("jcafjdafpaomnmpffgphdalkdhnnggln", tab.url)
-}
-chrome.contextMenus.create({
-    "title":"Send to Asciidoctor Editor",
-    "onclick":sendUrlToAsciidoctorEditor
-});
-
 chrome.contextMenus.create({
     "title":"Render selection",
     "contexts":["selection"], "onclick":function (info, tab) {
