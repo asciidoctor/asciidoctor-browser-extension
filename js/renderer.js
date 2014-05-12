@@ -13,12 +13,14 @@ var render = function (data) {
         detectLiveReloadJs(scripts);
         $(document.body).html('');
         var generatedHtml = undefined;
+        var documentTitle = undefined;
         try {
             var asciidoctorOptions = buildAsciidoctorOptions(settings);
             asciidoctorDocument = Opal.Asciidoctor.$load(data, asciidoctorOptions);
             if (asciidoctorDocument.attributes.map['icons'] == 'font') {
                 appendFontAwesomeStyle();
             }
+            documentTitle = asciidoctorDocument.$doctitle(Opal.hash2(['sanitize'], {sanitize: true}));
             generatedHtml = asciidoctorDocument.$render();
         }
         catch (e) {
@@ -26,6 +28,7 @@ var render = function (data) {
             console.error(e.stack);
             return;
         }
+        document.title = documentTitle;
         $(document.body).html('<div id="content">' + generatedHtml + '</div>');
         appendScripts(scripts);
         syntaxHighlighting();
@@ -44,8 +47,6 @@ function buildAsciidoctorOptions(settings) {
     } else {
         attributes = defaultAttributes;
     }
-    // prevent include directives from being processed regardless of safe mode for now
-    attributes = attributes.concat(' max-include-depth=0');
     return Opal.hash2(['base_dir', 'safe', 'attributes'], {
         'base_dir': window.location.href.replace(/\/[^\/]+$/, ''),
         'safe': safeMode,
