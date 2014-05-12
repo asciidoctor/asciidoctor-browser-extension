@@ -561,7 +561,7 @@ if (o == null) o = nil;
     var self = $module($base, 'Asciidoctor');
 
     var def = self._proto, $scope = self._scope;
-    $opal.cdecl($scope, 'VERSION', "1.5.0.preview4")
+    $opal.cdecl($scope, 'VERSION', "1.5.0-preview.5")
     
   })(self)
 })(Opal);
@@ -980,20 +980,20 @@ if (o == null) o = nil;
           m = $gvars["~"];
             if (($a = m['$[]'](0)['$start_with?']("\\")) !== false && $a !== nil) {
               return m['$[]'](0)['$[]']($range(1, -1, false));};
-            if (($a = m['$[]'](4)) !== false && $a !== nil) {
-              text = self.$unescape_brackets(m['$[]'](4));
-              if (($a = m['$[]'](3)['$nil_or_empty?']()) !== false && $a !== nil) {
-                subs = []
-                } else {
-                subs = self.$resolve_pass_subs(m['$[]'](3))
-              };
-              } else {
+            if (($a = m['$[]'](4)['$nil_or_empty?']()) !== false && $a !== nil) {
               text = m['$[]'](2);
               subs = ((function() {if (m['$[]'](1)['$==']("$$")) {
                 return ["specialcharacters"]
                 } else {
                 return []
               }; return nil; })());
+              } else {
+              text = self.$unescape_brackets(m['$[]'](4));
+              if (($a = m['$[]'](3)['$nil_or_empty?']()) !== false && $a !== nil) {
+                subs = []
+                } else {
+                subs = self.$resolve_pass_subs(m['$[]'](3))
+              };
             };
             self.passthroughs['$<<']($hash2(["text", "subs"], {"text": text, "subs": subs}));
             index = self.passthroughs.$size()['$-'](1);
@@ -1003,6 +1003,9 @@ if (o == null) o = nil;
             if (self.passthroughs == null) self.passthroughs = nil;
 
           m = $gvars["~"];
+            if (($a = (($b = $opal.Object._scope.RUBY_ENGINE_OPAL) == null ? $opal.cm('RUBY_ENGINE_OPAL') : $b)) !== false && $a !== nil) {
+              if (m['$[]'](2)['$==']("")) {
+                m['$[]='](2, nil)}};
             unescaped_attrs = nil;
             if (($a = m['$[]'](3)['$start_with?']("\\")) !== false && $a !== nil) {
               return (function() {if (($a = m['$[]'](2)) !== false && $a !== nil) {
@@ -1316,6 +1319,9 @@ if (o == null) o = nil;
           m = $gvars["~"];
             if (($a = m['$[]'](0)['$start_with?']("\\")) !== false && $a !== nil) {
               return m['$[]'](0)['$[]']($range(1, -1, false));};
+            if (($a = (($b = $opal.Object._scope.RUBY_ENGINE_OPAL) == null ? $opal.cm('RUBY_ENGINE_OPAL') : $b)) !== false && $a !== nil) {
+              if (m['$[]'](1)['$==']("")) {
+                m['$[]='](1, nil)}};
             num_brackets = 0;
             text_in_brackets = nil;
             if (($a = (macro_name = m['$[]'](1))) === false || $a === nil) {
@@ -1349,8 +1355,11 @@ if (o == null) o = nil;
 
           m = $gvars["~"];
             if (($a = m['$[]'](2)['$start_with?']("\\")) !== false && $a !== nil) {
-              return "" + (m['$[]'](1)) + (m['$[]'](2)['$[]']($range(1, -1, false))) + (m['$[]'](3));
-            } else if (($a = (($b = m['$[]'](1)['$==']("link:")) ? ($c = m['$[]'](3), ($c === nil || $c === false)) : $b)) !== false && $a !== nil) {
+              return "" + (m['$[]'](1)) + (m['$[]'](2)['$[]']($range(1, -1, false))) + (m['$[]'](3));};
+            if (($a = (($b = $opal.Object._scope.RUBY_ENGINE_OPAL) == null ? $opal.cm('RUBY_ENGINE_OPAL') : $b)) !== false && $a !== nil) {
+              if (m['$[]'](3)['$==']("")) {
+                m['$[]='](3, nil)}};
+            if (($a = (($b = m['$[]'](1)['$==']("link:")) ? ($c = m['$[]'](3), ($c === nil || $c === false)) : $b)) !== false && $a !== nil) {
               return m['$[]'](0);};
             prefix = ((function() {if (($a = ($b = m['$[]'](1)['$==']("link:"), ($b === nil || $b === false))) !== false && $a !== nil) {
               return m['$[]'](1)
@@ -1379,7 +1388,9 @@ if (o == null) o = nil;
               }}};
             self.document.$register("links", target);
             attrs = nil;
-            if (($a = ($b = m['$[]'](3)['$nil_or_empty?'](), ($b === nil || $b === false))) !== false && $a !== nil) {
+            if (($a = m['$[]'](3)['$nil_or_empty?']()) !== false && $a !== nil) {
+              text = ""
+              } else {
               if (($a = (($b = use_link_attrs !== false && use_link_attrs !== nil) ? (((($c = m['$[]'](3)['$start_with?']("\"")) !== false && $c !== nil) ? $c : m['$[]'](3)['$include?'](","))) : $b)) !== false && $a !== nil) {
                 attrs = self.$parse_attributes(self.$sub_attributes(m['$[]'](3).$gsub("]", "]")), []);
                 text = attrs['$[]'](1);
@@ -1391,8 +1402,6 @@ if (o == null) o = nil;
                 ((($a = attrs) !== false && $a !== nil) ? $a : attrs = $hash2([], {}));
                 if (($a = attrs['$has_key?']("window")) === false || $a === nil) {
                   attrs['$[]=']("window", "_blank")};};
-              } else {
-              text = ""
             };
             if (($a = text['$empty?']()) !== false && $a !== nil) {
               if (($a = self.document['$attr?']("hide-uri-scheme")) !== false && $a !== nil) {
@@ -1511,10 +1520,15 @@ if (o == null) o = nil;
           m = $gvars["~"];
             if (($a = m['$[]'](0)['$start_with?']("\\")) !== false && $a !== nil) {
               return m['$[]'](0)['$[]']($range(1, -1, false));};
+            if (($a = (($b = $opal.Object._scope.RUBY_ENGINE_OPAL) == null ? $opal.cm('RUBY_ENGINE_OPAL') : $b)) !== false && $a !== nil) {
+              if (m['$[]'](1)['$==']("")) {
+                m['$[]='](1, nil)};
+              if (m['$[]'](2)['$==']("")) {
+                m['$[]='](2, nil)};
+              if (m['$[]'](4)['$==']("")) {
+                m['$[]='](4, nil)};};
             id = ((($a = m['$[]'](1)) !== false && $a !== nil) ? $a : m['$[]'](3));
-            reftext = ((($a = m['$[]'](2)) !== false && $a !== nil) ? $a : m['$[]'](4));
-            if (($a = ($b = reftext, ($b === nil || $b === false))) !== false && $a !== nil) {
-              reftext = "[" + (id) + "]"};
+            reftext = ((($a = ((($b = m['$[]'](2)) !== false && $b !== nil) ? $b : m['$[]'](4))) !== false && $a !== nil) ? $a : "[" + (id) + "]");
             if (($a = self.document.$references()['$[]']("ids")['$has_key?'](id)) === false || $a === nil) {
               ($a = ($b = $scope.Debug).$debug, $a._p = (TMP_37 = function(){var self = TMP_37._s || this;
               return "Missing reference for anchor " + (id)}, TMP_37._s = self, TMP_37), $a).call($b)};
@@ -1528,20 +1542,16 @@ if (o == null) o = nil;
           found = nil
         }
         if (($a = ((($b = (((($c = ($d = found, ($d === nil || $d === false))) !== false && $c !== nil) ? $c : found['$[]']("macroish")))) !== false && $b !== nil) ? $b : text['$include?']("&lt;&lt;"))) !== false && $a !== nil) {
-          text = ($a = ($b = text).$gsub, $a._p = (TMP_38 = function(){var self = TMP_38._s || this, $a, $b, $c, $d, TMP_39, m = nil, id = nil, reftext = nil, path = nil, fragment = nil, refid = nil, target = nil;
+          text = ($a = ($b = text).$gsub, $a._p = (TMP_38 = function(){var self = TMP_38._s || this, $a, $b, $c, TMP_39, m = nil, id = nil, reftext = nil, path = nil, fragment = nil, refid = nil, target = nil;
             if (self.document == null) self.document = nil;
 
           m = $gvars["~"];
             if (($a = m['$[]'](0)['$start_with?']("\\")) !== false && $a !== nil) {
               return m['$[]'](0)['$[]']($range(1, -1, false));};
-            if (($a = ((($b = ($c = m['$[]'](1), ($c === nil || $c === false))) !== false && $b !== nil) ? $b : (($c = (($d = $opal.Object._scope.RUBY_ENGINE_OPAL) == null ? $opal.cm('RUBY_ENGINE_OPAL') : $d), $c !== false && $c !== nil ?m['$[]'](1).$to_s()['$==']("") : $c)))) !== false && $a !== nil) {
-              id = m['$[]'](2);
-              reftext = (function() {if (($a = ($b = m['$[]'](3)['$empty?'](), ($b === nil || $b === false))) !== false && $a !== nil) {
-                return m['$[]'](3)
-                } else {
-                return nil
-              }; return nil; })();
-              } else {
+            if (($a = (($b = $opal.Object._scope.RUBY_ENGINE_OPAL) == null ? $opal.cm('RUBY_ENGINE_OPAL') : $b)) !== false && $a !== nil) {
+              if (m['$[]'](1)['$==']("")) {
+                m['$[]='](1, nil)}};
+            if (($a = m['$[]'](1)) !== false && $a !== nil) {
               $a = $opal.to_ary(($b = ($c = m['$[]'](1).$split(",", 2)).$map, $b._p = (TMP_39 = function(it){var self = TMP_39._s || this;if (it == null) it = nil;
               return it.$strip()}, TMP_39._s = self, TMP_39), $b).call($c)), id = ($a[0] == null ? nil : $a[0]), reftext = ($a[1] == null ? nil : $a[1]);
               id = id.$sub($scope.DoubleQuotedRx, (function() {if (($a = (($b = $opal.Object._scope.RUBY_ENGINE_OPAL) == null ? $opal.cm('RUBY_ENGINE_OPAL') : $b)) !== false && $a !== nil) {
@@ -1555,6 +1565,10 @@ if (o == null) o = nil;
                   } else {
                   return "2"
                 }; return nil; })())};
+              } else {
+              id = m['$[]'](2);
+              if (($a = m['$[]'](3)['$nil_or_empty?']()) === false || $a === nil) {
+                reftext = m['$[]'](3)};
             };
             if (($a = id['$include?']("#")) !== false && $a !== nil) {
               $a = $opal.to_ary(id.$split("#")), path = ($a[0] == null ? nil : $a[0]), fragment = ($a[1] == null ? nil : $a[1])
@@ -1621,10 +1635,10 @@ if (o == null) o = nil;
       };
 
       def.$convert_quoted_text = function(match, type, scope) {
-        var $a, $b, self = this, unescaped_attrs = nil, attrs = nil, attributes = nil, id = nil;
+        var $a, $b, $c, self = this, unescaped_attrs = nil, attrs = nil, attributes = nil, id = nil;
         unescaped_attrs = nil;
         if (($a = match['$[]'](0)['$start_with?']("\\")) !== false && $a !== nil) {
-          if (($a = (($b = scope['$==']("constrained")) ? (attrs = match['$[]'](2)) : $b)) !== false && $a !== nil) {
+          if (($a = (($b = scope['$==']("constrained")) ? ($c = ((attrs = match['$[]'](2)))['$nil_or_empty?'](), ($c === nil || $c === false)) : $b)) !== false && $a !== nil) {
             unescaped_attrs = "[" + (attrs) + "]"
             } else {
             return match['$[]'](0)['$[]']($range(1, -1, false))
