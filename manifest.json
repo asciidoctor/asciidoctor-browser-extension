@@ -16,14 +16,14 @@
     "content_scripts":[
         {
             "matches":[
-                "http://*/*.ad",
-                "http://*/*.adoc",
-                "http://*/*.asc",
-                "http://*/*.asciidoc",
-                "https://*/*.ad",
-                "https://*/*.adoc",
-                "https://*/*.asc",
-                "https://*/*.asciidoc",
+                "*://*/*.ad",
+                "*://*/*.ad?*",
+                "*://*/*.adoc",
+                "*://*/*.adoc?*",
+                "*://*/*.asc",
+                "*://*/*.asc?*",
+                "*://*/*.asciidoc",
+                "*://*/*.asciidoc?*",
                 "file://*/*.ad",
                 "file://*/*.adoc",
                 "file://*/*.asc",
