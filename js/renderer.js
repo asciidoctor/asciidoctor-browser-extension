@@ -47,8 +47,10 @@ function buildAsciidoctorOptions(settings) {
     } else {
         attributes = defaultAttributes;
     }
+    var pwd = Opal.File.$dirname(window.location.href)
+    Opal.ENV['$[]=']("PWD", pwd)
     return Opal.hash2(['base_dir', 'safe', 'attributes'], {
-        'base_dir': window.location.href.replace(/\/[^\/]+$/, ''),
+        'base_dir': pwd,
         'safe': safeMode,
         'attributes': attributes
     });
