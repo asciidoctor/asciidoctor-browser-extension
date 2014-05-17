@@ -41,7 +41,7 @@ var render = function (data) {
 function buildAsciidoctorOptions(settings) {
     var customAttributes = settings[CUSTOM_ATTRIBUTES_KEY];
     var safeMode = settings[SAFE_MODE_KEY] || 'secure';
-    var defaultAttributes = 'showtitle toc! toc2! icons=font@ platform=opal platform-opal env=browser env-browser';
+    var defaultAttributes = 'showtitle icons=font@ platform=opal platform-opal env=browser env-browser';
     if (customAttributes) {
         attributes = defaultAttributes.concat(' ').concat(customAttributes);
     } else {
