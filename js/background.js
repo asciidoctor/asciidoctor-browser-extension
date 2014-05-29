@@ -61,3 +61,19 @@ function refreshOptions() {
 
 chrome.browserAction.onClicked.addListener(enableDisableRender);
 enableDisableRender();
+
+var headerReceivedUrls = chrome.runtime.getManifest().content_scripts[0].matches;
+chrome.webRequest.onHeadersReceived.addListener(function(details) {
+      for (var i = 0; i < details.responseHeaders.length; ++i) {
+        if (details.responseHeaders[i].name.toLowerCase() === 'content-security-policy') {
+          details.responseHeaders[i].value = "default-src *; script-src 'self'; style-src 'self' 'unsafe-inline';";
+          break;
+        }
+      }
+      return {responseHeaders: details.responseHeaders};
+  }, {
+    urls : headerReceivedUrls
+  },
+
+  ["blocking", "responseHeaders"]
+);

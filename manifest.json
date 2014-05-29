@@ -67,7 +67,9 @@
         "storage",
         "tabs",
         "<all_urls>",
-        "contextMenus"
+        "contextMenus",
+        "webRequest",
+        "webRequestBlocking"
     ],
     "browser_action":{
         "default_title":"Asciidoctor.js Preview"
