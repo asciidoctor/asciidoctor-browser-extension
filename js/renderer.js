@@ -47,8 +47,18 @@ function buildAsciidoctorOptions(settings) {
     } else {
         attributes = defaultAttributes;
     }
-    var pwd = Opal.File.$dirname(window.location.href)
-    Opal.ENV['$[]=']("PWD", pwd)
+    var href = window.location.href;
+    var fileName = href.split('/').pop();
+    var fileExtensions = fileName.split('.');
+    // If fileExtensions.length is one, it's a visible file with no extension ie. file
+    // If fileExtensions[0] === "" and fileExtensions.length === 2 it's a hidden file with no extension ie. .htaccess
+    // http://stackoverflow.com/a/1203361
+    var fileExtension = ( fileExtensions.length === 1 || ( fileExtensions[0] === '' && fileExtensions.length === 2 ) ) ? '' : fileExtensions.pop();
+    if (fileExtension !== '') {
+      attributes = attributes.concat(' outfilesuffix=.' + fileExtension);
+    }
+    var pwd = Opal.File.$dirname(href);
+    Opal.ENV['$[]=']("PWD", pwd);
     return Opal.hash2(['base_dir', 'safe', 'attributes'], {
         'base_dir':pwd,
         'safe':safeMode,
