@@ -24,7 +24,8 @@ chrome.contextMenus.create({
                     chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
                         if (changeInfo.status == "complete" && tabId == selfTabId) {
                             var tabs = chrome.extension.getViews({type:"tab"});
-                            tabs[0].inject(selectedText);
+                            // Get the latest tab opened
+                            tabs[tabs.length - 1].inject(selectedText);
                         }
                     });
                 });
