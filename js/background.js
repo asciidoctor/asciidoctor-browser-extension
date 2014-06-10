@@ -1,4 +1,5 @@
 var enableRender = true;
+var matchesTabUrl = chrome.runtime.getManifest().content_scripts[0].matches;
 
 chrome.contextMenus.create({
     "title":"Render selection",
@@ -34,6 +35,11 @@ chrome.contextMenus.create({
     }
 });
 
+function refreshTab(tab) {
+    var code = 'window.location.reload();';
+    chrome.tabs.executeScript(tab.id, {code: code});
+}
+
 function enableDisableRender() {
     // Save the status of the extension
     chrome.storage.local.set({'ENABLE_RENDER':enableRender});
@@ -45,11 +51,17 @@ function enableDisableRender() {
     // Switch enabled <> disabled
     enableRender = !enableRender;
 
-    // Reload the page
-    chrome.tabs.getSelected(null, function (tab) {
-        var code = 'window.location.reload();';
-        chrome.tabs.executeScript(tab.id, {code:code});
-    });
+    // Reload the active tab in the current windows that matches
+    var tabFound = false;
+    for (var i = 0; i < matchesTabUrl.length; i++) {
+        var matchTabUrl = matchesTabUrl[i];
+        chrome.tabs.query({active: true, currentWindow: true, url: matchTabUrl}, function (tabs) {
+            if (!tabFound && tabs.length > 0) {
+                refreshTab(tabs[0]);
+                tabFound = true;
+            }
+        });
+    }
 }
 
 function refreshOptions() {
