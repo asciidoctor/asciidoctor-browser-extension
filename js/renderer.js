@@ -41,21 +41,16 @@ var render = function (data) {
 function buildAsciidoctorOptions(settings) {
     var customAttributes = settings[CUSTOM_ATTRIBUTES_KEY];
     var safeMode = settings[SAFE_MODE_KEY] || 'secure';
-    var defaultAttributes = 'showtitle icons=font@ platform=opal platform-opal env=browser env-browser';
-    if (customAttributes) {
-        attributes = defaultAttributes.concat(' ').concat(customAttributes);
-    } else {
-        attributes = defaultAttributes;
-    }
+    // default attributes
+    var attributes = 'showtitle icons=font@ platform=opal platform-opal env=browser env-browser';
     var href = window.location.href;
     var fileName = href.split('/').pop();
-    var fileExtensions = fileName.split('.');
-    // If fileExtensions.length is one, it's a visible file with no extension ie. file
-    // If fileExtensions[0] === "" and fileExtensions.length === 2 it's a hidden file with no extension ie. .htaccess
-    // http://stackoverflow.com/a/1203361
-    var fileExtension = ( fileExtensions.length === 1 || ( fileExtensions[0] === '' && fileExtensions.length === 2 ) ) ? '' : fileExtensions.pop();
+    var fileExtension = fileName.split('.').pop();
     if (fileExtension !== '') {
-      attributes = attributes.concat(' outfilesuffix=.' + fileExtension);
+        attributes = attributes.concat(' ').concat('outfilesuffix=.').concat(fileExtension).concat('@');
+    }
+    if (customAttributes) {
+        attributes = attributes.concat(' ').concat(customAttributes);
     }
     var pwd = Opal.File.$dirname(href);
     Opal.ENV['$[]=']("PWD", pwd);
