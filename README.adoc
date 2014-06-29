@@ -34,6 +34,13 @@ The options page let you add custom Asciidoctor attributes or change the theme o
 
 == Changelog
 
+=== 0.4.0
+
+ * Upgrade to Asciidoctor 1.5.0-preview.8
+ * Activate includes!
+ * Render selection
+ * Match URLs that contain a query string
+
 === 0.3.0
 
  * Upgrade to Asciidoctor 1.5.0.preview.1
