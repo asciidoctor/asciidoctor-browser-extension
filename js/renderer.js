@@ -47,7 +47,7 @@ function buildAsciidoctorOptions(settings) {
     var fileName = href.split('/').pop();
     var fileExtension = fileName.split('.').pop();
     if (fileExtension !== '') {
-        attributes = attributes.concat(' ').concat('outfilesuffix=.').concat(fileExtension).concat('@');
+        attributes = attributes.concat(' ').concat('outfilesuffix=.').concat(fileExtension);
     }
     if (customAttributes) {
         attributes = attributes.concat(' ').concat(customAttributes);
