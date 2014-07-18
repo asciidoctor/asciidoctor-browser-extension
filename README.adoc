@@ -6,6 +6,8 @@ Guillaume Grossetie
 
 This project uses https://github.com/asciidoctor/asciidoctor.js[Asciidoctor.js] to preview AsciiDoc as HTML inside the Chrome (or Chromium) web browser!
 
+image::https://developer.chrome.com/webstore/images/ChromeWebStore_Badge_v2_206x58.png[link="{webstore}"]
+
 == Usage
 
  1. Install extension from {webstore}[Chrome Web Store]
