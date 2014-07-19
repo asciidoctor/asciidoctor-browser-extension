@@ -15,6 +15,10 @@ image::https://developer.chrome.com/webstore/images/ChromeWebStore_Badge_v2_206x
  3. Open local or remote .ad, .adoc, .asc, .asciidoc file in Chrome
  4. Enjoy!
 
+WARNING: Due to a https://code.google.com/p/chromium/issues/detail?id=365107[Chromium bug] the `Allow access to file URLs` is lost on extension update.
+If preview of local files isn't working, make sure to uncheck and recheck the `Allow access to file URLs`.
+
+
 == Installation
 
 Loading your local copy of the extension on Chrome is super easy:
