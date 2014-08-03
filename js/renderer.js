@@ -30,6 +30,7 @@ var render = function (data) {
         }
         document.title = documentTitle;
         $(document.body).html('<div id="content">' + generatedHtml + '</div>');
+        refreshMathJax();
         appendScripts(scripts);
         syntaxHighlighting();
     });
@@ -174,6 +175,15 @@ function appendMathJax() {
     mathJaxJsScript.type = 'text/javascript';
     mathJaxJsScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.4.0/MathJax.js?config=TeX-MML-AM_HTMLorMML';
     document.head.appendChild(mathJaxJsScript);
+}
+
+function refreshMathJax() {
+    var mathJaxJsScript = document.createElement('script');
+    mathJaxJsScript.text =
+        'if (window.MathJax) {' +
+            '  window.MathJax.Hub.Typeset();' +
+            '}';
+    document.body.appendChild(mathJaxJsScript);
 }
 
 /**
