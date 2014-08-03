@@ -148,6 +148,29 @@ function appendStyles() {
     document.head.appendChild(googleFontsStylesheetLink);
 }
 
+function appendMathJax() {
+    var mathJaxJsScriptConfig = document.createElement('script');
+    mathJaxJsScriptConfig.type = 'text/x-mathjax-config';
+    mathJaxJsScriptConfig.text =
+        'MathJax.Hub.Config({' +
+            '  tex2jax: {' +
+            '    inlineMath: [["\\\\(", "\\\\)"]],' +
+            '    displayMath: [["\\\\[", "\\\\]"]],' +
+            '    ignoreClass: "nostem|nostem|nolatexmath"' +
+            '  },' +
+            '  asciimath2jax: {' +
+            '    delimiters: [["\\\\$", "\\\\$"]],' +
+            '    ignoreClass: "nostem|nostem|noasciimath"' +
+            '  }' +
+            '});';
+    document.head.appendChild(mathJaxJsScriptConfig);
+
+    var mathJaxJsScript = document.createElement('script');
+    mathJaxJsScript.type = 'text/javascript';
+    mathJaxJsScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.4.0/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+    document.head.appendChild(mathJaxJsScript);
+}
+
 /**
  * Show error message
  * @param message The error message

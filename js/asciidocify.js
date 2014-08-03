@@ -26,6 +26,7 @@
             // Extension is enabled
             if (enabled) {
                 appendStyles();
+                appendMathJax();
                 appendHighlightJsScript();
                 render(data.responseText);
             }
