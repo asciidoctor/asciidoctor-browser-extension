@@ -41,14 +41,19 @@ var render = function (data) {
 function buildAsciidoctorOptions(settings) {
     var customAttributes = settings[CUSTOM_ATTRIBUTES_KEY];
     var safeMode = settings[SAFE_MODE_KEY] || 'secure';
-    var defaultAttributes = 'showtitle icons=font@ platform=opal platform-opal env=browser env-browser';
-    if (customAttributes) {
-        attributes = defaultAttributes.concat(' ').concat(customAttributes);
-    } else {
-        attributes = defaultAttributes;
+    // default attributes
+    var attributes = 'showtitle icons=font@ platform=opal platform-opal env=browser env-browser';
+    var href = window.location.href;
+    var fileName = href.split('/').pop();
+    var fileExtension = fileName.split('.').pop();
+    if (fileExtension !== '') {
+        attributes = attributes.concat(' ').concat('outfilesuffix=.').concat(fileExtension);
     }
-    var pwd = Opal.File.$dirname(window.location.href)
-    Opal.ENV['$[]=']("PWD", pwd)
+    if (customAttributes) {
+        attributes = attributes.concat(' ').concat(customAttributes);
+    }
+    var pwd = Opal.File.$dirname(href);
+    Opal.ENV['$[]=']("PWD", pwd);
     return Opal.hash2(['base_dir', 'safe', 'attributes'], {
         'base_dir':pwd,
         'safe':safeMode,
