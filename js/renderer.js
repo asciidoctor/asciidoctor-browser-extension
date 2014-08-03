@@ -20,7 +20,7 @@ var render = function (data) {
             if (asciidoctorDocument.attributes.map['icons'] == 'font') {
                 appendFontAwesomeStyle();
             }
-            documentTitle = asciidoctorDocument.$doctitle(Opal.hash2(['sanitize'], {sanitize: true}));
+            documentTitle = asciidoctorDocument.$doctitle(Opal.hash2(['sanitize'], {sanitize:true}));
             generatedHtml = asciidoctorDocument.$render();
         }
         catch (e) {
@@ -50,9 +50,9 @@ function buildAsciidoctorOptions(settings) {
     var pwd = Opal.File.$dirname(window.location.href)
     Opal.ENV['$[]=']("PWD", pwd)
     return Opal.hash2(['base_dir', 'safe', 'attributes'], {
-        'base_dir': pwd,
-        'safe': safeMode,
-        'attributes': attributes
+        'base_dir':pwd,
+        'safe':safeMode,
+        'attributes':attributes
     });
 }
 
@@ -95,7 +95,7 @@ function syntaxHighlighting() {
             hljs.highlightBlock(e);
         }
         else {
-            e.className += ' hljs'
+            e.className += ' hljs';
         }
     });
 }
@@ -125,6 +125,7 @@ function appendHighlightJsScript() {
  * Append css files
  */
 function appendStyles() {
+    // Theme
     chrome.storage.local.get(THEME_KEY, function (settings) {
         var theme = settings[THEME_KEY] || 'asciidoctor';
         var themeLink = document.createElement('link');
@@ -133,12 +134,18 @@ function appendStyles() {
         themeLink.href = chrome.extension.getURL('css/themes/' + theme + '.css');
         document.head.appendChild(themeLink);
     });
-    var highlightTheme = 'default'
+    // Highlight
+    var highlightTheme = 'default';
     var highlightStylesheetLink = document.createElement('link');
     highlightStylesheetLink.rel = 'stylesheet';
     highlightStylesheetLink.id = highlightTheme + '-highlight-style';
     highlightStylesheetLink.href = chrome.extension.getURL('css/' + highlightTheme + '.min.css');
     document.head.appendChild(highlightStylesheetLink);
+    // Google Fonts
+    var googleFontsStylesheetLink = document.createElement('link');
+    googleFontsStylesheetLink.rel = 'stylesheet';
+    googleFontsStylesheetLink.href = 'https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400';
+    document.head.appendChild(googleFontsStylesheetLink);
 }
 
 /**
