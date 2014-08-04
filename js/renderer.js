@@ -9,6 +9,7 @@ var THEME_KEY = 'THEME';
  */
 var render = function (data) {
     chrome.storage.local.get([CUSTOM_ATTRIBUTES_KEY, SAFE_MODE_KEY], function (settings) {
+        $('#mathjax-refresh-js').remove();
         var scripts = $(document.body).find('script');
         detectLiveReloadJs(scripts);
         $(document.body).html('');
@@ -88,8 +89,15 @@ function detectLiveReloadJs(scripts) {
 function appendScripts(scripts) {
     var length = scripts.length;
     for (var i = 0; i < length; i++) {
-        document.body.appendChild(scripts[i]);
+        var script = scripts[i];
+        if (!isMathTexScript(script)) {
+            document.body.appendChild(script);
+        }
     }
+}
+
+function isMathTexScript(script) {
+  return /math\/tex/i.test(script.type)
 }
 
 /**
@@ -179,6 +187,7 @@ function appendMathJax() {
 
 function refreshMathJax() {
     var mathJaxJsScript = document.createElement('script');
+    mathJaxJsScript.id = 'mathjax-refresh-js';
     mathJaxJsScript.text =
         'if (window.MathJax) {' +
             '  window.MathJax.Hub.Typeset();' +
