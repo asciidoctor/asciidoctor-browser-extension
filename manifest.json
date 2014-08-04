@@ -57,11 +57,11 @@
         "css/default.min.css",
         "css/font-awesome.min.css",
         "js/highlight.min.js",
-        "font/FontAwesome.otf",
-        "font/fontawesome-webfont.eot",
-        "font/fontawesome-webfont.svg",
-        "font/fontawesome-webfont.ttf",
-        "font/fontawesome-webfont.woff"
+        "fonts/FontAwesome.otf",
+        "fonts/fontawesome-webfont.eot",
+        "fonts/fontawesome-webfont.svg",
+        "fonts/fontawesome-webfont.ttf",
+        "fonts/fontawesome-webfont.woff"
     ],
     "permissions":[
         "storage",
