@@ -9,8 +9,11 @@ var THEME_KEY = 'THEME';
 /**
  * Render AsciiDoc content as HTML
  */
-var render = function (data) {
+Processor.convert = function (data) {
   chrome.storage.local.get([CUSTOM_ATTRIBUTES_KEY, SAFE_MODE_KEY], function (settings) {
+    appendStyles();
+    appendMathJax();
+    appendHighlightJsScript();
     $('#mathjax-refresh-js').remove();
     var scripts = $(document.body).find('script');
     detectLiveReloadJs(scripts);

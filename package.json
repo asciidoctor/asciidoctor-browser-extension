@@ -1,0 +1,32 @@
+{
+  "name": "asciidoctor-chrome-extension",
+  "description": "Render AsciiDoc (.ad, .adoc, .asc, .asciidoc) as HTML inside Chrome!",
+  "version": "0.5.0",
+  "homepage": "https://github.com/asciidoctor/asciidoctor-chrome-extension",
+  "author": {
+    "name": "Guillaume Grossetie"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:asciidoctor/asciidoctor-chrome-extension.git"
+  },
+  "bugs": {
+    "url": "https://github.com/asciidoctor/asciidoctor-chrome-extension/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/asciidoctor/asciidoctor-chrome-extension/blob/master/LICENSE"
+    }
+  ],
+  "devDependencies": {
+    "grunt-contrib-clean": "^0.5.0",
+    "grunt-contrib-compress": "^0.10.0",
+    "grunt-contrib-jasmine": "^0.7.0"
+  },
+  "keywords": [
+    "chrome",
+    "extension",
+    "asciidoctor"
+  ]
+}
