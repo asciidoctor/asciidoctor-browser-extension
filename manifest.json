@@ -1,80 +1,80 @@
 {
-    "name":"Asciidoctor.js Live Preview",
-    "version":"0.5.0",
-    "manifest_version":2,
+  "name":"Asciidoctor.js Live Preview",
+  "version":"0.5.0",
+  "manifest_version":2,
 
-    "description":"Render AsciiDoc (.ad, .adoc, .asc, .asciidoc) as HTML inside Chrome!",
+  "description":"Render AsciiDoc (.ad, .adoc, .asc, .asciidoc) as HTML inside Chrome!",
 
-    "options_page": "options.html",
+  "options_page":"options.html",
 
-    "icons":{
-        "16":"img/asciidoc_icon_16.png",
-        "48":"img/asciidoc_icon_48.png",
-        "128":"img/asciidoc_icon_128.png"
-    },
+  "icons":{
+    "16":"img/asciidoc_icon_16.png",
+    "48":"img/asciidoc_icon_48.png",
+    "128":"img/asciidoc_icon_128.png"
+  },
 
-    "content_scripts":[
-        {
-            "matches":[
-                "*://*/*.ad",
-                "*://*/*.ad?*",
-                "*://*/*.adoc",
-                "*://*/*.adoc?*",
-                "*://*/*.asc",
-                "*://*/*.asc?*",
-                "*://*/*.asciidoc",
-                "*://*/*.asciidoc?*",
-                "file://*/*.ad",
-                "file://*/*.adoc",
-                "file://*/*.asc",
-                "file://*/*.asciidoc"
-            ],
-            "js":[
-                "js/highlight.min.js",
-                "js/jquery.min.js",
-                "js/opal.js",
-                "js/asciidoctor.js",
-                "js/asciidocify.js",
-                "js/renderer.js",
-                "js/md5.js"
-            ]
-        }
-    ],
-    "web_accessible_resources":[
-        "css/themes/asciidoctor.css",
-        "css/themes/colony.css",
-        "css/themes/foundation.css",
-        "css/themes/foundation-lime.css",
-        "css/themes/foundation-potion.css",
-        "css/themes/github.css",
-        "css/themes/golo.css",
-        "css/themes/iconic.css",
-        "css/themes/maker.css",
-        "css/themes/readthedocs.css",
-        "css/themes/riak.css",
-        "css/themes/rocket-panda.css",
-        "css/themes/rubygems.css",
-        "css/default.min.css",
-        "css/font-awesome.min.css",
+  "content_scripts":[
+    {
+      "matches":[
+        "*://*/*.ad",
+        "*://*/*.ad?*",
+        "*://*/*.adoc",
+        "*://*/*.adoc?*",
+        "*://*/*.asc",
+        "*://*/*.asc?*",
+        "*://*/*.asciidoc",
+        "*://*/*.asciidoc?*",
+        "file://*/*.ad",
+        "file://*/*.adoc",
+        "file://*/*.asc",
+        "file://*/*.asciidoc"
+      ],
+      "js":[
         "js/highlight.min.js",
-        "fonts/FontAwesome.otf",
-        "fonts/fontawesome-webfont.eot",
-        "fonts/fontawesome-webfont.svg",
-        "fonts/fontawesome-webfont.ttf",
-        "fonts/fontawesome-webfont.woff"
-    ],
-    "permissions":[
-        "storage",
-        "tabs",
-        "<all_urls>",
-        "contextMenus"
-    ],
-    "browser_action":{
-        "default_title":"Asciidoctor.js Preview"
-    },
-    "background":{
-        "scripts":[
-            "js/background.js"
-        ]
+        "js/jquery.min.js",
+        "js/opal.js",
+        "js/asciidoctor.js",
+        "js/asciidocify.js",
+        "js/renderer.js",
+        "js/md5.js"
+      ]
     }
+  ],
+  "web_accessible_resources":[
+    "css/themes/asciidoctor.css",
+    "css/themes/colony.css",
+    "css/themes/foundation.css",
+    "css/themes/foundation-lime.css",
+    "css/themes/foundation-potion.css",
+    "css/themes/github.css",
+    "css/themes/golo.css",
+    "css/themes/iconic.css",
+    "css/themes/maker.css",
+    "css/themes/readthedocs.css",
+    "css/themes/riak.css",
+    "css/themes/rocket-panda.css",
+    "css/themes/rubygems.css",
+    "css/default.min.css",
+    "css/font-awesome.min.css",
+    "js/highlight.min.js",
+    "fonts/FontAwesome.otf",
+    "fonts/fontawesome-webfont.eot",
+    "fonts/fontawesome-webfont.svg",
+    "fonts/fontawesome-webfont.ttf",
+    "fonts/fontawesome-webfont.woff"
+  ],
+  "permissions":[
+    "storage",
+    "tabs",
+    "<all_urls>",
+    "contextMenus"
+  ],
+  "browser_action":{
+    "default_title":"Asciidoctor.js Preview"
+  },
+  "background":{
+    "scripts":[
+      "js/background.js"
+    ]
+  }
 }
