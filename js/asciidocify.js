@@ -1,10 +1,12 @@
-var Main = {};
+// Namespace
+var asciidoctor = asciidoctor || {};
+asciidoctor.chrome = asciidoctor.chrome || {};
 
 var autoReloadInterval;
 var AUTO_RELOAD_INTERVAL_TIME = 2000;
 var ENABLE_RENDER_KEY = 'ENABLE_RENDER';
 
-Main.asciidocify = function () {
+asciidoctor.chrome.asciidocify = function () {
   $.ajax({
     url:location.href,
     cache:false,
@@ -12,17 +14,17 @@ Main.asciidocify = function () {
       if (isHtmlContentType(data)) {
         return;
       }
-      Main.loadContent(data);
+      asciidoctor.chrome.loadContent(data);
     }
   });
 };
 
-Main.loadContent = function (data) {
+asciidoctor.chrome.loadContent = function (data) {
   chrome.storage.local.get(ENABLE_RENDER_KEY, function (items) {
     var enabled = items[ENABLE_RENDER_KEY];
     // Extension is enabled
     if (enabled) {
-      Processor.convert(data.responseText);
+      asciidoctor.chrome.convert(data.responseText);
     }
     startAutoReload();
   });
@@ -84,5 +86,5 @@ function isHtmlContentType(data) {
 }
 
 (function (document) {
-  Main.asciidocify();
+  asciidoctor.chrome.asciidocify();
 }(document));

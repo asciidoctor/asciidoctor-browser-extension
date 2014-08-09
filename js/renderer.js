@@ -1,4 +1,6 @@
-var Processor = {};
+// Namespace
+var asciidoctor = asciidoctor || {};
+asciidoctor.chrome = asciidoctor.chrome || {};
 
 var CUSTOM_ATTRIBUTES_KEY = 'CUSTOM_ATTRIBUTES';
 var SAFE_MODE_KEY = 'SAFE_MODE';
@@ -9,7 +11,7 @@ var THEME_KEY = 'THEME';
 /**
  * Render AsciiDoc content as HTML
  */
-Processor.convert = function (data) {
+asciidoctor.chrome.convert = function (data) {
   chrome.storage.local.get([CUSTOM_ATTRIBUTES_KEY, SAFE_MODE_KEY], function (settings) {
     appendStyles();
     appendMathJax();

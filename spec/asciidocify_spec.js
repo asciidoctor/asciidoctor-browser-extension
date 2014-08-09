@@ -5,15 +5,11 @@ describe("asciidocify", function () {
       chrome = {
         storage:{
           local:{
-            get:function () {
-            }
+            get:function () {}
           }
         }
       };
-      Processor = {
-        convert:function () {
-        }
-      };
+      asciidoctor.chrome.convert = function () {};
     });
 
     it("should call convert method if extension is enabled", function () {
@@ -25,11 +21,11 @@ describe("asciidocify", function () {
         values[ENABLE_RENDER_KEY] = true;
         callback(values);
       });
-      spyOn(Processor, "convert");
+      spyOn(asciidoctor.chrome, "convert");
       // When
-      Main.loadContent(data);
+      asciidoctor.chrome.loadContent(data);
       // Then
-      expect(Processor.convert).toHaveBeenCalledWith("= Hello world");
+      expect(asciidoctor.chrome.convert).toHaveBeenCalledWith("= Hello world");
     });
 
     it("should not call convert method if extension is disabled", function () {
@@ -41,11 +37,11 @@ describe("asciidocify", function () {
         values[ENABLE_RENDER_KEY] = false;
         callback(values);
       });
-      spyOn(Processor, "convert");
+      spyOn(asciidoctor.chrome, "convert");
       // When
-      Main.loadContent(data);
+      asciidoctor.chrome.loadContent(data);
       // Then
-      expect(Processor.convert).not.toHaveBeenCalledWith("= Hello world");
+      expect(asciidoctor.chrome.convert).not.toHaveBeenCalledWith("= Hello world");
     });
   });
 
