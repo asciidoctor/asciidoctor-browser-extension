@@ -8,6 +8,8 @@ This project uses https://github.com/asciidoctor/asciidoctor.js[Asciidoctor.js] 
 
 image::https://developer.chrome.com/webstore/images/ChromeWebStore_Badge_v2_206x58.png[link="{webstore}"]
 
+*Project health:* image:https://travis-ci.org/asciidoctor/asciidoctor-chrome-extension.svg?branch=master[Build Status, link="https://travis-ci.org/asciidoctor/asciidoctor-chrome-extension"]
+
 == Usage
 
  1. Install extension from {webstore}[Chrome Web Store]
