@@ -7,6 +7,9 @@ describe("asciidocify", function () {
           local:{
             get:function () {}
           }
+        },
+        extension:{
+          getURL:function () {}
         }
       };
       asciidoctor.chrome.convert = function () {};

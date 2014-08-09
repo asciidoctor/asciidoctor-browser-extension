@@ -30,13 +30,13 @@
         "file://*/*.asciidoc"
       ],
       "js":[
-        "js/highlight.min.js",
-        "js/jquery.min.js",
-        "js/opal.js",
-        "js/asciidoctor.js",
+        "js/vendor/highlight.min.js",
+        "js/vendor/jquery.min.js",
+        "js/vendor/opal.js",
+        "js/vendor/asciidoctor.js",
+        "js/vendor/md5.js",
         "js/asciidocify.js",
-        "js/renderer.js",
-        "js/md5.js"
+        "js/renderer.js"
       ]
     }
   ],
@@ -56,7 +56,7 @@
     "css/themes/rubygems.css",
     "css/default.min.css",
     "css/font-awesome.min.css",
-    "js/highlight.min.js",
+    "js/vendor/highlight.min.js",
     "fonts/FontAwesome.otf",
     "fonts/fontawesome-webfont.eot",
     "fonts/fontawesome-webfont.svg",

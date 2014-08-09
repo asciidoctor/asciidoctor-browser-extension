@@ -24,6 +24,9 @@ asciidoctor.chrome.loadContent = function (data) {
     var enabled = items[ENABLE_RENDER_KEY];
     // Extension is enabled
     if (enabled) {
+      appendStyles();
+      appendMathJax();
+      appendHighlightJsScript();
       asciidoctor.chrome.convert(data.responseText);
     }
     startAutoReload();
@@ -47,7 +50,7 @@ function reloadContent(data) {
           // Extension is enabled
           if (enabled) {
             // Convert AsciiDoc to HTML
-            Processor.convert(data);
+            asciidoctor.chrome.convert(data);
           } else {
             // Display plain content
             $(document.body).html('<pre style="word-wrap: break-word; white-space: pre-wrap;">' + $(document.body).text(data).html() + '</pre>');

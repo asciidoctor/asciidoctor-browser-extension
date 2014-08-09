@@ -13,34 +13,29 @@ var THEME_KEY = 'THEME';
  */
 asciidoctor.chrome.convert = function (data) {
   chrome.storage.local.get([CUSTOM_ATTRIBUTES_KEY, SAFE_MODE_KEY], function (settings) {
-    appendStyles();
-    appendMathJax();
-    appendHighlightJsScript();
-    $('#mathjax-refresh-js').remove();
-    var scripts = $(document.body).find('script');
-    detectLiveReloadJs(scripts);
-    $(document.body).html('');
-    var generatedHtml = undefined;
-    var documentTitle = undefined;
     try {
-      var asciidoctorOptions = buildAsciidoctorOptions(settings);
-      asciidoctorDocument = Opal.Asciidoctor.$load(data, asciidoctorOptions);
+      removeMathJaxRefreshJs();
+      var body = $(document.body);
+      var scripts = body.find('script');
+      detectLiveReloadJs(scripts);
+
+      body.html('');
+      var asciidoctorDocument = Opal.Asciidoctor.$load(data, buildAsciidoctorOptions(settings));
       if (asciidoctorDocument.attributes.map['icons'] == 'font') {
         appendFontAwesomeStyle();
       }
-      documentTitle = asciidoctorDocument.$doctitle(Opal.hash2(['sanitize'], {sanitize:true}));
-      generatedHtml = asciidoctorDocument.$render();
+      var generatedHtml = asciidoctorDocument.$render();
+      document.title = asciidoctorDocument.$doctitle(Opal.hash2(['sanitize'], {sanitize:true}));
+      body.html('<div id="content">' + generatedHtml + '</div>');
+
+      refreshMathJax();
+      appendScripts(scripts);
+      syntaxHighlighting();
     }
     catch (e) {
       showErrorMessage(e.name + ' : ' + e.message);
       console.error(e.stack);
-      return;
     }
-    document.title = documentTitle;
-    $(document.body).html('<div id="content">' + generatedHtml + '</div>');
-    refreshMathJax();
-    appendScripts(scripts);
-    syntaxHighlighting();
   });
 };
 
@@ -121,7 +116,6 @@ function syntaxHighlighting() {
   });
 }
 
-
 function appendFontAwesomeStyle() {
   if ($('#font-awesome-style').length == 0) {
     var fontAwesomeLink = document.createElement('link');
@@ -138,7 +132,7 @@ function appendFontAwesomeStyle() {
 function appendHighlightJsScript() {
   var highlightJsScript = document.createElement('script');
   highlightJsScript.type = 'text/javascript';
-  highlightJsScript.src = chrome.extension.getURL('js/highlight.min.js');
+  highlightJsScript.src = chrome.extension.getURL('js/vendor/highlight.min.js');
   document.head.appendChild(highlightJsScript);
 }
 
@@ -190,6 +184,10 @@ function appendMathJax() {
   mathJaxJsScript.type = 'text/javascript';
   mathJaxJsScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.4.0/MathJax.js?config=TeX-MML-AM_HTMLorMML';
   document.head.appendChild(mathJaxJsScript);
+}
+
+function removeMathJaxRefreshJs() {
+  $('#mathjax-refresh-js').remove();
 }
 
 function refreshMathJax() {

@@ -2,7 +2,7 @@ var alreadyRun = false;
 function inject(data){
     if (!alreadyRun) {
         appendStyles();
-        render(data);
+      asciidoctor.chrome.convert(data);
         alreadyRun = true; 
     }
 }

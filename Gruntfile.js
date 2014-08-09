@@ -12,12 +12,11 @@ module.exports = function (grunt) {
         options:{
           specs:'spec/*spec.js',
           vendor:[
-            'js/opal.js',
-            'js/asciidoctor.js',
-            'js/jquery.min.js',
-            'js/md5.js',
-            'js/bootstrap.min.js',
-            'js/bootstrap.min.js'
+            'js/vendor/opal.js',
+            'js/vendor/asciidoctor.js',
+            'js/vendor/jquery.min.js',
+            'js/vendor/md5.js',
+            'js/vendor/bootstrap.min.js'
           ]
         }
       }
