@@ -68,8 +68,29 @@ function refreshOptions() {
   chrome.storage.local.set({
     'CUSTOM_ATTRIBUTES':localStorage['CUSTOM_ATTRIBUTES'],
     'SAFE_MODE':localStorage['SAFE_MODE'],
-    'THEME':localStorage['THEME']
+    'THEME':localStorage['THEME'],
+    'JS':localStorage['JS']
   });
+  var customThemeNames = JSON.parse(localStorage['CUSTOM_THEME_NAMES'] || '[]');
+  if (customThemeNames.length > 0) {
+    for (var index in customThemeNames) {
+      var themeName = customThemeNames[index];
+      var themeNameKey = 'CUSTOM_THEME_' + themeName;
+      var themeObj = {};
+      themeObj[themeNameKey] = localStorage[themeNameKey];
+      chrome.storage.local.set(themeObj);
+    }
+  }
+  var customJavaScriptNames = JSON.parse(localStorage['CUSTOM_JS_NAMES'] || '[]');
+    if (customThemeNames.length > 0) {
+      for (var index in customJavaScriptNames) {
+        var javaScriptName = customJavaScriptNames[index];
+        var javaScriptNameKey = 'CUSTOM_JS_' + javaScriptName;
+        var javaScriptObj = {};
+        javaScriptObj[javaScriptNameKey] = localStorage[javaScriptNameKey];
+        chrome.storage.local.set(javaScriptObj);
+      }
+    }
 }
 
 chrome.browserAction.onClicked.addListener(enableDisableRender);

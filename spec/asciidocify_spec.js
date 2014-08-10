@@ -5,14 +5,22 @@ describe("asciidocify", function () {
       chrome = {
         storage:{
           local:{
-            get:function () {}
+            get:function () {
+            }
           }
         },
         extension:{
-          getURL:function () {}
+          getURL:function (path) {
+          }
+        },
+        runtime:{
+          getManifest:function () {
+            return {web_accessible_resources:[]};
+          }
         }
       };
-      asciidoctor.chrome.convert = function () {};
+      asciidoctor.chrome.convert = function () {
+      };
     });
 
     it("should call convert method if extension is enabled", function () {

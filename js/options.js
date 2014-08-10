@@ -1,76 +1,178 @@
-// Saves options to localStorage.
-function save_options() {
-  var inputCustomAttributes = document.getElementById('inputCustomAttributes');
-  localStorage['CUSTOM_ATTRIBUTES'] = inputCustomAttributes.value;
+var selectTheme = $('#selectTheme');
+var selectJavaScript = $('#selectJavaScript');
+var selectSafeMode = $('#selectSafeMode');
+var inputCustomAttributes = $('#inputCustomAttributes');
+var inputCustomTheme = $('#inputCustomTheme');
+var inputCustomJavaScript = $('#inputCustomJavaScript');
 
-  var selectSafeMode = document.getElementById('selectSafeMode');
-  localStorage['SAFE_MODE'] = selectSafeMode.value;
+var addCustomThemeAlert = $('#addCustomThemeAlert');
+var addCustomJavaScriptAlert = $('#addCustomJavaScriptAlert');
+var saveAlert = $('#saveAlert');
+var saveBtn = $('#saveBtn');
 
-  var selectTheme = document.getElementById('selectTheme');
-  localStorage['THEME'] = selectTheme.value;
+saveBtn.click(saveOptions);
+$(document).bind('ready', restoreOptions);
+
+/**
+ * Saves options to localStorage.
+ */
+function saveOptions() {
+  localStorage['CUSTOM_ATTRIBUTES'] = inputCustomAttributes.val();
+  localStorage['SAFE_MODE'] = selectSafeMode.val();
+  localStorage['THEME'] = selectTheme.val();
+  localStorage['JS'] = selectJavaScript.val();
 
   // Update status to let user know options were saved.
-  var alert = '<div class="alert alert-success alert-dismissable fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><b>{{message}}</b></div>';
-  var html = alert.replace('{{message}}', 'Options saved!');
-  $('#status').html(html);
+  saveAlert.find('.content').html('<b>Options saved!</b>');
+  saveAlert.show();
   chrome.extension.getBackgroundPage().refreshOptions()
 }
 
-// Restores options to saved value from localStorage.
-function restore_options() {
-  var customAttributes = localStorage['CUSTOM_ATTRIBUTES'];
-  if (customAttributes) {
-    var inputCustomAttributes = document.getElementById('inputCustomAttributes');
-    inputCustomAttributes.value = customAttributes;
-  }
+/**
+ * Restores options to saved value from localStorage.
+ */
+function restoreOptions() {
+  inputCustomAttributes.val(localStorage['CUSTOM_ATTRIBUTES'] || '');
+  selectSafeMode.val(localStorage['SAFE_MODE'] || 'secure');
 
-  var safeMode = localStorage['SAFE_MODE'] || 'secure';
-  var selectSafeMode = document.getElementById('selectSafeMode');
-  selectSafeMode.value = safeMode;
-
-  var theme = localStorage['THEME'] || 'asciidoctor';
-  var selectTheme = document.getElementById('selectTheme');
-  selectTheme.value = theme;
-
-  var customThemes = localStorage['CUSTOM_THEMES'];
-
-  if (customThemes) {
-    var customThemesOptGroup = document.createElement('optgroup');
-    customThemesOptGroup.label = 'Custom';
-    for (var index in customThemes) {
-      var customTheme = customThemes[index];
-      var option = document.createElement('option');
-      option.innerText = customTheme;
-      customThemesOptGroup.appendChild(option);
+  // Themes
+  var customThemeNames = JSON.parse(localStorage['CUSTOM_THEME_NAMES'] || '[]');
+  if (customThemeNames.length > 0) {
+    var customThemesOptGroup = getCustomThemeOptGroup();
+    for (var index in customThemeNames) {
+      customThemesOptGroup.append('<option>' + customThemeNames[index] + '</option>');
     }
-    document.getElementById('selectTheme').appendChild(customThemesOptGroup);
   }
+  selectTheme.val(localStorage['THEME'] || 'asciidoctor');
+
+  // JavaScripts
+  var customJavaScriptNames = JSON.parse(localStorage['CUSTOM_JS_NAMES'] || '[]');
+  if (customJavaScriptNames.length > 0) {
+    for (var index in customJavaScriptNames) {
+      selectJavaScript.append('<option>' + customJavaScriptNames[index] + '</option>');
+    }
+  }
+  selectJavaScript.val(localStorage['JS']);
 }
 
-var addCustomCSSBtn = $('#addCustomCSS');
-var addCustomJavaScriptBtn = $('#addCustomJavaScript');
-addCustomCSSBtn.hide();
-addCustomJavaScriptBtn.hide();
+function initAlert(element) {
+  element.find('.close').click(function () {
+    element.hide();
+  });
+  element.hide();
+}
 
-$('#inputCustomTheme').change(function () {
+initAlert(saveAlert);
+initAlert(addCustomThemeAlert);
+initAlert(addCustomJavaScriptAlert);
+
+inputCustomTheme.change(function () {
+  resetAlert(addCustomThemeAlert);
   var hasNoFiles = this.files.length == 0;
-  if (hasNoFiles) {
-    addCustomCSSBtn.hide();
-  } else {
-    // TODO Check extension
-    addCustomCSSBtn.show();
+  if (!hasNoFiles) {
+    var file = this.files[0];
+    var themeName = getFileNameWithoutExtension(file);
+    var customThemeOptGroup = getCustomThemeOptGroup();
+    var themeExists = customThemeOptGroup.find('option:contains(' + themeName + ')').length == 0;
+    var alert = buildAlert(themeExists, themeName, 'theme');
+    if (themeExists) {
+      addNewOpt(customThemeOptGroup, themeName);
+    }
+    selectOpt(customThemeOptGroup, themeName);
+    updateThemeFile(file, themeName);
+    showAlert(addCustomThemeAlert, alert);
+    this.value = '';
   }
 });
 
-$('#inputCustomJavaScript').change(function () {
+inputCustomJavaScript.change(function () {
+  resetAlert(addCustomJavaScriptAlert);
   var hasNoFiles = this.files.length == 0;
-  if (hasNoFiles) {
-    addCustomJavaScriptBtn.hide();
-  } else {
-    // TODO Check extension
-    addCustomJavaScriptBtn.show();
+  if (!hasNoFiles) {
+    var file = this.files[0];
+    var javaScriptName = getFileNameWithoutExtension(file);
+    var javaScriptExists = selectJavaScript.find('option:contains(' + javaScriptName + ')').length == 0;
+    var alert = buildAlert(javaScriptExists, javaScriptName, 'JavaScript');
+    if (javaScriptExists) {
+      addNewOpt(selectJavaScript, javaScriptName);
+    }
+    selectOpt(selectJavaScript, javaScriptName);
+    updateJavaScriptFile(file, javaScriptName);
+    showAlert(addCustomJavaScriptAlert, alert);
+    this.value = '';
   }
 });
 
-document.addEventListener('DOMContentLoaded', restore_options);
-document.querySelector('#save').addEventListener('click', save_options);
+function addNewOpt(parentElement, name) {
+  parentElement.append('<option>' + name + '</option>');
+}
+
+function getCustomThemeOptGroup() {
+  var customThemesOptGroup = $("#customThemeOptGroup");
+  if (customThemesOptGroup.length == 0) {
+    customThemesOptGroup = $('<optgroup id="customThemeOptGroup" label="Custom"></optgroup>');
+    selectTheme.append(customThemesOptGroup);
+  }
+  return customThemesOptGroup;
+}
+
+function updateThemeFile(themeFile, themeName) {
+  var reader = new FileReader();
+  reader.onload = function (evt) {
+    var fileString = evt.target.result;
+    var customThemeNames = JSON.parse(localStorage['CUSTOM_THEME_NAMES'] || '[]');
+    if ($.inArray(themeName, customThemeNames) === -1) {
+      customThemeNames.push(themeName);
+      localStorage['CUSTOM_THEME_NAMES'] = JSON.stringify(customThemeNames);
+    }
+    localStorage['CUSTOM_THEME_' + themeName] = fileString;
+  };
+  reader.readAsText(themeFile);
+}
+
+function updateJavaScriptFile(themeFile, javaScriptName) {
+  var reader = new FileReader();
+  reader.onload = function (evt) {
+    var fileString = evt.target.result;
+    var customJavaScriptNames = JSON.parse(localStorage['CUSTOM_JS_NAMES'] || '[]');
+    if ($.inArray(javaScriptName, customJavaScriptNames) === -1) {
+      customJavaScriptNames.push(javaScriptName);
+      localStorage['CUSTOM_JS_NAMES'] = JSON.stringify(customJavaScriptNames);
+    }
+    localStorage['CUSTOM_JS_' + javaScriptName] = fileString;
+  };
+  reader.readAsText(themeFile);
+}
+
+function getFileNameWithoutExtension(file) {
+  var fileName = file.name;
+  return fileName.substr(0, fileName.lastIndexOf('.')) || fileName;
+}
+
+function buildAlert(exists, name, type) {
+  var alertClasses;
+  var alertMessage;
+  if (exists) {
+    alertClasses = 'alert alert-sm alert-info';
+    alertMessage = 'New ' + type + ' <b>' + name + '</b> has been added!';
+  } else {
+    alertClasses = 'alert alert-sm alert-warning';
+    alertMessage = 'Existing ' + type + ' <b>' + name + '</b> has been replaced!';
+  }
+  return {classes:alertClasses, message:alertMessage};
+}
+
+function showAlert(element, alert) {
+  element.addClass(alert.classes);
+  element.find('.content').html(alert.message);
+  element.show();
+}
+
+function resetAlert(element) {
+  element.hide();
+  element.removeClass();
+}
+
+function selectOpt(parentElement, name) {
+  parentElement.find('option:contains(' + name + ')').prop('selected', true);
+}

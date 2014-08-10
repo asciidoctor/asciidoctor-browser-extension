@@ -7,6 +7,8 @@ var SAFE_MODE_KEY = 'SAFE_MODE';
 var LIVERELOADJS_DETECTED_KEY = 'LIVERELOADJS_DETECTED';
 var LIVERELOADJS_FILENAME = 'livereload.js';
 var THEME_KEY = 'THEME';
+var CUSTOM_THEME_PREFIX = 'CUSTOM_THEME_';
+var JS_KEY = 'JS';
 
 /**
  * Render AsciiDoc content as HTML
@@ -15,6 +17,7 @@ asciidoctor.chrome.convert = function (data) {
   chrome.storage.local.get([CUSTOM_ATTRIBUTES_KEY, SAFE_MODE_KEY], function (settings) {
     try {
       removeMathJaxRefreshJs();
+      removeCustomJs();
       var body = $(document.body);
       var scripts = body.find('script');
       detectLiveReloadJs(scripts);
@@ -30,6 +33,7 @@ asciidoctor.chrome.convert = function (data) {
 
       refreshMathJax();
       appendScripts(scripts);
+      appendCustomJavaScript();
       syntaxHighlighting();
     }
     catch (e) {
@@ -116,6 +120,22 @@ function syntaxHighlighting() {
   });
 }
 
+function appendCustomJavaScript() {
+  chrome.storage.local.get(JS_KEY, function (items) {
+    var javaScriptName = items[JS_KEY];
+    if (javaScriptName) {
+      var customJavaScriptKey = 'CUSTOM_JS_' + javaScriptName;
+      chrome.storage.local.get(customJavaScriptKey, function (items) {
+        if (items[customJavaScriptKey]) {
+          var customJavaScript = $('<script id="asciidoctor-custom-js" type="text/javascript"></script>');
+          customJavaScript.html(items[customJavaScriptKey]);
+          $(document.body).append(customJavaScript);
+        }
+      });
+    }
+  });
+}
+
 function appendFontAwesomeStyle() {
   if ($('#font-awesome-style').length == 0) {
     var fontAwesomeLink = document.createElement('link');
@@ -136,6 +156,17 @@ function appendHighlightJsScript() {
   document.head.appendChild(highlightJsScript);
 }
 
+function getDefaultThemeNames() {
+  var web_accessible_resources = chrome.runtime.getManifest().web_accessible_resources;
+  var themeRegexp = /^css\/themes\/(.*)\.css$/i;
+  var themes = $.grep(web_accessible_resources, function (item) {
+    return themeRegexp.test(item);
+  });
+  return themes.map(function (item) {
+    return item.replace(themeRegexp, "$1");
+  });
+}
+
 /**
  * Append css files
  */
@@ -143,11 +174,24 @@ function appendStyles() {
   // Theme
   chrome.storage.local.get(THEME_KEY, function (settings) {
     var theme = settings[THEME_KEY] || 'asciidoctor';
-    var themeLink = document.createElement('link');
-    themeLink.rel = 'stylesheet';
-    themeLink.id = 'asciidoctor-style';
-    themeLink.href = chrome.extension.getURL('css/themes/' + theme + '.css');
-    document.head.appendChild(themeLink);
+    var themeNames = getDefaultThemeNames();
+    // Check if the theme is packaged in the extension... if not it's a custom theme
+    if ($.inArray(theme, themeNames) !== -1) {
+      var themeLink = document.createElement('link');
+      themeLink.rel = 'stylesheet';
+      themeLink.id = 'asciidoctor-style';
+      themeLink.href = chrome.extension.getURL('css/themes/' + theme + '.css');
+      document.head.appendChild(themeLink);
+    } else {
+      var customThemeKey = CUSTOM_THEME_PREFIX + theme;
+      chrome.storage.local.get(customThemeKey, function (items) {
+        if (items[customThemeKey]) {
+          var themeStyle = $('<style id="asciidoctor-custom-style"></style>');
+          themeStyle.html(items[customThemeKey]);
+          $(document.head).append(themeStyle);
+        }
+      });
+    }
   });
   // Highlight
   var highlightTheme = 'default';
@@ -188,6 +232,10 @@ function appendMathJax() {
 
 function removeMathJaxRefreshJs() {
   $('#mathjax-refresh-js').remove();
+}
+
+function removeCustomJs() {
+  $('#asciidoctor-custom-js').remove();
 }
 
 function refreshMathJax() {
