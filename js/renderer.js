@@ -200,11 +200,6 @@ function appendStyles() {
   highlightStylesheetLink.id = highlightTheme + '-highlight-style';
   highlightStylesheetLink.href = chrome.extension.getURL('css/' + highlightTheme + '.min.css');
   document.head.appendChild(highlightStylesheetLink);
-  // Google Fonts
-  var googleFontsStylesheetLink = document.createElement('link');
-  googleFontsStylesheetLink.rel = 'stylesheet';
-  googleFontsStylesheetLink.href = 'https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400';
-  document.head.appendChild(googleFontsStylesheetLink);
 }
 
 function appendMathJax() {
