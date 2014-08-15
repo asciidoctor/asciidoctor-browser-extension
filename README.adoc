@@ -3,6 +3,7 @@ Guillaume Grossetie
 :sources: https://github.com/asciidoctor/asciidoctor-chrome-extension
 :license: https://github.com/asciidoctor/asciidoctor-chrome-extension/blob/master/LICENSE
 :webstore: https://chrome.google.com/webstore/detail/asciidoctorjs-live-previe/iaalpfgpbocpdfblpnhhgllgbdbchmia
+:manual-placement: http://asciidoctor.org/docs/user-manual/#manual-placement
 
 This project uses https://github.com/asciidoctor/asciidoctor.js[Asciidoctor.js] to preview AsciiDoc as HTML inside the Chrome (or Chromium) web browser!
 
@@ -39,6 +40,30 @@ The extension can be configured via an options page.
 To open the options page, right-click the extension icon and choose Options on the menu. You can also go to `chrome://extensions` and click the Options link.
 
 The options page let you add custom Asciidoctor attributes or change the theme of the AsciiDoc HTML output.
+
+== Troubleshooting
+
+=== TOC
+It's important to note that since the Chrome extension converts the document to embeddable HTML (header and footer disabled),
+the only TOC placement that work are preamble (if the document has a preamble) or {manual-placement}[manual placement].
+
+.toc-preambule.adoc
+----
+= Title
+:toc: preamble
+----
+
+.toc-manual-placement.adoc
+----
+= Title
+:toc:
+:toc-placement!:
+
+Somewhere...
+toc::[]
+----
+
+You can also use preprocessor directives to fine-tune the content to put the TOC in the right place depending on the environment.
 
 == Changelog
 
