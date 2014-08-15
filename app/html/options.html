@@ -69,8 +69,9 @@
         </div>
         <div class="row">
           <div class="col-lg-12">
-            <b>Add a new stylesheet...</b>
+            <b>Add Stylesheet...</b>
             <input type="file" id="inputCustomTheme" accept="text/css">
+
             <div id="addCustomThemeAlert" role="alert">
               <button type="button" class="close">
                 <span aria-hidden="true">&times;</span>
@@ -87,15 +88,33 @@
 
       <div class="col-lg-10">
         <select class="form-control" id="selectJavaScript">
+          <option value=""></option>
         </select>
         <span class="help-block">Add a custom JavaScript to the rendered HTML.</span>
+        <b>Add JavaScript...</b>
         <input type="file" id="inputCustomJavaScript" accept="application/javascript">
+
         <div id="addCustomJavaScriptAlert" role="alert">
           <button type="button" class="close">
             <span aria-hidden="true">&times;</span>
             <span class="sr-only">Close</span>
           </button>
           <div class="content"></div>
+        </div>
+        <br/>
+        <b>Load the JavaScript...</b>
+
+        <div class="radio">
+          <label>
+            <input type="radio" name="optionsLoadJavaScript" id="optionsJavaScriptAfter" value="after">
+            after the document has been rendered
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="optionsLoadJavaScript" id="optionJavaScriptBefore" value="before">
+            before the document has been rendered
+          </label>
         </div>
       </div>
     </div>
@@ -106,6 +125,7 @@
     </div>
   </form>
   <br/>
+
   <div id="saveAlert" class="alert alert-success">
     <button type="button" class="close">
       <span aria-hidden="true">&times;</span>

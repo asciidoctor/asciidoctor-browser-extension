@@ -9,32 +9,54 @@ var LIVERELOADJS_FILENAME = 'livereload.js';
 var THEME_KEY = 'THEME';
 var CUSTOM_THEME_PREFIX = 'CUSTOM_THEME_';
 var JS_KEY = 'JS';
+var JS_LOAD_KEY = 'JS_LOAD';
 
 /**
- * Render AsciiDoc content as HTML
+ * Convert AsciiDoc as HTML
  */
 asciidoctor.chrome.convert = function (data) {
-  chrome.storage.local.get([CUSTOM_ATTRIBUTES_KEY, SAFE_MODE_KEY], function (settings) {
+  chrome.storage.local.get([CUSTOM_ATTRIBUTES_KEY, SAFE_MODE_KEY, JS_KEY, JS_LOAD_KEY], function (settings) {
     try {
       removeMathJaxRefreshJs();
       removeCustomJs();
+
       var body = $(document.body);
+      // Save scripts
       var scripts = body.find('script');
+
       detectLiveReloadJs(scripts);
 
-      body.html('');
-      var asciidoctorDocument = Opal.Asciidoctor.$load(data, buildAsciidoctorOptions(settings));
-      if (asciidoctorDocument.attributes.map['icons'] == 'font') {
-        appendFontAwesomeStyle();
-      }
-      var generatedHtml = asciidoctorDocument.$render();
-      document.title = asciidoctorDocument.$doctitle(Opal.hash2(['sanitize'], {sanitize:true}));
-      body.html('<div id="content">' + generatedHtml + '</div>');
+      // Clear <body>
+      body.html('<div id="content"></div>');
 
-      refreshMathJax();
-      appendScripts(scripts);
-      appendCustomJavaScript();
-      syntaxHighlighting();
+      var loadCustomJavaScript = settings[JS_LOAD_KEY];
+      var customJavaScriptName = settings[JS_KEY];
+      if (customJavaScriptName) {
+        var customJavaScriptKey = 'CUSTOM_JS_' + customJavaScriptName;
+        chrome.storage.local.get(customJavaScriptKey, function (items) {
+          if (items[customJavaScriptKey]) {
+            var customJavaScript = $('<script id="asciidoctor-custom-js" type="text/javascript"></script>');
+            customJavaScript.html(items[customJavaScriptKey]);
+            if (loadCustomJavaScript === 'before') {
+              // Load the custom JavaScript...
+              $(document.body).append(customJavaScript);
+              // ... then update <body>
+              updateBody(data, settings, scripts);
+            } else {
+              // Update <body>
+              updateBody(data, settings, scripts);
+              // ... then load the custom JavaScript
+              $(document.body).append(customJavaScript);
+            }
+          } else {
+            // No content found for the custom JavaScript, update <body>
+            updateBody(data, settings, scripts);
+          }
+        });
+      } else {
+        // No custom JavaScript defined, update <body>
+        updateBody(data, settings, scripts);
+      }
     }
     catch (e) {
       showErrorMessage(e.name + ' : ' + e.message);
@@ -44,12 +66,29 @@ asciidoctor.chrome.convert = function (data) {
 };
 
 /**
- * Build Asciidoctor options
+ * Update the <body> with the generated HTML
+ */
+function updateBody(data, settings, scripts) {
+  var asciidoctorDocument = Opal.Asciidoctor.$load(data, buildAsciidoctorOptions(settings));
+  if (asciidoctorDocument.attributes.map['icons'] == 'font') {
+    appendFontAwesomeStyle();
+  }
+  var generatedHtml = asciidoctorDocument.$convert();
+  document.title = asciidoctorDocument.$doctitle(Opal.hash2(['sanitize'], {sanitize: true}));
+  $('#content').html(generatedHtml);
+
+  refreshMathJax();
+  appendScripts(scripts);
+  syntaxHighlighting();
+}
+
+/**
+ * Build Asciidoctor options from settings
  */
 function buildAsciidoctorOptions(settings) {
   var customAttributes = settings[CUSTOM_ATTRIBUTES_KEY];
   var safeMode = settings[SAFE_MODE_KEY] || 'secure';
-  // default attributes
+  // Default attributes
   var attributes = 'showtitle icons=font@ platform=opal platform-opal env=browser env-browser';
   var href = window.location.href;
   var fileName = href.split('/').pop();
@@ -73,8 +112,8 @@ function buildAsciidoctorOptions(settings) {
  * Detect LiveReload.js script to avoid multiple refreshes
  */
 function detectLiveReloadJs(scripts) {
-  var length = scripts.length,
-      script = null;
+  var length = scripts.length;
+  var script = null;
   var liveReloadDetected = false;
   for (var i = 0; i < length; i++) {
     script = scripts[i];
@@ -116,22 +155,6 @@ function syntaxHighlighting() {
     }
     else {
       e.className += ' hljs';
-    }
-  });
-}
-
-function appendCustomJavaScript() {
-  chrome.storage.local.get(JS_KEY, function (items) {
-    var javaScriptName = items[JS_KEY];
-    if (javaScriptName) {
-      var customJavaScriptKey = 'CUSTOM_JS_' + javaScriptName;
-      chrome.storage.local.get(customJavaScriptKey, function (items) {
-        if (items[customJavaScriptKey]) {
-          var customJavaScript = $('<script id="asciidoctor-custom-js" type="text/javascript"></script>');
-          customJavaScript.html(items[customJavaScriptKey]);
-          $(document.body).append(customJavaScript);
-        }
-      });
     }
   });
 }

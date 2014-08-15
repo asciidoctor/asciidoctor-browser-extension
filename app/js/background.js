@@ -69,12 +69,13 @@ function refreshOptions() {
     'CUSTOM_ATTRIBUTES':localStorage['CUSTOM_ATTRIBUTES'],
     'SAFE_MODE':localStorage['SAFE_MODE'],
     'THEME':localStorage['THEME'],
-    'JS':localStorage['JS']
+    'JS':localStorage['JS'],
+    'JS_LOAD':localStorage['JS_LOAD']
   });
   var customThemeNames = JSON.parse(localStorage['CUSTOM_THEME_NAMES'] || '[]');
   if (customThemeNames.length > 0) {
-    for (var index in customThemeNames) {
-      var themeName = customThemeNames[index];
+    for (var i in customThemeNames) {
+      var themeName = customThemeNames[i];
       var themeNameKey = 'CUSTOM_THEME_' + themeName;
       var themeObj = {};
       themeObj[themeNameKey] = localStorage[themeNameKey];
@@ -82,9 +83,9 @@ function refreshOptions() {
     }
   }
   var customJavaScriptNames = JSON.parse(localStorage['CUSTOM_JS_NAMES'] || '[]');
-    if (customThemeNames.length > 0) {
-      for (var index in customJavaScriptNames) {
-        var javaScriptName = customJavaScriptNames[index];
+    if (customJavaScriptNames.length > 0) {
+      for (var j in customJavaScriptNames) {
+        var javaScriptName = customJavaScriptNames[j];
         var javaScriptNameKey = 'CUSTOM_JS_' + javaScriptName;
         var javaScriptObj = {};
         javaScriptObj[javaScriptNameKey] = localStorage[javaScriptNameKey];

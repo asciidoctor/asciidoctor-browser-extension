@@ -4,6 +4,7 @@ var selectSafeMode = $('#selectSafeMode');
 var inputCustomAttributes = $('#inputCustomAttributes');
 var inputCustomTheme = $('#inputCustomTheme');
 var inputCustomJavaScript = $('#inputCustomJavaScript');
+var inputLoadJavaScript = $('input[name=optionsLoadJavaScript]');
 
 var addCustomThemeAlert = $('#addCustomThemeAlert');
 var addCustomJavaScriptAlert = $('#addCustomJavaScriptAlert');
@@ -21,6 +22,7 @@ function saveOptions() {
   localStorage['SAFE_MODE'] = selectSafeMode.val();
   localStorage['THEME'] = selectTheme.val();
   localStorage['JS'] = selectJavaScript.val();
+  localStorage['JS_LOAD'] = inputLoadJavaScript.filter(':checked').val();
 
   // Update status to let user know options were saved.
   saveAlert.find('.content').html('<b>Options saved!</b>');
@@ -34,13 +36,15 @@ function saveOptions() {
 function restoreOptions() {
   inputCustomAttributes.val(localStorage['CUSTOM_ATTRIBUTES'] || '');
   selectSafeMode.val(localStorage['SAFE_MODE'] || 'secure');
+  var loadJavaScriptValue = localStorage['JS_LOAD'] || 'after';
+  inputLoadJavaScript.filter('[value=' + loadJavaScriptValue + ']').prop('checked', true);
 
   // Themes
   var customThemeNames = JSON.parse(localStorage['CUSTOM_THEME_NAMES'] || '[]');
   if (customThemeNames.length > 0) {
     var customThemesOptGroup = getCustomThemeOptGroup();
-    for (var index in customThemeNames) {
-      customThemesOptGroup.append('<option>' + customThemeNames[index] + '</option>');
+    for (var i in customThemeNames) {
+      customThemesOptGroup.append('<option>' + customThemeNames[i] + '</option>');
     }
   }
   selectTheme.val(localStorage['THEME'] || 'asciidoctor');
@@ -48,8 +52,8 @@ function restoreOptions() {
   // JavaScripts
   var customJavaScriptNames = JSON.parse(localStorage['CUSTOM_JS_NAMES'] || '[]');
   if (customJavaScriptNames.length > 0) {
-    for (var index in customJavaScriptNames) {
-      selectJavaScript.append('<option>' + customJavaScriptNames[index] + '</option>');
+    for (var j in customJavaScriptNames) {
+      selectJavaScript.append('<option>' + customJavaScriptNames[j] + '</option>');
     }
   }
   selectJavaScript.val(localStorage['JS']);
