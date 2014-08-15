@@ -21,17 +21,16 @@ image::https://developer.chrome.com/webstore/images/ChromeWebStore_Badge_v2_206x
 WARNING: Due to a https://code.google.com/p/chromium/issues/detail?id=365107[Chromium bug] the `Allow access to file URLs` is lost on extension update.
 If preview of local files isn't working, make sure to uncheck and recheck the `Allow access to file URLs`.
 
-
 == Installation
 
 Loading your local copy of the extension on Chrome is super easy:
 
  1. Check `Developer mode` in `chrome://extensions`
- 2. Click `Load unpacked extension...` and select the extension root directory
+ 2. Click `Load unpacked extension...` and select the extension `app` directory
  3. That's all
 
 To see your changes, click the `Reload (Ctrl+R)` link in `chrome://extensions`.
-If you want to create a `Pack extension` just make a `zip` file of the extension root directory.
+If you want to create a `Pack extension` just make a `zip` file of the extension `app` directory.
 
 == Options
 

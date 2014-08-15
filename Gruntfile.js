@@ -1,47 +1,59 @@
 module.exports = function (grunt) {
-  grunt.initConfig({
-    pkg:grunt.file.readJSON('package.json'),
 
-    clean:{
-      dist:['dist']
+  var config = {
+    app: 'app',
+    dist: 'dist',
+    js: 'js',
+    vendor: 'vendor'
+  };
+
+  var paths = {
+    app: config.app,
+    js: config.app + '/' + config.js,
+    vendor: config.app + '/' + config.js + '/' + config.vendor,
+    dist: config.dist,
+    img: config.app + '/img',
+    fonts: config.app + '/fonts',
+    css: config.app + '/css',
+    html: config.app + '/html'
+  };
+
+  grunt.initConfig({
+
+    pkg: grunt.file.readJSON('package.json'),
+
+    config: config,
+
+    paths: paths,
+
+    clean: {
+      dist: ['dist']
     },
 
-    jasmine:{
-      customTemplate:{
-        src:['js/asciidocify.js', 'js/renderer.js'],
-        options:{
-          specs:'spec/*spec.js',
-          vendor:[
-            'js/vendor/opal.js',
-            'js/vendor/asciidoctor.js',
-            'js/vendor/jquery.min.js',
-            'js/vendor/md5.js',
-            'js/vendor/bootstrap.min.js'
+    jasmine: {
+      customTemplate: {
+        src: [paths.js + '/asciidocify.js', paths.js + '/renderer.js'],
+        options: {
+          specs: 'spec/*spec.js',
+          vendor: [
+            paths.vendor + '/opal.js',
+            paths.vendor + '/asciidoctor.js',
+            paths.vendor + '/jquery.min.js',
+            paths.vendor + '/md5.js',
+            paths.vendor + '/bootstrap.min.js'
           ]
         }
       }
     },
 
-    compress:{
-      main:{
-        options:{
-          archive:'dist/asciidoctor-chrome-extension.zip'
+    compress: {
+      main: {
+        options: {
+          archive: paths.dist + '/asciidoctor-chrome-extension.zip'
         },
-        files:[
-          {
-            expand:true,
-            src:[
-              'js/**',
-              'img/**',
-              'html/**',
-              'fonts/**',
-              'css/**',
-              'LICENSE',
-              'options.html',
-              'manifest.json',
-              'README.adoc'
-            ]
-          }
+        files: [
+          {expand: true, cwd: paths.app, src: '**'},
+          {expand: true, src: ['LICENSE', 'README.adoc']}
         ]
       }
     }
