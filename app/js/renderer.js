@@ -217,11 +217,11 @@ function appendStyles() {
     }
   });
   // Highlight
-  var highlightTheme = 'default';
+  var highlightTheme = 'github';
   var highlightStylesheetLink = document.createElement('link');
   highlightStylesheetLink.rel = 'stylesheet';
   highlightStylesheetLink.id = highlightTheme + '-highlight-style';
-  highlightStylesheetLink.href = chrome.extension.getURL('css/' + highlightTheme + '.min.css');
+  highlightStylesheetLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.2/styles/' + highlightTheme + '.min.css';
   document.head.appendChild(highlightStylesheetLink);
 }
 
