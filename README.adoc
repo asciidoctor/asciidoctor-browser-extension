@@ -66,6 +66,15 @@ You can also use preprocessor directives to fine-tune the content to put the TOC
 
 == Changelog
 
+=== 1.5.0.100
+
+ * Asciidoctor 1.5.0 !
+ * New stylesheet with Open Source Fonts
+ * Better print styles
+ * Font Awesome 4.1
+ * MathJax support
+ * Allow custom Javascript and Stylesheet
+
 === 0.4.0
 
  * Upgrade to Asciidoctor 1.5.0-preview.8
