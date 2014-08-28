@@ -233,11 +233,11 @@ function appendMathJax() {
           '  tex2jax: {' +
           '    inlineMath: [["\\\\(", "\\\\)"]],' +
           '    displayMath: [["\\\\[", "\\\\]"]],' +
-          '    ignoreClass: "nostem|nostem|nolatexmath"' +
+          '    ignoreClass: "nostem|nolatexmath"' +
           '  },' +
           '  asciimath2jax: {' +
           '    delimiters: [["\\\\$", "\\\\$"]],' +
-          '    ignoreClass: "nostem|nostem|noasciimath"' +
+          '    ignoreClass: "nostem|noasciimath"' +
           '  }' +
           '});';
   document.head.appendChild(mathJaxJsScriptConfig);
