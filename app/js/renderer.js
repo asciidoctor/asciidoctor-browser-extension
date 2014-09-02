@@ -75,6 +75,7 @@ function updateBody(data, settings, scripts) {
   }
   var generatedHtml = asciidoctorDocument.$convert();
   document.title = asciidoctorDocument.$doctitle(Opal.hash2(['sanitize'], {sanitize: true}));
+  document.body.className = asciidoctorDocument.$doctype();
   $('#content').html(generatedHtml);
 
   refreshMathJax();
