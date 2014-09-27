@@ -2,7 +2,9 @@
  * Scroll to the next/previous section (<h2>) with keyboard up/down.
  */
 var body = $('body');
-var headings = body.find('h2');
+var headings = [];
+headings.push.apply(headings, body.find('h1'));
+headings.push.apply(headings, body.find('h2'));
 var current = 0;
 var headingsLength = headings.length;
 $(document).keydown(function (e) {
