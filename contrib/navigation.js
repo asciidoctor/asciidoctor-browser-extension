@@ -5,7 +5,7 @@ var body = $('body');
 var headings = body.find('h2');
 var current = 0;
 var headingsLength = headings.length;
-body.on('keydown', function (e) {
+$(document).keydown(function (e) {
   if (e.keyCode === 38) {
     // up
     if (current > 0) {
