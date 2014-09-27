@@ -1,7 +1,6 @@
 /**
  * Scroll to the next/previous section (<h2>) with keyboard up/down.
  */
-var body = $('body');
 var headings = $('h1, h2, h3, h4, h5').not('.float');
 var current = 0;
 var headingsLength = headings.length;
