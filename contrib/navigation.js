@@ -1,11 +1,10 @@
 /**
  * Scroll to the next/previous section (<h2>) with keyboard up/down.
  */
-var body = $('body');
-var headings = body.find('h2');
+var headings = $('h1, h2, h3, h4, h5').not('.float');
 var current = 0;
 var headingsLength = headings.length;
-body.on('keydown', function (e) {
+$(document).keydown(function (e) {
   if (e.keyCode === 38) {
     // up
     if (current > 0) {
