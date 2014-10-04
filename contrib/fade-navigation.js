@@ -9,25 +9,33 @@ $(document).ready(
     var current = 0;
     var sectionsLength = sections.length;
     $(document).keydown(function (e) {
+      var origin = current;
+
       if (e.keyCode === 38) {
         // up
         if (current > 0) {
-          e.preventDefault();
           current -= 1;
-          $(sections[current+1]).fadeOut(300, function() {
-            $(sections[current]).fadeIn(300);
-          });
         }
+        else {
+          current = sectionsLength - 1;
+        }
+        e.preventDefault();
+        $(sections[origin]).fadeOut(300, function() {
+          $(sections[current]).fadeIn(300);
+        });
       }
       else if (e.keyCode === 40) {
         // down
         if (current < sectionsLength - 1) {
-          e.preventDefault();
           current += 1;
-          $(sections[current-1]).fadeOut(300, function() {
-            $(sections[current]).fadeIn(300);
-          });
         }
+        else {
+          current = 0;
+        }
+        e.preventDefault();
+        $(sections[origin]).fadeOut(300, function() {
+          $(sections[current]).fadeIn(300);
+        });
       }
     });
   }
