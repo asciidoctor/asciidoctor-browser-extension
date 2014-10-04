@@ -1,6 +1,8 @@
 /**
  * Fade between sections (<h1> and preamble are wrapped in a section) with keyboard up/down.
  */
+$(document).ready(
+  function() {
     $('#content h1:first-child, #content #preamble').wrapAll("<span class='sect1' />");
     var sections = $('.sect1');
     sections.hide();
@@ -29,3 +31,5 @@
         }
       }
     });
+  }
+);
