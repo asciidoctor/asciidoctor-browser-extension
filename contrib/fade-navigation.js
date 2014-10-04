@@ -1,5 +1,5 @@
 /**
- * Fade between sections (<h1> and preamble are wrapped in a section) with keyboard up/down.
+ * Fade between sections with keyboard up/down. <h1> and preamble are wrapped in a section.
  */
 $(document).ready(
   function() {
