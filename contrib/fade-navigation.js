@@ -5,9 +5,8 @@ $(document).ready(
   function() {
     $('#content h1:first-child, #content #preamble').wrapAll("<span class='sect1' />");
     var sections = $('.sect1');
-    sections.hide();
+    $.each(sections, function(i,o) {if (i > 0) {$(o).hide()}});
     var current = 0;
-    $(sections[current]).show();
     var sectionsLength = sections.length;
     $(document).keydown(function (e) {
       if (e.keyCode === 38) {
