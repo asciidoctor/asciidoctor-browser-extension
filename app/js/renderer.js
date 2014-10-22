@@ -222,7 +222,7 @@ function appendStyles() {
   var highlightStylesheetLink = document.createElement('link');
   highlightStylesheetLink.rel = 'stylesheet';
   highlightStylesheetLink.id = highlightTheme + '-highlight-style';
-  highlightStylesheetLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.2/styles/' + highlightTheme + '.min.css';
+  highlightStylesheetLink.href = chrome.extension.getURL('css/highlight/' + highlightTheme + '.css');
   document.head.appendChild(highlightStylesheetLink);
 }
 
@@ -245,7 +245,7 @@ function appendMathJax() {
 
   var mathJaxJsScript = document.createElement('script');
   mathJaxJsScript.type = 'text/javascript';
-  mathJaxJsScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.4.0/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  mathJaxJsScript.src = chrome.extension.getURL('vendor/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML');
   document.head.appendChild(mathJaxJsScript);
 }
 

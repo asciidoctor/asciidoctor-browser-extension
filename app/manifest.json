@@ -54,13 +54,15 @@
     "css/themes/riak.css",
     "css/themes/rocket-panda.css",
     "css/themes/rubygems.css",
+    "css/highlight/github.css",
     "css/font-awesome.min.css",
     "js/vendor/highlight.min.js",
     "fonts/FontAwesome.otf",
     "fonts/fontawesome-webfont.eot",
     "fonts/fontawesome-webfont.svg",
     "fonts/fontawesome-webfont.ttf",
-    "fonts/fontawesome-webfont.woff"
+    "fonts/fontawesome-webfont.woff",
+    "vendor/MathJax/*"
   ],
   "permissions":[
     "storage",
