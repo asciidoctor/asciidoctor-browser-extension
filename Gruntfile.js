@@ -4,7 +4,8 @@ module.exports = function (grunt) {
     app: 'app',
     dist: 'dist',
     js: 'js',
-    vendor: 'vendor'
+    vendor: 'vendor',
+    bower: 'bower_components'
   };
 
   var paths = {
@@ -15,7 +16,8 @@ module.exports = function (grunt) {
     img: config.app + '/img',
     fonts: config.app + '/fonts',
     css: config.app + '/css',
-    html: config.app + '/html'
+    html: config.app + '/html',
+    bower: config.bower
   };
 
   grunt.initConfig({
@@ -56,14 +58,57 @@ module.exports = function (grunt) {
           {expand: true, src: ['LICENSE', 'README.adoc']}
         ]
       }
+    },
+
+    copy: {
+      main: {
+        files: [
+          // copies vendor JavaScript files
+          {
+            expand: true,
+            src: [
+                  paths.bower + "/asciidoctor.js/dist/asciidoctor.js",
+                  paths.bower + "/opal/opal/0.6.2/opal.js",
+                  paths.bower + "/jquery/dist/jquery.min.js",
+                  paths.bower + "/bootstrap/dist/js/bootstrap.min.js"
+            ],
+            dest: 'app/js/vendor/',
+            flatten: true
+          },
+          // copies vendor style sheet files
+          {
+            expand: true,
+            src: paths.bower + "/asciidoctor.js/dist/css/asciidoctor.css",
+            dest: 'app/css/themes/',
+            flatten: true
+          },
+          {
+            expand: true,
+            src: [
+                  paths.bower + "/bootstrap/dist/css/bootstrap.min.css",
+                  paths.bower + "/font-awesome/css/font-awesome.min.css"
+            ],
+            dest: 'app/css/',
+            flatten: true
+          },
+          // copies vendor fonts files
+          {
+            expand: true,
+            src: paths.bower + "/font-awesome/fonts/*",
+            dest: 'app/fonts/',
+            flatten: true
+          }
+        ]
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-compress');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
   grunt.registerTask('default', ['dist']);
-  grunt.registerTask('dist', ['clean', 'test', 'compress']);
+  grunt.registerTask('dist', ['clean', 'copy', 'test', 'compress']);
   grunt.registerTask('test', ['jasmine']);
 };
