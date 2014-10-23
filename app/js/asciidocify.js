@@ -5,19 +5,35 @@ asciidoctor.chrome = asciidoctor.chrome || {};
 var autoReloadInterval;
 var AUTO_RELOAD_INTERVAL_TIME = 2000;
 var ENABLE_RENDER_KEY = 'ENABLE_RENDER';
+var ALLOW_TXT_EXTENSION_KEY = 'ALLOW_TXT_EXTENSION';
 
 asciidoctor.chrome.asciidocify = function () {
+  txtExtensionRegex = /\.txt[.|\?]?.*?$/;
+  if (location.href.match(txtExtensionRegex)) {
+    chrome.storage.local.get(ALLOW_TXT_EXTENSION_KEY, function (items) {
+      var allowed = items[ALLOW_TXT_EXTENSION_KEY] === 'true';
+      // Extension allows txt extension
+      if (allowed) {
+        loadContent();
+      }
+    });
+  } else {
+    loadContent();
+  }
+};
+
+function loadContent() {
   $.ajax({
-    url:location.href,
-    cache:false,
-    complete:function (data) {
+    url: location.href,
+    cache: false,
+    complete: function (data) {
       if (isHtmlContentType(data)) {
         return;
       }
       asciidoctor.chrome.loadContent(data);
     }
   });
-};
+}
 
 asciidoctor.chrome.loadContent = function (data) {
   chrome.storage.local.get(ENABLE_RENDER_KEY, function (items) {
@@ -69,9 +85,9 @@ function startAutoReload() {
   clearInterval(autoReloadInterval);
   autoReloadInterval = setInterval(function () {
     $.ajax({
-      url:location.href,
-      cache:false,
-      success:function (data) {
+      url: location.href,
+      cache: false,
+      success: function (data) {
         reloadContent(data);
       }
     });

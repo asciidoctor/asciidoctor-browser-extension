@@ -1,6 +1,7 @@
 var selectTheme = $('#selectTheme');
 var selectJavaScript = $('#selectJavaScript');
 var selectSafeMode = $('#selectSafeMode');
+var inputAllowTxtExtension = $('#inputAllowTxtExtension');
 var inputCustomAttributes = $('#inputCustomAttributes');
 var inputCustomTheme = $('#inputCustomTheme');
 var inputCustomJavaScript = $('#inputCustomJavaScript');
@@ -20,6 +21,7 @@ $(document).bind('ready', restoreOptions);
 function saveOptions() {
   localStorage['CUSTOM_ATTRIBUTES'] = inputCustomAttributes.val();
   localStorage['SAFE_MODE'] = selectSafeMode.val();
+  localStorage['ALLOW_TXT_EXTENSION'] = inputAllowTxtExtension.is(':checked');
   localStorage['THEME'] = selectTheme.val();
   localStorage['JS'] = selectJavaScript.val();
   localStorage['JS_LOAD'] = inputLoadJavaScript.filter(':checked').val();
@@ -36,6 +38,7 @@ function saveOptions() {
 function restoreOptions() {
   inputCustomAttributes.val(localStorage['CUSTOM_ATTRIBUTES'] || '');
   selectSafeMode.val(localStorage['SAFE_MODE'] || 'secure');
+  inputAllowTxtExtension.prop('checked', localStorage['ALLOW_TXT_EXTENSION'] === 'true');
   var loadJavaScriptValue = localStorage['JS_LOAD'] || 'after';
   inputLoadJavaScript.filter('[value=' + loadJavaScriptValue + ']').prop('checked', true);
 

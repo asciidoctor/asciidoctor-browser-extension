@@ -68,6 +68,7 @@ function refreshOptions() {
   chrome.storage.local.set({
     'CUSTOM_ATTRIBUTES':localStorage['CUSTOM_ATTRIBUTES'],
     'SAFE_MODE':localStorage['SAFE_MODE'],
+    'ALLOW_TXT_EXTENSION':localStorage['ALLOW_TXT_EXTENSION'],
     'THEME':localStorage['THEME'],
     'JS':localStorage['JS'],
     'JS_LOAD':localStorage['JS_LOAD']
