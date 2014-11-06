@@ -246,6 +246,7 @@ function appendMathJax() {
   var mathJaxJsScript = document.createElement('script');
   mathJaxJsScript.type = 'text/javascript';
   mathJaxJsScript.src = chrome.extension.getURL('vendor/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML');
+  //mathJaxJsScript.src = chrome.extension.getURL('vendor/MathJax/MathJax.js?config=TeX-AMS_HTML');
   document.head.appendChild(mathJaxJsScript);
 }
 
