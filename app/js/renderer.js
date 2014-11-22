@@ -107,9 +107,11 @@ function buildAsciidoctorOptions(settings) {
   }
   var pwd = Opal.File.$dirname(href);
   Opal.ENV['$[]=']("PWD", pwd);
-  return Opal.hash2(['base_dir', 'safe', 'attributes'], {
+  return Opal.hash2(['base_dir', 'safe', 'backend', 'attributes'], {
     'base_dir':pwd,
     'safe':safeMode,
+    // Force backend to html5
+    'backend': 'html5',
     'attributes':attributes
   });
 }
