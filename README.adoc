@@ -66,6 +66,13 @@ You can also use preprocessor directives to fine-tune the content to put the TOC
 
 == Changelog
 
+=== 1.5.2.100
+
+ * Asciidoctor 1.5.2
+ * Support :max-width: attribute
+ * Offline mode
+ * .txt files extension (configurable)
+
 === 1.5.1.100
 
  * Asciidoctor 1.5.1
