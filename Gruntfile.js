@@ -68,7 +68,7 @@ module.exports = function (grunt) {
             expand: true,
             src: [
                   paths.bower + "/asciidoctor.js/dist/asciidoctor.js",
-                  paths.bower + "/opal/opal/0.6.2/opal.js",
+                  paths.bower + "/opal/opal/0.6.3/opal.js",
                   paths.bower + "/jquery/dist/jquery.min.js",
                   paths.bower + "/bootstrap/dist/js/bootstrap.min.js"
             ],
