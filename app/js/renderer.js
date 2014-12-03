@@ -77,7 +77,6 @@ function updateBody(data, settings, scripts) {
   document.title = asciidoctorDocument.$doctitle(Opal.hash2(['sanitize'], {sanitize: true}));
   document.body.className = asciidoctorDocument.$doctype();
   var maxWidth = asciidoctorDocument.$attr('max-width');
-  console.log('maxWidth ' + maxWidth);
   if (maxWidth) {
     document.body.style.maxWidth = maxWidth;
   }
