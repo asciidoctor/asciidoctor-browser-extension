@@ -83,6 +83,7 @@ function updateBody(data, settings, scripts) {
   }
   $('#content').html(generatedHtml);
 
+  refreshIframe();
   refreshMathJax();
   appendScripts(scripts);
   syntaxHighlighting();
@@ -273,6 +274,13 @@ function refreshMathJax() {
           '  window.MathJax.Hub.Typeset();' +
           '}';
   document.body.appendChild(mathJaxJsScript);
+}
+
+/**
+ * Force iframe to load
+ */
+function refreshIframe() {
+  $('iframe').each(function() { $(this).attr('src', $(this).attr('src')) });
 }
 
 /**
