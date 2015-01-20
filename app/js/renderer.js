@@ -83,7 +83,7 @@ function updateBody(data, settings, scripts) {
   }
   $('#content').html(generatedHtml);
 
-  refreshIframe();
+  forceLoadDynamicObjects();
   refreshMathJax();
   appendScripts(scripts);
   syntaxHighlighting();
@@ -277,9 +277,10 @@ function refreshMathJax() {
 }
 
 /**
- * Force iframe to load
+ * Force dynamic objects to be load (iframe, script...)
  */
-function refreshIframe() {
+function forceLoadDynamicObjects() {
+  // Force iframe to be load
   $('iframe').each(function() { $(this).attr('src', $(this).attr('src')) });
 }
 
