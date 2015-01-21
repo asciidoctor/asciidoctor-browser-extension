@@ -82,6 +82,7 @@ function updateBody(data, settings, scripts) {
   }
   $('#content').html(generatedHtml);
 
+  forceLoadDynamicObjects();
   refreshMathJax();
   appendScripts(scripts);
   syntaxHighlighting();
@@ -272,6 +273,14 @@ function refreshMathJax() {
           '  window.MathJax.Hub.Typeset();' +
           '}';
   document.body.appendChild(mathJaxJsScript);
+}
+
+/**
+ * Force dynamic objects to be load (iframe, script...)
+ */
+function forceLoadDynamicObjects() {
+  // Force iframe to be load
+  $('iframe').each(function() { $(this).attr('src', $(this).attr('src')) });
 }
 
 /**
