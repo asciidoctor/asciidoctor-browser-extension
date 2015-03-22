@@ -56,7 +56,8 @@
         "js/asciidocify.js",
         "js/renderer.js",
         "js/vendor/chartist.min.js",
-        "js/vendor/asciidoctor-chart-block-macro.js"
+        "js/vendor/asciidoctor-chart-block-macro.js",
+        "js/vendor/asciidoctor-emoji-inline-macro.js"
       ]
     }
   ],
@@ -76,8 +77,10 @@
     "css/themes/rubygems.css",
     "css/highlight/github.css",
     "css/font-awesome.min.css",
+    "css/twemoji-awesome.css",
     "js/vendor/highlight.min.js",
     "js/vendor/asciidoctor-chart-block-macro.js",
+    "js/vendor/asciidoctor-emoji-inline-macro.js",
     "fonts/FontAwesome.otf",
     "fonts/fontawesome-webfont.eot",
     "fonts/fontawesome-webfont.svg",
