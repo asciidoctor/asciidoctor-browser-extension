@@ -73,6 +73,7 @@ function updateBody(data, settings, scripts) {
   if (asciidoctorDocument.attributes.map['icons'] == 'font') {
     appendFontAwesomeStyle();
   }
+  appendChartist();
   var generatedHtml = asciidoctorDocument.$convert();
   document.title = asciidoctorDocument.$doctitle(Opal.hash2(['sanitize'], {sanitize: true}));
   document.body.className = asciidoctorDocument.$doctype();
@@ -165,6 +166,31 @@ function syntaxHighlighting() {
       e.className += ' hljs';
     }
   });
+}
+
+function appendChartist() {
+  if ($('#chartist-style').length == 0) {
+    var chartistLink = document.createElement('link');
+    chartistLink.rel = 'stylesheet';
+    chartistLink.id = 'chartist-style';
+    chartistLink.href = 'http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css';
+    document.head.appendChild(chartistLink);
+  }
+  if ($('#chartist-script').length == 0) {
+    var chartistScript = document.createElement('script');
+    chartistScript.id = 'chartist-script';
+    chartistScript.src = 'http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js';
+    document.head.appendChild(chartistScript);
+  }
+  if ($('#chartist-asciidoctor-style').length == 0) {
+    var chartistStyle = document.createElement('style');
+    chartistStyle.id = 'chartist-asciidoctor-style';
+    chartistStyle.innerHTML = '.ct-chart .ct-series.ct-series-a .ct-line {stroke:#8EB33B} ' +
+    '.ct-chart .ct-series.ct-series-b .ct-line {stroke:#72B3CC} ' +
+    '.ct-chart .ct-series.ct-series-a .ct-point {stroke:#8EB33B} ' +
+    '.ct-chart .ct-series.ct-series-b .ct-point {stroke:#72B3CC}';
+    document.head.appendChild(chartistStyle);
+  }
 }
 
 function appendFontAwesomeStyle() {
