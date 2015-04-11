@@ -268,10 +268,7 @@ function removeCustomJs() {
 function refreshMathJax() {
   var mathJaxJsScript = document.createElement('script');
   mathJaxJsScript.id = 'mathjax-refresh-js';
-  mathJaxJsScript.text =
-      'if (window.MathJax) {' +
-          '  window.MathJax.Hub.Typeset();' +
-          '}';
+  mathJaxJsScript.text = 'if (window.MathJax) { window.MathJax.Hub.Typeset(); }';
   document.body.appendChild(mathJaxJsScript);
 }
 
