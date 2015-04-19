@@ -36,7 +36,7 @@ chrome.contextMenus.create({
 });
 
 function refreshTab(tab) {
-  chrome.tabs.reload(tab.id);
+  chrome.tabs.sendMessage(tab.id, "refresh");
 }
 
 function reloadTab(tab) {

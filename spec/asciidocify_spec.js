@@ -11,6 +11,10 @@ describe("asciidocify", function () {
         },
         extension:{
           getURL:function (path) {
+          },
+          onMessage: {
+            addListener:function (path) {
+            }
           }
         },
         runtime:{
@@ -25,8 +29,6 @@ describe("asciidocify", function () {
 
     it("should call convert method if extension is enabled", function () {
       // Given
-      var data = {};
-      data.responseText = "= Hello world";
       spyOn(chrome.storage.local, "get").and.callFake(function (name, callback) {
         var values = [];
         values[ENABLE_RENDER_KEY] = true;
@@ -34,15 +36,13 @@ describe("asciidocify", function () {
       });
       spyOn(asciidoctor.chrome, "convert");
       // When
-      asciidoctor.chrome.loadContent(data);
+      asciidoctor.chrome.loadContent("= Hello world");
       // Then
       expect(asciidoctor.chrome.convert).toHaveBeenCalledWith("= Hello world");
     });
 
     it("should not call convert method if extension is disabled", function () {
       // Given
-      var data = {};
-      data.responseText = "= Hello world";
       spyOn(chrome.storage.local, "get").and.callFake(function (name, callback) {
         var values = [];
         values[ENABLE_RENDER_KEY] = false;
@@ -50,7 +50,7 @@ describe("asciidocify", function () {
       });
       spyOn(asciidoctor.chrome, "convert");
       // When
-      asciidoctor.chrome.loadContent(data);
+      asciidoctor.chrome.loadContent("= Hello world");
       // Then
       expect(asciidoctor.chrome.convert).not.toHaveBeenCalledWith("= Hello world");
     });
