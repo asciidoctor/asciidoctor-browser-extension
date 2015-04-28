@@ -36,33 +36,49 @@ chrome.contextMenus.create({
 });
 
 function refreshTab(tab) {
-  var code = 'window.location.reload();';
-  chrome.tabs.executeScript(tab.id, {code:code});
+  chrome.tabs.reload(tab.id);
 }
 
-function enableDisableRender() {
-  // Save the status of the extension
-  chrome.storage.local.set({'ENABLE_RENDER':enableRender});
+function reloadTab(tab) {
+  chrome.tabs.reload(tab.id);
+}
 
-  // Update the extension icon
-  var iconPath = enableRender ? "img/enabled.png" : "img/disabled.png";
-  chrome.browserAction.setIcon({path:iconPath});
-
-  // Switch enabled <> disabled
-  enableRender = !enableRender;
-
-  // Reload the active tab in the current windows that matches
+function findActiveTab(callback) {
   var tabFound = false;
   for (var i = 0; i < matchesTabUrl.length; i++) {
     var matchTabUrl = matchesTabUrl[i];
-    chrome.tabs.query({active:true, currentWindow:true, url:matchTabUrl}, function (tabs) {
+    chrome.tabs.query({active: true, currentWindow: true, url: matchTabUrl}, function (tabs) {
       if (!tabFound && tabs.length > 0) {
-        refreshTab(tabs[0]);
+        callback(tabs[0]);
         tabFound = true;
       }
     });
   }
 }
+
+function enableDisableRender() {
+  // Save the status of the extension
+  chrome.storage.local.set({'ENABLE_RENDER': enableRender});
+
+  // Update the extension icon
+  var iconPath = enableRender ? "img/enabled.png" : "img/disabled.png";
+  chrome.browserAction.setIcon({path: iconPath});
+
+  // Reload the active tab in the current windows that matches
+  if (enableRender) {
+    findActiveTab(function (activeTab) {
+      refreshTab(activeTab);
+    });
+  } else {
+    findActiveTab(function (activeTab) {
+      reloadTab(activeTab);
+    });
+  }
+
+  // Switch the flag
+  enableRender = !enableRender;
+}
+
 
 function refreshOptions() {
   chrome.storage.local.set({
