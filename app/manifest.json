@@ -1,6 +1,6 @@
 {
   "name":"Asciidoctor.js Live Preview",
-  "version":"1.5.2.100",
+  "version":"1.5.2.110",
   "manifest_version":2,
 
   "description":"Render AsciiDoc (.ad, .adoc, .asc, .asciidoc) as HTML inside Chrome!",

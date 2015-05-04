@@ -66,6 +66,11 @@ You can also use preprocessor directives to fine-tune the content to put the TOC
 
 == Changelog
 
+=== 1.5.2.110
+
+ * Support embedded videos
+ * Fix enable/disable on local files
+
 === 1.5.2.100
 
  * Asciidoctor 1.5.2

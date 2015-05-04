@@ -1,6 +1,6 @@
 {
   "name": "Asciidoctor.js Live Preview",
-  "version": "1.5.2.100",
+  "version": "1.5.2.110",
   "main": "app",
   "dependencies": {
     "asciidoctor.js": "1.5.2",
