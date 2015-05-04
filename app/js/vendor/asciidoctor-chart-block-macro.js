@@ -14,17 +14,21 @@
 
     self.$named("chart");
 
-    return (def.$process = function(parent, target, attrs) {
-      var $a, self = this, engine = nil, raw_data = nil, html = nil;
+    self.$name_positional_attributes("type", "width", "height");
 
-      engine = (function() {if ((($a = (attrs['$key?']("engine"))) !== nil && (!$a._isBoolean || $a == true))) {
-        return attrs['$[]']("engine").$downcase()
+    return (def.$process = function(parent, target, attrs) {
+      var $a, $b, self = this, data_path = nil, read_data = nil, engine = nil, raw_data = nil, html = nil;
+
+      data_path = parent.$normalize_asset_path(target, "target");
+      read_data = parent.$read_asset(data_path, $hash2(["warn_on_failure", "normalize"], {"warn_on_failure": true, "normalize": true}));
+      if ((($a = ((($b = read_data['$nil?']()) !== false && $b !== nil) ? $b : read_data['$empty?']())) !== nil && (!$a._isBoolean || $a == true))) {
+        return nil
         } else {
-        return "c3js"
-      }; return nil; })();
-      raw_data = $scope.PlainRubyCSV.$read($scope.File.$join(parent.$document().$base_dir(), attrs['$[]']("data-uri")));
-      html = $scope.ChartBackend.$process(engine, target, raw_data);
-      return self.$create_pass_block(parent, html, attrs, $hash2(["subs"], {"subs": nil}));
+        engine = $scope.ChartBackend.$resolve_engine(attrs, parent.$document());
+        raw_data = $scope.PlainRubyCSV.$parse(read_data);
+        html = $scope.ChartBackend.$process(engine, attrs, raw_data);
+        return self.$create_pass_block(parent, html, attrs, $hash2(["subs"], {"subs": nil}));
+      };
     }, nil) && 'process';
   })(self, ($scope.Extensions)._scope.BlockMacroProcessor);
   (function($base, $super) {
@@ -39,20 +43,16 @@
 
     self.$on_context("literal");
 
-    self.$name_positional_attributes("type", "engine");
+    self.$name_positional_attributes("type", "width", "height");
 
     self.$parse_content_as("raw");
 
     return (def.$process = function(parent, reader, attrs) {
-      var $a, self = this, engine = nil, raw_data = nil, html = nil;
+      var self = this, engine = nil, raw_data = nil, html = nil;
 
-      engine = (function() {if ((($a = (attrs['$key?']("engine"))) !== nil && (!$a._isBoolean || $a == true))) {
-        return attrs['$[]']("engine").$downcase()
-        } else {
-        return "c3js"
-      }; return nil; })();
+      engine = $scope.ChartBackend.$resolve_engine(attrs, parent.$document());
       raw_data = $scope.PlainRubyCSV.$parse(reader.$source());
-      html = $scope.ChartBackend.$process(engine, attrs['$[]']("type"), raw_data);
+      html = $scope.ChartBackend.$process(engine, attrs, raw_data);
       return self.$create_pass_block(parent, html, attrs, $hash2(["subs"], {"subs": nil}));
     }, nil) && 'process';
   })(self, ($scope.Extensions)._scope.BlockProcessor);
@@ -90,14 +90,27 @@
 
     var def = self._proto, $scope = self._scope;
 
-    return ($opal.defs(self, '$process', function(engine, type, raw_data) {
-      var $a, self = this, $case = nil, data = nil, labels = nil;
+    $opal.defs(self, '$resolve_engine', function(attrs, document) {
+      var $a, self = this;
 
+      if ((($a = attrs['$key?']("engine")) !== nil && (!$a._isBoolean || $a == true))) {
+        return attrs['$[]']("engine").$downcase()
+      } else if ((($a = document.$attributes()['$key?']("chart-engine")) !== nil && (!$a._isBoolean || $a == true))) {
+        return document.$attributes()['$[]']("chart-engine").$downcase()
+        } else {
+        return "c3js"
+      };
+    });
+
+    return ($opal.defs(self, '$process', function(engine, attrs, raw_data) {
+      var $a, self = this, type = nil, $case = nil, data = nil, labels = nil;
+
+      type = attrs['$[]']("type");
       return (function() {$case = engine;if ("c3js"['$===']($case)) {$a = $opal.to_ary($scope.C3jsChartBuilder.$prepare_data(raw_data)), data = ($a[0] == null ? nil : $a[0]), labels = ($a[1] == null ? nil : $a[1]);
-      return ((function() {$case = type;if ("bar"['$===']($case)) {return $scope.C3jsChartBuilder.$bar(data, labels)}else if ("line"['$===']($case)) {return $scope.C3jsChartBuilder.$line(data, labels)}else if ("step"['$===']($case)) {return $scope.C3jsChartBuilder.$step(data, labels)}else if ("spline"['$===']($case)) {return $scope.C3jsChartBuilder.$spline(data, labels)}else {return $scope.C3jsChartBuilder.$line(data, labels)}})());}else if ("chartist"['$===']($case)) {$a = $opal.to_ary($scope.ChartistChartBuilder.$prepare_data(raw_data)), data = ($a[0] == null ? nil : $a[0]), labels = ($a[1] == null ? nil : $a[1]);
-      return ((function() {$case = type;if ("bar"['$===']($case)) {return $scope.ChartistChartBuilder.$bar(data, labels)}else if ("line"['$===']($case)) {return $scope.ChartistChartBuilder.$line(data, labels)}else {return $scope.ChartistChartBuilder.$line(data, labels)}})());}else if ("chartjs"['$===']($case)) {$a = $opal.to_ary($scope.ChartjsChartBuilder.$prepare_data(raw_data)), data = ($a[0] == null ? nil : $a[0]), labels = ($a[1] == null ? nil : $a[1]);
-      return ((function() {$case = type;if ("line"['$===']($case)) {return $scope.ChartjsChartBuilder.$line(data, labels)}else {return $scope.ChartjsChartBuilder.$line(data, labels)}})());}else { return nil }})();
-    }), nil) && 'process'
+      return ((function() {$case = type;if ("bar"['$===']($case)) {return $scope.C3jsChartBuilder.$bar(data, labels, attrs)}else if ("line"['$===']($case)) {return $scope.C3jsChartBuilder.$line(data, labels, attrs)}else if ("step"['$===']($case)) {return $scope.C3jsChartBuilder.$step(data, labels, attrs)}else if ("spline"['$===']($case)) {return $scope.C3jsChartBuilder.$spline(data, labels, attrs)}else {return $scope.C3jsChartBuilder.$line(data, labels, attrs)}})());}else if ("chartist"['$===']($case)) {$a = $opal.to_ary($scope.ChartistChartBuilder.$prepare_data(raw_data)), data = ($a[0] == null ? nil : $a[0]), labels = ($a[1] == null ? nil : $a[1]);
+      return ((function() {$case = type;if ("bar"['$===']($case)) {return $scope.ChartistChartBuilder.$bar(data, labels, attrs)}else if ("line"['$===']($case)) {return $scope.ChartistChartBuilder.$line(data, labels, attrs)}else {return $scope.ChartistChartBuilder.$line(data, labels, attrs)}})());}else if ("chartjs"['$===']($case)) {$a = $opal.to_ary($scope.ChartjsChartBuilder.$prepare_data(raw_data)), data = ($a[0] == null ? nil : $a[0]), labels = ($a[1] == null ? nil : $a[1]);
+      return ((function() {$case = type;if ("line"['$===']($case)) {return $scope.ChartjsChartBuilder.$line(data, labels, attrs)}else {return $scope.ChartjsChartBuilder.$line(data, labels, attrs)}})());}else { return nil }})();
+    }), nil) && 'process';
   })(self, null);
   (function($base, $super) {
     function $C3jsChartBuilder(){};
@@ -105,39 +118,39 @@
 
     var def = self._proto, $scope = self._scope;
 
-    $opal.defs(self, '$bar', function(data, labels) {
+    $opal.defs(self, '$bar', function(data, labels, attrs) {
       var self = this, chart_id = nil, chart_div = nil, chart_generate_script = nil;
 
       chart_id = self.$get_chart_id();
       chart_div = self.$create_chart_div(chart_id);
-      chart_generate_script = self.$chart_bar_script(chart_id, data, labels);
+      chart_generate_script = self.$chart_bar_script(chart_id, data, labels, attrs);
       return self.$to_html(chart_div, chart_generate_script);
     });
 
-    $opal.defs(self, '$line', function(data, labels) {
+    $opal.defs(self, '$line', function(data, labels, attrs) {
       var self = this, chart_id = nil, chart_div = nil, chart_generate_script = nil;
 
       chart_id = self.$get_chart_id();
       chart_div = self.$create_chart_div(chart_id);
-      chart_generate_script = self.$chart_line_script(chart_id, data, labels);
+      chart_generate_script = self.$chart_line_script(chart_id, data, labels, attrs);
       return self.$to_html(chart_div, chart_generate_script);
     });
 
-    $opal.defs(self, '$step', function(data, labels) {
+    $opal.defs(self, '$step', function(data, labels, attrs) {
       var self = this, chart_id = nil, chart_div = nil, chart_generate_script = nil;
 
       chart_id = self.$get_chart_id();
       chart_div = self.$create_chart_div(chart_id);
-      chart_generate_script = self.$chart_step_script(chart_id, data, labels);
+      chart_generate_script = self.$chart_step_script(chart_id, data, labels, attrs);
       return self.$to_html(chart_div, chart_generate_script);
     });
 
-    $opal.defs(self, '$spline', function(data, labels) {
+    $opal.defs(self, '$spline', function(data, labels, attrs) {
       var self = this, chart_id = nil, chart_div = nil, chart_generate_script = nil;
 
       chart_id = self.$get_chart_id();
       chart_div = self.$create_chart_div(chart_id);
-      chart_generate_script = self.$chart_spline_script(chart_id, data, labels);
+      chart_generate_script = self.$chart_spline_script(chart_id, data, labels, attrs);
       return self.$to_html(chart_div, chart_generate_script);
     });
 
@@ -164,35 +177,63 @@ if (row == null) row = nil;if (index == null) index = nil;
       return [raw_data, labels];
     });
 
-    $opal.defs(self, '$chart_bar_script', function(chart_id, data, labels) {
-      var self = this;
+    $opal.defs(self, '$chart_bar_script', function(chart_id, data, labels, attrs) {
+      var self = this, chart_height = nil, chart_width = nil;
 
-      return "\n<script type=\"text/javascript\">\nc3.generate({\n  bindto: '#" + (chart_id) + "',\n  size: { height: 200 },\n  data: {\n    columns: " + (data.$to_s()) + ",\n    type: 'bar'\n  },\n  axis: {\n    x: {\n      type: 'category',\n      categories: " + (labels.$to_s()) + "\n    }\n  }\n});\n</script>";
+      chart_height = self.$get_chart_height(attrs);
+      chart_width = self.$get_chart_width(attrs);
+      return "\n<script type=\"text/javascript\">\nc3.generate({\n  bindto: '#" + (chart_id) + "',\n  size: { height: " + (chart_height) + ", width: " + (chart_width) + " },\n  data: {\n    columns: " + (data.$to_s()) + ",\n    type: 'bar'\n  },\n  axis: {\n    x: {\n      type: 'category',\n      categories: " + (labels.$to_s()) + "\n    }\n  }\n});\n</script>";
     });
 
-    $opal.defs(self, '$chart_line_script', function(chart_id, data, labels) {
-      var self = this;
+    $opal.defs(self, '$chart_line_script', function(chart_id, data, labels, attrs) {
+      var self = this, chart_height = nil, chart_width = nil;
 
-      return "\n<script type=\"text/javascript\">\nc3.generate({\n  bindto: '#" + (chart_id) + "',\n  data: {\n    columns: " + (data.$to_s()) + "\n  },\n  axis: {\n    x: {\n      type: 'category',\n      categories: " + (labels.$to_s()) + "\n    }\n  }\n});\n</script>";
+      chart_height = self.$get_chart_height(attrs);
+      chart_width = self.$get_chart_width(attrs);
+      return "\n<script type=\"text/javascript\">\nc3.generate({\n  bindto: '#" + (chart_id) + "',\n  size: { height: " + (chart_height) + ", width: " + (chart_width) + " },\n  data: {\n    columns: " + (data.$to_s()) + "\n  },\n  axis: {\n    x: {\n      type: 'category',\n      categories: " + (labels.$to_s()) + "\n    }\n  }\n});\n</script>";
     });
 
-    $opal.defs(self, '$chart_step_script', function(chart_id, data, labels) {
-      var self = this;
+    $opal.defs(self, '$chart_step_script', function(chart_id, data, labels, attrs) {
+      var self = this, chart_height = nil, chart_width = nil;
 
-      return "\n<script type=\"text/javascript\">\nc3.generate({\n  bindto: '#" + (chart_id) + "',\n  data: {\n    columns: " + (data.$to_s()) + ",\n    type: 'step'\n  },\n  axis: {\n    x: {\n      type: 'category',\n      categories: " + (labels.$to_s()) + "\n    }\n  }\n});\n</script>";
+      chart_height = self.$get_chart_height(attrs);
+      chart_width = self.$get_chart_width(attrs);
+      return "\n<script type=\"text/javascript\">\nc3.generate({\n  bindto: '#" + (chart_id) + "',\n  size: { height: " + (chart_height) + ", width: " + (chart_width) + " },\n  data: {\n    columns: " + (data.$to_s()) + ",\n    type: 'step'\n  },\n  axis: {\n    x: {\n      type: 'category',\n      categories: " + (labels.$to_s()) + "\n    }\n  }\n});\n</script>";
     });
 
-    $opal.defs(self, '$chart_spline_script', function(chart_id, data, labels) {
-      var self = this;
+    $opal.defs(self, '$chart_spline_script', function(chart_id, data, labels, attrs) {
+      var self = this, chart_height = nil, chart_width = nil;
 
-      return "\n<script type=\"text/javascript\">\nc3.generate({\n  bindto: '#" + (chart_id) + "',\n  data: {\n    columns: " + (data.$to_s()) + ",\n    type: 'spline'\n  },\n  axis: {\n    x: {\n      type: 'category',\n      categories: " + (labels.$to_s()) + "\n    }\n  }\n});\n</script>";
+      chart_height = self.$get_chart_height(attrs);
+      chart_width = self.$get_chart_width(attrs);
+      return "\n<script type=\"text/javascript\">\nc3.generate({\n  bindto: '#" + (chart_id) + "',\n  size: { height: " + (chart_height) + ", width: " + (chart_width) + " },\n  data: {\n    columns: " + (data.$to_s()) + ",\n    type: 'spline'\n  },\n  axis: {\n    x: {\n      type: 'category',\n      categories: " + (labels.$to_s()) + "\n    }\n  }\n});\n</script>";
     });
 
-    return ($opal.defs(self, '$to_html', function(chart_div, chart_script) {
+    $opal.defs(self, '$to_html', function(chart_div, chart_script) {
       var self = this;
 
       return "\n    " + (chart_div) + "\n    " + (chart_script) + "\n    ";
-    }), nil) && 'to_html';
+    });
+
+    $opal.defs(self, '$get_chart_height', function(attrs) {
+      var $a, self = this;
+
+      if ((($a = (attrs['$key?']("height"))) !== nil && (!$a._isBoolean || $a == true))) {
+        return attrs['$[]']("height")
+        } else {
+        return "400"
+      };
+    });
+
+    return ($opal.defs(self, '$get_chart_width', function(attrs) {
+      var $a, self = this;
+
+      if ((($a = (attrs['$key?']("width"))) !== nil && (!$a._isBoolean || $a == true))) {
+        return attrs['$[]']("width")
+        } else {
+        return "600"
+      };
+    }), nil) && 'get_chart_width';
   })(self, null);
   (function($base, $super) {
     function $ChartjsChartBuilder(){};
@@ -200,8 +241,8 @@ if (row == null) row = nil;if (index == null) index = nil;
 
     var def = self._proto, $scope = self._scope;
 
-    $opal.defs(self, '$line', function(data, labels) {
-      var $a, $b, TMP_2, self = this, default_colors = nil, datasets = nil, chart_id = nil, chart_width_percent = nil, chart_canvas = nil, chart_init_ctx_script = nil, chart_init_data_script = nil, chart_init_script = nil;
+    $opal.defs(self, '$line', function(data, labels, attrs) {
+      var $a, $b, TMP_2, self = this, default_colors = nil, datasets = nil, chart_id = nil, chart_height = nil, chart_width = nil, chart_canvas = nil, chart_init_ctx_script = nil, chart_init_data_script = nil, chart_init_script = nil;
 
       default_colors = [$hash2(["r", "g", "b"], {"r": 220, "g": 220, "b": 220}), $hash2(["r", "g", "b"], {"r": 151, "g": 187, "b": 205})];
       datasets = ($a = ($b = data).$map, $a._p = (TMP_2 = function(set){var self = TMP_2._s || this, color = nil, color_rgba = nil;
@@ -210,21 +251,42 @@ if (set == null) set = nil;
         color_rgba = "rgba(" + (color['$[]']("r")) + "," + (color['$[]']("g")) + "," + (color['$[]']("b")) + ",1.0)";
         return "\n{\n  fillColor: \"" + (color_rgba.$gsub("1.0", "0.2")) + "\",\n  strokeColor: \"" + (color_rgba) + "\",\n  pointColor: \"" + (color_rgba) + "\",\n  pointHighlightStroke: \"" + (color_rgba) + "\",\n  pointStrokeColor: \"#fff\",\n  pointHighlightFill: \"#fff\",\n  data: " + (set.$to_s()) + "\n}\n      ";}, TMP_2._s = self, TMP_2), $a).call($b).$join(",");
       chart_id = "chart"['$+']($scope.PlainRubyRandom.$uuid());
-      chart_width_percent = 50;
-      chart_canvas = "<div style=\"width:" + (chart_width_percent) + "%\"><canvas id=\"" + (chart_id) + "\"></canvas></div>";
+      chart_height = self.$get_chart_height(attrs);
+      chart_width = self.$get_chart_width(attrs);
+      chart_canvas = "<div style=\"width:" + (chart_width) + "px; height:" + (chart_height) + "px\"><canvas id=\"" + (chart_id) + "\"></canvas></div>";
       chart_init_ctx_script = "var ctx = document.getElementById(\"" + (chart_id) + "\").getContext(\"2d\");";
       chart_init_data_script = "var data = {\n  labels: " + (labels.$to_s()) + ",\n  datasets: [\n    " + (datasets) + "\n  ]\n};";
       chart_init_script = "var chart = new Chart(ctx).Line(data, {responsive : true});";
       return "\n    " + (chart_canvas) + "<script type=\"text/javascript\">window.onload = function() {\n    " + (chart_init_ctx_script) + "\n    " + (chart_init_data_script) + "\n    " + (chart_init_script) + "\n}\n</script>";
     });
 
-    return ($opal.defs(self, '$prepare_data', function(raw_data) {
+    $opal.defs(self, '$prepare_data', function(raw_data) {
       var self = this, labels = nil;
 
       labels = raw_data['$[]'](0);
       raw_data.$shift();
       return [raw_data, labels];
-    }), nil) && 'prepare_data';
+    });
+
+    $opal.defs(self, '$get_chart_height', function(attrs) {
+      var $a, self = this;
+
+      if ((($a = (attrs['$key?']("height"))) !== nil && (!$a._isBoolean || $a == true))) {
+        return attrs['$[]']("height")
+        } else {
+        return "400"
+      };
+    });
+
+    return ($opal.defs(self, '$get_chart_width', function(attrs) {
+      var $a, self = this;
+
+      if ((($a = (attrs['$key?']("width"))) !== nil && (!$a._isBoolean || $a == true))) {
+        return attrs['$[]']("width")
+        } else {
+        return "600"
+      };
+    }), nil) && 'get_chart_width';
   })(self, null);
   (function($base, $super) {
     function $ChartistChartBuilder(){};
@@ -232,21 +294,21 @@ if (set == null) set = nil;
 
     var def = self._proto, $scope = self._scope;
 
-    $opal.defs(self, '$bar', function(data, labels) {
+    $opal.defs(self, '$bar', function(data, labels, attrs) {
       var self = this, chart_id = nil, chart_div = nil, chart_generate_script = nil;
 
       chart_id = self.$get_chart_id();
       chart_div = self.$create_chart_div(chart_id);
-      chart_generate_script = self.$chart_bar_script(chart_id, data, labels);
+      chart_generate_script = self.$chart_bar_script(chart_id, data, labels, attrs);
       return self.$to_html(chart_div, chart_generate_script);
     });
 
-    $opal.defs(self, '$line', function(data, labels) {
+    $opal.defs(self, '$line', function(data, labels, attrs) {
       var self = this, chart_id = nil, chart_div = nil, chart_generate_script = nil;
 
       chart_id = self.$get_chart_id();
       chart_div = self.$create_chart_div(chart_id);
-      chart_generate_script = self.$chart_line_script(chart_id, data, labels);
+      chart_generate_script = self.$chart_line_script(chart_id, data, labels, attrs);
       return self.$to_html(chart_div, chart_generate_script);
     });
 
@@ -270,18 +332,20 @@ if (set == null) set = nil;
       return [raw_data, labels];
     });
 
-    $opal.defs(self, '$chart_bar_script', function(chart_id, data, labels) {
-      var self = this, chart_height = nil;
+    $opal.defs(self, '$chart_bar_script', function(chart_id, data, labels, attrs) {
+      var self = this, chart_height = nil, chart_width = nil;
 
-      chart_height = self.$get_chart_height();
-      return "\n<script type=\"text/javascript\">\nvar options = {\n  height: '" + (chart_height) + "'\n};\nvar data = {\n  labels: " + (labels.$to_s()) + ",\n  series: " + (data.$to_s()) + "\n};\nnew Chartist.Bar('#" + (chart_id) + "', data, options);\n</script>";
+      chart_height = self.$get_chart_height(attrs);
+      chart_width = self.$get_chart_width(attrs);
+      return "\n<script type=\"text/javascript\">\nvar options = {\n  height: '" + (chart_height) + "',\n  colors:[\"#72B3CC\", \"#8EB33B\"]\n};\nvar data = {\n  labels: " + (labels.$to_s()) + ",\n  series: " + (data.$to_s()) + "\n};\nnew Chartist.Bar('#" + (chart_id) + "', data, options);\n</script>";
     });
 
-    $opal.defs(self, '$chart_line_script', function(chart_id, data, labels) {
-      var self = this, chart_height = nil;
+    $opal.defs(self, '$chart_line_script', function(chart_id, data, labels, attrs) {
+      var self = this, chart_height = nil, chart_width = nil;
 
-      chart_height = self.$get_chart_height();
-      return "\n<script type=\"text/javascript\">\nvar options = {\n  height: '" + (chart_height) + "'\n};\nvar data = {\n  labels: " + (labels.$to_s()) + ",\n  series: " + (data.$to_s()) + "\n};\nnew Chartist.Line('#" + (chart_id) + "', data, options);\n</script>";
+      chart_height = self.$get_chart_height(attrs);
+      chart_width = self.$get_chart_width(attrs);
+      return "\n<script type=\"text/javascript\">\nvar options = {\n  height: '" + (chart_height) + "',\n  width: '" + (chart_width) + "',\n  colors:[\"#72B3CC\", \"#8EB33B\"]\n};\nvar data = {\n  labels: " + (labels.$to_s()) + ",\n  series: " + (data.$to_s()) + "\n};\nnew Chartist.Line('#" + (chart_id) + "', data, options);\n</script>";
     });
 
     $opal.defs(self, '$to_html', function(chart_div, chart_script) {
@@ -290,11 +354,25 @@ if (set == null) set = nil;
       return "\n    " + (chart_div) + "\n    " + (chart_script) + "\n    ";
     });
 
-    return ($opal.defs(self, '$get_chart_height', function() {
-      var self = this;
+    $opal.defs(self, '$get_chart_height', function(attrs) {
+      var $a, self = this;
 
-      return "300px";
-    }), nil) && 'get_chart_height';
+      if ((($a = (attrs['$key?']("height"))) !== nil && (!$a._isBoolean || $a == true))) {
+        return attrs['$[]']("height")
+        } else {
+        return "400"
+      };
+    });
+
+    return ($opal.defs(self, '$get_chart_width', function(attrs) {
+      var $a, self = this;
+
+      if ((($a = (attrs['$key?']("width"))) !== nil && (!$a._isBoolean || $a == true))) {
+        return attrs['$[]']("width")
+        } else {
+        return "600"
+      };
+    }), nil) && 'get_chart_width';
   })(self, null);
   (function($base, $super) {
     function $PlainRubyCSV(){};
@@ -349,7 +427,8 @@ if (line == null) line = nil;
 
   if ((($a = self.$document()['$basebackend?']("html")) !== nil && (!$a._isBoolean || $a == true))) {
       self.$block_macro($scope.ChartBlockMacro);
-      return self.$block($scope.ChartBlockProcessor);
+      self.$block($scope.ChartBlockProcessor);
+      return self.$docinfo_processor($scope.ChartAssetsDocinfoProcessor);
       } else {
       return nil
     }}, TMP_1._s = self, TMP_1), $a).call($b);
