@@ -22,6 +22,15 @@ asciidoctor.chrome.asciidocify = function () {
   }
 };
 
+asciidoctor.chrome.listenRefresh = function() {
+  chrome.extension.onMessage.addListener(function(msg) {
+    if (msg === "refresh") {
+      var data = $(document.body).find("pre").text();
+      asciidoctor.chrome.loadContent(data);
+    }
+  });
+};
+
 function loadContent() {
   $.ajax({
     url: location.href,
@@ -30,7 +39,7 @@ function loadContent() {
       if (isHtmlContentType(data)) {
         return;
       }
-      asciidoctor.chrome.loadContent(data);
+      asciidoctor.chrome.loadContent(data.responseText);
     }
   });
 }
@@ -43,7 +52,7 @@ asciidoctor.chrome.loadContent = function (data) {
       appendStyles();
       appendMathJax();
       appendHighlightJsScript();
-      asciidoctor.chrome.convert(data.responseText);
+      asciidoctor.chrome.convert(data);
     }
     startAutoReload();
   });
@@ -104,6 +113,7 @@ function isHtmlContentType(data) {
   return contentType && (contentType.indexOf('html') > -1);
 }
 
-(function (document) {
+(function () {
+  asciidoctor.chrome.listenRefresh();
   asciidoctor.chrome.asciidocify();
 }(document));

@@ -38,6 +38,7 @@ module.exports = function (grunt) {
         options: {
           specs: 'spec/*spec.js',
           vendor: [
+            'spec/chrome_mock.js',
             paths.vendor + '/opal.js',
             paths.vendor + '/asciidoctor.js',
             paths.vendor + '/jquery.min.js',
@@ -67,10 +68,10 @@ module.exports = function (grunt) {
           {
             expand: true,
             src: [
-                  paths.bower + "/asciidoctor.js/dist/asciidoctor.js",
-                  paths.bower + "/opal/opal/0.6.3/opal.js",
-                  paths.bower + "/jquery/dist/jquery.min.js",
-                  paths.bower + "/bootstrap/dist/js/bootstrap.min.js"
+              paths.bower + "/asciidoctor.js/dist/asciidoctor.js",
+              paths.bower + "/opal/opal/0.6.3/opal.js",
+              paths.bower + "/jquery/dist/jquery.min.js",
+              paths.bower + "/bootstrap/dist/js/bootstrap.min.js"
             ],
             dest: 'app/js/vendor/',
             flatten: true
@@ -85,8 +86,8 @@ module.exports = function (grunt) {
           {
             expand: true,
             src: [
-                  paths.bower + "/bootstrap/dist/css/bootstrap.min.css",
-                  paths.bower + "/font-awesome/css/font-awesome.min.css"
+              paths.bower + "/bootstrap/dist/css/bootstrap.min.css",
+              paths.bower + "/font-awesome/css/font-awesome.min.css"
             ],
             dest: 'app/css/',
             flatten: true
