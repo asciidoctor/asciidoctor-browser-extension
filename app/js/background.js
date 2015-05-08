@@ -1,9 +1,15 @@
 var enableRender = true;
 var matchesTabUrl = chrome.runtime.getManifest().content_scripts[0].matches;
+var renderSelectionMenuItemId = "renderSelectionMenuItem";
 
 chrome.contextMenus.create({
+  "id": renderSelectionMenuItemId,
   "title": "Render selection",
-  "contexts": ["selection"], "onclick": function (info, tab) {
+  "contexts": ["selection"]
+});
+
+chrome.contextMenus.onClicked.addListener(function(info, tab) {
+  if (info.menuItemId === renderSelectionMenuItemId) {
     var funcToInject = function () {
       var selection = window.getSelection();
       return (selection.rangeCount > 0) ? selection.toString() : '';
