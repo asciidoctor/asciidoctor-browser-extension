@@ -10,10 +10,17 @@ var inputLoadJavaScript = $('input[name=optionsLoadJavaScript]');
 var addCustomThemeAlert = $('#addCustomThemeAlert');
 var addCustomJavaScriptAlert = $('#addCustomJavaScriptAlert');
 var saveAlert = $('#saveAlert');
+var enablingLocalFileAlert = $('#enablingLocalFileAlert');
 var saveBtn = $('#saveBtn');
+var openExtensionsPageLink = $('#openExtensionsPageLink');
 
 saveBtn.click(saveOptions);
+openExtensionsPageLink.click(openExtensionsPage);
 $(document).bind('ready', restoreOptions);
+
+function openExtensionsPage() {
+  chrome.tabs.create({'url': "chrome://extensions/?id=flahcdpicipahcghebiillhbjilehfhc"});
+};
 
 /**
  * Saves options to localStorage.
@@ -72,6 +79,8 @@ function initAlert(element) {
 initAlert(saveAlert);
 initAlert(addCustomThemeAlert);
 initAlert(addCustomJavaScriptAlert);
+initAlert(enablingLocalFileAlert);
+enablingLocalFileAlert.show();
 
 inputCustomTheme.change(function () {
   resetAlert(addCustomThemeAlert);
