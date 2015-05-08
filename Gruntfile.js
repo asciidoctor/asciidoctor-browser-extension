@@ -110,5 +110,6 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', ['dist']);
   grunt.registerTask('dist', ['clean', 'copy', 'test', 'compress']);
+  grunt.registerTask('publish', ['clean', 'test', 'compress']);
   grunt.registerTask('test', ['jasmine']);
 };
