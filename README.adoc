@@ -70,6 +70,7 @@ You can also use preprocessor directives to fine-tune the content to put the TOC
 
  * Support embedded videos
  * Fix enable/disable on local files
+ * Font Awesome 4.3.0
 
 === 1.5.2.100
 
