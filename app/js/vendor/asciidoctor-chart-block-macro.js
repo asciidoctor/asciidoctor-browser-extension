@@ -427,8 +427,7 @@ if (line == null) line = nil;
 
   if ((($a = self.$document()['$basebackend?']("html")) !== nil && (!$a._isBoolean || $a == true))) {
       self.$block_macro($scope.ChartBlockMacro);
-      self.$block($scope.ChartBlockProcessor);
-      return self.$docinfo_processor($scope.ChartAssetsDocinfoProcessor);
+      return self.$block($scope.ChartBlockProcessor);
       } else {
       return nil
     }}, TMP_1._s = self, TMP_1), $a).call($b);
