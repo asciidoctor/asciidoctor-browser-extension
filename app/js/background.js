@@ -35,10 +35,6 @@ chrome.contextMenus.create({
   }
 });
 
-function refreshTab(tab) {
-  chrome.tabs.reload(tab.id);
-}
-
 function reloadTab(tab) {
   chrome.tabs.reload(tab.id);
 }
@@ -65,15 +61,9 @@ function enableDisableRender() {
   chrome.browserAction.setIcon({path: iconPath});
 
   // Reload the active tab in the current windows that matches
-  if (enableRender) {
-    findActiveTab(function (activeTab) {
-      refreshTab(activeTab);
-    });
-  } else {
-    findActiveTab(function (activeTab) {
-      reloadTab(activeTab);
-    });
-  }
+  findActiveTab(function (activeTab) {
+    reloadTab(activeTab);
+  });
 
   // Switch the flag
   enableRender = !enableRender;
