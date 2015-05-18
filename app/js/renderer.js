@@ -96,10 +96,13 @@ function getAttributesFromQueryParameters() {
   var result = '';
   query.split("&").forEach(function(part) {
     var item = part.split("=");
-    if (typeof item[1] !== 'undefined') {
-      result = result.concat(item[0]).concat('=').concat(decodeURIComponent(item[1]));
+    var key = item[0];
+    var value = item[1];
+    if (typeof value !== 'undefined') {
+      var escapedValue = $('<div/>').text(decodeURIComponent(value)).html();
+      result = result.concat(key).concat('=').concat(escapedValue);
     } else {
-      result = result.concat(item[0]);
+      result = result.concat(key);
     }
     result = result.concat(' ');
   });
