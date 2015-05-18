@@ -15,7 +15,15 @@
 <body>
 <div class="container">
   <h1>Options</h1>
-
+  <div id="enablingLocalFileAlert" class="alert alert-info">
+    <button type="button" class="close">
+      <span aria-hidden="true">&times;</span>
+      <span class="sr-only">Close</span>
+    </button>
+    <div class="content">
+      <strong><i class="fa fa-info-circle"></i> Heads up!</strong> In order to use this extension on local files (i.e. files on this computer), you must check the option <code>Allow access to file URLs</code> on the <a id="openExtensionsPageLink" href="#">chrome://extensions</a> page
+    </div>
+  </div>
   <form class="form-horizontal" role="form">
     <div class="form-group">
       <label for="inputCustomAttributes" class="col-lg-2 control-label">Custom attributes</label>
