@@ -89,9 +89,31 @@ function updateBody(data, settings, scripts) {
 }
 
 /**
+ * Parse URL query parameters
+ */
+function getAttributesFromQueryParameters() {
+  var query = location.search.substr(1);
+  var result = '';
+  query.split("&").forEach(function(part) {
+    var item = part.split("=");
+    var key = item[0];
+    var value = item[1];
+    if (typeof value !== 'undefined') {
+      var escapedValue = $('<div/>').text(decodeURIComponent(value)).html();
+      result = result.concat(key).concat('=').concat(escapedValue);
+    } else {
+      result = result.concat(key);
+    }
+    result = result.concat(' ');
+  });
+  return result;
+}
+
+/**
  * Build Asciidoctor options from settings
  */
 function buildAsciidoctorOptions(settings) {
+  var attributesQueryParameters = getAttributesFromQueryParameters();
   var customAttributes = settings[CUSTOM_ATTRIBUTES_KEY];
   var safeMode = settings[SAFE_MODE_KEY] || 'secure';
   // Default attributes
@@ -104,6 +126,9 @@ function buildAsciidoctorOptions(settings) {
   }
   if (customAttributes) {
     attributes = attributes.concat(' ').concat(customAttributes);
+  }
+  if (attributesQueryParameters) {
+    attributes = attributes.concat(' ').concat(attributesQueryParameters);
   }
   var pwd = Opal.File.$dirname(href);
   Opal.ENV['$[]=']("PWD", pwd);
