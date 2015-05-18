@@ -54,7 +54,9 @@
         "js/vendor/asciidoctor.js",
         "js/vendor/md5.js",
         "js/asciidocify.js",
-        "js/renderer.js"
+        "js/renderer.js",
+        "js/vendor/chartist.min.js",
+        "js/vendor/asciidoctor-chart-block-macro.js"
       ]
     }
   ],
@@ -75,6 +77,7 @@
     "css/highlight/github.css",
     "css/font-awesome.min.css",
     "js/vendor/highlight.min.js",
+    "js/vendor/asciidoctor-chart-block-macro.js",
     "fonts/FontAwesome.otf",
     "fonts/fontawesome-webfont.eot",
     "fonts/fontawesome-webfont.svg",
