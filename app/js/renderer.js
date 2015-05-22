@@ -74,6 +74,7 @@ function updateBody(data, settings, scripts) {
     appendFontAwesomeStyle();
   }
   appendChartist();
+  appendTwemojiStyle();
   var generatedHtml = asciidoctorDocument.$convert();
   document.title = asciidoctorDocument.$doctitle(Opal.hash2(['sanitize'], {sanitize: true}));
   document.body.className = asciidoctorDocument.$doctype();
@@ -191,6 +192,16 @@ function syntaxHighlighting() {
       e.className += ' hljs';
     }
   });
+}
+
+function appendTwemojiStyle() {
+  if ($('#twemoji-awesome-style').length == 0) {
+    var twemojiAwesomeLink = document.createElement('link');
+    twemojiAwesomeLink.rel = 'stylesheet';
+    twemojiAwesomeLink.id = 'twemoji-awesome-style';
+    twemojiAwesomeLink.href = chrome.extension.getURL('css/twemoji-awesome.css');
+    document.head.appendChild(twemojiAwesomeLink);
+  }
 }
 
 function appendChartist() {
