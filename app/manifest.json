@@ -78,6 +78,7 @@
     "css/highlight/github.css",
     "css/font-awesome.min.css",
     "css/twemoji-awesome.css",
+    "css/chartist.min.css",
     "js/vendor/highlight.min.js",
     "js/vendor/asciidoctor-chart-block-macro.js",
     "js/vendor/asciidoctor-emoji-inline-macro.js",

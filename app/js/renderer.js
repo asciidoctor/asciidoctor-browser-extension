@@ -73,7 +73,7 @@ function updateBody(data, settings, scripts) {
   if (asciidoctorDocument.attributes.map['icons'] == 'font') {
     appendFontAwesomeStyle();
   }
-  appendChartist();
+  appendChartistStyle();
   appendTwemojiStyle();
   var generatedHtml = asciidoctorDocument.$convert();
   document.title = asciidoctorDocument.$doctitle(Opal.hash2(['sanitize'], {sanitize: true}));
@@ -204,19 +204,13 @@ function appendTwemojiStyle() {
   }
 }
 
-function appendChartist() {
+function appendChartistStyle() {
   if ($('#chartist-style').length == 0) {
     var chartistLink = document.createElement('link');
     chartistLink.rel = 'stylesheet';
     chartistLink.id = 'chartist-style';
-    chartistLink.href = 'http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css';
+    chartistLink.href = chrome.extension.getURL('css/chartist.min.css');
     document.head.appendChild(chartistLink);
-  }
-  if ($('#chartist-script').length == 0) {
-    var chartistScript = document.createElement('script');
-    chartistScript.id = 'chartist-script';
-    chartistScript.src = 'http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js';
-    document.head.appendChild(chartistScript);
   }
   if ($('#chartist-asciidoctor-style').length == 0) {
     var chartistStyle = document.createElement('style');
