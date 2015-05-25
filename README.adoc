@@ -66,6 +66,32 @@ You can also use preprocessor directives to fine-tune the content to put the TOC
 
 == Changelog
 
+=== 1.5.2.120
+
+ * Chart extension
++
+.Line chart
+```
+[chart,line]
+....
+January,February,March
+28,48,40
+65,59,80
+....
+```
+
+ * Emoji extension 
++
+.Large heart emoji
+`+emoji:heart[lg]+`
+
+ * Allow attributes to be defined via URL parameters
++
+.Set TOC placement to preamble
+`?toc=preamble`
+
+ * Add tip about enabling local file access to options page
+
 === 1.5.2.111
 
  * Support embedded videos
