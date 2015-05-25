@@ -83,7 +83,9 @@ January,February,March
  * Emoji extension 
 +
 .Large heart emoji
-`+emoji:heart[lg]+`
+```
+emoji:heart[lg]
+```
 
  * Allow attributes to be defined via URL parameters
 +
