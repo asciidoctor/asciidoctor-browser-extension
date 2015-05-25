@@ -4,10 +4,39 @@ var renderSelectionMenuItemId = "renderSelectionMenuItem";
 var injectTabId;
 var injectText;
 
-chrome.contextMenus.create({
-  "id": renderSelectionMenuItemId,
-  "title": "Render selection",
-  "contexts": ["selection"]
+chrome.runtime.onInstalled.addListener(function() {
+  chrome.contextMenus.create({
+    "id": renderSelectionMenuItemId,
+    "title": "Render selection",
+    "contexts": ["selection"]
+  });
+
+  chrome.contextMenus.onClicked.addListener(function(info, tab) {
+    if (info.menuItemId === renderSelectionMenuItemId) {
+      var funcToInject = function () {
+        var selection = window.getSelection();
+        return (selection.rangeCount > 0) ? selection.toString() : '';
+      };
+      var jsCodeStr = ';(' + funcToInject + ')();';
+      chrome.tabs.executeScript({
+        code: jsCodeStr,
+        allFrames: true
+      }, function (selectedTextPerFrame) {
+        if (chrome.runtime.lastError) {
+          console.log('error:' + chrome.runtime.lastError.message);
+        } else if ((selectedTextPerFrame.length > 0) && (typeof(selectedTextPerFrame[0]) === 'string')) {
+          injectText = selectedTextPerFrame[0];
+          chrome.tabs.create({
+            'url': chrome.extension.getURL("html/inject.html"),
+            'active': true
+          }, function (tab) {
+            injectTabId = tab.id;
+          });
+        }
+      });
+    }
+  });
+
 });
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
@@ -15,33 +44,6 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     var tabs = chrome.extension.getViews({type: "tab"});
     // Get the latest tab opened
     tabs[tabs.length - 1].inject(injectText);
-  }
-});
-
-chrome.contextMenus.onClicked.addListener(function(info, tab) {
-  if (info.menuItemId === renderSelectionMenuItemId) {
-    var funcToInject = function () {
-      var selection = window.getSelection();
-      return (selection.rangeCount > 0) ? selection.toString() : '';
-    };
-    var jsCodeStr = ';(' + funcToInject + ')();';
-    chrome.tabs.executeScript({
-      code: jsCodeStr,
-      allFrames: true
-    }, function (selectedTextPerFrame) {
-      if (chrome.runtime.lastError) {
-        console.log('error:' + chrome.runtime.lastError.message);
-      } else if ((selectedTextPerFrame.length > 0) && (typeof(selectedTextPerFrame[0]) === 'string')) {
-        injectText = selectedTextPerFrame[0];
-        chrome.tabs.create({
-          'url': chrome.extension.getURL("html/inject.html"),
-          'active': true
-        }, function (tab) {
-          injectTabId = tab.id;
-        });
-      }
-    });
-
   }
 });
 
