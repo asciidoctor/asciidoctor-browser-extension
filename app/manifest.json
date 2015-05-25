@@ -88,6 +88,7 @@
   "permissions":[
     "storage",
     "tabs",
+    "activeTab",
     "*://*/*.ad",
     "*://*/*.ad?*",
     "*://*/*.ad.*",
