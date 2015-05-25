@@ -81,11 +81,7 @@
     "js/vendor/highlight.min.js",
     "js/vendor/asciidoctor-chart-block-macro.js",
     "js/vendor/asciidoctor-emoji-inline-macro.js",
-    "fonts/FontAwesome.otf",
-    "fonts/fontawesome-webfont.eot",
-    "fonts/fontawesome-webfont.svg",
-    "fonts/fontawesome-webfont.ttf",
-    "fonts/fontawesome-webfont.woff",
+    "fonts/fontawesome-webfont.woff2",
     "vendor/MathJax/*"
   ],
   "permissions":[
