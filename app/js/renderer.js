@@ -119,7 +119,7 @@ function buildAsciidoctorOptions(settings) {
   var customAttributes = settings[CUSTOM_ATTRIBUTES_KEY];
   var safeMode = settings[SAFE_MODE_KEY] || 'secure';
   // Default attributes
-  var attributes = 'showtitle icons=font@ platform=opal platform-opal env=browser env-browser chart-engine=chartist';
+  var attributes = 'showtitle icons=font@ platform=opal platform-opal env=browser env-browser chart-engine=chartist data-uri!';
   var href = window.location.href;
   var fileName = href.split('/').pop();
   var fileExtension = fileName.split('.').pop();
