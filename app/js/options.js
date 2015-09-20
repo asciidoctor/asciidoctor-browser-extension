@@ -20,7 +20,7 @@ $(document).bind('ready', restoreOptions);
 
 function openExtensionsPage() {
   chrome.tabs.create({'url': "chrome://extensions/?id=flahcdpicipahcghebiillhbjilehfhc"});
-};
+}
 
 /**
  * Saves options to localStorage.
@@ -55,8 +55,8 @@ function restoreOptions() {
   var customThemeNames = JSON.parse(localStorage['CUSTOM_THEME_NAMES'] || '[]');
   if (customThemeNames.length > 0) {
     var customThemesOptGroup = getCustomThemeOptGroup();
-    for (var i in customThemeNames) {
-      customThemesOptGroup.append('<option>' + customThemeNames[i] + '</option>');
+    for (let customThemeName of customThemeNames) {
+      customThemesOptGroup.append('<option>' + customThemeName + '</option>');
     }
   }
   selectTheme.val(localStorage['THEME'] || 'asciidoctor');
@@ -64,8 +64,8 @@ function restoreOptions() {
   // JavaScripts
   var customJavaScriptNames = JSON.parse(localStorage['CUSTOM_JS_NAMES'] || '[]');
   if (customJavaScriptNames.length > 0) {
-    for (var j in customJavaScriptNames) {
-      selectJavaScript.append('<option>' + customJavaScriptNames[j] + '</option>');
+    for (let customJavaScriptName of customJavaScriptNames) {
+      selectJavaScript.append('<option>' + customJavaScriptName + '</option>');
     }
   }
   selectJavaScript.val(localStorage['JS']);
