@@ -6,7 +6,7 @@
     "asciidoctor.js": "1.5.4",
     "jquery": "2.1.1",
     "bootstrap": "3.2.0",
-    "font-awesome": "4.4.0",
+    "font-awesome": "4.5.0",
     "MathJax": "2.3"
   }
 }
