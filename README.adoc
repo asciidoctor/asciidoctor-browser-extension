@@ -66,6 +66,12 @@ You can also use preprocessor directives to fine-tune the content to put the TOC
 
 == Changelog
 
+=== 1.5.4.100
+
+ * Asciidoctor 1.5.4
+ * Font Awesome 4.5.0
+ * MathJax 2.6.0
+
 === 1.5.2.120
 
  * Chart extension
