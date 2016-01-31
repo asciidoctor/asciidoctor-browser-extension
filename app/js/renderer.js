@@ -69,14 +69,15 @@ asciidoctor.chrome.convert = function (data) {
  * Update the <body> with the generated HTML
  */
 function updateBody(data, settings, scripts) {
-  var asciidoctorDocument = Opal.Asciidoctor.$load(data, buildAsciidoctorOptions(settings));
-  if (asciidoctorDocument.attributes.map['icons'] == 'font') {
+  var options = buildAsciidoctorOptions(settings);
+  var asciidoctorDocument = Opal.Asciidoctor.$load(data, options);
+  if (asciidoctorDocument.attributes.smap['icons'] == 'font') {
     appendFontAwesomeStyle();
   }
   appendChartistStyle();
   appendTwemojiStyle();
   var generatedHtml = asciidoctorDocument.$convert();
-  document.title = asciidoctorDocument.$doctitle(Opal.hash2(['sanitize'], {sanitize: true}));
+  document.title = asciidoctorDocument.$doctitle(Opal.hash({sanitize: true}));
   document.body.className = asciidoctorDocument.$doctype();
   var maxWidth = asciidoctorDocument.$attr('max-width');
   if (maxWidth) {
@@ -95,18 +96,20 @@ function updateBody(data, settings, scripts) {
  */
 function getAttributesFromQueryParameters() {
   var query = location.search.substr(1);
-  var result = '';
-  query.split("&").forEach(function(part) {
-    var item = part.split("=");
-    var key = item[0];
-    var value = item[1];
-    if (typeof value !== 'undefined') {
-      var escapedValue = $('<div/>').text(decodeURIComponent(value)).html();
-      result = result.concat(key).concat('=').concat(escapedValue);
-    } else {
-      result = result.concat(key);
+  var result = [];
+  query.split("&").forEach(function (part) {
+    // part can be empty
+    if (part) {
+      var item = part.split("=");
+      var key = item[0];
+      var value = item[1];
+      if (typeof value !== 'undefined') {
+        var escapedValue = $('<div/>').text(decodeURIComponent(value)).html();
+        result.push(key.concat('=').concat(escapedValue));
+      } else {
+        result.push(key);
+      }
     }
-    result = result.concat(' ');
   });
   return result;
 }
@@ -119,27 +122,29 @@ function buildAsciidoctorOptions(settings) {
   var customAttributes = settings[CUSTOM_ATTRIBUTES_KEY];
   var safeMode = settings[SAFE_MODE_KEY] || 'secure';
   // Default attributes
-  var attributes = 'showtitle icons=font@ platform=opal platform-opal env=browser env-browser chart-engine=chartist data-uri!';
+  var attributes = ['showtitle', 'icons=font@', 'platform=opal', 'platform-opal', 'env=browser', 'env-browser', 'chart-engine=chartist', 'data-uri!'];
   var href = window.location.href;
   var fileName = href.split('/').pop();
   var fileExtension = fileName.split('.').pop();
   if (fileExtension !== '') {
-    attributes = attributes.concat(' ').concat('outfilesuffix=.').concat(fileExtension);
+    // Remove query parameters
+    fileExtension = fileExtension.split('?')[0];
+    attributes.push('outfilesuffix=.' + fileExtension);
   }
   if (customAttributes) {
-    attributes = attributes.concat(' ').concat(customAttributes);
+    attributes.push(customAttributes);
   }
-  if (attributesQueryParameters) {
-    attributes = attributes.concat(' ').concat(attributesQueryParameters);
+  if (attributesQueryParameters.length > 0) {
+    Array.prototype.push.apply(attributes, attributesQueryParameters);
   }
   var pwd = Opal.File.$dirname(href);
   Opal.ENV['$[]=']("PWD", pwd);
-  return Opal.hash2(['base_dir', 'safe', 'backend', 'attributes'], {
-    'base_dir':pwd,
-    'safe':safeMode,
+  return Opal.hash({
+    'base_dir': pwd,
+    'safe': safeMode,
     // Force backend to html5
     'backend': 'html5',
-    'attributes':attributes
+    'attributes': attributes
   });
 }
 
@@ -216,9 +221,9 @@ function appendChartistStyle() {
     var chartistStyle = document.createElement('style');
     chartistStyle.id = 'chartist-asciidoctor-style';
     chartistStyle.innerHTML = '.ct-chart .ct-series.ct-series-a .ct-line {stroke:#8EB33B} ' +
-    '.ct-chart .ct-series.ct-series-b .ct-line {stroke:#72B3CC} ' +
-    '.ct-chart .ct-series.ct-series-a .ct-point {stroke:#8EB33B} ' +
-    '.ct-chart .ct-series.ct-series-b .ct-point {stroke:#72B3CC}';
+      '.ct-chart .ct-series.ct-series-b .ct-line {stroke:#72B3CC} ' +
+      '.ct-chart .ct-series.ct-series-a .ct-point {stroke:#8EB33B} ' +
+      '.ct-chart .ct-series.ct-series-b .ct-point {stroke:#72B3CC}';
     document.head.appendChild(chartistStyle);
   }
 }
@@ -293,17 +298,17 @@ function appendMathJax() {
   var mathJaxJsScriptConfig = document.createElement('script');
   mathJaxJsScriptConfig.type = 'text/x-mathjax-config';
   mathJaxJsScriptConfig.text =
-      'MathJax.Hub.Config({' +
-          '  tex2jax: {' +
-          '    inlineMath: [["\\\\(", "\\\\)"]],' +
-          '    displayMath: [["\\\\[", "\\\\]"]],' +
-          '    ignoreClass: "nostem|nolatexmath"' +
-          '  },' +
-          '  asciimath2jax: {' +
-          '    delimiters: [["\\\\$", "\\\\$"]],' +
-          '    ignoreClass: "nostem|noasciimath"' +
-          '  }' +
-          '});';
+    'MathJax.Hub.Config({' +
+    '  tex2jax: {' +
+    '    inlineMath: [["\\\\(", "\\\\)"]],' +
+    '    displayMath: [["\\\\[", "\\\\]"]],' +
+    '    ignoreClass: "nostem|nolatexmath"' +
+    '  },' +
+    '  asciimath2jax: {' +
+    '    delimiters: [["\\\\$", "\\\\$"]],' +
+    '    ignoreClass: "nostem|noasciimath"' +
+    '  }' +
+    '});';
   document.head.appendChild(mathJaxJsScriptConfig);
 
   var mathJaxJsScript = document.createElement('script');
@@ -333,7 +338,9 @@ function refreshMathJax() {
  */
 function forceLoadDynamicObjects() {
   // Force iframe to be load
-  $('iframe').each(function() { $(this).attr('src', $(this).attr('src')) });
+  $('iframe').each(function () {
+    $(this).attr('src', $(this).attr('src'))
+  });
 }
 
 /**
