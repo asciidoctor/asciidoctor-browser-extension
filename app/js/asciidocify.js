@@ -104,6 +104,14 @@ function isHtmlContentType(data) {
   return contentType && (contentType.indexOf('html') > -1);
 }
 
+/**
+ * Is the document a local file ?
+ * @return true if the document is a local file, false otherwise
+ */
+function isLocalFile() {
+  return location.protocol === 'file:';
+}
+
 (function (document) {
   asciidoctor.chrome.asciidocify();
 }(document));
