@@ -298,25 +298,13 @@ function appendStyles() {
 
 function appendMathJax() {
   var mathJaxJsScriptConfig = document.createElement('script');
-  mathJaxJsScriptConfig.type = 'text/x-mathjax-config';
-  mathJaxJsScriptConfig.text =
-    'MathJax.Hub.Config({' +
-    '  tex2jax: {' +
-    '    inlineMath: [["\\\\(", "\\\\)"]],' +
-    '    displayMath: [["\\\\[", "\\\\]"]],' +
-    '    ignoreClass: "nostem|nolatexmath"' +
-    '  },' +
-    '  asciimath2jax: {' +
-    '    delimiters: [["\\\\$", "\\\\$"]],' +
-    '    ignoreClass: "nostem|noasciimath"' +
-    '  }' +
-    '});';
+  mathJaxJsScriptConfig.type = 'text/javascript';
+  mathJaxJsScriptConfig.src = chrome.extension.getURL('vendor/MathJax/config.js');
   document.head.appendChild(mathJaxJsScriptConfig);
 
   var mathJaxJsScript = document.createElement('script');
   mathJaxJsScript.type = 'text/javascript';
   mathJaxJsScript.src = chrome.extension.getURL('vendor/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML');
-  //mathJaxJsScript.src = chrome.extension.getURL('vendor/MathJax/MathJax.js?config=TeX-AMS_HTML');
   document.head.appendChild(mathJaxJsScript);
 }
 
