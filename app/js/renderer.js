@@ -76,10 +76,12 @@ function updateBody(data, settings, scripts) {
   }
   appendChartistStyle();
   appendTwemojiStyle();
-  var generatedHtml = asciidoctorDocument.$convert();
-  document.title = asciidoctorDocument.$doctitle(Opal.hash({sanitize: true}));
-  document.body.className = asciidoctorDocument.$doctype();
+  var title = asciidoctorDocument.$doctitle(Opal.hash({use_fallback: true}));
+  var doctype = asciidoctorDocument.$doctype();
   var maxWidth = asciidoctorDocument.$attr('max-width');
+  var generatedHtml = asciidoctorDocument.$convert();
+  document.title = $(document.createElement('div')).html(title).text();
+  document.body.className = doctype;
   if (maxWidth) {
     document.body.style.maxWidth = maxWidth;
   }
