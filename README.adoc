@@ -66,6 +66,13 @@ You can also use preprocessor directives to fine-tune the content to put the TOC
 
 == Changelog
 
+=== 1.5.4.110
+
+ * Upgrade Font Awesome to 4.6.3
+ * Decode entities in document title (Thanks @ismail & @mojavelinux)
+ * MathJax is now working on remote files (Thanks @kindlychung)
+ * Add missing images from Riak theme (Thanks @ssebastianj)
+
 === 1.5.4.100
 
  * Asciidoctor 1.5.4
