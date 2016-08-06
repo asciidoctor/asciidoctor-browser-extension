@@ -36,6 +36,8 @@ function saveOptions() {
   // Update status to let user know options were saved.
   saveAlert.find('.content').html('<b>Options saved!</b>');
   saveAlert.show();
+  // Scroll to the "Options saved" message.
+  $('html, body').animate({ scrollTop: saveAlert.offset().top}, 500);
   chrome.extension.getBackgroundPage().refreshOptions()
 }
 
