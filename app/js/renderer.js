@@ -146,7 +146,8 @@ function buildAsciidoctorOptions(settings) {
     'safe': safeMode,
     // Force backend to html5
     'backend': 'html5',
-    'attributes': attributes
+    // Pass attributes as String
+    'attributes': attributes.join(' ')
   });
 }
 
