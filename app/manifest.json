@@ -7,6 +7,10 @@
 
   "options_page":"html/options.html",
 
+  "options_ui":{
+    "page":"html/options.html"
+  },
+
   "icons":{
     "16":"img/asciidoc_icon_16.png",
     "48":"img/asciidoc_icon_48.png",
