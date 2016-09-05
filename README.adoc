@@ -67,7 +67,7 @@ You can also use preprocessor directives to fine-tune the content to put the TOC
 == Changelog
 
 === 1.5.4.111
- 
+
  * Fix custom attributes parsing on the options page
 
 === 1.5.4.110
