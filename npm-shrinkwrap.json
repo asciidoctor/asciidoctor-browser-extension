@@ -1,0 +1,10 @@
+{
+  "name": "grunt-contrib-jasmine",
+  "version": "1.0.3",
+  "dependencies": {
+    "jasmine-core": {
+      "version": "2.4.1",
+      "from": "2.5.0"
+    }
+  }
+}
