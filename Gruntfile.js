@@ -38,7 +38,6 @@ module.exports = function (grunt) {
         options: {
           specs: 'spec/*spec.js',
           vendor: [
-            paths.vendor + '/opal.js',
             paths.vendor + '/asciidoctor.js',
             paths.vendor + '/jquery.min.js',
             paths.vendor + '/md5.js',
@@ -68,9 +67,9 @@ module.exports = function (grunt) {
             expand: true,
             src: [
                   paths.bower + "/asciidoctor.js/dist/asciidoctor.js",
-                  paths.bower + "/opal/opal/current/opal.js",
                   paths.bower + "/jquery/dist/jquery.min.js",
-                  paths.bower + "/bootstrap/dist/js/bootstrap.min.js"
+                  paths.bower + "/bootstrap/dist/js/bootstrap.min.js",
+                  paths.bower + "/chartist/dist/js/chartist.min.js"
             ],
             dest: 'app/js/vendor/',
             flatten: true
@@ -94,7 +93,7 @@ module.exports = function (grunt) {
           // copies vendor fonts files
           {
             expand: true,
-            src: paths.bower + "/font-awesome/fonts/*",
+            src: paths.bower + "/font-awesome/fonts/*.woff2",
             dest: 'app/fonts/',
             flatten: true
           }

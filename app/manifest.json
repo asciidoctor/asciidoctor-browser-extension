@@ -1,6 +1,6 @@
 {
   "name":"Asciidoctor.js Live Preview",
-  "version":"1.5.4.111",
+  "version":"1.5.5.100",
   "manifest_version":2,
 
   "description":"Render AsciiDoc (.ad, .adoc, .asc, .asciidoc) as HTML inside Chrome!",
@@ -54,7 +54,6 @@
       "js":[
         "js/vendor/highlight.min.js",
         "js/vendor/jquery.min.js",
-        "js/vendor/opal.js",
         "js/vendor/asciidoctor.js",
         "js/vendor/md5.js",
         "js/asciidocify.js",
