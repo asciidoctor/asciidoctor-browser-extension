@@ -1,6 +1,7 @@
 // Namespace
 var asciidoctor = asciidoctor || {};
 asciidoctor.chrome = asciidoctor.chrome || {};
+var Asciidoctor = Asciidoctor();
 
 var CUSTOM_ATTRIBUTES_KEY = 'CUSTOM_ATTRIBUTES';
 var SAFE_MODE_KEY = 'SAFE_MODE';
@@ -70,16 +71,16 @@ asciidoctor.chrome.convert = function (data) {
  */
 function updateBody(data, settings, scripts) {
   var options = buildAsciidoctorOptions(settings);
-  var asciidoctorDocument = Opal.Asciidoctor.$load(data, options);
-  if (asciidoctorDocument.attributes.smap['icons'] == 'font') {
+  var doc = Asciidoctor.load(data, options);
+  if (doc.getAttribute('icons') === 'font') {
     appendFontAwesomeStyle();
   }
   appendChartistStyle();
   appendTwemojiStyle();
-  var title = asciidoctorDocument.$doctitle(Opal.hash({use_fallback: true}));
-  var doctype = asciidoctorDocument.$doctype();
-  var maxWidth = asciidoctorDocument.$attr('max-width');
-  var generatedHtml = asciidoctorDocument.$convert();
+  var title = doc.getDoctitle({use_fallback: true});
+  var doctype = doc.getDoctype();
+  var maxWidth = doc.getAttribute('max-width');
+  var generatedHtml = doc.convert();
   document.title = $(document.createElement('div')).html(title).text();
   document.body.className = doctype;
   if (maxWidth) {
@@ -139,16 +140,13 @@ function buildAsciidoctorOptions(settings) {
   if (attributesQueryParameters.length > 0) {
     Array.prototype.push.apply(attributes, attributesQueryParameters);
   }
-  var pwd = Opal.File.$dirname(href);
-  Opal.ENV['$[]=']("PWD", pwd);
-  return Opal.hash({
-    'base_dir': pwd,
+  return {
     'safe': safeMode,
     // Force backend to html5
     'backend': 'html5',
     // Pass attributes as String
     'attributes': attributes.join(' ')
-  });
+  };
 }
 
 /**
