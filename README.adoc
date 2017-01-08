@@ -66,6 +66,13 @@ You can also use preprocessor directives to fine-tune the content to put the TOC
 
 == Changelog
 
+=== 1.5.5.100
+
+ * Asciidoctor.js 1.5.5-4
+ * Highlight.js 9.9.0
+ * Font Awesome 4.7.0
+ * Options page now save changes automatically
+
 === 1.5.4.111
 
  * Fix custom attributes parsing on the options page
