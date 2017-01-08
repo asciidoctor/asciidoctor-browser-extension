@@ -2,6 +2,7 @@
 <head>
   <title>Asciidoctor.js Live Preview Options</title>
   <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/font-awesome.min.css">
   <script src="../js/vendor/jquery.min.js"></script>
   <script src="../js/vendor/bootstrap.min.js"></script>
   <style>
@@ -10,11 +11,32 @@
       margin-bottom: 15px;
       padding: 5px 10px;
     }
+
+    .input-group-addon.save-indicator-group-saved {
+      border: 1px solid #3c763d;
+      color: #3c763d;
+      background-color: #dff0d8;
+    }
+
+    .input-group-addon.save-indicator-group-saving {
+      border: 1px solid #31708f;
+      color: #31708f;
+      background-color: #d9edf7;
+    }
+
+    .save-indicator-group-saving .save-indicator-saved {
+      display: none;
+    }
+
+    .save-indicator-group-saved .save-indicator-saving {
+      display: none;
+    }
   </style>
 </head>
 <body>
 <div class="container">
   <h1>Options</h1>
+
   <div id="enablingLocalFileAlert" class="alert alert-info">
     <button type="button" class="close">
       <span aria-hidden="true">&times;</span>
@@ -29,7 +51,10 @@
       <label for="inputCustomAttributes" class="col-lg-2 control-label">Custom attributes</label>
 
       <div class="col-lg-10">
-        <input type="text" class="form-control" id="inputCustomAttributes">
+        <div class="input-group">
+          <input type="text" class="form-control form-input" id="inputCustomAttributes" name="inputCustomAttributes">
+          <span data-save-indicator="inputCustomAttributes"></span>
+        </div>
         <span class="help-block">A string of space-separated key/value attribute pairs (e.g., source-highlighter=highlightjs).
           <a href="http://asciidoctor.org/docs/user-manual/#attributes">Learn more</a> about attributes.</span>
       </div>
@@ -38,12 +63,15 @@
       <label for="selectSafeMode" class="col-lg-2 control-label">Safe mode</label>
 
       <div class="col-lg-10">
-        <select class="form-control" id="selectSafeMode">
-          <option value="unsafe">unsafe</option>
-          <option value="safe">safe</option>
-          <option value="server">server</option>
-          <option value="secure">secure</option>
-        </select>
+        <div class="input-group">
+          <select class="form-control form-input" id="selectSafeMode" name="selectSafeMode">
+            <option value="unsafe">unsafe</option>
+            <option value="safe">safe</option>
+            <option value="server">server</option>
+            <option value="secure">secure</option>
+          </select>
+          <span data-save-indicator="selectSafeMode"></span>
+        </div>
         <span class="help-block">Controls features related to security.
           <a href="http://asciidoctor.org/docs/user-manual/#running-asciidoctor-securely">Learn more</a> about these values.
         </span>
@@ -53,10 +81,13 @@
       <label for="inputAllowTxtExtension" class="col-lg-2 control-label">Preview .txt files</label>
 
       <div class="col-lg-10">
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" id="inputAllowTxtExtension">
+        <div class="input-group">
+          <div class="checkbox">
+            <label>
+              <input class="form-input" type="checkbox" id="inputAllowTxtExtension" name="inputAllowTxtExtension">
             </label>
+          </div>
+          <span data-save-indicator="inputAllowTxtExtension"></span>
         </div>
         <span class="help-block">Preview files with .txt extension.</span>
       </div>
@@ -67,23 +98,26 @@
       <div class="col-lg-10">
         <div class="row">
           <div class="col-lg-12">
-            <select class="form-control" id="selectTheme">
-              <optgroup label="Default">
-                <option>asciidoctor</option>
-                <option>colony</option>
-                <option>foundation</option>
-                <option>foundation-lime</option>
-                <option>foundation-potion</option>
-                <option>github</option>
-                <option>golo</option>
-                <option>iconic</option>
-                <option>maker</option>
-                <option>readthedocs</option>
-                <option>riak</option>
-                <option>rocket-panda</option>
-                <option>rubygems</option>
-              </optgroup>
-            </select>
+            <div class="input-group">
+              <select class="form-control form-input" id="selectTheme" name="selectTheme">
+                <optgroup label="Default">
+                  <option>asciidoctor</option>
+                  <option>colony</option>
+                  <option>foundation</option>
+                  <option>foundation-lime</option>
+                  <option>foundation-potion</option>
+                  <option>github</option>
+                  <option>golo</option>
+                  <option>iconic</option>
+                  <option>maker</option>
+                  <option>readthedocs</option>
+                  <option>riak</option>
+                  <option>rocket-panda</option>
+                  <option>rubygems</option>
+                </optgroup>
+              </select>
+              <span data-save-indicator="selectTheme"></span>
+            </div>
             <span class="help-block">The CSS styles to apply to the rendered HTML.</span>
           </div>
         </div>
@@ -107,9 +141,12 @@
       <label for="selectTheme" class="col-lg-2 control-label">JavaScript</label>
 
       <div class="col-lg-10">
-        <select class="form-control" id="selectJavaScript">
-          <option value=""></option>
-        </select>
+        <div class="input-group">
+          <select class="form-control form-input" id="selectJavaScript" name="selectJavaScript">
+            <option value=""></option>
+          </select>
+          <span data-save-indicator="selectJavaScript"></span>
+        </div>
         <span class="help-block">Add a custom JavaScript to the rendered HTML.</span>
         <b>Add JavaScript...</b>
         <input type="file" id="inputCustomJavaScript" accept="application/javascript">
@@ -122,25 +159,24 @@
           <div class="content"></div>
         </div>
         <br/>
-        <b>Load the JavaScript...</b>
 
-        <div class="radio">
-          <label>
-            <input type="radio" name="optionsLoadJavaScript" id="optionsJavaScriptAfter" value="after">
-            after the document has been rendered
-          </label>
+        <div class="input-group">
+          <b>Load the JavaScript...</b>
+
+          <div class="radio">
+            <label>
+              <input class="form-input" type="radio" name="optionsLoadJavaScript" id="optionsJavaScriptAfter" value="after">
+              after the document has been rendered
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input class="form-input" type="radio" name="optionsLoadJavaScript" id="optionJavaScriptBefore" value="before">
+              before the document has been rendered
+            </label>
+          </div>
+          <span data-save-indicator="optionsLoadJavaScript"></span>
         </div>
-        <div class="radio">
-          <label>
-            <input type="radio" name="optionsLoadJavaScript" id="optionJavaScriptBefore" value="before">
-            before the document has been rendered
-          </label>
-        </div>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-lg-offset-2 col-lg-10">
-        <a id="saveBtn" class="btn btn-default btn-success">Save</a>
       </div>
     </div>
   </form>
