@@ -151,11 +151,12 @@ function updateThemeFile(themeFile, themeName) {
       localStorage['CUSTOM_THEME_NAMES'] = JSON.stringify(customThemeNames);
     }
     localStorage['CUSTOM_THEME_' + themeName] = fileString;
+    saveOptions();
   };
   reader.readAsText(themeFile);
 }
 
-function updateJavaScriptFile(themeFile, javaScriptName) {
+function updateJavaScriptFile(javaScriptFile, javaScriptName) {
   var reader = new FileReader();
   reader.onload = function (evt) {
     var fileString = evt.target.result;
@@ -165,8 +166,9 @@ function updateJavaScriptFile(themeFile, javaScriptName) {
       localStorage['CUSTOM_JS_NAMES'] = JSON.stringify(customJavaScriptNames);
     }
     localStorage['CUSTOM_JS_' + javaScriptName] = fileString;
+    saveOptions();
   };
-  reader.readAsText(themeFile);
+  reader.readAsText(javaScriptFile);
 }
 
 function getFileNameWithoutExtension(file) {

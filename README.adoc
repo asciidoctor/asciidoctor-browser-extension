@@ -66,6 +66,10 @@ You can also use preprocessor directives to fine-tune the content to put the TOC
 
 == Changelog
 
+=== 1.5.5.101
+
+ * Updating a custom .css or .js file is not automatically saved
+
 === 1.5.5.100
 
  * Asciidoctor.js 1.5.5-4
