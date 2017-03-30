@@ -132,6 +132,8 @@ function buildAsciidoctorOptions(settings) {
   if (fileExtension !== '') {
     // Remove query parameters
     fileExtension = fileExtension.split('?')[0];
+    // Remove fragment identifier
+    fileExtension = fileExtension.split('#')[0];
     attributes.push('outfilesuffix=.' + fileExtension);
   }
   if (customAttributes) {
