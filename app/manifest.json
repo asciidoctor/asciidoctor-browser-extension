@@ -3,13 +3,6 @@
   "version":"1.5.5.101",
   "manifest_version":2,
 
-  "applications":{
-    "gecko":{
-      "id": "asciidoctor-preview-addon@asciidoctor",
-      "strict_min_version": "42.0"
-    }
-  },
-
   "description":"Render AsciiDoc (.ad, .adoc, .asc, .asciidoc) as HTML inside your browser!",
 
   "options_page":"html/options.html",
