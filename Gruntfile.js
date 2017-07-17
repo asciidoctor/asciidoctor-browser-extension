@@ -4,8 +4,7 @@ module.exports = function (grunt) {
     app: 'app',
     dist: 'dist',
     js: 'js',
-    vendor: 'vendor',
-    bower: 'bower_components'
+    vendor: 'vendor'
   };
 
   var paths = {
@@ -17,7 +16,7 @@ module.exports = function (grunt) {
     fonts: config.app + '/fonts',
     css: config.app + '/css',
     html: config.app + '/html',
-    bower: config.bower
+    node_module: 'node_modules'
   };
 
   grunt.initConfig({
@@ -66,10 +65,10 @@ module.exports = function (grunt) {
           {
             expand: true,
             src: [
-                  paths.bower + "/asciidoctor.js/dist/asciidoctor.js",
-                  paths.bower + "/jquery/dist/jquery.min.js",
-                  paths.bower + "/bootstrap/dist/js/bootstrap.min.js",
-                  paths.bower + "/chartist/dist/js/chartist.min.js"
+                  paths.node_modules + "/asciidoctor.js/dist/asciidoctor.js",
+                  paths.node_modules + "/jquery/dist/jquery.min.js",
+                  paths.node_modules + "/bootstrap/dist/js/bootstrap.min.js",
+                  paths.node_modules + "/chartist/dist/chartist.min.js"
             ],
             dest: 'app/js/vendor/',
             flatten: true

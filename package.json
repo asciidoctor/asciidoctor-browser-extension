@@ -14,6 +14,14 @@
     "url": "https://github.com/asciidoctor/asciidoctor-chrome-extension/issues"
   },
   "license": "MIT",
+  "dependencies": {
+    "asciidoctor.js": "1.5.5-4",
+    "bootstrap": "3.3.7",
+    "chartist": "0.10.1",
+    "font-awesome": "4.7.0",
+    "jquery": "2.2.4",
+    "mathjax": "2.6"
+  },
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-cli": "1.2.0",
