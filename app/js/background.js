@@ -1,8 +1,8 @@
-var enableRender = true;
-var matchesTabUrl = chrome.runtime.getManifest().content_scripts[0].matches;
-var renderSelectionMenuItemId = "renderSelectionMenuItem";
-var injectTabId;
-var injectText;
+let enableRender = true;
+const matchesTabUrl = chrome.runtime.getManifest().content_scripts[0].matches;
+const renderSelectionMenuItemId = "renderSelectionMenuItem";
+let injectTabId;
+let injectText;
 
 chrome.runtime.onInstalled.addListener(function() {
   chrome.contextMenus.create({
@@ -13,11 +13,11 @@ chrome.runtime.onInstalled.addListener(function() {
 
   chrome.contextMenus.onClicked.addListener(function(info, tab) {
     if (info.menuItemId === renderSelectionMenuItemId) {
-      var funcToInject = function () {
-        var selection = window.getSelection();
+      const funcToInject = function () {
+        const selection = window.getSelection();
         return (selection.rangeCount > 0) ? selection.toString() : '';
       };
-      var jsCodeStr = ';(' + funcToInject + ')();';
+      const jsCodeStr = `;(${funcToInject})();`;
       chrome.tabs.executeScript({
         code: jsCodeStr,
         allFrames: true
@@ -40,8 +40,8 @@ chrome.runtime.onInstalled.addListener(function() {
 });
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  if (changeInfo.status == "complete" && tabId === injectTabId) {
-    var tabs = chrome.extension.getViews({type: "tab"});
+  if (changeInfo.status === "complete" && tabId === injectTabId) {
+    const tabs = chrome.extension.getViews({type: "tab"});
     // Get the latest tab opened
     tabs[tabs.length - 1].inject(injectText);
   }
@@ -52,9 +52,8 @@ function reloadTab(tab) {
 }
 
 function findActiveTab(callback) {
-  var tabFound = false;
-  for (var i = 0; i < matchesTabUrl.length; i++) {
-    var matchTabUrl = matchesTabUrl[i];
+  let tabFound = false;
+  for (let matchTabUrl of matchesTabUrl) {
     chrome.tabs.query({active: true, currentWindow: true, url: matchTabUrl}, function (tabs) {
       if (!tabFound && tabs.length > 0) {
         callback(tabs[0]);
@@ -69,7 +68,7 @@ function enableDisableRender() {
   chrome.storage.local.set({'ENABLE_RENDER': enableRender});
 
   // Update the extension icon
-  var iconPath = enableRender ? "img/enabled.png" : "img/disabled.png";
+  const iconPath = enableRender ? "img/enabled.png" : "img/disabled.png";
   chrome.browserAction.setIcon({path: iconPath});
 
   // Reload the active tab in the current windows that matches
@@ -91,25 +90,23 @@ function refreshOptions() {
     'JS': localStorage['JS'],
     'JS_LOAD': localStorage['JS_LOAD']
   });
-  var customThemeNames = JSON.parse(localStorage['CUSTOM_THEME_NAMES'] || '[]');
+  const customThemeNames = JSON.parse(localStorage['CUSTOM_THEME_NAMES'] || '[]');
   if (customThemeNames.length > 0) {
-    for (var i in customThemeNames) {
-      var themeName = customThemeNames[i];
-      var themeNameKey = 'CUSTOM_THEME_' + themeName;
-      var themeObj = {};
+    customThemeNames.forEach(function (themeName) {
+      const themeNameKey = 'CUSTOM_THEME_' + themeName;
+      const themeObj = {};
       themeObj[themeNameKey] = localStorage[themeNameKey];
       chrome.storage.local.set(themeObj);
-    }
+    });
   }
-  var customJavaScriptNames = JSON.parse(localStorage['CUSTOM_JS_NAMES'] || '[]');
+  const customJavaScriptNames = JSON.parse(localStorage['CUSTOM_JS_NAMES'] || '[]');
   if (customJavaScriptNames.length > 0) {
-    for (var j in customJavaScriptNames) {
-      var javaScriptName = customJavaScriptNames[j];
-      var javaScriptNameKey = 'CUSTOM_JS_' + javaScriptName;
-      var javaScriptObj = {};
+    customJavaScriptNames.forEach(function (javaScriptName) {
+      const javaScriptNameKey = 'CUSTOM_JS_' + javaScriptName;
+      const javaScriptObj = {};
       javaScriptObj[javaScriptNameKey] = localStorage[javaScriptNameKey];
       chrome.storage.local.set(javaScriptObj);
-    }
+    });
   }
 }
 
