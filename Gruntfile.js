@@ -31,21 +31,6 @@ module.exports = function (grunt) {
       dist: ['dist']
     },
 
-    jasmine: {
-      customTemplate: {
-        src: [paths.js + '/asciidocify.js', paths.js + '/renderer.js'],
-        options: {
-          specs: 'spec/*spec.js',
-          vendor: [
-            paths.vendor + '/asciidoctor.js',
-            paths.vendor + '/jquery.min.js',
-            paths.vendor + '/md5.js',
-            paths.vendor + '/bootstrap.min.js'
-          ]
-        }
-      }
-    },
-
     compress: {
       main: {
         options: {
@@ -65,10 +50,10 @@ module.exports = function (grunt) {
           {
             expand: true,
             src: [
-                  paths.node_modules + "/asciidoctor.js/dist/asciidoctor.js",
-                  paths.node_modules + "/jquery/dist/jquery.min.js",
-                  paths.node_modules + "/bootstrap/dist/js/bootstrap.min.js",
-                  paths.node_modules + "/chartist/dist/chartist.min.js"
+              paths.node_modules + "/asciidoctor.js/dist/asciidoctor.js",
+              paths.node_modules + "/jquery/dist/jquery.min.js",
+              paths.node_modules + "/bootstrap/dist/js/bootstrap.min.js",
+              paths.node_modules + "/chartist/dist/chartist.min.js"
             ],
             dest: 'app/js/vendor/',
             flatten: true
@@ -102,12 +87,10 @@ module.exports = function (grunt) {
   });
 
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.loadNpmTasks('grunt-contrib-copy');
 
   grunt.registerTask('default', ['dist']);
-  grunt.registerTask('dist', ['clean', 'copy', 'test', 'compress']);
-  grunt.registerTask('publish', ['clean', 'test', 'compress']);
-  grunt.registerTask('test', ['jasmine']);
+  grunt.registerTask('dist', ['clean', 'copy', 'compress']);
+  grunt.registerTask('publish', ['clean', 'compress']);
 };
