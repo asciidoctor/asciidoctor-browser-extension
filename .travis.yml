@@ -1,7 +1,17 @@
 language: node_js
-node_js:
-  - "4"
-  - "6"
-  - "node"
 
-script: "grunt"
+node_js:
+- '4'
+- '6'
+- 'node'
+
+dist: trusty # needs Ubuntu Trusty
+
+sudo: false  # no need for virtualization.
+
+addons:
+  chrome: stable # have Travis install chrome stable.
+
+script:
+- grunt
+- npm test
