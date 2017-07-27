@@ -69,8 +69,8 @@ function enableDisableRender() {
   chrome.storage.local.set({'ENABLE_RENDER': enableRender});
 
   // Update the extension icon
-  var iconPath = enableRender ? "img/enabled.png" : "img/disabled.png";
-  chrome.browserAction.setIcon({path: iconPath});
+  var iconPaths = enableRender ? { "19": "img/enabled_19.png", "38": "img/enabled_38.png" } : { "19": "img/disabled_19.png", "38": "img/disabled_38.png" };
+  chrome.browserAction.setIcon({"path": iconPaths});
 
   // Reload the active tab in the current windows that matches
   findActiveTab(function (activeTab) {
