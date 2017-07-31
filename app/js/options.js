@@ -1,20 +1,19 @@
-'use strict';
+const selectTheme = $('#selectTheme');
+const selectJavaScript = $('#selectJavaScript');
+const selectSafeMode = $('#selectSafeMode');
+const inputAllowTxtExtension = $('#inputAllowTxtExtension');
+const inputCustomAttributes = $('#inputCustomAttributes');
+const inputCustomTheme = $('#inputCustomTheme');
+const inputCustomJavaScript = $('#inputCustomJavaScript');
+const inputLoadJavaScript = $('input[name=optionsLoadJavaScript]');
 
-var selectTheme = $('#selectTheme');
-var selectJavaScript = $('#selectJavaScript');
-var selectSafeMode = $('#selectSafeMode');
-var inputAllowTxtExtension = $('#inputAllowTxtExtension');
-var inputCustomAttributes = $('#inputCustomAttributes');
-var inputCustomTheme = $('#inputCustomTheme');
-var inputCustomJavaScript = $('#inputCustomJavaScript');
-var inputLoadJavaScript = $('input[name=optionsLoadJavaScript]');
+const addCustomThemeAlert = $('#addCustomThemeAlert');
+const addCustomJavaScriptAlert = $('#addCustomJavaScriptAlert');
+const saveAlert = $('#saveAlert');
+const enablingLocalFileAlert = $('#enablingLocalFileAlert');
+const openExtensionsPageLink = $('#openExtensionsPageLink');
 
-var addCustomThemeAlert = $('#addCustomThemeAlert');
-var addCustomJavaScriptAlert = $('#addCustomJavaScriptAlert');
-var saveAlert = $('#saveAlert');
-var enablingLocalFileAlert = $('#enablingLocalFileAlert');
-var openExtensionsPageLink = $('#openExtensionsPageLink');
-var saveAction;
+let saveAction;
 
 openExtensionsPageLink.click(openExtensionsPage);
 $(document).bind('ready', restoreOptions);
@@ -23,9 +22,6 @@ function openExtensionsPage() {
   chrome.tabs.create({'url': "chrome://extensions/?id=flahcdpicipahcghebiillhbjilehfhc"});
 }
 
-/**
- * Returns true if options changed else false.
- */
 function optionsChanged() {
   return localStorage['CUSTOM_ATTRIBUTES'] !== inputCustomAttributes.val() ||
     localStorage['SAFE_MODE'] !== selectSafeMode.val() ||
@@ -55,24 +51,24 @@ function restoreOptions() {
   inputCustomAttributes.val(localStorage['CUSTOM_ATTRIBUTES'] || '');
   selectSafeMode.val(localStorage['SAFE_MODE'] || 'secure');
   inputAllowTxtExtension.prop('checked', localStorage['ALLOW_TXT_EXTENSION'] === 'true');
-  var loadJavaScriptValue = localStorage['JS_LOAD'] || 'after';
-  inputLoadJavaScript.filter('[value=' + loadJavaScriptValue + ']').prop('checked', true);
+  const loadJavaScriptValue = localStorage['JS_LOAD'] || 'after';
+  inputLoadJavaScript.filter(`[value=${loadJavaScriptValue}]`).prop('checked', true);
 
   // Themes
-  var customThemeNames = JSON.parse(localStorage['CUSTOM_THEME_NAMES'] || '[]');
+  const customThemeNames = JSON.parse(localStorage['CUSTOM_THEME_NAMES'] || '[]');
   if (customThemeNames.length > 0) {
-    var customThemesOptGroup = getCustomThemeOptGroup();
+    const customThemesOptGroup = getCustomThemeOptGroup();
     for (let customThemeName of customThemeNames) {
-      customThemesOptGroup.append('<option>' + customThemeName + '</option>');
+      customThemesOptGroup.append(`<option>${customThemeName}</option>`);
     }
   }
   selectTheme.val(localStorage['THEME'] || 'asciidoctor');
 
   // JavaScripts
-  var customJavaScriptNames = JSON.parse(localStorage['CUSTOM_JS_NAMES'] || '[]');
+  const customJavaScriptNames = JSON.parse(localStorage['CUSTOM_JS_NAMES'] || '[]');
   if (customJavaScriptNames.length > 0) {
     for (let customJavaScriptName of customJavaScriptNames) {
-      selectJavaScript.append('<option>' + customJavaScriptName + '</option>');
+      selectJavaScript.append(`<option>${customJavaScriptName}</option>`);
     }
   }
   selectJavaScript.val(localStorage['JS']);
@@ -93,13 +89,13 @@ enablingLocalFileAlert.show();
 
 inputCustomTheme.change(function () {
   resetAlert(addCustomThemeAlert);
-  var hasNoFiles = this.files.length == 0;
+  const hasNoFiles = this.files.length === 0;
   if (!hasNoFiles) {
-    var file = this.files[0];
-    var themeName = getFileNameWithoutExtension(file);
-    var customThemeOptGroup = getCustomThemeOptGroup();
-    var themeExists = customThemeOptGroup.find('option:contains(' + themeName + ')').length == 0;
-    var alert = buildAlert(themeExists, themeName, 'theme');
+    const file = this.files[0];
+    const themeName = getFileNameWithoutExtension(file);
+    const customThemeOptGroup = getCustomThemeOptGroup();
+    const themeExists = customThemeOptGroup.find(`option:contains(${themeName})`).length === 0;
+    const alert = buildAlert(themeExists, themeName, 'theme');
     if (themeExists) {
       addNewOpt(customThemeOptGroup, themeName);
     }
@@ -112,12 +108,12 @@ inputCustomTheme.change(function () {
 
 inputCustomJavaScript.change(function () {
   resetAlert(addCustomJavaScriptAlert);
-  var hasNoFiles = this.files.length == 0;
+  const hasNoFiles = this.files.length === 0;
   if (!hasNoFiles) {
-    var file = this.files[0];
-    var javaScriptName = getFileNameWithoutExtension(file);
-    var javaScriptExists = selectJavaScript.find('option:contains(' + javaScriptName + ')').length == 0;
-    var alert = buildAlert(javaScriptExists, javaScriptName, 'JavaScript');
+    const file = this.files[0];
+    const javaScriptName = getFileNameWithoutExtension(file);
+    const javaScriptExists = selectJavaScript.find(`option:contains(${javaScriptName})`).length === 0;
+    const alert = buildAlert(javaScriptExists, javaScriptName, 'JavaScript');
     if (javaScriptExists) {
       addNewOpt(selectJavaScript, javaScriptName);
     }
@@ -129,12 +125,12 @@ inputCustomJavaScript.change(function () {
 });
 
 function addNewOpt(parentElement, name) {
-  parentElement.append('<option>' + name + '</option>');
+  parentElement.append(`<option>${name}</option>`);
 }
 
 function getCustomThemeOptGroup() {
-  var customThemesOptGroup = $("#customThemeOptGroup");
-  if (customThemesOptGroup.length == 0) {
+  let customThemesOptGroup = $("#customThemeOptGroup");
+  if (customThemesOptGroup.length === 0) {
     customThemesOptGroup = $('<optgroup id="customThemeOptGroup" label="Custom"></optgroup>');
     selectTheme.append(customThemesOptGroup);
   }
@@ -142,10 +138,10 @@ function getCustomThemeOptGroup() {
 }
 
 function updateThemeFile(themeFile, themeName) {
-  var reader = new FileReader();
+  const reader = new FileReader();
   reader.onload = function (evt) {
-    var fileString = evt.target.result;
-    var customThemeNames = JSON.parse(localStorage['CUSTOM_THEME_NAMES'] || '[]');
+    const fileString = evt.target.result;
+    const customThemeNames = JSON.parse(localStorage['CUSTOM_THEME_NAMES'] || '[]');
     if ($.inArray(themeName, customThemeNames) === -1) {
       customThemeNames.push(themeName);
       localStorage['CUSTOM_THEME_NAMES'] = JSON.stringify(customThemeNames);
@@ -157,10 +153,10 @@ function updateThemeFile(themeFile, themeName) {
 }
 
 function updateJavaScriptFile(javaScriptFile, javaScriptName) {
-  var reader = new FileReader();
+  const reader = new FileReader();
   reader.onload = function (evt) {
-    var fileString = evt.target.result;
-    var customJavaScriptNames = JSON.parse(localStorage['CUSTOM_JS_NAMES'] || '[]');
+    const fileString = evt.target.result;
+    const customJavaScriptNames = JSON.parse(localStorage['CUSTOM_JS_NAMES'] || '[]');
     if ($.inArray(javaScriptName, customJavaScriptNames) === -1) {
       customJavaScriptNames.push(javaScriptName);
       localStorage['CUSTOM_JS_NAMES'] = JSON.stringify(customJavaScriptNames);
@@ -172,19 +168,19 @@ function updateJavaScriptFile(javaScriptFile, javaScriptName) {
 }
 
 function getFileNameWithoutExtension(file) {
-  var fileName = file.name;
+  const fileName = file.name;
   return fileName.substr(0, fileName.lastIndexOf('.')) || fileName;
 }
 
 function buildAlert(exists, name, type) {
-  var alertClasses;
-  var alertMessage;
+  let alertClasses;
+  let alertMessage;
   if (exists) {
     alertClasses = 'alert alert-sm alert-info';
-    alertMessage = 'New ' + type + ' <b>' + name + '</b> has been added!';
+    alertMessage = `New ${type} <b>${name}</b> has been added!`;
   } else {
     alertClasses = 'alert alert-sm alert-warning';
-    alertMessage = 'Existing ' + type + ' <b>' + name + '</b> has been replaced!';
+    alertMessage = `Existing ${type} <b>${name}</b> has been replaced!`;
   }
   return {classes: alertClasses, message: alertMessage};
 }
@@ -201,12 +197,12 @@ function resetAlert(element) {
 }
 
 function selectOpt(parentElement, name) {
-  parentElement.find('option:contains(' + name + ')').prop('selected', true);
+  parentElement.find(`option:contains(${name})`).prop('selected', true);
 }
 
 function initSaveIndicators(opts, optionsChangedFunction, saveOptionsFunction) {
-  var timeout = opts.timeout || 200;
-  var inputsIdentifier = opts.inputsIdentifier || '.form-input';
+  const timeout = opts.timeout || 200;
+  const inputsIdentifier = opts.inputsIdentifier || '.form-input';
 
   $('[data-save-indicator]').each(function() {
     $(this).append('<i class="save-indicator-saved fa fa-check-circle"></i>');
@@ -216,8 +212,8 @@ function initSaveIndicators(opts, optionsChangedFunction, saveOptionsFunction) {
 
   $(inputsIdentifier).on('input propertychange change', function() {
     if (optionsChangedFunction()) {
-      var inputName = $(this).attr('name');
-      var saveIndicatorComp = $("[data-save-indicator='" + inputName + "']");
+      const inputName = $(this).attr('name');
+      const saveIndicatorComp = $(`[data-save-indicator='${inputName}']`);
       // Update status to let user know options are being saved.
       saveIndicatorComp.removeClass('save-indicator-group-saved');
       saveIndicatorComp.addClass('save-indicator-group-saving');

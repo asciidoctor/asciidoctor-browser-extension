@@ -1,4 +1,4 @@
-var alreadyRun = false;
+let alreadyRun = false;
 function inject(data) {
   if (!alreadyRun) {
     appendStyles();
