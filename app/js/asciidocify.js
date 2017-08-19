@@ -25,6 +25,11 @@ asciidoctor.chrome.asciidocify = function () {
 
 function loadContent() {
   $.ajax({
+    beforeSend: function (xhr) {
+      if (xhr.overrideMimeType) {
+        xhr.overrideMimeType("text/plain;charset=utf-8");
+      }
+    },
     url: location.href,
     cache: false,
     complete: function (data) {
@@ -86,6 +91,11 @@ function startAutoReload() {
   clearInterval(autoReloadInterval);
   autoReloadInterval = setInterval(function () {
     $.ajax({
+      beforeSend: function (xhr) {
+        if (xhr.overrideMimeType) {
+          xhr.overrideMimeType("text/plain;charset=utf-8");
+        }
+      },
       url: location.href,
       cache: false,
       success: function (data) {
