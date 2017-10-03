@@ -25,11 +25,6 @@ asciidoctor.chrome.asciidocify = function () {
 
 function loadContent() {
   $.ajax({
-    beforeSend: function (xhr) {
-      if (xhr.overrideMimeType) {
-        xhr.overrideMimeType("text/plain;charset=utf-8");
-      }
-    },
     url: location.href,
     cache: false,
     complete: function (data) {
