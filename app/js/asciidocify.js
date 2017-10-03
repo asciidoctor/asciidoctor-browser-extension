@@ -11,8 +11,7 @@ const ALLOW_TXT_EXTENSION_KEY = 'ALLOW_TXT_EXTENSION';
 asciidoctor.chrome.asciidocify = function () {
   const txtExtensionRegex = /\.txt[.|\?]?.*?$/;
   if (location.href.match(txtExtensionRegex)) {
-    chrome.storage.local.get(ALLOW_TXT_EXTENSION_KEY, function (items) {
-      const allowed = items[ALLOW_TXT_EXTENSION_KEY] === 'true';
+    isTxtExtAllowed(function(allowed) {
       // Extension allows txt extension
       if (allowed) {
         fetchContent();
@@ -35,6 +34,13 @@ asciidoctor.chrome.loadContent = function (data) {
     startAutoReload();
   });
 };
+
+function isTxtExtAllowed(callback) {
+  chrome.storage.local.get(ALLOW_TXT_EXTENSION_KEY, function (items) {
+    const allowed = items[ALLOW_TXT_EXTENSION_KEY] === 'true';
+    callback(allowed);
+  });
+}
 
 function isExtensionEnabled(callback) {
   chrome.storage.local.get(ENABLE_RENDER_KEY, function (items) {
