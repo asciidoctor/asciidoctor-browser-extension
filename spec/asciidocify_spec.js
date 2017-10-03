@@ -29,7 +29,7 @@ describe("asciidocify", function () {
       data.responseText = "= Hello world";
       spyOn(chrome.storage.local, "get").and.callFake(function (name, callback) {
         var values = [];
-        values[ENABLE_RENDER_KEY] = true;
+        values[asciidoctor.chrome.ENABLE_RENDER_KEY] = true;
         callback(values);
       });
       spyOn(asciidoctor.chrome, "convert");
@@ -45,7 +45,7 @@ describe("asciidocify", function () {
       data.responseText = "= Hello world";
       spyOn(chrome.storage.local, "get").and.callFake(function (name, callback) {
         var values = [];
-        values[ENABLE_RENDER_KEY] = false;
+        values[asciidoctor.chrome.ENABLE_RENDER_KEY] = false;
         callback(values);
       });
       spyOn(asciidoctor.chrome, "convert");
