@@ -1,6 +1,6 @@
 describe("asciidocify", function () {
 
-  describe("loadContent", function () {
+  describe("fetchContent", function () {
     beforeEach(function () {
       chrome = {
         storage:{
