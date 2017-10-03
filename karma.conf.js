@@ -4,7 +4,6 @@ module.exports = function(config) {
     files: [
       'app/js/vendor/highlight.min.js',
       'app/js/vendor/jquery.min.js',
-      'app/js/vendor/opal.js',
       'app/js/vendor/asciidoctor.js',
       'app/js/vendor/md5.js',
       'app/js/asciidocify.js',
