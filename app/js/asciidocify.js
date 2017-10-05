@@ -9,21 +9,61 @@ const ENABLE_RENDER_KEY = 'ENABLE_RENDER';
 const ALLOW_TXT_EXTENSION_KEY = 'ALLOW_TXT_EXTENSION';
 
 asciidoctor.chrome.asciidocify = function () {
-  txtExtensionRegex = /\.txt[.|\?]?.*?$/;
+  const txtExtensionRegex = /\.txt[.|\?]?.*?$/;
   if (location.href.match(txtExtensionRegex)) {
-    chrome.storage.local.get(ALLOW_TXT_EXTENSION_KEY, function (items) {
-      const allowed = items[ALLOW_TXT_EXTENSION_KEY] === 'true';
+    isTxtExtAllowed(function(allowed) {
       // Extension allows txt extension
       if (allowed) {
-        loadContent();
+        fetchContent();
       }
     });
   } else {
-    loadContent();
+    fetchContent();
   }
 };
 
-function loadContent() {
+asciidoctor.chrome.loadContent = function (data) {
+  isExtensionEnabled(function (enabled) {
+    // Extension is enabled
+    if (enabled) {
+      appendStyles();
+      appendMathJax();
+      appendHighlightJsScript();
+      asciidoctor.chrome.convert(data.responseText);
+    }
+    startAutoReload();
+  });
+};
+
+function isTxtExtAllowed(callback) {
+  chrome.storage.local.get(ALLOW_TXT_EXTENSION_KEY, function (items) {
+    const allowed = items[ALLOW_TXT_EXTENSION_KEY] === 'true';
+    callback(allowed);
+  });
+}
+
+function isExtensionEnabled(callback) {
+  chrome.storage.local.get(ENABLE_RENDER_KEY, function (items) {
+    const enabled = items[ENABLE_RENDER_KEY];
+    callback(enabled);
+  });
+}
+
+function isLiveReloadDetected(callback) {
+  chrome.storage.local.get(LIVERELOADJS_DETECTED_KEY, function (items) {
+    const liveReloadJsDetected = items[LIVERELOADJS_DETECTED_KEY];
+    callback(liveReloadJsDetected);
+  });
+}
+
+function getMd5sum(key, callback) {
+  chrome.storage.local.get(key, function (items) {
+    const md5sum = items[key];
+    callback(md5sum);
+  });
+}
+
+function fetchContent() {
   $.ajax({
     url: location.href,
     cache: false,
@@ -36,34 +76,17 @@ function loadContent() {
   });
 }
 
-asciidoctor.chrome.loadContent = function (data) {
-  chrome.storage.local.get(ENABLE_RENDER_KEY, function (items) {
-    const enabled = items[ENABLE_RENDER_KEY];
-    // Extension is enabled
-    if (enabled) {
-      appendStyles();
-      appendMathJax();
-      appendHighlightJsScript();
-      asciidoctor.chrome.convert(data.responseText);
-    }
-    startAutoReload();
-  });
-};
-
 function reloadContent(data) {
-  chrome.storage.local.get(LIVERELOADJS_DETECTED_KEY, function (items) {
-    const liveReloadJsDetected = items[LIVERELOADJS_DETECTED_KEY];
+  isLiveReloadDetected(function (liveReloadDetected) {
     // LiveReload.js has been detected
-    if (!liveReloadJsDetected) {
+    if (!liveReloadDetected) {
       const key = 'md5' + location.href;
-      chrome.storage.local.get(key, function (items) {
-        const md5sum = items[key];
+      getMd5sum(key, function (md5sum) {
         if (md5sum && md5sum === md5(data)) {
           return;
         }
         // Content has changed...
-        chrome.storage.local.get(ENABLE_RENDER_KEY, function (items) {
-          const enabled = items[ENABLE_RENDER_KEY];
+        isExtensionEnabled(function (enabled) {
           // Extension is enabled
           if (enabled) {
             // Convert AsciiDoc to HTML
