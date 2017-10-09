@@ -1,19 +1,20 @@
 = Asciidoctor Chrome Extension
 Guillaume Grossetie
-:sources: https://github.com/asciidoctor/asciidoctor-chrome-extension
-:license: https://github.com/asciidoctor/asciidoctor-chrome-extension/blob/master/LICENSE
-:webstore: https://chrome.google.com/webstore/detail/asciidoctorjs-live-previe/iaalpfgpbocpdfblpnhhgllgbdbchmia
-:manual-placement: http://asciidoctor.org/docs/user-manual/#manual-placement
+
+:uri-license: https://github.com/asciidoctor/asciidoctor-chrome-extension/blob/master/LICENSE
+:uri-hacking: https://github.com/asciidoctor/asciidoctor-chrome-extension/blob/master/hacking.adoc
+:uri-changelog: https://github.com/asciidoctor/asciidoctor-chrome-extension/blob/master/changelog.adoc
+:uri-webstore: https://chrome.google.com/webstore/detail/asciidoctorjs-live-previe/iaalpfgpbocpdfblpnhhgllgbdbchmia
 
 This project uses https://github.com/asciidoctor/asciidoctor.js[Asciidoctor.js] to preview AsciiDoc as HTML inside the Chrome (or Chromium) web browser!
 
-image::https://developer.chrome.com/webstore/images/ChromeWebStore_Badge_v2_206x58.png[link="{webstore}"]
+image::https://developer.chrome.com/webstore/images/ChromeWebStore_Badge_v2_206x58.png[link="{uri-webstore}"]
 
 *Project health:* image:https://travis-ci.org/asciidoctor/asciidoctor-chrome-extension.svg?branch=master[Build Status, link="https://travis-ci.org/asciidoctor/asciidoctor-chrome-extension"]
 
 == Usage
 
- 1. Install extension from {webstore}[Chrome Web Store]
+ 1. Install extension from {uri-webstore}[Chrome Web Store]
  2. Check `Allow access to file URLs` in `chrome://extensions`
  3. Open local or remote .ad, .adoc, .asc, .asciidoc file in Chrome
  4. Enjoy!
@@ -40,122 +41,17 @@ To open the options page, right-click the extension icon and choose Options on t
 
 The options page let you add custom Asciidoctor attributes or change the theme of the AsciiDoc HTML output.
 
+== Contributing
+
+See the <<hacking#, hacking>> file.
+
 == Changelog
 
-=== 1.5.5.101
-
- * Updating a custom .css or .js file is not automatically saved
-
-=== 1.5.5.100
-
- * Asciidoctor.js 1.5.5-4
- * Highlight.js 9.9.0
- * Font Awesome 4.7.0
- * Options page now save changes automatically
-
-=== 1.5.4.111
-
- * Fix custom attributes parsing on the options page
-
-=== 1.5.4.110
-
- * Upgrade Font Awesome to 4.6.3
- * Decode entities in document title (Thanks @ismail & @mojavelinux)
- * MathJax is now working on remote files (Thanks @kindlychung)
- * Add missing images from Riak theme (Thanks @ssebastianj)
-
-=== 1.5.4.100
-
- * Asciidoctor 1.5.4
- * Font Awesome 4.5.0
- * MathJax 2.6.0
-
-=== 1.5.2.120
-
- * Chart extension
-+
-.Line chart
-```
-[chart,line]
-....
-January,February,March
-28,48,40
-65,59,80
-....
-```
-
- * Emoji extension 
-+
-.Large heart emoji
-```
-emoji:heart[lg]
-```
-
- * Allow attributes to be defined via URL parameters
-+
-.Set TOC placement to preamble
-`?toc=preamble`
-
- * Add tip about enabling local file access to options page
-
-=== 1.5.2.111
-
- * Support embedded videos
- * Fix enable/disable on local files
- * Font Awesome 4.3.0
-
-=== 1.5.2.100
-
- * Asciidoctor 1.5.2
- * Support :max-width: attribute
- * Offline mode
- * .txt files extension (configurable)
-
-=== 1.5.1.100
-
- * Asciidoctor 1.5.1
- * Fade navigation to enable sections as slides (contrib)
-
-=== 1.5.0.100
-
- * Asciidoctor 1.5.0 !
- * New stylesheet with Open Source Fonts
- * Better print styles
- * Font Awesome 4.1
- * MathJax support
- * Allow custom Javascript and Stylesheet
-
-=== 0.4.0
-
- * Upgrade to Asciidoctor 1.5.0-preview.8
- * Activate includes!
- * Render selection
- * Match URLs that contain a query string
-
-=== 0.3.0
-
- * Upgrade to Asciidoctor 1.5.0.preview.1
- * Add integration with Font Awesome 3.2.1
-
-=== 0.2.5
-
- * Add configuration option for specifying custom attributes
- * Allow to change the theme of AsciiDoc HTML output
-
-=== 0.2.4
-
- * Add highlight.js for syntax highlighting
- * Add context menu to send the "browser content" to the Asciidoctor Editor
-
-=== 0.2.3
-
- * Auto reload, you don't need to refresh your browser anymore!
- * Shiny icon in `chrome://extensions/`
- * Support .asc file extension (thanks @mojavelinux)
+See the <<changelog#, changelog>> file.
 
 == Copyright
 
-Copyright (C) 2013 Guillaume Grossetie.
+Copyright (C) 2013-2017 Guillaume Grossetie.
 Free use of this software is granted under the terms of the MIT License.
 
-See the {license}[LICENSE] file for details.
+See the {uri-license}[LICENSE] file for details.
