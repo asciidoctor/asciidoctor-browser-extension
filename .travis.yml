@@ -13,5 +13,5 @@ addons:
   chrome: stable # have Travis install chrome stable.
 
 script:
-- grunt
-- npm test
+- npm run build
+- npm run test
