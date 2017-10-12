@@ -9,9 +9,9 @@ const ENABLE_RENDER_KEY = 'ENABLE_RENDER';
 const ALLOW_TXT_EXTENSION_KEY = 'ALLOW_TXT_EXTENSION';
 
 asciidoctor.chrome.asciidocify = function () {
-  const txtExtensionRegex = /\.txt[.|\?]?.*?$/;
+  const txtExtensionRegex = /\.txt[.|?]?.*?$/;
   if (location.href.match(txtExtensionRegex)) {
-    isTxtExtAllowed(function(allowed) {
+    isTxtExtAllowed(function (allowed) {
       // Extension allows txt extension
       if (allowed) {
         fetchContent();
@@ -26,44 +26,44 @@ asciidoctor.chrome.loadContent = function (data) {
   isExtensionEnabled(function (enabled) {
     // Extension is enabled
     if (enabled) {
-      appendStyles();
-      appendMathJax();
-      appendHighlightJsScript();
+      asciidoctor.chrome.appendStyles();
+      asciidoctor.chrome.appendMathJax();
+      asciidoctor.chrome.appendHighlightJsScript();
       asciidoctor.chrome.convert(data.responseText);
     }
     startAutoReload();
   });
 };
 
-function isTxtExtAllowed(callback) {
+function isTxtExtAllowed (callback) {
   chrome.storage.local.get(ALLOW_TXT_EXTENSION_KEY, function (items) {
     const allowed = items[ALLOW_TXT_EXTENSION_KEY] === 'true';
     callback(allowed);
   });
 }
 
-function isExtensionEnabled(callback) {
+function isExtensionEnabled (callback) {
   chrome.storage.local.get(ENABLE_RENDER_KEY, function (items) {
     const enabled = items[ENABLE_RENDER_KEY];
     callback(enabled);
   });
 }
 
-function isLiveReloadDetected(callback) {
+function isLiveReloadDetected (callback) {
   chrome.storage.local.get(LIVERELOADJS_DETECTED_KEY, function (items) {
     const liveReloadJsDetected = items[LIVERELOADJS_DETECTED_KEY];
     callback(liveReloadJsDetected);
   });
 }
 
-function getMd5sum(key, callback) {
+function getMd5sum (key, callback) {
   chrome.storage.local.get(key, function (items) {
     const md5sum = items[key];
     callback(md5sum);
   });
 }
 
-function fetchContent() {
+function fetchContent () {
   $.ajax({
     url: location.href,
     cache: false,
@@ -76,7 +76,7 @@ function fetchContent() {
   });
 }
 
-function reloadContent(data) {
+function reloadContent (data) {
   isLiveReloadDetected(function (liveReloadDetected) {
     // LiveReload.js has been detected
     if (!liveReloadDetected) {
@@ -105,13 +105,13 @@ function reloadContent(data) {
   });
 }
 
-function startAutoReload() {
+function startAutoReload () {
   clearInterval(autoReloadInterval);
   autoReloadInterval = setInterval(function () {
     $.ajax({
       beforeSend: function (xhr) {
         if (xhr.overrideMimeType) {
-          xhr.overrideMimeType("text/plain;charset=utf-8");
+          xhr.overrideMimeType('text/plain;charset=utf-8');
         }
       },
       url: location.href,
@@ -128,7 +128,7 @@ function startAutoReload() {
  * @param data The data
  * @return true if the content type is html, false otherwise
  */
-function isHtmlContentType(data) {
+function isHtmlContentType (data) {
   const contentType = data.getResponseHeader('Content-Type');
   return contentType && (contentType.indexOf('html') > -1);
 }

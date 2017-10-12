@@ -1,17 +1,17 @@
 let enableRender = true;
 const matchesTabUrl = chrome.runtime.getManifest().content_scripts[0].matches;
-const renderSelectionMenuItemId = "renderSelectionMenuItem";
+const renderSelectionMenuItemId = 'renderSelectionMenuItem';
 let injectTabId;
 let injectText;
 
-chrome.runtime.onInstalled.addListener(function() {
+chrome.runtime.onInstalled.addListener(function () {
   chrome.contextMenus.create({
-    "id": renderSelectionMenuItemId,
-    "title": "Render selection",
-    "contexts": ["selection"]
+    'id': renderSelectionMenuItemId,
+    'title': 'Render selection',
+    'contexts': ['selection']
   });
 
-  chrome.contextMenus.onClicked.addListener(function(info, tab) {
+  chrome.contextMenus.onClicked.addListener(function (info) {
     if (info.menuItemId === renderSelectionMenuItemId) {
       const funcToInject = function () {
         const selection = window.getSelection();
@@ -23,11 +23,12 @@ chrome.runtime.onInstalled.addListener(function() {
         allFrames: true
       }, function (selectedTextPerFrame) {
         if (chrome.runtime.lastError) {
+          // eslint-disable-next-line no-console
           console.log('error:' + chrome.runtime.lastError.message);
-        } else if ((selectedTextPerFrame.length > 0) && (typeof(selectedTextPerFrame[0]) === 'string')) {
+        } else if (selectedTextPerFrame.length > 0 && typeof selectedTextPerFrame[0] === 'string') {
           injectText = selectedTextPerFrame[0];
           chrome.tabs.create({
-            'url': chrome.extension.getURL("html/inject.html"),
+            'url': chrome.extension.getURL('html/inject.html'),
             'active': true
           }, function (tab) {
             injectTabId = tab.id;
@@ -36,22 +37,21 @@ chrome.runtime.onInstalled.addListener(function() {
       });
     }
   });
-
 });
 
-chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  if (changeInfo.status === "complete" && tabId === injectTabId) {
-    const tabs = chrome.extension.getViews({type: "tab"});
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo) {
+  if (changeInfo.status === 'complete' && tabId === injectTabId) {
+    const tabs = chrome.extension.getViews({type: 'tab'});
     // Get the latest tab opened
     tabs[tabs.length - 1].inject(injectText);
   }
 });
 
-function reloadTab(tab) {
+function reloadTab (tab) {
   chrome.tabs.reload(tab.id);
 }
 
-function findActiveTab(callback) {
+function findActiveTab (callback) {
   let tabFound = false;
   for (let matchTabUrl of matchesTabUrl) {
     chrome.tabs.query({active: true, currentWindow: true, url: matchTabUrl}, function (tabs) {
@@ -63,12 +63,12 @@ function findActiveTab(callback) {
   }
 }
 
-function enableDisableRender() {
+function enableDisableRender () {
   // Save the status of the extension
   chrome.storage.local.set({'ENABLE_RENDER': enableRender});
 
   // Update the extension icon
-  const iconPath = enableRender ? "img/enabled.png" : "img/disabled.png";
+  const iconPath = enableRender ? 'img/enabled.png' : 'img/disabled.png';
   chrome.browserAction.setIcon({path: iconPath});
 
   // Reload the active tab in the current windows that matches
@@ -80,8 +80,8 @@ function enableDisableRender() {
   enableRender = !enableRender;
 }
 
-
-function refreshOptions() {
+// eslint-disable-next-line no-unused-vars
+function refreshOptions () {
   chrome.storage.local.set({
     'CUSTOM_ATTRIBUTES': localStorage['CUSTOM_ATTRIBUTES'],
     'SAFE_MODE': localStorage['SAFE_MODE'],

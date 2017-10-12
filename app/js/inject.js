@@ -1,9 +1,12 @@
 let alreadyRun = false;
-function inject(data) {
+
+// eslint-disable-next-line no-unused-vars
+function inject (data) {
   if (!alreadyRun) {
     appendStyles();
     asciidoctor.chrome.convert(data);
     alreadyRun = true;
   }
 }
-document.getElementById("content").innerHTML += "Rendering...";
+
+document.getElementById('content').innerHTML += 'Rendering...';

@@ -9,7 +9,8 @@
   },
   "scripts": {
     "test": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
-    "build": "node npm/build.js"
+    "build": "node npm/build.js",
+    "lint": "eslint app/js/*.js npm"
   },
   "homepage": "https://github.com/asciidoctor/asciidoctor-chrome-extension",
   "author": {
@@ -30,6 +31,12 @@
     "bestikk-log": "0.1.0",
     "bootstrap": "3.3.7",
     "chartist": "0.8.3",
+    "eslint": "4.8.0",
+    "eslint-config-standard": "10.2.1",
+    "eslint-plugin-import": "2.7.0",
+    "eslint-plugin-node": "5.2.0",
+    "eslint-plugin-promise": "3.5.0",
+    "eslint-plugin-standard": "3.0.1",
     "font-awesome": "4.7.0",
     "jasmine-core": "2.8.0",
     "jquery": "2.2.4",
