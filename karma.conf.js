@@ -6,7 +6,7 @@ module.exports = function(config) {
       'app/js/vendor/jquery.min.js',
       'app/js/vendor/asciidoctor.js',
       'app/js/vendor/md5.js',
-      'app/js/asciidocify.js',
+      'app/js/loader.js',
       'app/js/renderer.js',
       'spec/**/*.js'
     ],
