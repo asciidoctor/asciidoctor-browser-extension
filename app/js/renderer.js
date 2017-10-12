@@ -1,20 +1,25 @@
 // Namespace
 const processor = Asciidoctor({runtime: {platform: 'browser'}});
 
-const CUSTOM_ATTRIBUTES_KEY = 'CUSTOM_ATTRIBUTES';
-const SAFE_MODE_KEY = 'SAFE_MODE';
-const LIVERELOADJS_DETECTED_KEY = 'LIVERELOADJS_DETECTED';
-const LIVERELOADJS_FILENAME = 'livereload.js';
-const THEME_KEY = 'THEME';
-const CUSTOM_THEME_PREFIX = 'CUSTOM_THEME_';
-const JS_KEY = 'JS';
-const JS_LOAD_KEY = 'JS_LOAD';
+asciidoctor.chrome.CUSTOM_ATTRIBUTES_KEY = 'CUSTOM_ATTRIBUTES';
+asciidoctor.chrome.SAFE_MODE_KEY = 'SAFE_MODE';
+asciidoctor.chrome.LIVERELOADJS_DETECTED_KEY = 'LIVERELOADJS_DETECTED';
+asciidoctor.chrome.LIVERELOADJS_FILENAME = 'livereload.js';
+asciidoctor.chrome.THEME_KEY = 'THEME';
+asciidoctor.chrome.CUSTOM_THEME_PREFIX = 'CUSTOM_THEME_';
+asciidoctor.chrome.CUSTOM_JS_PREFIX = 'CUSTOM_JS_';
+asciidoctor.chrome.JS_KEY = 'JS';
+asciidoctor.chrome.JS_LOAD_KEY = 'JS_LOAD';
 
 /**
  * Convert AsciiDoc as HTML
  */
 asciidoctor.chrome.convert = function (data) {
-  chrome.storage.local.get([CUSTOM_ATTRIBUTES_KEY, SAFE_MODE_KEY, JS_KEY, JS_LOAD_KEY], function (settings) {
+  chrome.storage.local.get([
+    asciidoctor.chrome.CUSTOM_ATTRIBUTES_KEY,
+    asciidoctor.chrome.SAFE_MODE_KEY,
+    asciidoctor.chrome.JS_KEY,
+    asciidoctor.chrome.JS_LOAD_KEY], function (settings) {
     try {
       removeMathJaxRefreshJs();
       removeCustomJs();
@@ -28,10 +33,10 @@ asciidoctor.chrome.convert = function (data) {
       // Clear <body>
       body.html('<div id="content"></div>');
 
-      const loadCustomJavaScript = settings[JS_LOAD_KEY];
-      const customJavaScriptName = settings[JS_KEY];
+      const loadCustomJavaScript = settings[asciidoctor.chrome.JS_LOAD_KEY];
+      const customJavaScriptName = settings[asciidoctor.chrome.JS_KEY];
       if (customJavaScriptName) {
-        const customJavaScriptKey = 'CUSTOM_JS_' + customJavaScriptName;
+        const customJavaScriptKey = asciidoctor.chrome.CUSTOM_JS_PREFIX + customJavaScriptName;
         chrome.storage.local.get(customJavaScriptKey, function (items) {
           if (items[customJavaScriptKey]) {
             const customJavaScript = $('<script id="asciidoctor-custom-js" type="text/javascript"></script>');
@@ -79,8 +84,8 @@ asciidoctor.chrome.appendHighlightJsScript = function () {
  */
 asciidoctor.chrome.appendStyles = function () {
   // Theme
-  chrome.storage.local.get(THEME_KEY, function (settings) {
-    const theme = settings[THEME_KEY] || 'asciidoctor';
+  chrome.storage.local.get(asciidoctor.chrome.THEME_KEY, function (settings) {
+    const theme = settings[asciidoctor.chrome.THEME_KEY] || 'asciidoctor';
     const themeNames = getDefaultThemeNames();
     // Check if the theme is packaged in the extension... if not it's a custom theme
     if ($.inArray(theme, themeNames) !== -1) {
@@ -90,7 +95,7 @@ asciidoctor.chrome.appendStyles = function () {
       themeLink.href = chrome.extension.getURL(`css/themes/${theme}.css`);
       document.head.appendChild(themeLink);
     } else {
-      const customThemeKey = CUSTOM_THEME_PREFIX + theme;
+      const customThemeKey = asciidoctor.chrome.CUSTOM_THEME_PREFIX + theme;
       chrome.storage.local.get(customThemeKey, function (items) {
         if (items[customThemeKey]) {
           const themeStyle = $('<style id="asciidoctor-custom-style"></style>');
@@ -180,8 +185,8 @@ function getAttributesFromQueryParameters () {
  */
 function buildAsciidoctorOptions (settings) {
   const attributesQueryParameters = getAttributesFromQueryParameters();
-  const customAttributes = settings[CUSTOM_ATTRIBUTES_KEY];
-  const safeMode = settings[SAFE_MODE_KEY] || 'secure';
+  const customAttributes = settings[asciidoctor.chrome.CUSTOM_ATTRIBUTES_KEY];
+  const safeMode = settings[asciidoctor.chrome.SAFE_MODE_KEY] || 'secure';
   // Default attributes
   const attributes = ['showtitle', 'icons=font@', 'platform=opal', 'platform-opal', 'env=browser', 'env-browser', 'chart-engine=chartist', 'data-uri!'];
   const href = window.location.href;
@@ -215,14 +220,14 @@ function buildAsciidoctorOptions (settings) {
 function detectLiveReloadJs (scripts) {
   let liveReloadDetected = false;
   for (let script of scripts) {
-    if (script.src.indexOf(LIVERELOADJS_FILENAME) !== -1) {
+    if (script.src.indexOf(asciidoctor.chrome.LIVERELOADJS_FILENAME) !== -1) {
       // LiveReload.js detected!
       liveReloadDetected = true;
       break;
     }
   }
   const value = {};
-  value[LIVERELOADJS_DETECTED_KEY] = liveReloadDetected;
+  value[asciidoctor.chrome.LIVERELOADJS_DETECTED_KEY] = liveReloadDetected;
   chrome.storage.local.set(value);
 }
 

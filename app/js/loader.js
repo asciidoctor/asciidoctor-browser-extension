@@ -2,11 +2,9 @@
 const asciidoctor = {};
 asciidoctor.chrome = {};
 
-let autoReloadInterval;
-
-const AUTO_RELOAD_INTERVAL_TIME = 2000;
-const ENABLE_RENDER_KEY = 'ENABLE_RENDER';
-const ALLOW_TXT_EXTENSION_KEY = 'ALLOW_TXT_EXTENSION';
+asciidoctor.chrome.AUTO_RELOAD_INTERVAL_TIME = 2000;
+asciidoctor.chrome.ENABLE_RENDER_KEY = 'ENABLE_RENDER';
+asciidoctor.chrome.ALLOW_TXT_EXTENSION_KEY = 'ALLOW_TXT_EXTENSION';
 
 asciidoctor.chrome.asciidocify = function () {
   const txtExtensionRegex = /\.txt[.|?]?.*?$/;
@@ -36,22 +34,22 @@ asciidoctor.chrome.loadContent = function (data) {
 };
 
 function isTxtExtAllowed (callback) {
-  chrome.storage.local.get(ALLOW_TXT_EXTENSION_KEY, function (items) {
-    const allowed = items[ALLOW_TXT_EXTENSION_KEY] === 'true';
+  chrome.storage.local.get(asciidoctor.chrome.ALLOW_TXT_EXTENSION_KEY, function (items) {
+    const allowed = items[asciidoctor.chrome.ALLOW_TXT_EXTENSION_KEY] === 'true';
     callback(allowed);
   });
 }
 
 function isExtensionEnabled (callback) {
-  chrome.storage.local.get(ENABLE_RENDER_KEY, function (items) {
-    const enabled = items[ENABLE_RENDER_KEY];
+  chrome.storage.local.get(asciidoctor.chrome.ENABLE_RENDER_KEY, function (items) {
+    const enabled = items[asciidoctor.chrome.ENABLE_RENDER_KEY];
     callback(enabled);
   });
 }
 
 function isLiveReloadDetected (callback) {
-  chrome.storage.local.get(LIVERELOADJS_DETECTED_KEY, function (items) {
-    const liveReloadJsDetected = items[LIVERELOADJS_DETECTED_KEY];
+  chrome.storage.local.get(asciidoctor.chrome.LIVERELOADJS_DETECTED_KEY, function (items) {
+    const liveReloadJsDetected = items[asciidoctor.chrome.LIVERELOADJS_DETECTED_KEY];
     callback(liveReloadJsDetected);
   });
 }
@@ -105,6 +103,7 @@ function reloadContent (data) {
   });
 }
 
+let autoReloadInterval;
 function startAutoReload () {
   clearInterval(autoReloadInterval);
   autoReloadInterval = setInterval(function () {
@@ -120,7 +119,7 @@ function startAutoReload () {
         reloadContent(data);
       }
     });
-  }, AUTO_RELOAD_INTERVAL_TIME);
+  }, asciidoctor.chrome.AUTO_RELOAD_INTERVAL_TIME);
 }
 
 /**
