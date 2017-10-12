@@ -1,0 +1,32 @@
+= Hacking
+:uri-nodejs: http://nodejs.org
+:uri-nvm: https://github.com/creationix/nvm
+
+This guide will give you all the necessary information you need to become a successful code contributor!
+
+== Setup
+
+To build this project, you will need {uri-nodejs}[Node.js] >= 4 and `npm` (we recommend {uri-nvm}[nvm] to manage multiple active Node.js versions).
+
+NOTE: If you feel more comfortable with `yarn`, you can use it as an alternative to `npm`
+
+== Building
+
+. Install all the dependencies
++
+ $ npm install
+
+. Build the project 
++
+ $ npm run build
++
+This command will produce a zip file that can be load in Chrome: [.path]_dist/asciidoctor-browser-extension.zip_
+
+. Run tests
++
+ $ npm run test
+
+This project is using a code linter to enforce code consistency. 
+To make sure that the code you have contributed, follow the code rules, execute the following command:
+
+ $ npm run lint

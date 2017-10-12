@@ -50,6 +50,7 @@ Builder.prototype.compress = function () {
 
   archive.file('LICENSE');
   archive.file('README.adoc');
+  archive.file('changelog.adoc');
   archive.directory('app/', false);
   archive.finalize();
 };
@@ -65,7 +66,7 @@ Builder.prototype.copy = function () {
   bfs.copySync('node_modules/asciidoctor.js/dist/css/asciidoctor.css', 'app/css/themes/asciidoctor.css');
   bfs.copySync('node_modules/bootstrap/dist/css/bootstrap.min.css', 'app/css/bootstrap.min.css');
   bfs.copySync('node_modules/font-awesome/css/font-awesome.min.css', 'app/css/font-awesome.min.css');
-  // Web Fonts 
+  // Web Fonts
   bfs.copySync('node_modules/font-awesome/fonts/fontawesome-webfont.woff2', 'app/fonts/fontawesome-webfont.woff2');
 };
 
