@@ -1,7 +1,7 @@
+const processor = Asciidoctor({runtime: {platform: 'browser'}});
+
 // exports
 asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom, Theme) => {
-  const processor = Asciidoctor({runtime: {platform: 'browser'}});
-
   class AsciidoctorDocument {
     constructor (doc, html) {
       this.doc = doc;
@@ -159,7 +159,6 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
     }
     await appendStyles(doc);
     appendChartistStyle();
-    appendTwemojiStyle();
 
     const title = doc.getDoctitle({use_fallback: true});
     const doctype = doc.getDoctype();
@@ -172,14 +171,14 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
     }
     let contentDiv = document.createElement('div');
     contentDiv.id = 'content';
+    contentDiv.innerHTML = asciidoctorDocument.html;
     document.body.appendChild(contentDiv);
-    // REMIND: We need to use the html method in order to safely eval <script> (for instance Chartist.js)
-    $('#content').html(asciidoctorDocument.html);
 
     forceLoadDynamicObjects();
     refreshMathJax();
     appendScripts(scripts);
     syntaxHighlighting();
+    drawCharts();
   };
 
   /**
@@ -213,7 +212,7 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
     const customAttributes = settings.customAttributes;
     const safeMode = settings.safeMode;
     // Default attributes
-    const attributes = ['showtitle', 'icons=font@', 'platform=opal', 'platform-opal', 'env=browser', 'env-browser', 'chart-engine=chartist', 'data-uri!'];
+    const attributes = ['showtitle', 'icons=font@', 'platform=opal', 'platform-opal', 'env=browser', 'env-browser', 'data-uri!'];
     const href = window.location.href;
     const fileName = href.split('/').pop();
     let fileExtension = fileName.split('.').pop();
@@ -272,7 +271,7 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
   };
 
   /**
-   * Syntax highlighting
+   * Syntax highlighting with Highlight.js
    */
   const syntaxHighlighting = () => {
     document.body.querySelectorAll('pre.highlight > code').forEach((node) => {
@@ -286,13 +285,28 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
   };
 
   /**
-   *
+   * Draw charts with Chartist
    */
-  const appendTwemojiStyle = () => {
-    Dom.appendOnce(document.head, Dom.createStylesheetLinkElement({
-      id: 'twemoji-awesome-style',
-      href: webExtension.extension.getURL('css/twemoji-awesome.css')
-    }));
+  const drawCharts = () => {
+    document.body.querySelectorAll('div.ct-chart').forEach((node) => {
+      let options = {
+        height: node.dataset['chartHeight'],
+        width: node.dataset['chartWidth'],
+        colors: node.dataset['chartColors'].split(',')
+      };
+      const dataset = Object.assign({}, node.dataset);
+      const series = Object.values(Object.keys(dataset)
+        .filter(key => key.startsWith('chartSeries-'))
+        .reduce((obj, key) => {
+          obj[key] = dataset[key];
+          return obj;
+        }, {})).map(value => value.split(','));
+      let data = {
+        labels: node.dataset['chartLabels'].split(','),
+        series: series
+      };
+      Chartist[node.dataset['chartType']](node, data, options);
+    });
   };
 
   /**

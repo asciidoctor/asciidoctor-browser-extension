@@ -21,8 +21,6 @@ describe('Update the HTML document', () => {
     // When
     Renderer.update(source)
       .then(() => {
-        // Twemoji must be present
-        expect(document.getElementById('twemoji-awesome-style').getAttribute('href')).toBe('css/twemoji-awesome.css');
         // Chartist must be present
         expect(document.getElementById('chartist-style').getAttribute('href')).toBe('css/chartist.min.css');
         expect(document.getElementById('chartist-asciidoctor-style').innerText).not.toBe('');
