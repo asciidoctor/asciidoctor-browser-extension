@@ -18,11 +18,11 @@ let saveAction;
 openExtensionsPageLink.click(openExtensionsPage);
 $(document).bind('ready', restoreOptions);
 
-function openExtensionsPage() {
-  chrome.tabs.create({'url': "chrome://extensions/?id=flahcdpicipahcghebiillhbjilehfhc"});
+function openExtensionsPage () {
+  chrome.tabs.create({'url': 'chrome://extensions/?id=flahcdpicipahcghebiillhbjilehfhc'});
 }
 
-function optionsChanged() {
+function optionsChanged () {
   return localStorage['CUSTOM_ATTRIBUTES'] !== inputCustomAttributes.val() ||
     localStorage['SAFE_MODE'] !== selectSafeMode.val() ||
     localStorage['ALLOW_TXT_EXTENSION'] !== inputAllowTxtExtension.is(':checked').toString() ||
@@ -34,20 +34,20 @@ function optionsChanged() {
 /**
  * Saves options to localStorage.
  */
-function saveOptions() {
-    localStorage['CUSTOM_ATTRIBUTES'] = inputCustomAttributes.val();
-    localStorage['SAFE_MODE'] = selectSafeMode.val();
-    localStorage['ALLOW_TXT_EXTENSION'] = inputAllowTxtExtension.is(':checked');
-    localStorage['THEME'] = selectTheme.val();
-    localStorage['JS'] = selectJavaScript.val();
-    localStorage['JS_LOAD'] = inputLoadJavaScript.filter(':checked').val();
-    chrome.extension.getBackgroundPage().refreshOptions()
+function saveOptions () {
+  localStorage['CUSTOM_ATTRIBUTES'] = inputCustomAttributes.val();
+  localStorage['SAFE_MODE'] = selectSafeMode.val();
+  localStorage['ALLOW_TXT_EXTENSION'] = inputAllowTxtExtension.is(':checked');
+  localStorage['THEME'] = selectTheme.val();
+  localStorage['JS'] = selectJavaScript.val();
+  localStorage['JS_LOAD'] = inputLoadJavaScript.filter(':checked').val();
+  chrome.extension.getBackgroundPage().refreshOptions();
 }
 
 /**
  * Restores options to saved value from localStorage.
  */
-function restoreOptions() {
+function restoreOptions () {
   inputCustomAttributes.val(localStorage['CUSTOM_ATTRIBUTES'] || '');
   selectSafeMode.val(localStorage['SAFE_MODE'] || 'secure');
   inputAllowTxtExtension.prop('checked', localStorage['ALLOW_TXT_EXTENSION'] === 'true');
@@ -74,7 +74,7 @@ function restoreOptions() {
   selectJavaScript.val(localStorage['JS']);
 }
 
-function initAlert(element) {
+function initAlert (element) {
   element.find('.close').click(function () {
     element.hide();
   });
@@ -124,12 +124,12 @@ inputCustomJavaScript.change(function () {
   }
 });
 
-function addNewOpt(parentElement, name) {
+function addNewOpt (parentElement, name) {
   parentElement.append(`<option>${name}</option>`);
 }
 
-function getCustomThemeOptGroup() {
-  let customThemesOptGroup = $("#customThemeOptGroup");
+function getCustomThemeOptGroup () {
+  let customThemesOptGroup = $('#customThemeOptGroup');
   if (customThemesOptGroup.length === 0) {
     customThemesOptGroup = $('<optgroup id="customThemeOptGroup" label="Custom"></optgroup>');
     selectTheme.append(customThemesOptGroup);
@@ -137,7 +137,7 @@ function getCustomThemeOptGroup() {
   return customThemesOptGroup;
 }
 
-function updateThemeFile(themeFile, themeName) {
+function updateThemeFile (themeFile, themeName) {
   const reader = new FileReader();
   reader.onload = function (evt) {
     const fileString = evt.target.result;
@@ -152,7 +152,7 @@ function updateThemeFile(themeFile, themeName) {
   reader.readAsText(themeFile);
 }
 
-function updateJavaScriptFile(javaScriptFile, javaScriptName) {
+function updateJavaScriptFile (javaScriptFile, javaScriptName) {
   const reader = new FileReader();
   reader.onload = function (evt) {
     const fileString = evt.target.result;
@@ -167,12 +167,12 @@ function updateJavaScriptFile(javaScriptFile, javaScriptName) {
   reader.readAsText(javaScriptFile);
 }
 
-function getFileNameWithoutExtension(file) {
+function getFileNameWithoutExtension (file) {
   const fileName = file.name;
   return fileName.substr(0, fileName.lastIndexOf('.')) || fileName;
 }
 
-function buildAlert(exists, name, type) {
+function buildAlert (exists, name, type) {
   let alertClasses;
   let alertMessage;
   if (exists) {
@@ -185,32 +185,32 @@ function buildAlert(exists, name, type) {
   return {classes: alertClasses, message: alertMessage};
 }
 
-function showAlert(element, alert) {
+function showAlert (element, alert) {
   element.addClass(alert.classes);
   element.find('.content').html(alert.message);
   element.show();
 }
 
-function resetAlert(element) {
+function resetAlert (element) {
   element.hide();
   element.removeClass();
 }
 
-function selectOpt(parentElement, name) {
+function selectOpt (parentElement, name) {
   parentElement.find(`option:contains(${name})`).prop('selected', true);
 }
 
-function initSaveIndicators(opts, optionsChangedFunction, saveOptionsFunction) {
+function initSaveIndicators (opts, optionsChangedFunction, saveOptionsFunction) {
   const timeout = opts.timeout || 200;
   const inputsIdentifier = opts.inputsIdentifier || '.form-input';
 
-  $('[data-save-indicator]').each(function() {
+  $('[data-save-indicator]').each(function () {
     $(this).append('<i class="save-indicator-saved fa fa-check-circle"></i>');
     $(this).append('<i class="save-indicator-saving fa fa-spinner fa-pulse"></i>');
     $(this).addClass('input-group-addon group-addon save-indicator-group-saved');
   });
 
-  $(inputsIdentifier).on('input propertychange change', function() {
+  $(inputsIdentifier).on('input propertychange change', function () {
     if (optionsChangedFunction()) {
       const inputName = $(this).attr('name');
       const saveIndicatorComp = $(`[data-save-indicator='${inputName}']`);

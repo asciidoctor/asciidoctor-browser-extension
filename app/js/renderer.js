@@ -56,18 +56,78 @@ asciidoctor.chrome.convert = function (data) {
         // No custom JavaScript defined, update <body>
         updateBody(data, settings, scripts);
       }
-    }
-    catch (e) {
+    } catch (e) {
       showErrorMessage(`${e.name} : ${e.message}`);
+      // eslint-disable-next-line no-console
       console.error(e.stack);
     }
   });
 };
 
 /**
+ * Append highlight.js script
+ */
+asciidoctor.chrome.appendHighlightJsScript = function () {
+  const highlightJsScript = document.createElement('script');
+  highlightJsScript.type = 'text/javascript';
+  highlightJsScript.src = chrome.extension.getURL('js/vendor/highlight.min.js');
+  document.head.appendChild(highlightJsScript);
+};
+
+/**
+ * Append css files
+ */
+asciidoctor.chrome.appendStyles = function () {
+  // Theme
+  chrome.storage.local.get(THEME_KEY, function (settings) {
+    const theme = settings[THEME_KEY] || 'asciidoctor';
+    const themeNames = getDefaultThemeNames();
+    // Check if the theme is packaged in the extension... if not it's a custom theme
+    if ($.inArray(theme, themeNames) !== -1) {
+      const themeLink = document.createElement('link');
+      themeLink.rel = 'stylesheet';
+      themeLink.id = 'asciidoctor-style';
+      themeLink.href = chrome.extension.getURL(`css/themes/${theme}.css`);
+      document.head.appendChild(themeLink);
+    } else {
+      const customThemeKey = CUSTOM_THEME_PREFIX + theme;
+      chrome.storage.local.get(customThemeKey, function (items) {
+        if (items[customThemeKey]) {
+          const themeStyle = $('<style id="asciidoctor-custom-style"></style>');
+          themeStyle.html(items[customThemeKey]);
+          $(document.head).append(themeStyle);
+        }
+      });
+    }
+  });
+  // Highlight
+  const highlightTheme = 'github';
+  const highlightStylesheetLink = document.createElement('link');
+  highlightStylesheetLink.rel = 'stylesheet';
+  highlightStylesheetLink.id = `${highlightTheme}-highlight-style`;
+  highlightStylesheetLink.href = chrome.extension.getURL(`css/highlight/${highlightTheme}.css`);
+  document.head.appendChild(highlightStylesheetLink);
+};
+
+/**
+ * Append MathJax script
+ */
+asciidoctor.chrome.appendMathJax = function () {
+  const mathJaxJsScriptConfig = document.createElement('script');
+  mathJaxJsScriptConfig.type = 'text/javascript';
+  mathJaxJsScriptConfig.src = chrome.extension.getURL('vendor/MathJax/config.js');
+  document.head.appendChild(mathJaxJsScriptConfig);
+
+  const mathJaxJsScript = document.createElement('script');
+  mathJaxJsScript.type = 'text/javascript';
+  mathJaxJsScript.src = chrome.extension.getURL('vendor/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML');
+  document.head.appendChild(mathJaxJsScript);
+};
+
+/**
  * Update the <body> with the generated HTML
  */
-function updateBody(data, settings, scripts) {
+function updateBody (data, settings, scripts) {
   const options = buildAsciidoctorOptions(settings);
   const doc = processor.load(data, options);
   if (doc.getAttribute('icons') === 'font') {
@@ -95,13 +155,13 @@ function updateBody(data, settings, scripts) {
 /**
  * Parse URL query parameters
  */
-function getAttributesFromQueryParameters() {
+function getAttributesFromQueryParameters () {
   const query = location.search.substr(1);
   const result = [];
-  query.split("&").forEach(function (part) {
+  query.split('&').forEach(function (part) {
     // part can be empty
     if (part) {
-      const item = part.split("=");
+      const item = part.split('=');
       const key = item[0];
       const value = item[1];
       if (typeof value !== 'undefined') {
@@ -118,7 +178,7 @@ function getAttributesFromQueryParameters() {
 /**
  * Build Asciidoctor options from settings
  */
-function buildAsciidoctorOptions(settings) {
+function buildAsciidoctorOptions (settings) {
   const attributesQueryParameters = getAttributesFromQueryParameters();
   const customAttributes = settings[CUSTOM_ATTRIBUTES_KEY];
   const safeMode = settings[SAFE_MODE_KEY] || 'secure';
@@ -152,7 +212,7 @@ function buildAsciidoctorOptions(settings) {
 /**
  * Detect LiveReload.js script to avoid multiple refreshes
  */
-function detectLiveReloadJs(scripts) {
+function detectLiveReloadJs (scripts) {
   let liveReloadDetected = false;
   for (let script of scripts) {
     if (script.src.indexOf(LIVERELOADJS_FILENAME) !== -1) {
@@ -169,7 +229,7 @@ function detectLiveReloadJs(scripts) {
 /**
  * Append saved scripts
  */
-function appendScripts(scripts) {
+function appendScripts (scripts) {
   for (let script of scripts) {
     if (!isMathTexScript(script)) {
       document.body.appendChild(script);
@@ -177,26 +237,25 @@ function appendScripts(scripts) {
   }
 }
 
-function isMathTexScript(script) {
-  return /math\/tex/i.test(script.type)
+function isMathTexScript (script) {
+  return /math\/tex/i.test(script.type);
 }
 
 /**
  * Syntax highlighting
  */
-function syntaxHighlighting() {
+function syntaxHighlighting () {
   $('pre.highlight > code').each(function (i, e) {
     const match = /language-(\S+)/.exec(e.className);
     if (match !== null && hljs.getLanguage(match[1]) !== null) {
       hljs.highlightBlock(e);
-    }
-    else {
+    } else {
       e.className += ' hljs';
     }
   });
 }
 
-function appendTwemojiStyle() {
+function appendTwemojiStyle () {
   if ($('#twemoji-awesome-style').length === 0) {
     const twemojiAwesomeLink = document.createElement('link');
     twemojiAwesomeLink.rel = 'stylesheet';
@@ -206,7 +265,7 @@ function appendTwemojiStyle() {
   }
 }
 
-function appendChartistStyle() {
+function appendChartistStyle () {
   if ($('#chartist-style').length === 0) {
     const chartistLink = document.createElement('link');
     chartistLink.rel = 'stylesheet';
@@ -222,7 +281,7 @@ function appendChartistStyle() {
   }
 }
 
-function appendFontAwesomeStyle() {
+function appendFontAwesomeStyle () {
   if ($('#font-awesome-style').length === 0) {
     const fontAwesomeLink = document.createElement('link');
     fontAwesomeLink.rel = 'stylesheet';
@@ -232,83 +291,26 @@ function appendFontAwesomeStyle() {
   }
 }
 
-/**
- * Append highlight.js script
- */
-function appendHighlightJsScript() {
-  const highlightJsScript = document.createElement('script');
-  highlightJsScript.type = 'text/javascript';
-  highlightJsScript.src = chrome.extension.getURL('js/vendor/highlight.min.js');
-  document.head.appendChild(highlightJsScript);
-}
-
-function getDefaultThemeNames() {
-  const web_accessible_resources = chrome.runtime.getManifest().web_accessible_resources;
+function getDefaultThemeNames () {
+  const webAccessibleResources = chrome.runtime.getManifest().web_accessible_resources;
   const themeRegexp = /^css\/themes\/(.*)\.css$/i;
-  const themes = $.grep(web_accessible_resources, function (item) {
+  const themes = $.grep(webAccessibleResources, function (item) {
     return themeRegexp.test(item);
   });
   return themes.map(function (item) {
-    return item.replace(themeRegexp, "$1");
+    return item.replace(themeRegexp, '$1');
   });
 }
 
-/**
- * Append css files
- */
-function appendStyles() {
-  // Theme
-  chrome.storage.local.get(THEME_KEY, function (settings) {
-    const theme = settings[THEME_KEY] || 'asciidoctor';
-    const themeNames = getDefaultThemeNames();
-    // Check if the theme is packaged in the extension... if not it's a custom theme
-    if ($.inArray(theme, themeNames) !== -1) {
-      const themeLink = document.createElement('link');
-      themeLink.rel = 'stylesheet';
-      themeLink.id = 'asciidoctor-style';
-      themeLink.href = chrome.extension.getURL(`css/themes/${theme}.css`);
-      document.head.appendChild(themeLink);
-    } else {
-      const customThemeKey = CUSTOM_THEME_PREFIX + theme;
-      chrome.storage.local.get(customThemeKey, function (items) {
-        if (items[customThemeKey]) {
-          const themeStyle = $('<style id="asciidoctor-custom-style"></style>');
-          themeStyle.html(items[customThemeKey]);
-          $(document.head).append(themeStyle);
-        }
-      });
-    }
-  });
-  // Highlight
-  const highlightTheme = 'github';
-  const highlightStylesheetLink = document.createElement('link');
-  highlightStylesheetLink.rel = 'stylesheet';
-  highlightStylesheetLink.id = `${highlightTheme}-highlight-style`;
-  highlightStylesheetLink.href = chrome.extension.getURL(`css/highlight/${highlightTheme}.css`);
-  document.head.appendChild(highlightStylesheetLink);
-}
-
-function appendMathJax() {
-  const mathJaxJsScriptConfig = document.createElement('script');
-  mathJaxJsScriptConfig.type = 'text/javascript';
-  mathJaxJsScriptConfig.src = chrome.extension.getURL('vendor/MathJax/config.js');
-  document.head.appendChild(mathJaxJsScriptConfig);
-
-  const mathJaxJsScript = document.createElement('script');
-  mathJaxJsScript.type = 'text/javascript';
-  mathJaxJsScript.src = chrome.extension.getURL('vendor/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML');
-  document.head.appendChild(mathJaxJsScript);
-}
-
-function removeMathJaxRefreshJs() {
+function removeMathJaxRefreshJs () {
   $('#mathjax-refresh-js').remove();
 }
 
-function removeCustomJs() {
+function removeCustomJs () {
   $('#asciidoctor-custom-js').remove();
 }
 
-function refreshMathJax() {
+function refreshMathJax () {
   const mathJaxJsScript = document.createElement('script');
   mathJaxJsScript.id = 'mathjax-refresh-js';
   mathJaxJsScript.text = 'if (window.MathJax && window.MathJax.Hub) { window.MathJax.Hub.Typeset(); }';
@@ -318,10 +320,10 @@ function refreshMathJax() {
 /**
  * Force dynamic objects to be load (iframe, script...)
  */
-function forceLoadDynamicObjects() {
+function forceLoadDynamicObjects () {
   // Force iframe to be load
   $('iframe').each(function () {
-    $(this).attr('src', $(this).attr('src'))
+    $(this).attr('src', $(this).attr('src'));
   });
 }
 
@@ -329,7 +331,7 @@ function forceLoadDynamicObjects() {
  * Show error message
  * @param message The error message
  */
-function showErrorMessage(message) {
+function showErrorMessage (message) {
   const messageText = `<p>${message}</p>`;
   $(document.body).html(`<div id="content"><h4>Error</h4>${messageText}</div>`);
 }
