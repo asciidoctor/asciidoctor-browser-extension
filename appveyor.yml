@@ -4,8 +4,7 @@ skip_commits:
   message: /\[ci skip\]/
 clone_depth: 10
 install:
-- git submodule update --init --recursive
-- npm install -g grunt-cli
 - npm install
 build_script:
-- grunt
+- npm run build
+- npm run test

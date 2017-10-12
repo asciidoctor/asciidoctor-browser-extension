@@ -95,6 +95,8 @@
     "js/vendor/asciidoctor-chart-block-macro.js",
     "js/vendor/asciidoctor-emoji-inline-macro.js",
     "fonts/fontawesome-webfont.woff2",
+    "fonts/fontawesome-webfont.woff",
+    "fonts/fontawesome-webfont.ttf",
     "vendor/MathJax/*"
   ],
   "permissions":[
