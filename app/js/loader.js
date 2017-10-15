@@ -2,9 +2,10 @@
 const asciidoctor = {};
 asciidoctor.chrome = {};
 
-asciidoctor.chrome.AUTO_RELOAD_INTERVAL_TIME = 2000;
 asciidoctor.chrome.ENABLE_RENDER_KEY = 'ENABLE_RENDER';
 asciidoctor.chrome.ALLOW_TXT_EXTENSION_KEY = 'ALLOW_TXT_EXTENSION';
+
+const AUTO_RELOAD_INTERVAL_TIME = 2000;
 
 asciidoctor.chrome.asciidocify = function () {
   const txtExtensionRegex = /\.txt[.|?]?.*?$/;
@@ -33,6 +34,15 @@ asciidoctor.chrome.loadContent = function (data) {
   });
 };
 
+/**
+ * Get user's setting defined in the options page.
+ */
+asciidoctor.chrome.getSetting = function (key, callback) {
+  chrome.storage.local.get(key, function (items) {
+    callback(items[key]);
+  });
+};
+
 function isTxtExtAllowed (callback) {
   chrome.storage.local.get(asciidoctor.chrome.ALLOW_TXT_EXTENSION_KEY, function (items) {
     const allowed = items[asciidoctor.chrome.ALLOW_TXT_EXTENSION_KEY] === 'true';
@@ -41,24 +51,15 @@ function isTxtExtAllowed (callback) {
 }
 
 function isExtensionEnabled (callback) {
-  chrome.storage.local.get(asciidoctor.chrome.ENABLE_RENDER_KEY, function (items) {
-    const enabled = items[asciidoctor.chrome.ENABLE_RENDER_KEY];
-    callback(enabled);
-  });
+  asciidoctor.chrome.getSetting(asciidoctor.chrome.ENABLE_RENDER_KEY, callback);
 }
 
 function isLiveReloadDetected (callback) {
-  chrome.storage.local.get(asciidoctor.chrome.LIVERELOADJS_DETECTED_KEY, function (items) {
-    const liveReloadJsDetected = items[asciidoctor.chrome.LIVERELOADJS_DETECTED_KEY];
-    callback(liveReloadJsDetected);
-  });
+  asciidoctor.chrome.getSetting(asciidoctor.chrome.LIVERELOADJS_DETECTED_KEY, callback);
 }
 
 function getMd5sum (key, callback) {
-  chrome.storage.local.get(key, function (items) {
-    const md5sum = items[key];
-    callback(md5sum);
-  });
+  asciidoctor.chrome.getSetting(key, callback);
 }
 
 function fetchContent () {
@@ -104,6 +105,7 @@ function reloadContent (data) {
 }
 
 let autoReloadInterval;
+
 function startAutoReload () {
   clearInterval(autoReloadInterval);
   autoReloadInterval = setInterval(function () {
@@ -119,7 +121,7 @@ function startAutoReload () {
         reloadContent(data);
       }
     });
-  }, asciidoctor.chrome.AUTO_RELOAD_INTERVAL_TIME);
+  }, AUTO_RELOAD_INTERVAL_TIME);
 }
 
 /**

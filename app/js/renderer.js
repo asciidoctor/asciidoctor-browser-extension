@@ -15,11 +15,7 @@ asciidoctor.chrome.JS_LOAD_KEY = 'JS_LOAD';
  * Convert AsciiDoc as HTML
  */
 asciidoctor.chrome.convert = function (data) {
-  chrome.storage.local.get([
-    asciidoctor.chrome.CUSTOM_ATTRIBUTES_KEY,
-    asciidoctor.chrome.SAFE_MODE_KEY,
-    asciidoctor.chrome.JS_KEY,
-    asciidoctor.chrome.JS_LOAD_KEY], function (settings) {
+  getRenderingSettings(function (settings) {
     try {
       removeMathJaxRefreshJs();
       removeCustomJs();
@@ -33,30 +29,20 @@ asciidoctor.chrome.convert = function (data) {
       // Clear <body>
       body.html('<div id="content"></div>');
 
-      const loadCustomJavaScript = settings[asciidoctor.chrome.JS_LOAD_KEY];
-      const customJavaScriptName = settings[asciidoctor.chrome.JS_KEY];
-      if (customJavaScriptName) {
-        const customJavaScriptKey = asciidoctor.chrome.CUSTOM_JS_PREFIX + customJavaScriptName;
-        chrome.storage.local.get(customJavaScriptKey, function (items) {
-          if (items[customJavaScriptKey]) {
-            const customJavaScript = $('<script id="asciidoctor-custom-js" type="text/javascript"></script>');
-            customJavaScript.html(items[customJavaScriptKey]);
-            if (loadCustomJavaScript === 'before') {
-              // Load the custom JavaScript...
-              $(document.body).append(customJavaScript);
-              // ... then update <body>
-              updateBody(data, settings, scripts);
-            } else {
-              // Update <body>
-              updateBody(data, settings, scripts);
-              // ... then load the custom JavaScript
-              $(document.body).append(customJavaScript);
-            }
-          } else {
-            // No content found for the custom JavaScript, update <body>
-            updateBody(data, settings, scripts);
-          }
-        });
+      if (settings.customJavaScriptContent) {
+        const customJavaScript = $('<script id="asciidoctor-custom-js" type="text/javascript"></script>');
+        customJavaScript.html(settings.customJavaScriptContent);
+        if (settings.loadCustomJavaScript === 'before') {
+          // Load the custom JavaScript...
+          $(document.body).append(customJavaScript);
+          // ... then update <body>
+          updateBody(data, settings, scripts);
+        } else {
+          // Update <body>
+          updateBody(data, settings, scripts);
+          // ... then load the custom JavaScript
+          $(document.body).append(customJavaScript);
+        }
       } else {
         // No custom JavaScript defined, update <body>
         updateBody(data, settings, scripts);
@@ -84,22 +70,20 @@ asciidoctor.chrome.appendHighlightJsScript = function () {
  */
 asciidoctor.chrome.appendStyles = function () {
   // Theme
-  chrome.storage.local.get(asciidoctor.chrome.THEME_KEY, function (settings) {
-    const theme = settings[asciidoctor.chrome.THEME_KEY] || 'asciidoctor';
+  getThemeName(function (themeName) {
     const themeNames = getDefaultThemeNames();
     // Check if the theme is packaged in the extension... if not it's a custom theme
-    if ($.inArray(theme, themeNames) !== -1) {
+    if ($.inArray(themeName, themeNames) !== -1) {
       const themeLink = document.createElement('link');
       themeLink.rel = 'stylesheet';
       themeLink.id = 'asciidoctor-style';
-      themeLink.href = chrome.extension.getURL(`css/themes/${theme}.css`);
+      themeLink.href = chrome.extension.getURL(`css/themes/${themeName}.css`);
       document.head.appendChild(themeLink);
     } else {
-      const customThemeKey = asciidoctor.chrome.CUSTOM_THEME_PREFIX + theme;
-      chrome.storage.local.get(customThemeKey, function (items) {
-        if (items[customThemeKey]) {
+      asciidoctor.chrome.getSetting(asciidoctor.chrome.CUSTOM_THEME_PREFIX + themeName, function (customThemeContent) {
+        if (customThemeContent) {
           const themeStyle = $('<style id="asciidoctor-custom-style"></style>');
-          themeStyle.html(items[customThemeKey]);
+          themeStyle.html(customThemeContent);
           $(document.head).append(themeStyle);
         }
       });
@@ -128,6 +112,42 @@ asciidoctor.chrome.appendMathJax = function () {
   mathJaxJsScript.src = chrome.extension.getURL('vendor/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML');
   document.head.appendChild(mathJaxJsScript);
 };
+
+/**
+ * Get theme name from the settings.
+ */
+function getThemeName (callback) {
+  chrome.storage.local.get(asciidoctor.chrome.THEME_KEY, function (settings) {
+    const theme = settings[asciidoctor.chrome.THEME_KEY] || 'asciidoctor';
+    callback(theme);
+  });
+}
+
+/**
+ * Get user's rendering settings defined in the options page.
+ */
+function getRenderingSettings (callback) {
+  chrome.storage.local.get([
+    asciidoctor.chrome.CUSTOM_ATTRIBUTES_KEY,
+    asciidoctor.chrome.SAFE_MODE_KEY,
+    asciidoctor.chrome.JS_KEY,
+    asciidoctor.chrome.JS_LOAD_KEY], function (settings) {
+    const result = {
+      customAttributes: settings[asciidoctor.chrome.CUSTOM_ATTRIBUTES_KEY],
+      safeMode: settings[asciidoctor.chrome.SAFE_MODE_KEY] || 'secure',
+      customJavaScriptName: settings[asciidoctor.chrome.JS_KEY],
+      loadCustomJavaScript: settings[asciidoctor.chrome.JS_LOAD_KEY]
+    };
+    if (result.customJavaScriptName) {
+      asciidoctor.chrome.getSetting(asciidoctor.chrome.CUSTOM_JS_PREFIX + result.customJavaScriptName, function (customJavaScriptContent) {
+        result.customJavaScriptContent = customJavaScriptContent;
+        callback(result);
+      });
+    } else {
+      callback(result);
+    }
+  });
+}
 
 /**
  * Update the <body> with the generated HTML
@@ -185,8 +205,8 @@ function getAttributesFromQueryParameters () {
  */
 function buildAsciidoctorOptions (settings) {
   const attributesQueryParameters = getAttributesFromQueryParameters();
-  const customAttributes = settings[asciidoctor.chrome.CUSTOM_ATTRIBUTES_KEY];
-  const safeMode = settings[asciidoctor.chrome.SAFE_MODE_KEY] || 'secure';
+  const customAttributes = settings.customAttributes;
+  const safeMode = settings.safeMode;
   // Default attributes
   const attributes = ['showtitle', 'icons=font@', 'platform=opal', 'platform-opal', 'env=browser', 'env-browser', 'chart-engine=chartist', 'data-uri!'];
   const href = window.location.href;
