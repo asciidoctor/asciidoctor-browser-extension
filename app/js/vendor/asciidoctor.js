@@ -17865,7 +17865,7 @@ Opal.modules["corelib/time"] = function(Opal) {
         result = string.match(/[A-Z]{3,4}/)[0];
       }
       else {
-        result = string.match(/\([^)]+\)/)[0].match(/[A-Z]/g).join('');
+        result = string.match(/\((.+)\)(?:\s|$)/)[1];
       }
 
       if (result == "GMT" && /(GMT\W*\d{4})/.test(string)) {
