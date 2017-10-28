@@ -44,3 +44,13 @@ After installation, run the linter on the archive produced by `npm run build`:
 
  $ addons-linter dist/asciidoctor-browser-extension.zip
 
+== Release
+
+. Build and run the tests
+. Make sure that everything is working fine by loading an unpack extension
+. Edit the `changelog.adoc` file
+. Update the version in `app/manifest.json`
+. Commit the changes
+. Tag the version
+. Connect to the https://chrome.google.com/webstore/developer/dashboard[Chrome Web Store developper dashboard] and update the package
+. Publish
