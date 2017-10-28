@@ -1,5 +1,12 @@
 = Changelog
 
+== 1.5.5.110
+
+* Upgrade Chartist to 0.8.3
+* Upgrade MathJax to 2.7.2
+* Remove fragment identifier from outfilesuffix (thanks @oncletom)
+* Fix timezone regexp to handle numeric and non-latin timezones (thanks @guziks, @stayfool, @tequlia2pop, @noah538 & @jfstn)
+
 == 1.5.5.101
 
  * Updating a custom .css or .js file is not automatically saved
