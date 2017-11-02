@@ -47,10 +47,17 @@ After installation, run the linter on the archive produced by `npm run build`:
 == Release
 
 . Build and run the tests
-. Make sure that everything is working fine by loading an unpack extension
+. Make sure that everything is working fine by loading the extension as an "unpack extension"
 . Edit the `changelog.adoc` file
 . Update the version in `app/manifest.json`
 . Commit the changes
 . Tag the version
-. Connect to the https://chrome.google.com/webstore/developer/dashboard[Chrome Web Store developper dashboard] and update the package
-. Publish
+. Connect to the https://chrome.google.com/webstore/developer/dashboard[Chrome Web Store developper dashboard]
+.. Update the package
+.. Publish the new version
+. Connect to the https://addons.mozilla.org/fr/developers/addons[Firefox Add-ons developper dashboard]
+.. Update the package
+.. Publish the new version
+. Connect to the https://addons.opera.com/developer[Opera Add-ons developper dashboard]
+.. Update the package
+.. Publish the new version
