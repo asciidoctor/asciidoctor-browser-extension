@@ -1,30 +1,44 @@
-= Asciidoctor Chrome Extension
+= Asciidoctor Browser Extension
 Guillaume Grossetie
 
 :uri-license: https://github.com/asciidoctor/asciidoctor-chrome-extension/blob/master/LICENSE
 :uri-hacking: https://github.com/asciidoctor/asciidoctor-chrome-extension/blob/master/hacking.adoc
 :uri-changelog: https://github.com/asciidoctor/asciidoctor-chrome-extension/blob/master/changelog.adoc
-:uri-webstore: https://chrome.google.com/webstore/detail/asciidoctorjs-live-previe/iaalpfgpbocpdfblpnhhgllgbdbchmia
+:uri-chrome-webstore: https://chrome.google.com/webstore/detail/asciidoctorjs-live-previe/iaalpfgpbocpdfblpnhhgllgbdbchmia
+:uri-mozilla-addon: https://addons.mozilla.org/firefox/addon/asciidoctorjs-live-preview
+:uri-opera-addon: https://addons.opera.com/fr/extensions/details/asciidoctorjs-live-preview
 
-This project uses https://github.com/asciidoctor/asciidoctor.js[Asciidoctor.js] to preview AsciiDoc as HTML inside the Chrome (or Chromium) web browser!
+This project uses https://github.com/asciidoctor/asciidoctor.js[Asciidoctor.js] to preview AsciiDoc as HTML inside Chrome (or Chromium), Firefox and Opera web browser!
 
-image::https://developer.chrome.com/webstore/images/ChromeWebStore_Badge_v2_206x58.png[link="{uri-webstore}"]
+image:https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png[link={uri-chrome-webstore}]
+image:https://addons.cdn.mozilla.net/static/img/addons-buttons/AMO-button_1.png[link={uri-mozilla-addon}]
+image:https://dev.opera.com/extensions/branding-guidelines/addons_206x58_en@2x.png[link={uri-opera-addon},width=206px]
 
 *Project health:* image:https://travis-ci.org/asciidoctor/asciidoctor-chrome-extension.svg?branch=master[Build Status, link="https://travis-ci.org/asciidoctor/asciidoctor-chrome-extension"]
 
 == Usage
 
- 1. Install extension from {uri-webstore}[Chrome Web Store]
+=== Chrome, Chromium or Opera
+
+ 1. Install the extension from the {uri-chrome-webstore}[Chrome Web Store] or the {uri-opera-addon}[Opera Add-ons website]
  2. Check `Allow access to file URLs` in `chrome://extensions`
- 3. Open local or remote .ad, .adoc, .asc, .asciidoc file in Chrome
+ 3. Open local or remote .ad, .adoc, .asc, .asciidoc files in your browser
  4. Enjoy!
 
 WARNING: Due to a https://code.google.com/p/chromium/issues/detail?id=365107[Chromium bug] the `Allow access to file URLs` is lost on extension update.
 If preview of local files isn't working, make sure to uncheck and recheck the `Allow access to file URLs`.
 
+=== Firefox
+
+ 1. Install the extension from the {uri-mozilla-addon}[Firefox Add-ons website]
+ 2. Open local or remote .ad, .adoc, .asc, .asciidoc files in Firefox
+ 3. Enjoy!
+
 == Installation
 
-Loading your local copy of the extension on Chrome is super easy:
+Loading your local copy of the extension on Chrome (or Chromium), Firefox or Opera is super easy!
+
+=== Chrome, Chromium or Opera
 
  1. Check `Developer mode` in `chrome://extensions`
  2. Click `Load unpacked extension...` and select the extension `app` directory
@@ -33,11 +47,22 @@ Loading your local copy of the extension on Chrome is super easy:
 To see your changes, click the `Reload (Ctrl+R)` link in `chrome://extensions`.
 If you want to create a `Pack extension` just make a `zip` file of the extension `app` directory.
 
+=== Firefox
+
+ 1. Click on the `Load Temporary Add-on` in `about:debugging`
+ 2. Select the manifest file in the `app` directory
+ 3. That's all
+
+To see your changes, click the `Reload` link in `about:debugging`.
+
 == Options
 
 The extension can be configured via an options page.
 
-To open the options page, right-click the extension icon and choose Options on the menu. You can also go to `chrome://extensions` and click the Options link.
+To open the options page, in Chrome or Opera, right-click the extension icon and choose Options on the menu.
+You can also go to `chrome://extensions` and click the Options link.
+
+In Firefox, go to `about:addons` and click the More link or the Preferences button.
 
 The options page let you add custom Asciidoctor attributes or change the theme of the AsciiDoc HTML output.
 
