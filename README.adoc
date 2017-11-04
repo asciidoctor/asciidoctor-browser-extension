@@ -8,7 +8,7 @@ Guillaume Grossetie
 :uri-mozilla-addon: https://addons.mozilla.org/firefox/addon/asciidoctorjs-live-preview
 :uri-opera-addon: https://addons.opera.com/fr/extensions/details/asciidoctorjs-live-preview
 
-This project uses https://github.com/asciidoctor/asciidoctor.js[Asciidoctor.js] to preview AsciiDoc as HTML inside Chrome (or Chromium), Firefox and Opera web browser!
+This project uses https://github.com/asciidoctor/asciidoctor.js[Asciidoctor.js] to preview AsciiDoc as HTML inside Chrome (or Chromium), Firefox and Opera!
 
 image:https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png[link={uri-chrome-webstore}]
 image:https://addons.cdn.mozilla.net/static/img/addons-buttons/AMO-button_1.png[link={uri-mozilla-addon}]
