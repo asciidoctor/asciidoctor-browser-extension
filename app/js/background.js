@@ -5,38 +5,40 @@ let injectTabId;
 let injectText;
 
 chrome.runtime.onInstalled.addListener(function () {
-  chrome.contextMenus.create({
-    'id': renderSelectionMenuItemId,
-    'title': 'Render selection',
-    'contexts': ['selection']
-  });
+  if (chrome.contextMenus) {
+    chrome.contextMenus.create({
+      'id': renderSelectionMenuItemId,
+      'title': 'Render selection',
+      'contexts': ['selection']
+    });
 
-  chrome.contextMenus.onClicked.addListener(function (info) {
-    if (info.menuItemId === renderSelectionMenuItemId) {
-      const funcToInject = function () {
-        const selection = window.getSelection();
-        return (selection.rangeCount > 0) ? selection.toString() : '';
-      };
-      const jsCodeStr = `;(${funcToInject})();`;
-      chrome.tabs.executeScript({
-        code: jsCodeStr,
-        allFrames: true
-      }, function (selectedTextPerFrame) {
-        if (chrome.runtime.lastError) {
-          // eslint-disable-next-line no-console
-          console.log('error:' + chrome.runtime.lastError.message);
-        } else if (selectedTextPerFrame.length > 0 && typeof selectedTextPerFrame[0] === 'string') {
-          injectText = selectedTextPerFrame[0];
-          chrome.tabs.create({
-            'url': chrome.extension.getURL('html/inject.html'),
-            'active': true
-          }, function (tab) {
-            injectTabId = tab.id;
-          });
-        }
-      });
-    }
-  });
+    chrome.contextMenus.onClicked.addListener(function (info) {
+      if (info.menuItemId === renderSelectionMenuItemId) {
+        const funcToInject = function () {
+          const selection = window.getSelection();
+          return (selection.rangeCount > 0) ? selection.toString() : '';
+        };
+        const jsCodeStr = `;(${funcToInject})();`;
+        chrome.tabs.executeScript({
+          code: jsCodeStr,
+          allFrames: true
+        }, function (selectedTextPerFrame) {
+          if (chrome.runtime.lastError) {
+            // eslint-disable-next-line no-console
+            console.log('error:' + chrome.runtime.lastError.message);
+          } else if (selectedTextPerFrame.length > 0 && typeof selectedTextPerFrame[0] === 'string') {
+            injectText = selectedTextPerFrame[0];
+            chrome.tabs.create({
+              'url': chrome.extension.getURL('html/inject.html'),
+              'active': true
+            }, function (tab) {
+              injectTabId = tab.id;
+            });
+          }
+        });
+      }
+    });
+  }
 });
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo) {
@@ -69,7 +71,14 @@ function enableDisableRender () {
 
   // Update the extension icon
   const iconPath = enableRender ? 'img/enabled.png' : 'img/disabled.png';
-  chrome.browserAction.setIcon({path: iconPath});
+  if (typeof chrome.browserAction.setIcon === 'function') {
+    chrome.browserAction.setIcon({path: iconPath});
+  } else if (typeof browser.browserAction.setTitle === 'function') {
+    browser.browserAction.setTitle({'title': `Asciidoctor.js Preview (${enableRender ? '✔' : '✘'})`});
+  } else {
+    // eslint-disable-next-line no-console
+    console.log(`Asciidoctor.js Preview (${enableRender ? 'enabled' : 'disabled'})`);
+  }
 
   // Reload the active tab in the current windows that matches
   findActiveTab(function (activeTab) {
