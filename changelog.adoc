@@ -1,5 +1,9 @@
 = Changelog
 
+== 1.5.5.111
+
+* Add condition for unsupported API on Firefox Mobile
+
 == 1.5.5.110
 
 * Upgrade Chartist to 0.8.3
