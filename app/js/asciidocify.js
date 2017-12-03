@@ -1,3 +1,3 @@
 (function () {
-  asciidoctor.chrome.asciidocify();
+  asciidoctor.browser.asciidocify();
 }(document));

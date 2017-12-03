@@ -1,59 +1,57 @@
-describe("asciidocify", function () {
-
-  describe("fetchContent", function () {
+describe('asciidocify', function () {
+  describe('fetchContent', function () {
     beforeEach(function () {
       chrome = {
-        storage:{
-          local:{
-            get:function () {
+        storage: {
+          local: {
+            get: function () {
             }
           }
         },
-        extension:{
-          getURL:function (path) {
+        extension: {
+          getURL: function (path) {
           }
         },
-        runtime:{
-          getManifest:function () {
-            return {web_accessible_resources:[]};
+        runtime: {
+          getManifest: function () {
+            return {web_accessible_resources: []};
           }
         }
       };
-      asciidoctor.chrome.convert = function () {
+      asciidoctor.browser.convert = function () {
       };
     });
 
-    it("should call convert method if extension is enabled", function () {
+    it('should call convert method if extension is enabled', function () {
       // Given
       var data = {};
-      data.responseText = "= Hello world";
-      spyOn(chrome.storage.local, "get").and.callFake(function (name, callback) {
+      data.responseText = '= Hello world';
+      spyOn(chrome.storage.local, 'get').and.callFake(function (name, callback) {
         var values = [];
-        values[asciidoctor.chrome.ENABLE_RENDER_KEY] = true;
+        values[asciidoctor.browser.ENABLE_RENDER_KEY] = true;
         callback(values);
       });
-      spyOn(asciidoctor.chrome, "convert");
+      spyOn(asciidoctor.browser, 'convert');
       // When
-      asciidoctor.chrome.loadContent(data);
+      asciidoctor.browser.loadContent(data);
       // Then
-      expect(asciidoctor.chrome.convert).toHaveBeenCalledWith("= Hello world");
+      expect(asciidoctor.browser.convert).toHaveBeenCalledWith('= Hello world');
     });
 
-    it("should not call convert method if extension is disabled", function () {
+    it('should not call convert method if extension is disabled', function () {
       // Given
       var data = {};
-      data.responseText = "= Hello world";
-      spyOn(chrome.storage.local, "get").and.callFake(function (name, callback) {
+      data.responseText = '= Hello world';
+      spyOn(chrome.storage.local, 'get').and.callFake(function (name, callback) {
         var values = [];
-        values[asciidoctor.chrome.ENABLE_RENDER_KEY] = false;
+        values[asciidoctor.browser.ENABLE_RENDER_KEY] = false;
         callback(values);
       });
-      spyOn(asciidoctor.chrome, "convert");
+      spyOn(asciidoctor.browser, 'convert');
       // When
-      asciidoctor.chrome.loadContent(data);
+      asciidoctor.browser.loadContent(data);
       // Then
-      expect(asciidoctor.chrome.convert).not.toHaveBeenCalledWith("= Hello world");
+      expect(asciidoctor.browser.convert).not.toHaveBeenCalledWith('= Hello world');
     });
   });
-
 });

@@ -1,13 +1,15 @@
 // Namespace
-const asciidoctor = {};
-asciidoctor.chrome = {};
+const webExtension = typeof browser === 'undefined' ? chrome : browser;
 
-asciidoctor.chrome.ENABLE_RENDER_KEY = 'ENABLE_RENDER';
-asciidoctor.chrome.ALLOW_TXT_EXTENSION_KEY = 'ALLOW_TXT_EXTENSION';
+const asciidoctor = {};
+asciidoctor.browser = {};
+
+asciidoctor.browser.ENABLE_RENDER_KEY = 'ENABLE_RENDER';
+asciidoctor.browser.ALLOW_TXT_EXTENSION_KEY = 'ALLOW_TXT_EXTENSION';
 
 const AUTO_RELOAD_INTERVAL_TIME = 2000;
 
-asciidoctor.chrome.asciidocify = function () {
+asciidoctor.browser.asciidocify = function () {
   const txtExtensionRegex = /\.txt[.|?]?.*?$/;
   if (location.href.match(txtExtensionRegex)) {
     isTxtExtAllowed(function (allowed) {
@@ -21,14 +23,14 @@ asciidoctor.chrome.asciidocify = function () {
   }
 };
 
-asciidoctor.chrome.loadContent = function (data) {
+asciidoctor.browser.loadContent = function (data) {
   isExtensionEnabled(function (enabled) {
     // Extension is enabled
     if (enabled) {
-      asciidoctor.chrome.appendStyles();
-      asciidoctor.chrome.appendMathJax();
-      asciidoctor.chrome.appendHighlightJsScript();
-      asciidoctor.chrome.convert(data.responseText);
+      asciidoctor.browser.appendStyles();
+      asciidoctor.browser.appendMathJax();
+      asciidoctor.browser.appendHighlightJsScript();
+      asciidoctor.browser.convert(data.responseText);
     }
     startAutoReload();
   });
@@ -37,29 +39,29 @@ asciidoctor.chrome.loadContent = function (data) {
 /**
  * Get user's setting defined in the options page.
  */
-asciidoctor.chrome.getSetting = function (key, callback) {
-  chrome.storage.local.get(key, function (items) {
+asciidoctor.browser.getSetting = function (key, callback) {
+  webExtension.storage.local.get(key, function (items) {
     callback(items[key]);
   });
 };
 
 function isTxtExtAllowed (callback) {
-  chrome.storage.local.get(asciidoctor.chrome.ALLOW_TXT_EXTENSION_KEY, function (items) {
-    const allowed = items[asciidoctor.chrome.ALLOW_TXT_EXTENSION_KEY] === 'true';
+  webExtension.storage.local.get(asciidoctor.browser.ALLOW_TXT_EXTENSION_KEY, function (items) {
+    const allowed = items[asciidoctor.browser.ALLOW_TXT_EXTENSION_KEY] === 'true';
     callback(allowed);
   });
 }
 
 function isExtensionEnabled (callback) {
-  asciidoctor.chrome.getSetting(asciidoctor.chrome.ENABLE_RENDER_KEY, callback);
+  asciidoctor.browser.getSetting(asciidoctor.browser.ENABLE_RENDER_KEY, callback);
 }
 
 function isLiveReloadDetected (callback) {
-  asciidoctor.chrome.getSetting(asciidoctor.chrome.LIVERELOADJS_DETECTED_KEY, callback);
+  asciidoctor.browser.getSetting(asciidoctor.browser.LIVERELOADJS_DETECTED_KEY, callback);
 }
 
 function getMd5sum (key, callback) {
-  asciidoctor.chrome.getSetting(key, callback);
+  asciidoctor.browser.getSetting(key, callback);
 }
 
 function fetchContent () {
@@ -70,7 +72,7 @@ function fetchContent () {
       if (isHtmlContentType(data)) {
         return;
       }
-      asciidoctor.chrome.loadContent(data);
+      asciidoctor.browser.loadContent(data);
     }
   });
 }
@@ -89,7 +91,7 @@ function reloadContent (data) {
           // Extension is enabled
           if (enabled) {
             // Convert AsciiDoc to HTML
-            asciidoctor.chrome.convert(data);
+            asciidoctor.browser.convert(data);
           } else {
             // Display plain content
             $(document.body).html(`<pre style="word-wrap: break-word; white-space: pre-wrap;">${$(document.body).text(data).html()}</pre>`);
@@ -97,7 +99,7 @@ function reloadContent (data) {
           // Update md5sum
           const value = {};
           value[key] = md5(data);
-          chrome.storage.local.set(value);
+          webExtension.storage.local.set(value);
         });
       });
     }
