@@ -2,13 +2,14 @@ module.exports = function(config) {
   config.set({
     frameworks: ['jasmine'],
     files: [
+      'spec/webextension-api.js',
       'app/js/vendor/highlight.min.js',
       'app/js/vendor/jquery.min.js',
       'app/js/vendor/asciidoctor.js',
       'app/js/vendor/md5.js',
       'app/js/loader.js',
       'app/js/renderer.js',
-      'spec/**/*.js'
+      'spec/**/*-spec.js'
     ],
     reporters: ['progress'],
     port: 9876,  // karma web server port

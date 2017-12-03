@@ -4,7 +4,7 @@ let alreadyRun = false;
 function inject (data) {
   if (!alreadyRun) {
     appendStyles();
-    asciidoctor.chrome.convert(data);
+    asciidoctor.browser.convert(data);
     alreadyRun = true;
   }
 }

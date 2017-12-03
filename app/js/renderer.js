@@ -1,20 +1,20 @@
 // Namespace
 const processor = Asciidoctor({runtime: {platform: 'browser'}});
 
-asciidoctor.chrome.CUSTOM_ATTRIBUTES_KEY = 'CUSTOM_ATTRIBUTES';
-asciidoctor.chrome.SAFE_MODE_KEY = 'SAFE_MODE';
-asciidoctor.chrome.LIVERELOADJS_DETECTED_KEY = 'LIVERELOADJS_DETECTED';
-asciidoctor.chrome.LIVERELOADJS_FILENAME = 'livereload.js';
-asciidoctor.chrome.THEME_KEY = 'THEME';
-asciidoctor.chrome.CUSTOM_THEME_PREFIX = 'CUSTOM_THEME_';
-asciidoctor.chrome.CUSTOM_JS_PREFIX = 'CUSTOM_JS_';
-asciidoctor.chrome.JS_KEY = 'JS';
-asciidoctor.chrome.JS_LOAD_KEY = 'JS_LOAD';
+asciidoctor.browser.CUSTOM_ATTRIBUTES_KEY = 'CUSTOM_ATTRIBUTES';
+asciidoctor.browser.SAFE_MODE_KEY = 'SAFE_MODE';
+asciidoctor.browser.LIVERELOADJS_DETECTED_KEY = 'LIVERELOADJS_DETECTED';
+asciidoctor.browser.LIVERELOADJS_FILENAME = 'livereload.js';
+asciidoctor.browser.THEME_KEY = 'THEME';
+asciidoctor.browser.CUSTOM_THEME_PREFIX = 'CUSTOM_THEME_';
+asciidoctor.browser.CUSTOM_JS_PREFIX = 'CUSTOM_JS_';
+asciidoctor.browser.JS_KEY = 'JS';
+asciidoctor.browser.JS_LOAD_KEY = 'JS_LOAD';
 
 /**
  * Convert AsciiDoc as HTML
  */
-asciidoctor.chrome.convert = function (data) {
+asciidoctor.browser.convert = function (data) {
   getRenderingSettings(function (settings) {
     try {
       removeMathJaxRefreshJs();
@@ -58,17 +58,17 @@ asciidoctor.chrome.convert = function (data) {
 /**
  * Append highlight.js script
  */
-asciidoctor.chrome.appendHighlightJsScript = function () {
+asciidoctor.browser.appendHighlightJsScript = function () {
   const highlightJsScript = document.createElement('script');
   highlightJsScript.type = 'text/javascript';
-  highlightJsScript.src = chrome.extension.getURL('js/vendor/highlight.min.js');
+  highlightJsScript.src = webExtension.extension.getURL('js/vendor/highlight.min.js');
   document.head.appendChild(highlightJsScript);
 };
 
 /**
  * Append css files
  */
-asciidoctor.chrome.appendStyles = function () {
+asciidoctor.browser.appendStyles = function () {
   // Theme
   getThemeName(function (themeName) {
     const themeNames = getDefaultThemeNames();
@@ -77,10 +77,10 @@ asciidoctor.chrome.appendStyles = function () {
       const themeLink = document.createElement('link');
       themeLink.rel = 'stylesheet';
       themeLink.id = 'asciidoctor-style';
-      themeLink.href = chrome.extension.getURL(`css/themes/${themeName}.css`);
+      themeLink.href = webExtension.extension.getURL(`css/themes/${themeName}.css`);
       document.head.appendChild(themeLink);
     } else {
-      asciidoctor.chrome.getSetting(asciidoctor.chrome.CUSTOM_THEME_PREFIX + themeName, function (customThemeContent) {
+      asciidoctor.browser.getSetting(asciidoctor.browser.CUSTOM_THEME_PREFIX + themeName, function (customThemeContent) {
         if (customThemeContent) {
           const themeStyle = $('<style id="asciidoctor-custom-style"></style>');
           themeStyle.html(customThemeContent);
@@ -94,22 +94,22 @@ asciidoctor.chrome.appendStyles = function () {
   const highlightStylesheetLink = document.createElement('link');
   highlightStylesheetLink.rel = 'stylesheet';
   highlightStylesheetLink.id = `${highlightTheme}-highlight-style`;
-  highlightStylesheetLink.href = chrome.extension.getURL(`css/highlight/${highlightTheme}.css`);
+  highlightStylesheetLink.href = webExtension.extension.getURL(`css/highlight/${highlightTheme}.css`);
   document.head.appendChild(highlightStylesheetLink);
 };
 
 /**
  * Append MathJax script
  */
-asciidoctor.chrome.appendMathJax = function () {
+asciidoctor.browser.appendMathJax = function () {
   const mathJaxJsScriptConfig = document.createElement('script');
   mathJaxJsScriptConfig.type = 'text/javascript';
-  mathJaxJsScriptConfig.src = chrome.extension.getURL('vendor/MathJax/config.js');
+  mathJaxJsScriptConfig.src = webExtension.extension.getURL('vendor/MathJax/config.js');
   document.head.appendChild(mathJaxJsScriptConfig);
 
   const mathJaxJsScript = document.createElement('script');
   mathJaxJsScript.type = 'text/javascript';
-  mathJaxJsScript.src = chrome.extension.getURL('vendor/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML');
+  mathJaxJsScript.src = webExtension.extension.getURL('vendor/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML');
   document.head.appendChild(mathJaxJsScript);
 };
 
@@ -117,8 +117,8 @@ asciidoctor.chrome.appendMathJax = function () {
  * Get theme name from the settings.
  */
 function getThemeName (callback) {
-  chrome.storage.local.get(asciidoctor.chrome.THEME_KEY, function (settings) {
-    const theme = settings[asciidoctor.chrome.THEME_KEY] || 'asciidoctor';
+  webExtension.storage.local.get(asciidoctor.browser.THEME_KEY, function (settings) {
+    const theme = settings[asciidoctor.browser.THEME_KEY] || 'asciidoctor';
     callback(theme);
   });
 }
@@ -127,19 +127,19 @@ function getThemeName (callback) {
  * Get user's rendering settings defined in the options page.
  */
 function getRenderingSettings (callback) {
-  chrome.storage.local.get([
-    asciidoctor.chrome.CUSTOM_ATTRIBUTES_KEY,
-    asciidoctor.chrome.SAFE_MODE_KEY,
-    asciidoctor.chrome.JS_KEY,
-    asciidoctor.chrome.JS_LOAD_KEY], function (settings) {
+  webExtension.storage.local.get([
+    asciidoctor.browser.CUSTOM_ATTRIBUTES_KEY,
+    asciidoctor.browser.SAFE_MODE_KEY,
+    asciidoctor.browser.JS_KEY,
+    asciidoctor.browser.JS_LOAD_KEY], function (settings) {
     const result = {
-      customAttributes: settings[asciidoctor.chrome.CUSTOM_ATTRIBUTES_KEY],
-      safeMode: settings[asciidoctor.chrome.SAFE_MODE_KEY] || 'secure',
-      customJavaScriptName: settings[asciidoctor.chrome.JS_KEY],
-      loadCustomJavaScript: settings[asciidoctor.chrome.JS_LOAD_KEY]
+      customAttributes: settings[asciidoctor.browser.CUSTOM_ATTRIBUTES_KEY],
+      safeMode: settings[asciidoctor.browser.SAFE_MODE_KEY] || 'secure',
+      customJavaScriptName: settings[asciidoctor.browser.JS_KEY],
+      loadCustomJavaScript: settings[asciidoctor.browser.JS_LOAD_KEY]
     };
     if (result.customJavaScriptName) {
-      asciidoctor.chrome.getSetting(asciidoctor.chrome.CUSTOM_JS_PREFIX + result.customJavaScriptName, function (customJavaScriptContent) {
+      asciidoctor.browser.getSetting(asciidoctor.browser.CUSTOM_JS_PREFIX + result.customJavaScriptName, function (customJavaScriptContent) {
         result.customJavaScriptContent = customJavaScriptContent;
         callback(result);
       });
@@ -240,15 +240,15 @@ function buildAsciidoctorOptions (settings) {
 function detectLiveReloadJs (scripts) {
   let liveReloadDetected = false;
   for (let script of scripts) {
-    if (script.src.indexOf(asciidoctor.chrome.LIVERELOADJS_FILENAME) !== -1) {
+    if (script.src.indexOf(asciidoctor.browser.LIVERELOADJS_FILENAME) !== -1) {
       // LiveReload.js detected!
       liveReloadDetected = true;
       break;
     }
   }
   const value = {};
-  value[asciidoctor.chrome.LIVERELOADJS_DETECTED_KEY] = liveReloadDetected;
-  chrome.storage.local.set(value);
+  value[asciidoctor.browser.LIVERELOADJS_DETECTED_KEY] = liveReloadDetected;
+  webExtension.storage.local.set(value);
 }
 
 /**
@@ -285,7 +285,7 @@ function appendTwemojiStyle () {
     const twemojiAwesomeLink = document.createElement('link');
     twemojiAwesomeLink.rel = 'stylesheet';
     twemojiAwesomeLink.id = 'twemoji-awesome-style';
-    twemojiAwesomeLink.href = chrome.extension.getURL('css/twemoji-awesome.css');
+    twemojiAwesomeLink.href = webExtension.extension.getURL('css/twemoji-awesome.css');
     document.head.appendChild(twemojiAwesomeLink);
   }
 }
@@ -295,7 +295,7 @@ function appendChartistStyle () {
     const chartistLink = document.createElement('link');
     chartistLink.rel = 'stylesheet';
     chartistLink.id = 'chartist-style';
-    chartistLink.href = chrome.extension.getURL('css/chartist.min.css');
+    chartistLink.href = webExtension.extension.getURL('css/chartist.min.css');
     document.head.appendChild(chartistLink);
   }
   if ($('#chartist-asciidoctor-style').length === 0) {
@@ -311,13 +311,13 @@ function appendFontAwesomeStyle () {
     const fontAwesomeLink = document.createElement('link');
     fontAwesomeLink.rel = 'stylesheet';
     fontAwesomeLink.id = 'font-awesome-style';
-    fontAwesomeLink.href = chrome.extension.getURL('css/font-awesome.min.css');
+    fontAwesomeLink.href = webExtension.extension.getURL('css/font-awesome.min.css');
     document.head.appendChild(fontAwesomeLink);
   }
 }
 
 function getDefaultThemeNames () {
-  const webAccessibleResources = chrome.runtime.getManifest().web_accessible_resources;
+  const webAccessibleResources = webExtension.runtime.getManifest().web_accessible_resources;
   const themeRegexp = /^css\/themes\/(.*)\.css$/i;
   const themes = $.grep(webAccessibleResources, function (item) {
     return themeRegexp.test(item);

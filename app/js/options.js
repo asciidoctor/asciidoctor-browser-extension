@@ -1,3 +1,5 @@
+const webExtension = typeof browser === 'undefined' ? chrome : browser;
+
 const selectTheme = $('#selectTheme');
 const selectJavaScript = $('#selectJavaScript');
 const selectSafeMode = $('#selectSafeMode');
@@ -19,7 +21,7 @@ openExtensionsPageLink.click(openExtensionsPage);
 $(document).bind('ready', restoreOptions);
 
 function openExtensionsPage () {
-  chrome.tabs.create({'url': 'chrome://extensions/?id=flahcdpicipahcghebiillhbjilehfhc'});
+  webExtension.tabs.create({'url': 'browser://extensions/?id=flahcdpicipahcghebiillhbjilehfhc'});
 }
 
 function optionsChanged () {
@@ -41,7 +43,7 @@ function saveOptions () {
   localStorage['THEME'] = selectTheme.val();
   localStorage['JS'] = selectJavaScript.val();
   localStorage['JS_LOAD'] = inputLoadJavaScript.filter(':checked').val();
-  chrome.extension.getBackgroundPage().refreshOptions();
+  webExtension.extension.getBackgroundPage().refreshOptions();
 }
 
 /**
