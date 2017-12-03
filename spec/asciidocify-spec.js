@@ -1,32 +1,14 @@
 describe('asciidocify', function () {
   describe('fetchContent', function () {
     beforeEach(function () {
-      chrome = {
-        storage: {
-          local: {
-            get: function () {
-            }
-          }
-        },
-        extension: {
-          getURL: function (path) {
-          }
-        },
-        runtime: {
-          getManifest: function () {
-            return {web_accessible_resources: []};
-          }
-        }
-      };
-      asciidoctor.browser.convert = function () {
-      };
+      asciidoctor.browser.convert = function () {};
     });
 
     it('should call convert method if extension is enabled', function () {
       // Given
       var data = {};
       data.responseText = '= Hello world';
-      spyOn(chrome.storage.local, 'get').and.callFake(function (name, callback) {
+      spyOn(browser.storage.local, 'get').and.callFake(function (name, callback) {
         var values = [];
         values[asciidoctor.browser.ENABLE_RENDER_KEY] = true;
         callback(values);
@@ -42,7 +24,7 @@ describe('asciidocify', function () {
       // Given
       var data = {};
       data.responseText = '= Hello world';
-      spyOn(chrome.storage.local, 'get').and.callFake(function (name, callback) {
+      spyOn(browser.storage.local, 'get').and.callFake(function (name, callback) {
         var values = [];
         values[asciidoctor.browser.ENABLE_RENDER_KEY] = false;
         callback(values);
