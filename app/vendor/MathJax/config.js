@@ -1,6 +1,7 @@
 var MathJax = {
+  messageStyle: 'none',
   tex2jax: {
-    inlineMath: [['\\$','\\$'],['\\(','\\)']],
+    inlineMath: [['\\(','\\)']],
     displayMath: [['\\[', '\\]']],
     ignoreClass: 'nostem|nolatexmath'
   },
