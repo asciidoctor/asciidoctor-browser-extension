@@ -84,6 +84,7 @@
     "css/twemoji-awesome.css",
     "css/chartist.min.css",
     "img/themes/riak/*.png",
+    "img/themes/github/*.png",
     "js/vendor/highlight.min.js",
     "js/vendor/asciidoctor-chart-block-macro.js",
     "js/vendor/asciidoctor-emoji-inline-macro.js",
