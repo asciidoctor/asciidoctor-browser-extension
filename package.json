@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
-    "build": "node npm/build.js",
+    "build": "npm run lint && node npm/build.js",
     "lint": "eslint app/js/*.js npm"
   },
   "homepage": "https://github.com/asciidoctor/asciidoctor-chrome-extension",
