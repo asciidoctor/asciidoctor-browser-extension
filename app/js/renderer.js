@@ -378,16 +378,7 @@ function removeElement (id) {
 function createStylesheetLinkElement (attributes) {
   const stylesheetLink = document.createElement('link');
   stylesheetLink.rel = 'stylesheet';
-  if (attributes.id) {
-    stylesheetLink.id = attributes.id;
-  }
-  if (attributes.href) {
-    stylesheetLink.href = attributes.href;
-  }
-  if (attributes.content) {
-    stylesheetLink.innerHTML = attributes.content;
-  }
-  return stylesheetLink;
+  return Object.assign(stylesheetLink, attributes);
 }
 
 /**
@@ -398,14 +389,5 @@ function createStylesheetLinkElement (attributes) {
 function createScriptElement (attributes) {
   const scriptElement = document.createElement('script');
   scriptElement.type = 'text/javascript';
-  if (attributes.id) {
-    scriptElement.id = attributes.id;
-  }
-  if (attributes.src) {
-    scriptElement.src = attributes.src;
-  }
-  if (attributes.text) {
-    scriptElement.text = attributes.text;
-  }
-  return scriptElement;
+  return Object.assign(scriptElement, attributes);
 }
