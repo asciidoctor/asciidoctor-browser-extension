@@ -11,7 +11,7 @@ function Builder () {
 
 Builder.prototype.uncommentFontsImport = function () {
   const path = 'app/css/themes/asciidoctor.css';
-  var data = fs.readFileSync(path, 'utf8');
+  let data = fs.readFileSync(path, 'utf8');
   log.debug('Uncomment fonts @import in asciidoctor.css');
   data = data.replace(/\/\*(@import "[^"]+";)\*\//g, '$1');
   fs.writeFileSync(path, data, 'utf8');
