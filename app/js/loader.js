@@ -27,7 +27,6 @@ asciidoctor.browser.loadContent = function (request) {
   isExtensionEnabled(function (enabled) {
     // Extension is enabled
     if (enabled) {
-      asciidoctor.browser.appendStyles();
       asciidoctor.browser.appendMathJax();
       asciidoctor.browser.appendHighlightJsScript();
       asciidoctor.browser.update(request.responseText);

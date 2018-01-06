@@ -43,32 +43,33 @@ class AsciidoctorDocument {
 /**
  * Update the content of the HTML document
  * @param source AsciiDoc source
- * @returns {Promise<any>}
+ * @returns {Promise<boolean>}
  */
-asciidoctor.browser.update = function (source) {
-  return asciidoctor.browser.getRenderingSettings()
-    .then((settings) => {
-      const asciidoctorDocument = asciidoctor.browser.convert(source, settings);
+asciidoctor.browser.update = async (source) => {
+  try {
+    const settings = await asciidoctor.browser.getRenderingSettings();
+    const asciidoctorDocument = asciidoctor.browser.convert(source, settings);
 
-      removeElement('mathjax-refresh-js');
-      removeElement('asciidoctor-custom-js');
+    removeElement('mathjax-refresh-js');
+    removeElement('asciidoctor-custom-js');
 
-      // Save the scripts that are present at the root of the <body> to be able to restore them after the update
-      // QUESTION: Should we remove this code ? Since using livereload and this extension is not recommended!
-      const scripts = document.body.querySelectorAll(':scope > script');
-      detectLiveReloadJs(scripts);
+    // Save the scripts that are present at the root of the <body> to be able to restore them after the update
+    // QUESTION: Should we remove this code ? Since using livereload and this extension is not recommended!
+    const scripts = document.body.querySelectorAll(':scope > script');
+    detectLiveReloadJs(scripts);
 
-      const customJavaScript = settings.customScript;
-      clearBody();
-      preprocessing(customJavaScript);
-      updateBody(asciidoctorDocument, scripts);
-      postprocessing(customJavaScript);
-    })
-    .catch((error) => {
-      showErrorMessage(`${error.name} : ${error.message}`);
-      // eslint-disable-next-line no-console
-      console.error(error.stack);
-    });
+    const customJavaScript = settings.customScript;
+    clearBody();
+    preprocessing(customJavaScript);
+    await updateBody(asciidoctorDocument, scripts);
+    postprocessing(customJavaScript);
+    return true;
+  } catch (error) {
+    showErrorMessage(`${error.name} : ${error.message}`);
+    // eslint-disable-next-line no-console
+    console.error(error.stack);
+    return false;
+  }
 };
 
 asciidoctor.browser.convert = function (source, settings) {
@@ -87,35 +88,21 @@ asciidoctor.browser.appendHighlightJsScript = function () {
 };
 
 /**
- * Append css files
+ * Append styles
+ * @param doc
  */
-asciidoctor.browser.appendStyles = function () {
+const appendStyles = (doc) => {
   // Theme
-  getThemeNameFromSettings(function (themeName) {
-    const themeNames = getDefaultThemeNames();
-    // Check if the theme is packaged in the extension... if not it's a custom theme
-    if (themeNames.includes(themeName)) {
-      replace(document.head, createStylesheetLinkElement({
-        id: 'asciidoctor-style',
-        href: webExtension.extension.getURL(`css/themes/${themeName}.css`)
+  return getThemeName(doc)
+    .then(appendThemeStyle)
+    .then(() => {
+      // Highlight
+      const highlightTheme = 'github';
+      document.head.appendChild(createStylesheetLinkElement({
+        id: `${highlightTheme}-highlight-style`,
+        href: webExtension.extension.getURL(`css/highlight/${highlightTheme}.css`)
       }));
-    } else {
-      asciidoctor.browser.getSetting(asciidoctor.browser.CUSTOM_THEME_PREFIX + themeName, function (customThemeContent) {
-        if (customThemeContent) {
-          replace(document.head, createStylesheetLinkElement({
-            id: 'asciidoctor-style',
-            innerHTML: customThemeContent
-          }));
-        }
-      });
-    }
-  });
-  // Highlight
-  const highlightTheme = 'github';
-  document.head.appendChild(createStylesheetLinkElement({
-    id: `${highlightTheme}-highlight-style`,
-    href: webExtension.extension.getURL(`css/highlight/${highlightTheme}.css`)
-  }));
+    });
 };
 
 /**
@@ -150,12 +137,52 @@ function postprocessing (customJavaScript) {
 }
 
 /**
- * Get theme name from the settings.
+ * @param themeName
+ * @returns {Promise<Boolean>}
  */
-function getThemeNameFromSettings (callback) {
-  webExtension.storage.local.get(asciidoctor.browser.THEME_KEY, function (settings) {
-    const theme = settings[asciidoctor.browser.THEME_KEY] || 'asciidoctor';
-    callback(theme);
+function hasTheme (themeName) {
+  return new Promise((resolve) => {
+    const themeNames = getDefaultThemeNames();
+    if (themeNames.includes(themeName)) {
+      resolve(true);
+      return;
+    }
+    asciidoctor.browser.getSetting(asciidoctor.browser.CUSTOM_THEME_PREFIX + themeName, function (customThemeContent) {
+      resolve(!!customThemeContent);
+    });
+  });
+}
+
+function appendThemeStyle (themeName) {
+  const themeNames = getDefaultThemeNames();
+  // Check if the theme is packaged in the extension... if not it's a custom theme
+  if (themeNames.includes(themeName)) {
+    replace(document.head, createStylesheetLinkElement({
+      id: 'asciidoctor-style',
+      href: webExtension.extension.getURL(`css/themes/${themeName}.css`)
+    }));
+  } else {
+    asciidoctor.browser.getSetting(asciidoctor.browser.CUSTOM_THEME_PREFIX + themeName, function (customThemeContent) {
+      if (customThemeContent) {
+        replace(document.head, createStyleElement({
+          id: 'asciidoctor-style',
+          innerHTML: customThemeContent
+        }));
+      }
+    });
+  }
+}
+
+/**
+ * Get theme name from the settings.
+ * @returns {Promise<String>}
+ */
+function getThemeNameFromSettings () {
+  return new Promise((resolve) => {
+    webExtension.storage.local.get(asciidoctor.browser.THEME_KEY, function (settings) {
+      const theme = settings[asciidoctor.browser.THEME_KEY] || 'asciidoctor';
+      resolve(theme);
+    });
   });
 }
 
@@ -210,13 +237,15 @@ const getCustomScriptContent = (customJavaScriptName) => {
  * @param asciidoctorDocument The Asciidoctor document
  * @param scripts The scripts to restore
  */
-function updateBody (asciidoctorDocument, scripts) {
+const updateBody = async (asciidoctorDocument, scripts) => {
   const doc = asciidoctorDocument.doc;
   if (doc.getAttribute('icons') === 'font') {
     appendFontAwesomeStyle();
   }
+  await appendStyles(doc);
   appendChartistStyle();
   appendTwemojiStyle();
+
   const title = doc.getDoctitle({use_fallback: true});
   const doctype = doc.getDoctype();
   const maxWidth = doc.getAttribute('max-width');
@@ -236,7 +265,7 @@ function updateBody (asciidoctorDocument, scripts) {
   refreshMathJax();
   appendScripts(scripts);
   syntaxHighlighting();
-}
+};
 
 asciidoctor.browser.decodeEntities = function (value) {
   // QUESTION: Should we use a solution that does not rely on DOM ?
@@ -387,6 +416,25 @@ function getDefaultThemeNames () {
   return webAccessibleResources
     .filter(item => themeRegexp.test(item))
     .map(item => item.replace(themeRegexp, '$1'));
+}
+
+/**
+ * @param doc
+ * @returns {Promise<String>}
+ */
+function getThemeName (doc) {
+  const stylesheetAttribute = doc.getAttribute('stylesheet');
+  if (typeof stylesheetAttribute !== 'undefined' && stylesheetAttribute !== '') {
+    const themeName = stylesheetAttribute.replace(/\.css$/, '');
+    return hasTheme(themeName)
+      .then((result) => {
+        if (result) {
+          return Promise.resolve(themeName);
+        }
+        return getThemeNameFromSettings();
+      });
+  }
+  return getThemeNameFromSettings();
 }
 
 function refreshMathJax () {
