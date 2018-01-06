@@ -383,7 +383,7 @@ table.tableblock #preamble > .sectionbody > .paragraph:first-of-type p { font-si
 
 .exampleblock > .content > :last-child > :last-child, .exampleblock > .content .olist > ol > li:last-child > :last-child, .exampleblock > .content .ulist > ul > li:last-child > :last-child, .exampleblock > .content .qlist > ol > li:last-child > :last-child, .sidebarblock > .content > :last-child > :last-child, .sidebarblock > .content .olist > ol > li:last-child > :last-child, .sidebarblock > .content .ulist > ul > li:last-child > :last-child, .sidebarblock > .content .qlist > ol > li:last-child > :last-child { margin-bottom: 0; }
 
-.literalblock pre:not([class]), .listingblock pre:not([class]) { background: url('../images/golo/pre-bg.png?1383495631'); }
+.literalblock pre:not([class]), .listingblock pre:not([class]) { background: url('../../img/themes/golo/pre-bg.png?1383495631'); }
 .literalblock pre, .literalblock pre[class], .listingblock pre, .listingblock pre[class] { border-width: 1px; border-style: solid; border-color: rgba(21, 35, 71, 0.1); -webkit-border-radius: 6px; border-radius: 6px; padding: 0.8em; word-wrap: break-word; }
 .literalblock pre.nowrap, .literalblock pre[class].nowrap, .listingblock pre.nowrap, .listingblock pre[class].nowrap { overflow-x: auto; white-space: pre; word-wrap: normal; }
 .literalblock pre > code, .literalblock pre[class] > code, .listingblock pre > code, .listingblock pre[class] > code { display: block; }
@@ -659,7 +659,7 @@ b.conum * { color: inherit !important; }
 
 .conum:not([data-value]):empty { display: none; }
 
-body { background: url('../images/golo/body-bg.png?1383495631') #fdfaf7 repeat; }
+body { background: url('../../img/themes/golo/body-bg.png?1383495631') #fdfaf7 repeat; }
 
 #toc.toc2 ul ul { list-style-type: circle; padding-left: 1.75em; }
 
@@ -671,7 +671,7 @@ body { background: url('../images/golo/body-bg.png?1383495631') #fdfaf7 repeat; 
 #content h2, #content h3, #content #toctitle, #content .sidebarblock > .content > .title, #content h4, #content h5, #content #toctitle { font-weight: normal; position: relative; left: -0.0625em; }
 #content h2 { font-weight: bold; }
 
-.literalblock .content pre.highlight, .listingblock .content pre.highlight { background: url('../images/golo/pre-bg.png?1383495631'); }
+.literalblock .content pre.highlight, .listingblock .content pre.highlight { background: url('../../img/themes/golo/pre-bg.png?1383495631'); }
 
 .admonitionblock > table td.content { border-color: #dddddd; }
 
