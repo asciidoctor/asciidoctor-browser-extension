@@ -17,6 +17,18 @@ Builder.prototype.uncommentFontsImport = function () {
   fs.writeFileSync(path, data, 'utf8');
 };
 
+Builder.prototype.replaceImagesURL = function () {
+  const themesNamesWithImages = ['github', 'golo', 'maker', 'riak'];
+  function replaceURL (themeName) {
+    const path = `app/css/themes/${themeName}.css`;
+    var data = fs.readFileSync(path, 'utf8');
+    log.debug(`Replace images url in ${themeName}.css`);
+    data = data.replace(/url\('\.\.\/images\/([^']+)'/, 'url(\'../../img/themes/$1\'');
+    fs.writeFileSync(path, data, 'utf8');
+  }
+  themesNamesWithImages.forEach(replaceURL);
+};
+
 Builder.prototype.clean = function () {
   log.task('clean');
   log.debug('remove dist directory');
@@ -74,5 +86,6 @@ Builder.prototype.dist = function () {
   this.clean();
   this.copy();
   this.uncommentFontsImport();
+  this.replaceImagesURL();
   this.compress();
 };
