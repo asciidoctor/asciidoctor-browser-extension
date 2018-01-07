@@ -40,9 +40,9 @@
     "font-awesome": "4.7.0",
     "jasmine-core": "2.8.0",
     "jquery": "2.2.4",
-    "karma": "1.7.1",
-    "karma-chrome-launcher": "2.2.0",
-    "karma-jasmine": "1.1.0"
+    "karma": "^1.7.1",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "1.1.1"
   },
   "keywords": [
     "chrome",

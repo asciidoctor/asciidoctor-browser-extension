@@ -1,15 +1,15 @@
 describe('asciidocify', function () {
-  describe('fetchContent', function () {
+  describe('enable', function () {
     beforeEach(function () {
       asciidoctor.browser.convert = function () {};
     });
 
     it('should call convert method if extension is enabled', function () {
       // Given
-      var data = {};
+      const data = {};
       data.responseText = '= Hello world';
       spyOn(browser.storage.local, 'get').and.callFake(function (name, callback) {
-        var values = [];
+        const values = [];
         values[asciidoctor.browser.ENABLE_RENDER_KEY] = true;
         callback(values);
       });
@@ -22,10 +22,10 @@ describe('asciidocify', function () {
 
     it('should not call convert method if extension is disabled', function () {
       // Given
-      var data = {};
+      const data = {};
       data.responseText = '= Hello world';
       spyOn(browser.storage.local, 'get').and.callFake(function (name, callback) {
-        var values = [];
+        const values = [];
         values[asciidoctor.browser.ENABLE_RENDER_KEY] = false;
         callback(values);
       });

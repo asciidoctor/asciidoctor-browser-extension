@@ -3,11 +3,14 @@ const browser = {
   storage: {
     local: {
       get: function () {
+      },
+      set: function () {
       }
     }
   },
   extension: {
     getURL: function (path) {
+      return path;
     }
   },
   runtime: {
