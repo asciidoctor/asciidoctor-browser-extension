@@ -14,7 +14,7 @@ asciidoctor.browser.JS_LOAD_KEY = 'JS_LOAD';
 /**
  * Convert AsciiDoc as HTML
  */
-asciidoctor.browser.convert = function (data) {
+asciidoctor.browser.convert = function (data, callback) {
   getRenderingSettings(function (settings) {
     try {
       removeMathJaxRefreshJs();
@@ -52,6 +52,7 @@ asciidoctor.browser.convert = function (data) {
       // eslint-disable-next-line no-console
       console.error(e.stack);
     }
+    typeof callback === 'function' && callback();
   });
 };
 
