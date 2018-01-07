@@ -1,31 +1,31 @@
 module.exports = {
-  "env": {
-    "browser": true,
-    "es6": true
+  'env': {
+    'browser': true,
+    'es6': true
   },
-  "extends": "standard",
-  "rules": {
-    "space-before-function-paren": [
-      "error",
-      "always"
+  'extends': 'standard',
+  'rules': {
+    'space-before-function-paren': [
+      'error',
+      'always'
     ],
-    "no-cond-assign": "off",
-    "no-undef": "off",
-    "indent": [
-      "error",
+    'no-cond-assign': 'off',
+    'no-undef': 'off',
+    'indent': [
+      'error',
       2
     ],
-    "linebreak-style": [
-      "error",
-      "unix"
+    'linebreak-style': [
+      'error',
+      'unix'
     ],
-    "quotes": [
-      "error",
-      "single"
+    'quotes': [
+      'error',
+      'single'
     ],
-    "semi": [
-      "error",
-      "always"
+    'semi': [
+      'error',
+      'always'
     ]
   }
 };
