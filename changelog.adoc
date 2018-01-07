@@ -1,5 +1,11 @@
 = Changelog
 
+== 1.5.5.112
+
+* Use the browser namespace
+* Use correct config for MathJax (thanks @mojavelinux)
+* Add missing images for golo, riak, maker and github themes (thanks @puffybsd)
+
 == 1.5.5.111
 
 * Add condition for unsupported API on Firefox Mobile
