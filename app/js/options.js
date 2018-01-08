@@ -17,11 +17,29 @@ const openExtensionsPageLink = $('#openExtensionsPageLink');
 
 let saveAction;
 
-openExtensionsPageLink.click(openExtensionsPage);
 $(document).bind('ready', restoreOptions);
 
-function openExtensionsPage () {
-  webExtension.tabs.create({'url': 'browser://extensions/?id=flahcdpicipahcghebiillhbjilehfhc'});
+function showEnablingLocalFileAlert () {
+  openExtensionsPageLink.click(function () {
+    webExtension.tabs.create({'url': 'chrome://extensions/?id=' + webExtension.runtime.id});
+  });
+  initAlert(enablingLocalFileAlert);
+  enablingLocalFileAlert.show();
+}
+
+function initEnablingLocalFileAlert () {
+  // This API is currently only implemented in Firefox and Firefox Mobile.
+  // Reference: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/getBrowserInfo
+  if (typeof webExtension.runtime.getBrowserInfo === 'function') {
+    webExtension.runtime.getBrowserInfo().then(function (info) {
+      if (info.name.includes('Chrome') || info.name.includes('Opera')) {
+        showEnablingLocalFileAlert();
+      }
+    });
+  } else {
+    // Assume that we are running Chrome or Opera (even if it can be Edge)
+    showEnablingLocalFileAlert();
+  }
 }
 
 function optionsChanged () {
@@ -86,8 +104,7 @@ function initAlert (element) {
 initAlert(saveAlert);
 initAlert(addCustomThemeAlert);
 initAlert(addCustomJavaScriptAlert);
-initAlert(enablingLocalFileAlert);
-enablingLocalFileAlert.show();
+initEnablingLocalFileAlert();
 
 inputCustomTheme.change(function () {
   resetAlert(addCustomThemeAlert);
