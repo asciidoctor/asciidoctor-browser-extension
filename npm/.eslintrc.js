@@ -1,6 +1,6 @@
 module.exports = {
-  "env": {
-    "node": true,
-    "es6": true
+  'env': {
+    'node': true,
+    'es6': true
   }
 };
