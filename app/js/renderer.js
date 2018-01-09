@@ -32,7 +32,7 @@ asciidoctor.browser.convert = function (data, callback) {
       if (settings.customJavaScriptContent) {
         const customJavaScript = createScriptElement({
           id: 'asciidoctor-custom-js',
-          text: settings.customJavaScriptContent
+          innerHTML: settings.customJavaScriptContent
         });
         if (settings.loadCustomJavaScript === 'before') {
           // Load the custom JavaScript...
@@ -85,7 +85,7 @@ asciidoctor.browser.appendStyles = function () {
         if (customThemeContent) {
           replace(document.head, createStylesheetLinkElement({
             id: 'asciidoctor-style',
-            text: customThemeContent
+            innerHTML: customThemeContent
           }));
         }
       });
@@ -291,7 +291,7 @@ function appendChartistStyle () {
   }));
   appendOnce(document.head, createStylesheetLinkElement({
     id: 'chartist-asciidoctor-style',
-    text: '.ct-chart .ct-series.ct-series-a .ct-line {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-line {stroke:#72B3CC} .ct-chart .ct-series.ct-series-a .ct-point {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-point {stroke:#72B3CC}'
+    innerHTML: '.ct-chart .ct-series.ct-series-a .ct-line {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-line {stroke:#72B3CC} .ct-chart .ct-series.ct-series-a .ct-point {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-point {stroke:#72B3CC}'
   }));
 }
 
@@ -313,7 +313,7 @@ function getDefaultThemeNames () {
 function refreshMathJax () {
   document.body.appendChild(createScriptElement({
     id: 'mathjax-refresh-js',
-    text: 'if (window.MathJax && window.MathJax.Hub) { window.MathJax.Hub.Typeset(); }'
+    innerHTML: 'if (window.MathJax && window.MathJax.Hub) { window.MathJax.Hub.Typeset(); }'
   }));
 }
 
