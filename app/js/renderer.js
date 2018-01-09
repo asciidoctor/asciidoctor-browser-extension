@@ -17,8 +17,8 @@ asciidoctor.browser.JS_LOAD_KEY = 'JS_LOAD';
 asciidoctor.browser.convert = function (data, callback) {
   getRenderingSettings(function (settings) {
     try {
-      removeMathJaxRefreshJs();
-      removeCustomJs();
+      removeElement('mathjax-refresh-js');
+      removeElement('asciidoctor-custom-js');
 
       const body = $(document.body);
       // Save scripts
@@ -30,18 +30,20 @@ asciidoctor.browser.convert = function (data, callback) {
       body.html('<div id="content"></div>');
 
       if (settings.customJavaScriptContent) {
-        const customJavaScript = $('<script id="asciidoctor-custom-js" type="text/javascript"></script>');
-        customJavaScript.html(settings.customJavaScriptContent);
+        const customJavaScript = createScriptElement({
+          id: 'asciidoctor-custom-js',
+          text: settings.customJavaScriptContent
+        });
         if (settings.loadCustomJavaScript === 'before') {
           // Load the custom JavaScript...
-          $(document.body).append(customJavaScript);
+          body.append(customJavaScript);
           // ... then update <body>
           updateBody(data, settings, scripts);
         } else {
           // Update <body>
           updateBody(data, settings, scripts);
           // ... then load the custom JavaScript
-          $(document.body).append(customJavaScript);
+          body.append(customJavaScript);
         }
       } else {
         // No custom JavaScript defined, update <body>
@@ -60,10 +62,9 @@ asciidoctor.browser.convert = function (data, callback) {
  * Append highlight.js script
  */
 asciidoctor.browser.appendHighlightJsScript = function () {
-  const highlightJsScript = document.createElement('script');
-  highlightJsScript.type = 'text/javascript';
-  highlightJsScript.src = webExtension.extension.getURL('js/vendor/highlight.min.js');
-  document.head.appendChild(highlightJsScript);
+  document.head.appendChild(createScriptElement({
+    src: webExtension.extension.getURL('js/vendor/highlight.min.js')
+  }));
 };
 
 /**
@@ -71,53 +72,49 @@ asciidoctor.browser.appendHighlightJsScript = function () {
  */
 asciidoctor.browser.appendStyles = function () {
   // Theme
-  getThemeName(function (themeName) {
+  getThemeNameFromSettings(function (themeName) {
     const themeNames = getDefaultThemeNames();
     // Check if the theme is packaged in the extension... if not it's a custom theme
-    if ($.inArray(themeName, themeNames) !== -1) {
-      const themeLink = document.createElement('link');
-      themeLink.rel = 'stylesheet';
-      themeLink.id = 'asciidoctor-style';
-      themeLink.href = webExtension.extension.getURL(`css/themes/${themeName}.css`);
-      document.head.appendChild(themeLink);
+    if (themeNames.includes(themeName)) {
+      replace(document.head, createStylesheetLinkElement({
+        id: 'asciidoctor-style',
+        href: webExtension.extension.getURL(`css/themes/${themeName}.css`)
+      }));
     } else {
       asciidoctor.browser.getSetting(asciidoctor.browser.CUSTOM_THEME_PREFIX + themeName, function (customThemeContent) {
         if (customThemeContent) {
-          const themeStyle = $('<style id="asciidoctor-custom-style"></style>');
-          themeStyle.html(customThemeContent);
-          $(document.head).append(themeStyle);
+          replace(document.head, createStylesheetLinkElement({
+            id: 'asciidoctor-style',
+            content: customThemeContent
+          }));
         }
       });
     }
   });
   // Highlight
   const highlightTheme = 'github';
-  const highlightStylesheetLink = document.createElement('link');
-  highlightStylesheetLink.rel = 'stylesheet';
-  highlightStylesheetLink.id = `${highlightTheme}-highlight-style`;
-  highlightStylesheetLink.href = webExtension.extension.getURL(`css/highlight/${highlightTheme}.css`);
-  document.head.appendChild(highlightStylesheetLink);
+  document.head.appendChild(createStylesheetLinkElement({
+    id: `${highlightTheme}-highlight-style`,
+    href: webExtension.extension.getURL(`css/highlight/${highlightTheme}.css`)
+  }));
 };
 
 /**
  * Append MathJax script
  */
 asciidoctor.browser.appendMathJax = function () {
-  const mathJaxJsScriptConfig = document.createElement('script');
-  mathJaxJsScriptConfig.type = 'text/javascript';
-  mathJaxJsScriptConfig.src = webExtension.extension.getURL('vendor/MathJax/config.js');
-  document.head.appendChild(mathJaxJsScriptConfig);
-
-  const mathJaxJsScript = document.createElement('script');
-  mathJaxJsScript.type = 'text/javascript';
-  mathJaxJsScript.src = webExtension.extension.getURL('vendor/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML');
-  document.head.appendChild(mathJaxJsScript);
+  document.head.appendChild(createScriptElement({
+    src: webExtension.extension.getURL('vendor/MathJax/config.js')
+  }));
+  document.head.appendChild(createScriptElement({
+    src: webExtension.extension.getURL('vendor/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML')
+  }));
 };
 
 /**
  * Get theme name from the settings.
  */
-function getThemeName (callback) {
+function getThemeNameFromSettings (callback) {
   webExtension.storage.local.get(asciidoctor.browser.THEME_KEY, function (settings) {
     const theme = settings[asciidoctor.browser.THEME_KEY] || 'asciidoctor';
     callback(theme);
@@ -171,7 +168,6 @@ function updateBody (data, settings, scripts) {
     document.body.style.maxWidth = maxWidth;
   }
   $('#content').html(generatedHtml);
-
   forceLoadDynamicObjects();
   refreshMathJax();
   appendScripts(scripts);
@@ -282,69 +278,47 @@ function syntaxHighlighting () {
 }
 
 function appendTwemojiStyle () {
-  if ($('#twemoji-awesome-style').length === 0) {
-    const twemojiAwesomeLink = document.createElement('link');
-    twemojiAwesomeLink.rel = 'stylesheet';
-    twemojiAwesomeLink.id = 'twemoji-awesome-style';
-    twemojiAwesomeLink.href = webExtension.extension.getURL('css/twemoji-awesome.css');
-    document.head.appendChild(twemojiAwesomeLink);
-  }
+  appendOnce(document.head, createStylesheetLinkElement({
+    id: 'twemoji-awesome-style',
+    href: webExtension.extension.getURL('css/twemoji-awesome.css')
+  }));
 }
 
 function appendChartistStyle () {
-  if ($('#chartist-style').length === 0) {
-    const chartistLink = document.createElement('link');
-    chartistLink.rel = 'stylesheet';
-    chartistLink.id = 'chartist-style';
-    chartistLink.href = webExtension.extension.getURL('css/chartist.min.css');
-    document.head.appendChild(chartistLink);
-  }
-  if ($('#chartist-asciidoctor-style').length === 0) {
-    const chartistStyle = document.createElement('style');
-    chartistStyle.id = 'chartist-asciidoctor-style';
-    chartistStyle.innerHTML = '.ct-chart .ct-series.ct-series-a .ct-line {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-line {stroke:#72B3CC} .ct-chart .ct-series.ct-series-a .ct-point {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-point {stroke:#72B3CC}';
-    document.head.appendChild(chartistStyle);
-  }
+  appendOnce(document.head, createStylesheetLinkElement({
+    id: 'chartist-style',
+    href: webExtension.extension.getURL('css/chartist.min.css')
+  }));
+  appendOnce(document.head, createStylesheetLinkElement({
+    id: 'chartist-asciidoctor-style',
+    content: '.ct-chart .ct-series.ct-series-a .ct-line {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-line {stroke:#72B3CC} .ct-chart .ct-series.ct-series-a .ct-point {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-point {stroke:#72B3CC}'
+  }));
 }
 
 function appendFontAwesomeStyle () {
-  if ($('#font-awesome-style').length === 0) {
-    const fontAwesomeLink = document.createElement('link');
-    fontAwesomeLink.rel = 'stylesheet';
-    fontAwesomeLink.id = 'font-awesome-style';
-    fontAwesomeLink.href = webExtension.extension.getURL('css/font-awesome.min.css');
-    document.head.appendChild(fontAwesomeLink);
-  }
+  appendOnce(document.head, createStylesheetLinkElement({
+    id: 'font-awesome-style',
+    href: webExtension.extension.getURL('css/font-awesome.min.css')
+  }));
 }
 
 function getDefaultThemeNames () {
   const webAccessibleResources = webExtension.runtime.getManifest().web_accessible_resources;
   const themeRegexp = /^css\/themes\/(.*)\.css$/i;
-  const themes = $.grep(webAccessibleResources, function (item) {
-    return themeRegexp.test(item);
-  });
-  return themes.map(function (item) {
-    return item.replace(themeRegexp, '$1');
-  });
-}
-
-function removeMathJaxRefreshJs () {
-  $('#mathjax-refresh-js').remove();
-}
-
-function removeCustomJs () {
-  $('#asciidoctor-custom-js').remove();
+  return webAccessibleResources
+    .filter(item => themeRegexp.test(item))
+    .map(item => item.replace(themeRegexp, '$1'));
 }
 
 function refreshMathJax () {
-  const mathJaxJsScript = document.createElement('script');
-  mathJaxJsScript.id = 'mathjax-refresh-js';
-  mathJaxJsScript.text = 'if (window.MathJax && window.MathJax.Hub) { window.MathJax.Hub.Typeset(); }';
-  document.body.appendChild(mathJaxJsScript);
+  document.body.appendChild(createScriptElement({
+    id: 'mathjax-refresh-js',
+    text: 'if (window.MathJax && window.MathJax.Hub) { window.MathJax.Hub.Typeset(); }'
+  }));
 }
 
 /**
- * Force dynamic objects to be load (iframe, script...)
+ * Force dynamic objects to be loaded (iframe, script...)
  */
 function forceLoadDynamicObjects () {
   // Force iframe to be load
@@ -354,10 +328,67 @@ function forceLoadDynamicObjects () {
 }
 
 /**
- * Show error message
+ * Show an error message
  * @param message The error message
  */
 function showErrorMessage (message) {
   const messageText = `<p>${message}</p>`;
   $(document.body).html(`<div id="content"><h4>Error</h4>${messageText}</div>`);
+}
+
+// DOM
+
+/**
+ * Append a child element to the parent if the child element does not exist in the document.
+ * @param parent The parent element
+ * @param childElement The child element
+ */
+function appendOnce (parent, childElement) {
+  if (document.getElementById(childElement.id) === null) {
+    parent.appendChild(childElement);
+  }
+}
+
+/**
+ * Replace the child element in the document.
+ * Effectively removing and then appending the child to the parent in the document.
+ * @param parent
+ * @param childElement
+ */
+function replace (parent, childElement) {
+  removeElement(childElement.id);
+  parent.appendChild(childElement);
+}
+
+/**
+ * Remove a element by id from the document.
+ * @param id The element's id
+ */
+function removeElement (id) {
+  const element = document.getElementById(id);
+  if (element) {
+    element.parentNode.removeChild(element);
+  }
+}
+
+/**
+ * Create a <link rel="stylesheet"> element.
+ * @param attributes The element's attributes
+ * @returns {HTMLLinkElement}
+ */
+function createStylesheetLinkElement (attributes) {
+  const stylesheetLink = document.createElement('link');
+  stylesheetLink.rel = 'stylesheet';
+  return Object.assign(stylesheetLink, attributes);
+}
+
+/**
+ * Create a <script type="text/javascript"> element.
+ * @param attributes The element's attributes
+ * @returns {HTMLScriptElement}
+ */
+function createScriptElement (attributes) {
+  const scriptElement = document.createElement('script');
+  scriptElement.type = 'text/javascript';
+  return Object.assign(scriptElement, attributes);
 }
