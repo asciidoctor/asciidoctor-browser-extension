@@ -5,7 +5,14 @@ node_js:
 
 dist: trusty
 
-sudo: false
+# Temporary workaround, otherwise tests are failing because Chrome cannot be start
+#
+# Stack trace on Travis: 
+# Cannot start ChromeHeadless
+# [FATAL:setuid_sandbox_host.cc(157)] The SUID sandbox helper binary was found, but is not configured correctly. Rather than run without sandboxing I'm aborting now. You need to make sure that /opt/google/chrome/chrome-sandbox is owned by root and has mode 4755.
+#
+# Reference: https://github.com/travis-ci/travis-ci/issues/8836
+sudo: required
 
 addons:
   chrome: stable # have Travis install chrome stable.
