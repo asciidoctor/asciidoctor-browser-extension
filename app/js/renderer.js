@@ -85,7 +85,7 @@ asciidoctor.browser.appendStyles = function () {
         if (customThemeContent) {
           replace(document.head, createStylesheetLinkElement({
             id: 'asciidoctor-style',
-            content: customThemeContent
+            text: customThemeContent
           }));
         }
       });
@@ -291,7 +291,7 @@ function appendChartistStyle () {
   }));
   appendOnce(document.head, createStylesheetLinkElement({
     id: 'chartist-asciidoctor-style',
-    content: '.ct-chart .ct-series.ct-series-a .ct-line {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-line {stroke:#72B3CC} .ct-chart .ct-series.ct-series-a .ct-point {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-point {stroke:#72B3CC}'
+    text: '.ct-chart .ct-series.ct-series-a .ct-line {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-line {stroke:#72B3CC} .ct-chart .ct-series.ct-series-a .ct-point {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-point {stroke:#72B3CC}'
   }));
 }
 
