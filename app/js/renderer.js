@@ -20,14 +20,11 @@ asciidoctor.browser.convert = function (data, callback) {
       removeElement('mathjax-refresh-js');
       removeElement('asciidoctor-custom-js');
 
-      const body = $(document.body);
       // Save scripts
-      const scripts = body.find('script');
-
+      const scripts = document.body.querySelectorAll('script');
       detectLiveReloadJs(scripts);
 
-      // Clear <body>
-      body.html('<div id="content"></div>');
+      clearBody();
 
       if (settings.customJavaScriptContent) {
         const customJavaScript = createScriptElement({
@@ -36,14 +33,14 @@ asciidoctor.browser.convert = function (data, callback) {
         });
         if (settings.loadCustomJavaScript === 'before') {
           // Load the custom JavaScript...
-          body.append(customJavaScript);
+          document.body.appendChild(customJavaScript);
           // ... then update <body>
           updateBody(data, settings, scripts);
         } else {
           // Update <body>
           updateBody(data, settings, scripts);
           // ... then load the custom JavaScript
-          body.append(customJavaScript);
+          document.body.appendChild(customJavaScript);
         }
       } else {
         // No custom JavaScript defined, update <body>
@@ -112,6 +109,16 @@ asciidoctor.browser.appendMathJax = function () {
 };
 
 /**
+ * Clear <body>
+ */
+function clearBody () {
+  document.body.innerHTML = '';
+  let contentDiv = document.createElement('div');
+  contentDiv.id = 'content';
+  document.body.appendChild(contentDiv);
+}
+
+/**
  * Get theme name from the settings.
  */
 function getThemeNameFromSettings (callback) {
@@ -162,17 +169,34 @@ function updateBody (data, settings, scripts) {
   const doctype = doc.getDoctype();
   const maxWidth = doc.getAttribute('max-width');
   const generatedHtml = doc.convert();
-  document.title = $(document.createElement('div')).html(title).text();
+
+  document.title = asciidoctor.browser.decodeEntities(title);
   document.body.className = doctype;
   if (maxWidth) {
     document.body.style.maxWidth = maxWidth;
   }
-  $('#content').html(generatedHtml);
+  document.getElementById('content').innerHTML = generatedHtml;
+
   forceLoadDynamicObjects();
   refreshMathJax();
   appendScripts(scripts);
   syntaxHighlighting();
 }
+
+asciidoctor.browser.decodeEntities = function (value) {
+  // QUESTION: Should we use a solution that does not rely on DOM ?
+  // https://github.com/mathiasbynens/he
+  let div = document.createElement('div');
+  div.innerHTML = value;
+  return div.textContent;
+};
+
+asciidoctor.browser.escape = function (value) {
+  // QUESTION: Should we use https://lodash.com/docs/4.17.4#escape ?
+  let div = document.createElement('div');
+  div.textContent = decodeURIComponent(value);
+  return div.innerHTML;
+};
 
 /**
  * Parse URL query parameters
@@ -187,7 +211,7 @@ function getAttributesFromQueryParameters () {
       const key = item[0];
       const value = item[1];
       if (typeof value !== 'undefined') {
-        const escapedValue = $('<div/>').text(decodeURIComponent(value)).html();
+        const escapedValue = asciidoctor.browser.escape(value);
         result.push(key.concat('=').concat(escapedValue));
       } else {
         result.push(key);
@@ -267,12 +291,12 @@ function isMathTexScript (script) {
  * Syntax highlighting
  */
 function syntaxHighlighting () {
-  $('pre.highlight > code').each(function (i, e) {
-    const match = /language-(\S+)/.exec(e.className);
+  document.body.querySelectorAll('pre.highlight > code').forEach((node) => {
+    const match = /language-(\S+)/.exec(node.className);
     if (match !== null && hljs.getLanguage(match[1]) !== null) {
-      hljs.highlightBlock(e);
+      hljs.highlightBlock(node);
     } else {
-      e.className += ' hljs';
+      node.className += ' hljs';
     }
   });
 }
@@ -318,12 +342,11 @@ function refreshMathJax () {
 }
 
 /**
- * Force dynamic objects to be loaded (iframe, script...)
+ * Force dynamic objects to load (iframe, script...)
  */
 function forceLoadDynamicObjects () {
-  // Force iframe to be load
-  $('iframe').each(function () {
-    $(this).attr('src', $(this).attr('src'));
+  document.body.querySelectorAll('iframe').forEach((node) => {
+    node.setAttribute('src', node.getAttribute('src'));
   });
 }
 
@@ -333,7 +356,7 @@ function forceLoadDynamicObjects () {
  */
 function showErrorMessage (message) {
   const messageText = `<p>${message}</p>`;
-  $(document.body).html(`<div id="content"><h4>Error</h4>${messageText}</div>`);
+  document.body.innerHTML = `<div id="content"><h4>Error</h4>${messageText}</div>`;
 }
 
 // DOM
