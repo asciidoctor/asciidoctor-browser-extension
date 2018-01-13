@@ -11,6 +11,20 @@ asciidoctor.browser.CUSTOM_JS_PREFIX = 'CUSTOM_JS_';
 asciidoctor.browser.JS_KEY = 'JS';
 asciidoctor.browser.JS_LOAD_KEY = 'JS_LOAD';
 
+class CustomJavaScript {
+  constructor (content, loadDirective) {
+    this.content = content;
+    this.loadDirective = loadDirective;
+  }
+
+  htmlElement () {
+    return createScriptElement({
+      id: 'asciidoctor-custom-js',
+      innerHTML: this.content
+    });
+  }
+}
+
 /**
  * Convert AsciiDoc as HTML
  */
@@ -20,32 +34,14 @@ asciidoctor.browser.convert = function (data, callback) {
       removeElement('mathjax-refresh-js');
       removeElement('asciidoctor-custom-js');
 
-      // Save scripts
-      const scripts = document.body.querySelectorAll('script');
+      const scripts = document.body.querySelectorAll('script'); // save scripts
       detectLiveReloadJs(scripts);
 
+      const customJavaScript = getCustomJavaScript(settings);
       clearBody();
-
-      if (settings.customJavaScriptContent) {
-        const customJavaScript = createScriptElement({
-          id: 'asciidoctor-custom-js',
-          innerHTML: settings.customJavaScriptContent
-        });
-        if (settings.loadCustomJavaScript === 'before') {
-          // Load the custom JavaScript...
-          document.body.appendChild(customJavaScript);
-          // ... then update <body>
-          updateBody(data, settings, scripts);
-        } else {
-          // Update <body>
-          updateBody(data, settings, scripts);
-          // ... then load the custom JavaScript
-          document.body.appendChild(customJavaScript);
-        }
-      } else {
-        // No custom JavaScript defined, update <body>
-        updateBody(data, settings, scripts);
-      }
+      preprocessing(customJavaScript);
+      updateBody(data, settings, scripts);
+      postprocessing(customJavaScript);
     } catch (e) {
       showErrorMessage(`${e.name} : ${e.message}`);
       // eslint-disable-next-line no-console
@@ -113,9 +109,24 @@ asciidoctor.browser.appendMathJax = function () {
  */
 function clearBody () {
   document.body.innerHTML = '';
-  let contentDiv = document.createElement('div');
-  contentDiv.id = 'content';
-  document.body.appendChild(contentDiv);
+}
+
+function getCustomJavaScript (settings) {
+  if (settings.customJavaScriptContent) {
+    return new CustomJavaScript(settings.customJavaScriptContent, settings.loadCustomJavaScript);
+  }
+}
+
+function preprocessing (customJavaScript) {
+  if (customJavaScript && customJavaScript.loadDirective === 'before') {
+    document.body.appendChild(customJavaScript.htmlElement());
+  }
+}
+
+function postprocessing (customJavaScript) {
+  if (customJavaScript && customJavaScript.loadDirective === 'after') {
+    document.body.appendChild(customJavaScript.htmlElement());
+  }
 }
 
 /**
@@ -155,7 +166,7 @@ function getRenderingSettings (callback) {
 }
 
 /**
- * Update the <body> with the generated HTML
+ * Convert the AsciiDoc content to HTML and update the <body>
  */
 function updateBody (data, settings, scripts) {
   const options = buildAsciidoctorOptions(settings);
@@ -175,7 +186,10 @@ function updateBody (data, settings, scripts) {
   if (maxWidth) {
     document.body.style.maxWidth = maxWidth;
   }
-  document.getElementById('content').innerHTML = generatedHtml;
+  let contentDiv = document.createElement('div');
+  contentDiv.id = 'content';
+  contentDiv.innerHTML = generatedHtml;
+  document.body.appendChild(contentDiv);
 
   forceLoadDynamicObjects();
   refreshMathJax();
