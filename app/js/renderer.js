@@ -211,8 +211,9 @@ function updateBody (data, settings, scripts) {
   }
   let contentDiv = document.createElement('div');
   contentDiv.id = 'content';
-  contentDiv.innerHTML = generatedHtml;
   document.body.appendChild(contentDiv);
+  // REMIND: We need to use the html method in order to safely eval <script> (for instance Chartist.js)
+  $('#content').html(generatedHtml);
 
   forceLoadDynamicObjects();
   refreshMathJax();
