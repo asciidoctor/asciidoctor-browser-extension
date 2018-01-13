@@ -11,10 +11,18 @@ asciidoctor.browser.CUSTOM_JS_PREFIX = 'CUSTOM_JS_';
 asciidoctor.browser.JS_KEY = 'JS';
 asciidoctor.browser.JS_LOAD_KEY = 'JS_LOAD';
 
+class RenderingSettings {
+  constructor (customAttributes, safeMode, customScript) {
+    this.customAttributes = customAttributes;
+    this.safeMode = safeMode || 'secure';
+    this.customScript = customScript;
+  }
+}
+
 class CustomJavaScript {
   constructor (content, loadDirective) {
     this.content = content;
-    this.loadDirective = loadDirective;
+    this.loadDirective = loadDirective || 'after';
   }
 
   htmlElement () {
@@ -27,28 +35,29 @@ class CustomJavaScript {
 
 /**
  * Convert AsciiDoc as HTML
+ * @param data
+ * @returns {Promise<any>}
  */
-asciidoctor.browser.convert = function (data, callback) {
-  getRenderingSettings(function (settings) {
-    try {
+asciidoctor.browser.convert = function (data) {
+  return asciidoctor.browser.getRenderingSettings()
+    .then((settings) => {
       removeElement('mathjax-refresh-js');
       removeElement('asciidoctor-custom-js');
 
       const scripts = document.body.querySelectorAll('script'); // save scripts
       detectLiveReloadJs(scripts);
 
-      const customJavaScript = getCustomJavaScript(settings);
+      const customJavaScript = settings.customScript;
       clearBody();
       preprocessing(customJavaScript);
       updateBody(data, settings, scripts);
       postprocessing(customJavaScript);
-    } catch (e) {
-      showErrorMessage(`${e.name} : ${e.message}`);
+    })
+    .catch((error) => {
+      showErrorMessage(`${error.name} : ${error.message}`);
       // eslint-disable-next-line no-console
-      console.error(e.stack);
-    }
-    typeof callback === 'function' && callback();
-  });
+      console.error(error.stack);
+    });
 };
 
 /**
@@ -111,12 +120,6 @@ function clearBody () {
   document.body.innerHTML = '';
 }
 
-function getCustomJavaScript (settings) {
-  if (settings.customJavaScriptContent) {
-    return new CustomJavaScript(settings.customJavaScriptContent, settings.loadCustomJavaScript);
-  }
-}
-
 function preprocessing (customJavaScript) {
   if (customJavaScript && customJavaScript.loadDirective === 'before') {
     document.body.appendChild(customJavaScript.htmlElement());
@@ -141,29 +144,49 @@ function getThemeNameFromSettings (callback) {
 
 /**
  * Get user's rendering settings defined in the options page.
+ * @returns {Promise<RenderingSettings>}
  */
-function getRenderingSettings (callback) {
-  webExtension.storage.local.get([
+asciidoctor.browser.getRenderingSettings = async () => {
+  const settings = await getSettings([
     asciidoctor.browser.CUSTOM_ATTRIBUTES_KEY,
     asciidoctor.browser.SAFE_MODE_KEY,
     asciidoctor.browser.JS_KEY,
-    asciidoctor.browser.JS_LOAD_KEY], function (settings) {
-    const result = {
-      customAttributes: settings[asciidoctor.browser.CUSTOM_ATTRIBUTES_KEY],
-      safeMode: settings[asciidoctor.browser.SAFE_MODE_KEY] || 'secure',
-      customJavaScriptName: settings[asciidoctor.browser.JS_KEY],
-      loadCustomJavaScript: settings[asciidoctor.browser.JS_LOAD_KEY]
-    };
-    if (result.customJavaScriptName) {
-      asciidoctor.browser.getSetting(asciidoctor.browser.CUSTOM_JS_PREFIX + result.customJavaScriptName, function (customJavaScriptContent) {
-        result.customJavaScriptContent = customJavaScriptContent;
-        callback(result);
+    asciidoctor.browser.JS_LOAD_KEY]);
+  const customJavaScriptName = settings[asciidoctor.browser.JS_KEY];
+  const customAttributes = settings[asciidoctor.browser.CUSTOM_ATTRIBUTES_KEY];
+  const safeMode = settings[asciidoctor.browser.SAFE_MODE_KEY];
+  const customJavaScriptContent = await getCustomScriptContent(customJavaScriptName);
+  if (customJavaScriptContent) {
+    const customJavaScriptLoadDirective = settings[asciidoctor.browser.JS_LOAD_KEY];
+    return new RenderingSettings(
+      customAttributes,
+      safeMode,
+      new CustomJavaScript(customJavaScriptContent, customJavaScriptLoadDirective));
+  }
+  return new RenderingSettings(
+    customAttributes,
+    safeMode);
+};
+
+const getSettings = (keys) => {
+  return new Promise((resolve) => {
+    webExtension.storage.local.get(keys, (settings) => {
+      resolve(settings);
+    });
+  });
+};
+
+const getCustomScriptContent = (customJavaScriptName) => {
+  return new Promise((resolve) => {
+    if (customJavaScriptName) {
+      asciidoctor.browser.getSetting(asciidoctor.browser.CUSTOM_JS_PREFIX + customJavaScriptName, (customJavaScriptContent) => {
+        resolve(customJavaScriptContent);
       });
     } else {
-      callback(result);
+      resolve(undefined);
     }
   });
-}
+};
 
 /**
  * Convert the AsciiDoc content to HTML and update the <body>

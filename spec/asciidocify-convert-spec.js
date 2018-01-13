@@ -12,17 +12,18 @@ describe('Convert the AsciiDoc content', () => {
       callback(values);
     });
     // When
-    asciidoctor.browser.convert(data, () => {
-      // Twemoji must be present
-      expect(document.getElementById('twemoji-awesome-style').getAttribute('href')).toBe('css/twemoji-awesome.css');
-      // Chartist must be present
-      expect(document.getElementById('chartist-style').getAttribute('href')).toBe('css/chartist.min.css');
-      expect(document.getElementById('chartist-asciidoctor-style').innerText).not.toBe('');
-      // Font Awesome must be present
-      expect(document.getElementById('font-awesome-style').getAttribute('href')).toBe('css/font-awesome.min.css');
-      // Content must be converted
-      expect(document.getElementById('content').innerHTML).toContain('<h1>Hello world</h1>');
-      done();
-    });
+    asciidoctor.browser.convert(data)
+      .then(() => {
+        // Twemoji must be present
+        expect(document.getElementById('twemoji-awesome-style').getAttribute('href')).toBe('css/twemoji-awesome.css');
+        // Chartist must be present
+        expect(document.getElementById('chartist-style').getAttribute('href')).toBe('css/chartist.min.css');
+        expect(document.getElementById('chartist-asciidoctor-style').innerText).not.toBe('');
+        // Font Awesome must be present
+        expect(document.getElementById('font-awesome-style').getAttribute('href')).toBe('css/font-awesome.min.css');
+        // Content must be converted
+        expect(document.getElementById('content').innerHTML).toContain('<h1>Hello world</h1>');
+        done();
+      });
   });
 });
