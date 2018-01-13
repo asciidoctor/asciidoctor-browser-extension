@@ -23,14 +23,14 @@ asciidoctor.browser.asciidocify = function () {
   }
 };
 
-asciidoctor.browser.loadContent = function (data) {
+asciidoctor.browser.loadContent = function (request) {
   isExtensionEnabled(function (enabled) {
     // Extension is enabled
     if (enabled) {
       asciidoctor.browser.appendStyles();
       asciidoctor.browser.appendMathJax();
       asciidoctor.browser.appendHighlightJsScript();
-      asciidoctor.browser.convert(data.responseText);
+      asciidoctor.browser.update(request.responseText);
     }
     startAutoReload();
   });
@@ -68,37 +68,37 @@ function fetchContent () {
   $.ajax({
     url: location.href,
     cache: false,
-    complete: function (data) {
-      if (isHtmlContentType(data)) {
+    complete: function (request) {
+      if (isHtmlContentType(request)) {
         return;
       }
-      asciidoctor.browser.loadContent(data);
+      asciidoctor.browser.loadContent(request);
     }
   });
 }
 
-function reloadContent (data) {
+function reloadContent (source) {
   isLiveReloadDetected(function (liveReloadDetected) {
     // LiveReload.js has been detected
     if (!liveReloadDetected) {
       const key = 'md5' + location.href;
       getMd5sum(key, function (md5sum) {
-        if (md5sum && md5sum === md5(data)) {
+        if (md5sum && md5sum === md5(source)) {
           return;
         }
         // Content has changed...
         isExtensionEnabled(function (enabled) {
           // Extension is enabled
           if (enabled) {
-            // Convert AsciiDoc to HTML
-            asciidoctor.browser.convert(data);
+            // Update the content
+            asciidoctor.browser.update(source);
           } else {
             // Display plain content
-            $(document.body).html(`<pre style="word-wrap: break-word; white-space: pre-wrap;">${$(document.body).text(data).html()}</pre>`);
+            $(document.body).html(`<pre style="word-wrap: break-word; white-space: pre-wrap;">${$(document.body).text(source).html()}</pre>`);
           }
           // Update md5sum
           const value = {};
-          value[key] = md5(data);
+          value[key] = md5(source);
           webExtension.storage.local.set(value);
         });
       });
@@ -119,8 +119,8 @@ function startAutoReload () {
       },
       url: location.href,
       cache: false,
-      success: function (data) {
-        reloadContent(data);
+      success: function (source) {
+        reloadContent(source);
       }
     });
   }, AUTO_RELOAD_INTERVAL_TIME);
@@ -128,10 +128,10 @@ function startAutoReload () {
 
 /**
  * Is the content type html ?
- * @param data The data
+ * @param request The request
  * @return true if the content type is html, false otherwise
  */
-function isHtmlContentType (data) {
-  const contentType = data.getResponseHeader('Content-Type');
+function isHtmlContentType (request) {
+  const contentType = request.getResponseHeader('Content-Type');
   return contentType && (contentType.indexOf('html') > -1);
 }

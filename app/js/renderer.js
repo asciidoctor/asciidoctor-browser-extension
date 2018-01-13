@@ -33,14 +33,23 @@ class CustomJavaScript {
   }
 }
 
+class AsciidoctorDocument {
+  constructor (doc, html) {
+    this.doc = doc;
+    this.html = html;
+  }
+}
+
 /**
- * Convert AsciiDoc as HTML
- * @param data
+ * Update the content of the HTML document
+ * @param source AsciiDoc source
  * @returns {Promise<any>}
  */
-asciidoctor.browser.convert = function (data) {
+asciidoctor.browser.update = function (source) {
   return asciidoctor.browser.getRenderingSettings()
     .then((settings) => {
+      const asciidoctorDocument = asciidoctor.browser.convert(source, settings);
+
       removeElement('mathjax-refresh-js');
       removeElement('asciidoctor-custom-js');
 
@@ -52,7 +61,7 @@ asciidoctor.browser.convert = function (data) {
       const customJavaScript = settings.customScript;
       clearBody();
       preprocessing(customJavaScript);
-      updateBody(data, settings, scripts);
+      updateBody(asciidoctorDocument, scripts);
       postprocessing(customJavaScript);
     })
     .catch((error) => {
@@ -60,6 +69,12 @@ asciidoctor.browser.convert = function (data) {
       // eslint-disable-next-line no-console
       console.error(error.stack);
     });
+};
+
+asciidoctor.browser.convert = function (source, settings) {
+  const options = buildAsciidoctorOptions(settings);
+  const doc = processor.load(source, options);
+  return new AsciidoctorDocument(doc, doc.convert());
 };
 
 /**
@@ -191,11 +206,12 @@ const getCustomScriptContent = (customJavaScriptName) => {
 };
 
 /**
- * Convert the AsciiDoc content to HTML and update the <body>
+ * Update the HTML document with the Asciidoctor document
+ * @param asciidoctorDocument The Asciidoctor document
+ * @param scripts The scripts to restore
  */
-function updateBody (data, settings, scripts) {
-  const options = buildAsciidoctorOptions(settings);
-  const doc = processor.load(data, options);
+function updateBody (asciidoctorDocument, scripts) {
+  const doc = asciidoctorDocument.doc;
   if (doc.getAttribute('icons') === 'font') {
     appendFontAwesomeStyle();
   }
@@ -204,7 +220,6 @@ function updateBody (data, settings, scripts) {
   const title = doc.getDoctitle({use_fallback: true});
   const doctype = doc.getDoctype();
   const maxWidth = doc.getAttribute('max-width');
-  const generatedHtml = doc.convert();
 
   document.title = asciidoctor.browser.decodeEntities(title);
   document.body.className = doctype;
@@ -215,7 +230,7 @@ function updateBody (data, settings, scripts) {
   contentDiv.id = 'content';
   document.body.appendChild(contentDiv);
   // REMIND: We need to use the html method in order to safely eval <script> (for instance Chartist.js)
-  $('#content').html(generatedHtml);
+  $('#content').html(asciidoctorDocument.html);
 
   forceLoadDynamicObjects();
   refreshMathJax();

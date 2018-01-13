@@ -1,10 +1,10 @@
 let alreadyRun = false;
 
 // eslint-disable-next-line no-unused-vars
-function inject (data) {
+function inject (source) {
   if (!alreadyRun) {
     appendStyles();
-    asciidoctor.browser.convert(data);
+    asciidoctor.browser.update(source);
     alreadyRun = true;
   }
 }

@@ -1,7 +1,7 @@
-describe('Convert the AsciiDoc content', () => {
-  it('should convert the AsciiDoc content', (done) => {
+describe('Update the HTML document', () => {
+  it('should update the HTML document with the AsciiDoc source', (done) => {
     // Given
-    const data = '= Hello world';
+    const source = '= Hello world';
     spyOn(browser.storage.local, 'set').and.callFake(() => {
       // noop
     });
@@ -12,7 +12,7 @@ describe('Convert the AsciiDoc content', () => {
       callback(values);
     });
     // When
-    asciidoctor.browser.convert(data)
+    asciidoctor.browser.update(source)
       .then(() => {
         // Twemoji must be present
         expect(document.getElementById('twemoji-awesome-style').getAttribute('href')).toBe('css/twemoji-awesome.css');
