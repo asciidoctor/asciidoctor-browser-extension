@@ -351,7 +351,7 @@ function appendChartistStyle () {
     id: 'chartist-style',
     href: webExtension.extension.getURL('css/chartist.min.css')
   }));
-  appendOnce(document.head, createStylesheetLinkElement({
+  appendOnce(document.head, createStyleElement({
     id: 'chartist-asciidoctor-style',
     innerHTML: '.ct-chart .ct-series.ct-series-a .ct-line {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-line {stroke:#72B3CC} .ct-chart .ct-series.ct-series-a .ct-point {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-point {stroke:#72B3CC}'
   }));
@@ -430,6 +430,16 @@ function removeElement (id) {
   if (element) {
     element.parentNode.removeChild(element);
   }
+}
+
+/**
+ * Create a <style type="text/css"> element.
+ * @param attributes
+ */
+function createStyleElement (attributes) {
+  const style = document.createElement('style');
+  style.type = 'text/css';
+  return Object.assign(style, attributes);
 }
 
 /**
