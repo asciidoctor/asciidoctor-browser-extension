@@ -44,7 +44,9 @@ asciidoctor.browser.convert = function (data) {
       removeElement('mathjax-refresh-js');
       removeElement('asciidoctor-custom-js');
 
-      const scripts = document.body.querySelectorAll('script'); // save scripts
+      // Save the scripts that are present at the root of the <body> to be able to restore them after the update
+      // QUESTION: Should we remove this code ? Since using livereload and this extension is not recommended!
+      const scripts = document.body.querySelectorAll(':scope > script');
       detectLiveReloadJs(scripts);
 
       const customJavaScript = settings.customScript;
