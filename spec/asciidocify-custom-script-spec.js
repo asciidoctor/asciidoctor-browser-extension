@@ -1,7 +1,7 @@
 describe('Append a custom script', () => {
   it('should append before the content', (done) => {
     // Given
-    const data = '= Hello world';
+    const source = '= Hello world';
     spyOn(browser.storage.local, 'set').and.callFake(() => {
       // noop
     });
@@ -15,7 +15,7 @@ describe('Append a custom script', () => {
       callback(values);
     });
     // When
-    asciidoctor.browser.convert(data)
+    asciidoctor.browser.update(source)
       .then(() => {
         // the custom script must be the first element in the <body>
         expect(document.body.children[0].innerText).toBe('const bar = \'bar\';');
@@ -27,7 +27,7 @@ describe('Append a custom script', () => {
 
   it('should append after the content', (done) => {
     // Given
-    const data = '= Hello world';
+    const source = '= Hello world';
     spyOn(browser.storage.local, 'set').and.callFake(() => {
       // noop
     });
@@ -41,7 +41,7 @@ describe('Append a custom script', () => {
       callback(values);
     });
     // When
-    asciidoctor.browser.convert(data)
+    asciidoctor.browser.update(source)
       .then(() => {
         // the content must be the first element in the <body>
         expect(document.body.children[0].id).toBe('content');
