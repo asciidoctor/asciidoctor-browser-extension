@@ -1,4 +1,11 @@
 describe('Update the HTML document', () => {
+
+  const Constants = asciidoctor.browser.constants();
+  const Dom = asciidoctor.browser.dom(document);
+  const Theme = asciidoctor.browser.theme(browser, Constants);
+  const Settings = asciidoctor.browser.settings(browser, Constants);
+  const Renderer = asciidoctor.browser.renderer(browser, document, Constants, Settings, Dom, Theme);
+
   it('should update the HTML document with the AsciiDoc source', (done) => {
     // Given
     const source = '= Hello world';
@@ -7,12 +14,12 @@ describe('Update the HTML document', () => {
     });
     spyOn(browser.storage.local, 'get').and.callFake((name, callback) => {
       const values = [];
-      values[asciidoctor.browser.CUSTOM_ATTRIBUTES_KEY] = '';
-      values[asciidoctor.browser.SAFE_MODE_KEY] = 'safe';
+      values[Constants.CUSTOM_ATTRIBUTES_KEY] = '';
+      values[Constants.SAFE_MODE_KEY] = 'safe';
       callback(values);
     });
     // When
-    asciidoctor.browser.update(source)
+    Renderer.update(source)
       .then(() => {
         // Twemoji must be present
         expect(document.getElementById('twemoji-awesome-style').getAttribute('href')).toBe('css/twemoji-awesome.css');

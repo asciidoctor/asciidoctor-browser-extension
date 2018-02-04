@@ -1,4 +1,11 @@
 describe('Append a custom script', () => {
+
+  const Constants = asciidoctor.browser.constants();
+  const Dom = asciidoctor.browser.dom(document);
+  const Theme = asciidoctor.browser.theme(browser, Constants);
+  const Settings = asciidoctor.browser.settings(browser, Constants);
+  const Renderer = asciidoctor.browser.renderer(browser, document, Constants, Settings, Dom, Theme);
+
   it('should append before the content', (done) => {
     // Given
     const source = '= Hello world';
@@ -7,15 +14,15 @@ describe('Append a custom script', () => {
     });
     spyOn(browser.storage.local, 'get').and.callFake((name, callback) => {
       const values = [];
-      values[asciidoctor.browser.CUSTOM_ATTRIBUTES_KEY] = '';
-      values[asciidoctor.browser.SAFE_MODE_KEY] = 'safe';
-      values[asciidoctor.browser.JS_KEY] = 'bar';
-      values[asciidoctor.browser.JS_LOAD_KEY] = 'before';
-      values[asciidoctor.browser.CUSTOM_JS_PREFIX + 'bar'] = 'const bar = \'bar\';';
+      values[Constants.CUSTOM_ATTRIBUTES_KEY] = '';
+      values[Constants.SAFE_MODE_KEY] = 'safe';
+      values[Constants.JS_KEY] = 'bar';
+      values[Constants.JS_LOAD_KEY] = 'before';
+      values[Constants.CUSTOM_JS_PREFIX + 'bar'] = 'const bar = \'bar\';';
       callback(values);
     });
     // When
-    asciidoctor.browser.update(source)
+    Renderer.update(source)
       .then(() => {
         // the custom script must be the first element in the <body>
         expect(document.body.children[0].innerText).toBe('const bar = \'bar\';');
@@ -33,15 +40,15 @@ describe('Append a custom script', () => {
     });
     spyOn(browser.storage.local, 'get').and.callFake((name, callback) => {
       const values = [];
-      values[asciidoctor.browser.CUSTOM_ATTRIBUTES_KEY] = '';
-      values[asciidoctor.browser.SAFE_MODE_KEY] = 'safe';
-      values[asciidoctor.browser.JS_KEY] = 'foo';
-      values[asciidoctor.browser.JS_LOAD_KEY] = 'after';
-      values[asciidoctor.browser.CUSTOM_JS_PREFIX + 'foo'] = 'const foo = \'foo\';';
+      values[Constants.CUSTOM_ATTRIBUTES_KEY] = '';
+      values[Constants.SAFE_MODE_KEY] = 'safe';
+      values[Constants.JS_KEY] = 'foo';
+      values[Constants.JS_LOAD_KEY] = 'after';
+      values[Constants.CUSTOM_JS_PREFIX + 'foo'] = 'const foo = \'foo\';';
       callback(values);
     });
     // When
-    asciidoctor.browser.update(source)
+    Renderer.update(source)
       .then(() => {
         // the content must be the first element in the <body>
         expect(document.body.children[0].id).toBe('content');
