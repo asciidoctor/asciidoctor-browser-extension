@@ -1,14 +1,18 @@
 describe('Retrieve the rendering settings', () => {
+
+  const Constants = asciidoctor.browser.constants();
+  const Settings = asciidoctor.browser.settings(browser, Constants);
+
   it('should return the configured settings', (done) => {
     // Given
     spyOn(browser.storage.local, 'get').and.callFake((name, callback) => {
       const values = [];
-      values[asciidoctor.browser.CUSTOM_ATTRIBUTES_KEY] = 'foo=bar';
-      values[asciidoctor.browser.SAFE_MODE_KEY] = 'server';
+      values[Constants.CUSTOM_ATTRIBUTES_KEY] = 'foo=bar';
+      values[Constants.SAFE_MODE_KEY] = 'server';
       callback(values);
     });
     // When
-    asciidoctor.browser.getRenderingSettings()
+    Settings.getRenderingSettings()
       .then((renderingSettings) => {
         expect(renderingSettings.customAttributes).toBe('foo=bar');
         expect(renderingSettings.safeMode).toBe('server');
@@ -23,7 +27,7 @@ describe('Retrieve the rendering settings', () => {
       callback(values);
     });
     // When
-    asciidoctor.browser.getRenderingSettings()
+    Settings.getRenderingSettings()
       .then((renderingSettings) => {
         expect(renderingSettings.safeMode).toBe('secure');
         done();
@@ -38,7 +42,7 @@ describe('Retrieve the rendering settings', () => {
         callback(values);
       });
       // When
-      asciidoctor.browser.getRenderingSettings()
+      Settings.getRenderingSettings()
         .then((renderingSettings) => {
           expect(renderingSettings.customScript).toBeUndefined();
           done();
@@ -49,11 +53,11 @@ describe('Retrieve the rendering settings', () => {
       // Given
       spyOn(browser.storage.local, 'get').and.callFake((name, callback) => {
         const values = [];
-        values[asciidoctor.browser.JS_KEY] = 'alert';
+        values[Constants.JS_KEY] = 'alert';
         callback(values);
       });
       // When
-      asciidoctor.browser.getRenderingSettings()
+      Settings.getRenderingSettings()
         .then((renderingSettings) => {
           expect(renderingSettings.customScript).toBeUndefined();
           done();
@@ -64,12 +68,12 @@ describe('Retrieve the rendering settings', () => {
       // Given
       spyOn(browser.storage.local, 'get').and.callFake((name, callback) => {
         const values = [];
-        values[asciidoctor.browser.JS_KEY] = 'alert';
-        values[asciidoctor.browser.CUSTOM_JS_PREFIX + 'alert'] = 'alert();';
+        values[Constants.JS_KEY] = 'alert';
+        values[Constants.CUSTOM_JS_PREFIX + 'alert'] = 'alert();';
         callback(values);
       });
       // When
-      asciidoctor.browser.getRenderingSettings()
+      Settings.getRenderingSettings()
         .then((renderingSettings) => {
           expect(renderingSettings.customScript.content).toBe('alert();');
           expect(renderingSettings.customScript.loadDirective).toBe('after');
@@ -81,13 +85,13 @@ describe('Retrieve the rendering settings', () => {
       // Given
       spyOn(browser.storage.local, 'get').and.callFake((name, callback) => {
         const values = [];
-        values[asciidoctor.browser.JS_KEY] = 'alert';
-        values[asciidoctor.browser.CUSTOM_JS_PREFIX + 'alert'] = 'alert();';
-        values[asciidoctor.browser.JS_LOAD_KEY] = 'before';
+        values[Constants.JS_KEY] = 'alert';
+        values[Constants.CUSTOM_JS_PREFIX + 'alert'] = 'alert();';
+        values[Constants.JS_LOAD_KEY] = 'before';
         callback(values);
       });
       // When
-      asciidoctor.browser.getRenderingSettings()
+      Settings.getRenderingSettings()
         .then((renderingSettings) => {
           expect(renderingSettings.customScript.content).toBe('alert();');
           expect(renderingSettings.customScript.loadDirective).toBe('before');
