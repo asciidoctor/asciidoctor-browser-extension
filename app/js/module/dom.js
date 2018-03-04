@@ -89,5 +89,15 @@ asciidoctor.browser.dom = ((document) => {
     return div.innerHTML;
   };
 
+  /**
+   * Set the appropriate viewport <meta> tag
+   */
+  module.setViewport = () => {
+    const viewportMeta = document.createElement('meta');
+    viewportMeta.name = "viewport";
+    viewportMeta.content = "width=device-width, initial-scale=1.0";
+    module.appendOnce(document.head, viewportMeta);
+  }
+
   return module;
 });

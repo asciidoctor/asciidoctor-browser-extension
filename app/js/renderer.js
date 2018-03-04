@@ -21,6 +21,7 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
       const settings = await Settings.getRenderingSettings();
       const asciidoctorDocument = module.convert(source, settings);
 
+      Dom.setViewport();
       Dom.removeElement('mathjax-refresh-js');
       Dom.removeElement('asciidoctor-custom-js');
 
