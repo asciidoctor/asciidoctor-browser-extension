@@ -93,10 +93,15 @@ asciidoctor.browser.dom = ((document) => {
    * Set the appropriate viewport <meta> tag
    */
   module.setViewport = () => {
+    // Remove existing viewport meta elements.
+    document.getElementsByName('viewport').forEach((existingViewport) => {
+      existingViewport.remove();
+    });
+    // Set the viewport meta element that we want.
     const viewportMeta = document.createElement('meta');
-    viewportMeta.name = "viewport";
-    viewportMeta.content = "width=device-width, initial-scale=1.0";
-    module.appendOnce(document.head, viewportMeta);
+    viewportMeta.name = 'viewport';
+    viewportMeta.content = 'width=device-width, initial-scale=1.0';
+    document.head.appendChild(viewportMeta);
   }
 
   return module;

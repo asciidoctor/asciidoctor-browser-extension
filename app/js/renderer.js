@@ -12,6 +12,15 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
   const module = {};
 
   /**
+   * Initialize the HTML document
+   */
+  module.prepare = () => {
+    module.appendMathJax();
+    module.appendHighlightJsScript();
+    Dom.setViewport();
+  };
+
+  /**
    * Update the content of the HTML document
    * @param source AsciiDoc source
    * @returns {Promise<boolean>}
@@ -21,7 +30,6 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
       const settings = await Settings.getRenderingSettings();
       const asciidoctorDocument = module.convert(source, settings);
 
-      Dom.setViewport();
       Dom.removeElement('mathjax-refresh-js');
       Dom.removeElement('asciidoctor-custom-js');
 
