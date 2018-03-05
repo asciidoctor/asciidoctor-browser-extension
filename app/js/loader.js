@@ -21,8 +21,7 @@ asciidoctor.browser.loader = (webExtension, document, location, Settings, Render
     Settings.isExtensionEnabled((enabled) => {
       // Extension is enabled
       if (enabled) {
-        Renderer.appendMathJax();
-        Renderer.appendHighlightJsScript();
+        Renderer.prepare();
         Renderer.update(request.responseText);
       }
       startAutoReload();

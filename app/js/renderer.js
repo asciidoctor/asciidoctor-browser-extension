@@ -12,6 +12,15 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
   const module = {};
 
   /**
+   * Initialize the HTML document
+   */
+  module.prepare = () => {
+    module.appendMathJax();
+    module.appendHighlightJsScript();
+    Dom.setViewport();
+  };
+
+  /**
    * Update the content of the HTML document
    * @param source AsciiDoc source
    * @returns {Promise<boolean>}
