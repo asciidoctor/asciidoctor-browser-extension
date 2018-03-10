@@ -37,6 +37,30 @@ asciidoctor.browser.settings = ((webExtension, Constants) => {
   module.isLiveReloadDetected = () => module.getSetting(Constants.LIVERELOADJS_DETECTED_KEY);
 
   /**
+   * Get the local poll frequency defined in the options page.
+   */
+  module.getLocalPollFrequency = async () => {
+    const pollFrequency = await module.getSetting(Constants.LOCAL_POLL_FREQUENCY_KEY);
+    if (typeof pollFrequency === 'undefined') {
+      // If the poll frequency is not defined, by default use 2 seconds
+      return 2;
+    }
+    return parseInt(pollFrequency);
+  };
+
+  /**
+   * Get the remote poll frequency defined in the options page.
+   */
+  module.getRemotePollFrequency = async () => {
+    const pollFrequency = await module.getSetting(Constants.REMOTE_POLL_FREQUENCY_KEY);
+    if (typeof pollFrequency === 'undefined') {
+      // If the poll frequency is not defined, by default use 2 seconds
+      return 2;
+    }
+    return parseInt(pollFrequency);
+  };
+
+  /**
    * Get the user's rendering settings defined in the options page.
    * @returns {Promise<RenderingSettings>}
    */
@@ -57,9 +81,7 @@ asciidoctor.browser.settings = ((webExtension, Constants) => {
         safeMode,
         new CustomJavaScript(customJavaScriptContent, customJavaScriptLoadDirective));
     }
-    return new RenderingSettings(
-      customAttributes,
-      safeMode);
+    return new RenderingSettings(customAttributes, safeMode);
   };
 
   const getCustomScriptContent = async (customJavaScriptName) =>

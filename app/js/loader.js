@@ -1,6 +1,4 @@
 asciidoctor.browser.loader = (webExtension, document, location, Settings, Renderer) => {
-  const AUTO_RELOAD_INTERVAL_TIME = 2000;
-
   const module = {};
 
   module.load = async () => {
@@ -67,8 +65,15 @@ asciidoctor.browser.loader = (webExtension, document, location, Settings, Render
 
   let autoReloadInterval;
 
-  const startAutoReload = () => {
+  const startAutoReload = async () => {
+    const href = location.href;
+    const remoteFile = (href.startsWith('http://') || href.startsWith('https://'));
+    const pollFrequency = remoteFile ? await Settings.getRemotePollFrequency() : await Settings.getLocalPollFrequency();
     clearInterval(autoReloadInterval);
+    if (pollFrequency === 0) {
+      // Poll is disabled!
+      return;
+    }
     autoReloadInterval = setInterval(() => {
       $.ajax({
         beforeSend: (xhr) => {
@@ -82,7 +87,7 @@ asciidoctor.browser.loader = (webExtension, document, location, Settings, Render
           reloadContent(source);
         }
       });
-    }, AUTO_RELOAD_INTERVAL_TIME);
+    }, pollFrequency * 1000);
   };
 
   /**

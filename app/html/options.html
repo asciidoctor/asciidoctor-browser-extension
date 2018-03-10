@@ -3,9 +3,11 @@
   <title>Asciidoctor.js Live Preview Options</title>
   <link rel="stylesheet" href="../css/bootstrap.min.css">
   <link rel="stylesheet" href="../css/font-awesome.min.css">
-  <script src="../js/vendor/jquery.min.js"></script>
-  <script src="../js/vendor/bootstrap.min.js"></script>
   <style>
+    html {
+      min-width: 35rem
+    }
+
     .alert-sm {
       margin-top: 10px;
       margin-bottom: 15px;
@@ -43,13 +45,14 @@
       <span class="sr-only">Close</span>
     </button>
     <div class="content">
-      <strong><i class="fa fa-info-circle"></i> Heads up!</strong> If your are using Chrome or Opera, in order to use this extension on local files (i.e. files on this computer), you must check the option <code>Allow access to file URLs</code> on the <a id="openExtensionsPageLink" href="#">chrome://extensions</a> page
+      <strong><i class="fa fa-info-circle"></i> Heads up!</strong>
+      If your are using Chrome or Opera, in order to use this extension on local files (i.e. files on this computer),
+      you must check the option <code>Allow access to file URLs</code> on the <a id="openExtensionsPageLink" href="#">chrome://extensions</a> page
     </div>
   </div>
   <form class="form-horizontal" role="form">
     <div class="form-group">
       <label for="inputCustomAttributes" class="col-lg-2 control-label">Custom attributes</label>
-
       <div class="col-lg-10">
         <div class="input-group">
           <input type="text" class="form-control form-input" id="inputCustomAttributes" name="inputCustomAttributes">
@@ -61,7 +64,6 @@
     </div>
     <div class="form-group">
       <label for="selectSafeMode" class="col-lg-2 control-label">Safe mode</label>
-
       <div class="col-lg-10">
         <div class="input-group">
           <select class="form-control form-input" id="selectSafeMode" name="selectSafeMode">
@@ -79,7 +81,6 @@
     </div>
     <div class="form-group">
       <label for="inputAllowTxtExtension" class="col-lg-2 control-label">Preview .txt files</label>
-
       <div class="col-lg-10">
         <div class="input-group">
           <div class="checkbox">
@@ -93,8 +94,41 @@
       </div>
     </div>
     <div class="form-group">
+      <label for="selectRemotePollFrequency" class="col-lg-2 control-label">Poll for changes to files loaded from URLs</label>
+      <div class="col-lg-10">
+        <div class="input-group">
+          <select class="form-control form-input" id="selectRemotePollFrequency" name="selectRemotePollFrequency">
+            <option value="0">disabled</option>
+            <option value="1">1s</option>
+            <option value="2">2s</option>
+            <option value="3">3s</option>
+            <option value="5">5s</option>
+            <option value="8">8s</option>
+          </select>
+          <span data-save-indicator="selectRemotePollFrequency"></span>
+        </div>
+        <span class="help-block">URLs use the <code>http</code> or <code>https</code> protocol.</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="selectLocalPollFrequency" class="col-lg-2 control-label">Poll for changes to local files</label>
+      <div class="col-lg-10">
+        <div class="input-group">
+          <select class="form-control form-input" id="selectLocalPollFrequency" name="selectLocalPollFrequency">
+            <option value="0">disabled</option>
+            <option value="1">1s</option>
+            <option value="2">2s</option>
+            <option value="3">3s</option>
+            <option value="5">5s</option>
+            <option value="8">8s</option>
+          </select>
+          <span data-save-indicator="selectLocalPollFrequency"></span>
+        </div>
+        <span class="help-block">Local files use the <code>file</code> protocol (or no protocol).</span>
+      </div>
+    </div>
+    <div class="form-group">
       <label for="selectTheme" class="col-lg-2 control-label">Theme / Stylesheet</label>
-
       <div class="col-lg-10">
         <div class="row">
           <div class="col-lg-12">
@@ -125,7 +159,6 @@
           <div class="col-lg-12">
             <b>Add Stylesheet...</b>
             <input type="file" id="inputCustomTheme" accept="text/css">
-
             <div id="addCustomThemeAlert" role="alert">
               <button type="button" class="close">
                 <span aria-hidden="true">&times;</span>
@@ -139,7 +172,6 @@
     </div>
     <div class="form-group">
       <label for="selectTheme" class="col-lg-2 control-label">JavaScript</label>
-
       <div class="col-lg-10">
         <div class="input-group">
           <select class="form-control form-input" id="selectJavaScript" name="selectJavaScript">
@@ -150,7 +182,6 @@
         <span class="help-block">Add a custom JavaScript to the rendered HTML.</span>
         <b>Add JavaScript...</b>
         <input type="file" id="inputCustomJavaScript" accept="application/javascript">
-
         <div id="addCustomJavaScriptAlert" role="alert">
           <button type="button" class="close">
             <span aria-hidden="true">&times;</span>
@@ -159,10 +190,8 @@
           <div class="content"></div>
         </div>
         <br/>
-
         <div class="input-group">
           <b>Load the JavaScript...</b>
-
           <div class="radio">
             <label>
               <input class="form-input" type="radio" name="optionsLoadJavaScript" id="optionsJavaScriptAfter" value="after">
@@ -181,7 +210,6 @@
     </div>
   </form>
   <br/>
-
   <div id="saveAlert" class="alert alert-success">
     <button type="button" class="close">
       <span aria-hidden="true">&times;</span>
