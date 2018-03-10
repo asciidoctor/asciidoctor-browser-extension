@@ -19,40 +19,22 @@ asciidoctor.browser.settings = ((webExtension, Constants) => {
   const module = {};
 
   /**
-   * FIXME: Returns Promise
-   * @param callback
+   * Is the .txt extension allowed ?
+   * @returns {Promise<boolean>}
    */
-  module.isTxtExtAllowed = (callback) => {
-    webExtension.storage.local.get(Constants.ALLOW_TXT_EXTENSION_KEY, (items) => {
-      const allowed = items[Constants.ALLOW_TXT_EXTENSION_KEY] === 'true';
-      callback(allowed);
-    });
-  }
+  module.isTxtExtAllowed = async () => await module.getSetting(Constants.ALLOW_TXT_EXTENSION_KEY) === 'true'
 
   /**
-   * FIXME: Returns Promise
-   * @param callback
+   * Is the extension currently enabled ?
+   * @returns {Promise<boolean>}
    */
-  module.isExtensionEnabled = (callback) => {
-    module.getSetting(Constants.ENABLE_RENDER_KEY, callback);
-  }
+  module.isExtensionEnabled = () => module.getSetting(Constants.ENABLE_RENDER_KEY);
 
   /**
-   * FIXME: Returns Promise
-   * @param callback
+   * Is "LiveReload" currently enabled on the page ?
+   * @returns {Promise<boolean>}
    */
-  module.isLiveReloadDetected = (callback) => {
-    module.getSetting(Constants.LIVERELOADJS_DETECTED_KEY, callback);
-  }
-
-  /**
-   * FIXME: Returns Promise
-   * @param key
-   * @param callback
-   */
-  module.getMd5sum = (key, callback) => {
-    module.getSetting(key, callback);
-  }
+  module.isLiveReloadDetected = () => module.getSetting(Constants.LIVERELOADJS_DETECTED_KEY);
 
   /**
    * Get the user's rendering settings defined in the options page.
@@ -80,41 +62,30 @@ asciidoctor.browser.settings = ((webExtension, Constants) => {
       safeMode);
   };
 
-  const getCustomScriptContent = (customJavaScriptName) => {
-    return new Promise((resolve) => {
-      if (customJavaScriptName) {
-        module.getSetting(Constants.CUSTOM_JS_PREFIX + customJavaScriptName, (customJavaScriptContent) => {
-          resolve(customJavaScriptContent);
-        });
-      } else {
-        resolve(undefined);
-      }
-    });
-  };
+  const getCustomScriptContent = async (customJavaScriptName) =>
+    customJavaScriptName ? module.getSetting(Constants.CUSTOM_JS_PREFIX + customJavaScriptName) : undefined
 
   /**
    * Get user's setting defined in the options page.
-   * FIXME: Returns Promise
    * @param key
-   * @param callback
+   * @returns {Promise<any>}
    */
-  module.getSetting = (key, callback) => {
+  module.getSetting = (key) => new Promise((resolve) => {
     webExtension.storage.local.get(key, (items) => {
-      callback(items[key]);
-    });
-  };
+      resolve(items[key]);
+    })
+  });
 
   /**
+   * Get user's settings defined in the options page.
    * @param keys
    * @returns {Promise<any>}
    */
-  module.getSettings = (keys) => {
-    return new Promise((resolve) => {
-      webExtension.storage.local.get(keys, (settings) => {
-        resolve(settings);
-      });
+  module.getSettings = (keys) => new Promise((resolve) => {
+    webExtension.storage.local.get(keys, (settings) => {
+      resolve(settings);
     });
-  };
+  });
 
   return module;
 });
