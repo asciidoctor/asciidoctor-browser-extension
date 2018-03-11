@@ -128,7 +128,7 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
     }
   };
 
-  const appendThemeStyle = (themeName) => {
+  const appendThemeStyle = async (themeName) => {
     const themeNames = Theme.getDefaultThemeNames();
     // Check if the theme is packaged in the extension... if not it's a custom theme
     if (themeNames.includes(themeName)) {
@@ -137,14 +137,13 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
         href: webExtension.extension.getURL(`css/themes/${themeName}.css`)
       }));
     } else {
-      Settings.getSetting(Constants.CUSTOM_THEME_PREFIX + themeName, (customThemeContent) => {
-        if (customThemeContent) {
-          Dom.replace(document.head, Dom.createStyleElement({
-            id: 'asciidoctor-style',
-            innerHTML: customThemeContent
-          }));
-        }
-      });
+      const customThemeContent = await Settings.getSetting(Constants.CUSTOM_THEME_PREFIX + themeName);
+      if (customThemeContent) {
+        Dom.replace(document.head, Dom.createStyleElement({
+          id: 'asciidoctor-style',
+          innerHTML: customThemeContent
+        }));
+      }
     }
   };
 

@@ -3,29 +3,25 @@ asciidoctor.browser.loader = (webExtension, document, location, Settings, Render
 
   const module = {};
 
-  module.load = () => {
+  module.load = async () => {
     const txtExtensionRegex = /\.txt[.|?]?.*?$/;
     if (location.href.match(txtExtensionRegex)) {
-      Settings.isTxtExtAllowed((allowed) => {
-        // Extension allows txt extension
-        if (allowed) {
-          fetchContent();
-        }
-      });
+      // .txt extension should be allowed ?
+      if (await Settings.isTxtExtAllowed()) {
+        fetchContent();
+      }
     } else {
       fetchContent();
     }
   };
 
-  module.loadContent = (request) => {
-    Settings.isExtensionEnabled((enabled) => {
-      // Extension is enabled
-      if (enabled) {
-        Renderer.prepare();
-        Renderer.update(request.responseText);
-      }
-      startAutoReload();
-    });
+  module.loadContent = async (request) => {
+    // Extension is enabled ?
+    if (await Settings.isExtensionEnabled()) {
+      Renderer.prepare();
+      Renderer.update(request.responseText);
+    }
+    startAutoReload();
   };
 
   const fetchContent = () => {
@@ -41,37 +37,32 @@ asciidoctor.browser.loader = (webExtension, document, location, Settings, Render
     });
   };
 
-  const reloadContent = (source) => {
-    Settings.isLiveReloadDetected((liveReloadDetected) => {
-      // LiveReload.js has been detected
-      if (!liveReloadDetected) {
-        const key = 'md5' + location.href;
-        Settings.getMd5sum(key, (md5sum) => {
-          if (md5sum && md5sum === md5(source)) {
-            return;
-          }
-          // Content has changed...
-          isExtensionEnabled((enabled) => {
-            // Extension is enabled
-            if (enabled) {
-              // Update the content
-              Renderer.update(source);
-            } else {
-              // Display plain content
-              document.body.innerHTML = '';
-              const preElement = document.createElement('pre');
-              preElement.style = 'word-wrap: break-word; white-space: pre-wrap;';
-              preElement.innerText = source;
-              document.body.appendChild(preElement);
-            }
-            // Update md5sum
-            const value = {};
-            value[key] = md5(source);
-            webExtension.storage.local.set(value);
-          });
-        });
+  const reloadContent = async (source) => {
+    const liveReloadDetected = await Settings.isLiveReloadDetected();
+    // LiveReload.js has been detected
+    if (!liveReloadDetected) {
+      const md5key = 'md5' + location.href;
+      const md5sum = await Settings.getSetting(md5key);
+      if (md5sum && md5sum === md5(source)) {
+        return;
       }
-    });
+      // Content has changed...
+      if (await Settings.isExtensionEnabled()) {
+        // Update the content
+        Renderer.update(source);
+      } else {
+        // Display plain content
+        document.body.innerHTML = '';
+        const preElement = document.createElement('pre');
+        preElement.style = 'word-wrap: break-word; white-space: pre-wrap;';
+        preElement.innerText = source;
+        document.body.appendChild(preElement);
+      }
+      // Update md5sum
+      const value = {};
+      value[md5key] = md5(source);
+      webExtension.storage.local.set(value);
+    }
   };
 
   let autoReloadInterval;

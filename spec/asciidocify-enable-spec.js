@@ -18,9 +18,10 @@ describe('Enable or disable the extension', () => {
     });
     spyOn(Renderer, 'update').and.callFake(() => Promise.resolve());
     // When
-    Loader.loadContent(request);
-    // Then
-    expect(Renderer.update).toHaveBeenCalledWith('= Hello world');
+    Loader.loadContent(request)
+      .then(() => {
+        expect(Renderer.update).toHaveBeenCalledWith('= Hello world');
+      });
   });
 
   it('should not call convert method if the extension is disabled', () => {
@@ -34,8 +35,9 @@ describe('Enable or disable the extension', () => {
     });
     spyOn(Renderer, 'update').and.callFake(() => Promise.resolve());
     // When
-    Loader.loadContent(request);
-    // Then
-    expect(Renderer.update).not.toHaveBeenCalledWith('= Hello world');
+    Loader.loadContent(request)
+      .then(() => {
+        expect(Renderer.update).not.toHaveBeenCalledWith('= Hello world');
+      });
   });
 });
