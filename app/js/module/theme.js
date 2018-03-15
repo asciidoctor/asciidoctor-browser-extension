@@ -46,7 +46,6 @@ asciidoctor.browser.theme = ((webExtension, Constants) => {
         resolve(true);
         return;
       }
-      console.log('load custom theme', themeName);
       module.getSetting(Constants.CUSTOM_THEME_PREFIX + themeName, (customThemeContent) => {
         resolve(!!customThemeContent);
       });
