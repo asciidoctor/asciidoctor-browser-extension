@@ -4,6 +4,8 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser;
   const selectTheme = document.getElementById('selectTheme');
   const selectJavaScript = document.getElementById('selectJavaScript');
   const selectSafeMode = document.getElementById('selectSafeMode');
+  const selectLocalPollFrequency = document.getElementById('selectLocalPollFrequency');
+  const selectRemotePollFrequency = document.getElementById('selectRemotePollFrequency');
   const inputAllowTxtExtension = document.getElementById('inputAllowTxtExtension');
   const inputCustomAttributes = document.getElementById('inputCustomAttributes');
   const inputLoadJavaScript = Array.from(document.body.querySelectorAll('input[name=optionsLoadJavaScript]'));
@@ -38,6 +40,8 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser;
   const optionsChanged = () => {
     return localStorage['CUSTOM_ATTRIBUTES'] !== inputCustomAttributes.value ||
       localStorage['SAFE_MODE'] !== selectSafeMode.value ||
+      localStorage['LOCAL_POLL_FREQUENCY'] !== selectLocalPollFrequency.value ||
+      localStorage['REMOTE_POLL_FREQUENCY'] !== selectRemotePollFrequency.value ||
       localStorage['ALLOW_TXT_EXTENSION'] !== inputAllowTxtExtension.checked.toString() ||
       localStorage['THEME'] !== selectTheme.value ||
       localStorage['JS'] !== selectJavaScript.value ||
@@ -50,6 +54,8 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser;
   const saveOptions = () => {
     localStorage['CUSTOM_ATTRIBUTES'] = inputCustomAttributes.value;
     localStorage['SAFE_MODE'] = selectSafeMode.value;
+    localStorage['LOCAL_POLL_FREQUENCY'] = selectLocalPollFrequency.value;
+    localStorage['REMOTE_POLL_FREQUENCY'] = selectRemotePollFrequency.value;
     localStorage['ALLOW_TXT_EXTENSION'] = inputAllowTxtExtension.checked;
     localStorage['THEME'] = selectTheme.value;
     localStorage['JS'] = selectJavaScript.value;
@@ -63,6 +69,8 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser;
   const restoreOptions = () => {
     inputCustomAttributes.value = localStorage['CUSTOM_ATTRIBUTES'] || '';
     selectSafeMode.value = localStorage['SAFE_MODE'] || 'secure';
+    selectLocalPollFrequency.value = localStorage['LOCAL_POLL_FREQUENCY'] || '2';
+    selectRemotePollFrequency.value = localStorage['REMOTE_POLL_FREQUENCY'] || '2';
     inputAllowTxtExtension.checked = localStorage['ALLOW_TXT_EXTENSION'] === 'true';
     const loadJavaScriptValue = ['before', 'after'].includes(localStorage['JS_LOAD']) ? localStorage['JS_LOAD'] : 'after';
     inputLoadJavaScript.find((element) => element.value === loadJavaScriptValue).checked = true;

@@ -15,7 +15,9 @@ asciidoctor.browser.constants = (() => {
     CUSTOM_THEME_PREFIX: 'CUSTOM_THEME_',
     CUSTOM_JS_PREFIX: 'CUSTOM_JS_',
     JS_KEY: 'JS',
-    JS_LOAD_KEY: 'JS_LOAD'
+    JS_LOAD_KEY: 'JS_LOAD',
+    REMOTE_POLL_FREQUENCY_KEY: 'REMOTE_POLL_FREQUENCY',
+    LOCAL_POLL_FREQUENCY_KEY: 'LOCAL_POLL_FREQUENCY'
   }
   return module;
 });

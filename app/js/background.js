@@ -102,7 +102,9 @@ const {refreshOptions, enableDisableRender} = ((webExtension) => {
       'ALLOW_TXT_EXTENSION': localStorage['ALLOW_TXT_EXTENSION'],
       'THEME': localStorage['THEME'],
       'JS': localStorage['JS'],
-      'JS_LOAD': localStorage['JS_LOAD']
+      'JS_LOAD': localStorage['JS_LOAD'],
+      'LOCAL_POLL_FREQUENCY': localStorage['LOCAL_POLL_FREQUENCY'],
+      'REMOTE_POLL_FREQUENCY': localStorage['REMOTE_POLL_FREQUENCY']
     });
     const customThemeNames = JSON.parse(localStorage['CUSTOM_THEME_NAMES'] || '[]');
     if (customThemeNames.length > 0) {
