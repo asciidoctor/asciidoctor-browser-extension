@@ -158,12 +158,11 @@ arrify@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/arrify/-/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
 
-asciidoctor.js@1.5.5-4:
-  version "1.5.5-4"
-  resolved "https://registry.yarnpkg.com/asciidoctor.js/-/asciidoctor.js-1.5.5-4.tgz#6f2b8389ea6e5ec7f25e78436c69773d1eb0f98b"
+asciidoctor.js@1.5.6-preview.5:
+  version "1.5.6-preview.5"
+  resolved "https://registry.yarnpkg.com/asciidoctor.js/-/asciidoctor.js-1.5.6-preview.5.tgz#e8459d531e3cbfaf5857207b0f8edfff8fbfeefc"
   dependencies:
-    opal-runtime "0.10.2"
-    xmlhttprequest "~1.7.0"
+    opal-runtime "0.11.0-integration8"
 
 asn1@~0.2.3:
   version "0.2.3"
@@ -1424,7 +1423,7 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
-karma-chrome-launcher@^2.2.0:
+karma-chrome-launcher@2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/karma-chrome-launcher/-/karma-chrome-launcher-2.2.0.tgz#cf1b9d07136cc18fe239327d24654c3dbc368acf"
   dependencies:
@@ -1435,7 +1434,7 @@ karma-jasmine@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/karma-jasmine/-/karma-jasmine-1.1.1.tgz#6fe840e75a11600c9d91e84b33c458e1c46a3529"
 
-karma@^1.7.1:
+karma@1.7.1:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/karma/-/karma-1.7.1.tgz#85cc08e9e0a22d7ce9cca37c4a1be824f6a2b1ae"
   dependencies:
@@ -1725,9 +1724,9 @@ onetime@^2.0.0:
   dependencies:
     mimic-fn "^1.0.0"
 
-opal-runtime@0.10.2:
-  version "0.10.2"
-  resolved "https://registry.yarnpkg.com/opal-runtime/-/opal-runtime-0.10.2.tgz#b2c48a234b8db94e2a1d49b8fd45b8db9d91c929"
+opal-runtime@0.11.0-integration8:
+  version "0.11.0-integration8"
+  resolved "https://registry.yarnpkg.com/opal-runtime/-/opal-runtime-0.11.0-integration8.tgz#8442ddc8c66279c6cd004bf7a730a78646202db2"
   dependencies:
     glob "6.0.4"
 
@@ -2493,10 +2492,6 @@ wtf-8@1.0.0:
 xmlhttprequest-ssl@1.5.3:
   version "1.5.3"
   resolved "https://registry.yarnpkg.com/xmlhttprequest-ssl/-/xmlhttprequest-ssl-1.5.3.tgz#185a888c04eca46c3e4070d99f7b49de3528992d"
-
-xmlhttprequest@~1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/xmlhttprequest/-/xmlhttprequest-1.7.0.tgz#dc697a8df0258afacad526c1c296b1bdd12c4ab3"
 
 xtend@^4.0.0:
   version "4.0.1"
