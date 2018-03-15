@@ -31,4 +31,55 @@ describe('Update the HTML document', () => {
         done();
       });
   });
+
+
+  it('should hide the document title when noheader attribute is defined', (done) => {
+    // Given
+    const source = `= Hello world
+:noheader:
+
+When the noheader attribute is defined, the title must not be shown.
+`;
+    spyOn(browser.storage.local, 'set').and.callFake(() => {
+      // noop
+    });
+    spyOn(browser.storage.local, 'get').and.callFake((name, callback) => {
+      const values = [];
+      values[Constants.CUSTOM_ATTRIBUTES_KEY] = '';
+      values[Constants.SAFE_MODE_KEY] = 'safe';
+      callback(values);
+    });
+    // When
+    Renderer.update(source)
+      .then(() => {
+        // the document title element <h1> must not be shown
+        expect(Array.from(document.getElementsByTagName('h1')).length).toBe(0);
+        done();
+      });
+  });
+
+
+  it('should show the document title by default', (done) => {
+    // Given
+    const source = `= Hello world
+
+By default, the title must be shown.
+`;
+    spyOn(browser.storage.local, 'set').and.callFake(() => {
+      // noop
+    });
+    spyOn(browser.storage.local, 'get').and.callFake((name, callback) => {
+      const values = [];
+      values[Constants.CUSTOM_ATTRIBUTES_KEY] = '';
+      values[Constants.SAFE_MODE_KEY] = 'safe';
+      callback(values);
+    });
+    // When
+    Renderer.update(source)
+      .then(() => {
+        // the document title element <h1> must be shown
+        expect(Array.from(document.getElementsByTagName('h1'))[0].innerText).toBe('Hello world');
+        done();
+      });
+  });
 });
