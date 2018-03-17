@@ -27,6 +27,7 @@
   "devDependencies": {
     "archiver": "2.0.3",
     "asciidoctor.js": "1.5.6-rc.1",
+    "asciidoctor-plantuml": "0.8.1",
     "bestikk-fs": "0.1.0",
     "bestikk-log": "0.1.0",
     "bootstrap": "3.3.7",

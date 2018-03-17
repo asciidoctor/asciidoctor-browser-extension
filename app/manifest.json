@@ -64,8 +64,10 @@
         "js/renderer.js",
         "js/asciidocify.js",
         "js/vendor/chartist.min.js",
+        "js/vendor/plantuml.min.js",
         "js/vendor/asciidoctor-chart-block-macro.js",
-        "js/vendor/asciidoctor-emoji-inline-macro.js"
+        "js/vendor/asciidoctor-emoji-inline-macro.js",
+        "js/vendor/asciidoctor-plantuml-register.js"
       ]
     }
   ],
@@ -92,8 +94,10 @@
     "img/themes/riak/*.png",
     "img/themes/riak/*.jpg",
     "js/vendor/highlight.min.js",
+    "js/vendor/plantuml.min.js",
     "js/vendor/asciidoctor-chart-block-macro.js",
     "js/vendor/asciidoctor-emoji-inline-macro.js",
+    "js/vendor/asciidoctor-plantuml-register.js",
     "js/vendor/jquery.min.js",
     "js/vendor/asciidoctor.js",
     "js/vendor/md5.js",
@@ -101,8 +105,6 @@
     "js/renderer.js",
     "js/asciidocify.js",
     "js/vendor/chartist.min.js",
-    "js/vendor/asciidoctor-chart-block-macro.js",
-    "js/vendor/asciidoctor-emoji-inline-macro.js",
     "fonts/fontawesome-webfont.woff2",
     "fonts/fontawesome-webfont.woff",
     "fonts/fontawesome-webfont.ttf",
