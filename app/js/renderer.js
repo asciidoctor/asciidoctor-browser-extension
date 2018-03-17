@@ -109,10 +109,8 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
    */
   const preprocessing = (customJavaScript) => {
     if (customJavaScript && customJavaScript.loadDirective === 'before') {
-      document.body.appendChild(Dom.createScriptElement({
-        id: 'asciidoctor-custom-js',
-        innerHTML: customJavaScript.content
-      }));
+      // IMPORTANT: we are using eval because the custom script need to have access to the Asciidoctor processor.
+      eval(customJavaScript.content);
     }
   };
 
