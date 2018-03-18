@@ -52,9 +52,15 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
     }
   };
 
+  // REMIND: notitle attribute is automatically set when header_footer equals false.
+  const showTitle = (doc) => !doc.isAttribute('noheader');
+
   module.convert = (source, settings) => {
     const options = buildAsciidoctorOptions(settings);
     const doc = processor.load(source, options);
+    if (showTitle(doc)) {
+      doc.setAttribute('showtitle');
+    }
     return new AsciidoctorDocument(doc, doc.convert());
   };
 
@@ -212,7 +218,7 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
     const customAttributes = settings.customAttributes;
     const safeMode = settings.safeMode;
     // Default attributes
-    const attributes = ['showtitle', 'icons=font@', 'platform=opal', 'platform-opal', 'env=browser', 'env-browser', 'data-uri!'];
+    const attributes = ['icons=font@', 'platform=opal', 'platform-opal', 'env=browser', 'env-browser', 'data-uri!'];
     const href = window.location.href;
     const fileName = href.split('/').pop();
     let fileExtension = fileName.split('.').pop();
