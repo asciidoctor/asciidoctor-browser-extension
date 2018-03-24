@@ -158,11 +158,11 @@ arrify@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/arrify/-/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
 
-asciidoctor.js@1.5.6-preview.5:
-  version "1.5.6-preview.5"
-  resolved "https://registry.yarnpkg.com/asciidoctor.js/-/asciidoctor.js-1.5.6-preview.5.tgz#e8459d531e3cbfaf5857207b0f8edfff8fbfeefc"
+asciidoctor.js@^1.5.6-rc.1:
+  version "1.5.6-rc.1"
+  resolved "https://registry.yarnpkg.com/asciidoctor.js/-/asciidoctor.js-1.5.6-rc.1.tgz#8bdd07d817817e626bc3e2e09aa35500bfce4b3d"
   dependencies:
-    opal-runtime "0.11.0-integration8"
+    opal-runtime "1.0.2"
 
 asn1@~0.2.3:
   version "0.2.3"
@@ -1724,11 +1724,12 @@ onetime@^2.0.0:
   dependencies:
     mimic-fn "^1.0.0"
 
-opal-runtime@0.11.0-integration8:
-  version "0.11.0-integration8"
-  resolved "https://registry.yarnpkg.com/opal-runtime/-/opal-runtime-0.11.0-integration8.tgz#8442ddc8c66279c6cd004bf7a730a78646202db2"
+opal-runtime@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/opal-runtime/-/opal-runtime-1.0.2.tgz#dae7669f23943b3f3fbba77b718a7e4977f4af73"
   dependencies:
     glob "6.0.4"
+    xmlhttprequest "1.8.0"
 
 optimist@^0.6.1:
   version "0.6.1"
@@ -2492,6 +2493,10 @@ wtf-8@1.0.0:
 xmlhttprequest-ssl@1.5.3:
   version "1.5.3"
   resolved "https://registry.yarnpkg.com/xmlhttprequest-ssl/-/xmlhttprequest-ssl-1.5.3.tgz#185a888c04eca46c3e4070d99f7b49de3528992d"
+
+xmlhttprequest@1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/xmlhttprequest/-/xmlhttprequest-1.8.0.tgz#67fe075c5c24fef39f9d65f5f7b7fe75171968fc"
 
 xtend@^4.0.0:
   version "4.0.1"
