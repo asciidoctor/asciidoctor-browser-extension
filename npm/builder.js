@@ -17,15 +17,6 @@ Builder.prototype.uncommentFontsImport = function () {
   fs.writeFileSync(path, data, 'utf8');
 };
 
-// REMIND: Fixed in Asciidoctor.js 1.5.6
-Builder.prototype.fixTimezone = function () {
-  const path = 'app/js/vendor/asciidoctor.js';
-  var data = fs.readFileSync(path, 'utf8');
-  log.debug('Backport https://github.com/opal/opal/issues/539');
-  data = data.replace(/string\.match\(\/\\\(\[\^\)\]\+\\\)\/\)\[0\]\.match\(\/\[A-Z\]\/g\)\.join\(''\);/g, 'string.match(/\\((.+)\\)(?:\\s|$)/)[1];');
-  fs.writeFileSync(path, data, 'utf8');
-};
-
 Builder.prototype.replaceImagesURL = function () {
   const themesNamesWithImages = ['github', 'golo', 'maker', 'riak'];
   function replaceURL (themeName) {
@@ -94,7 +85,6 @@ Builder.prototype.dist = function () {
   this.clean();
   this.copy();
   this.uncommentFontsImport();
-  this.fixTimezone();
   this.replaceImagesURL();
   this.compress();
 };
