@@ -53,7 +53,7 @@ describe('Append a custom script', () => {
         // the content must be the first element in the <body>
         expect(document.body.children[0].id).toBe('content');
         // the custom script must be present in the <body>
-        expect(Array.from(document.body.children).find(element => element.id === 'asciidoctor-custom-js').innerText).toBe('const foo = \'foo\';');
+        expect(Array.from(document.body.children).find(element => element.id === 'asciidoctor-browser-custom-js').innerText).toBe('const foo = \'foo\';');
         done();
       });
   });

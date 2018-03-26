@@ -18,14 +18,36 @@ describe('Update the HTML document', () => {
       values[Constants.SAFE_MODE_KEY] = 'safe';
       callback(values);
     });
+    spyOn(browser.runtime, 'getManifest').and.callFake(() => {
+      return {
+        web_accessible_resources: [
+          "css/themes/asciidoctor.css",
+          "css/themes/colony.css",
+          "css/themes/foundation.css",
+          "css/themes/foundation-lime.css",
+          "css/themes/foundation-potion.css",
+          "css/themes/github.css",
+          "css/themes/golo.css",
+          "css/themes/iconic.css",
+          "css/themes/maker.css",
+          "css/themes/readthedocs.css",
+          "css/themes/riak.css",
+          "css/themes/rocket-panda.css",
+          "css/themes/rubygems.css",
+        ]
+      }
+    });
     // When
     Renderer.update(source)
       .then(() => {
+        console.log('document', document);
         // Chartist must be present
-        expect(document.getElementById('chartist-style').getAttribute('href')).toBe('css/chartist.min.css');
-        expect(document.getElementById('chartist-asciidoctor-style').innerText).not.toBe('');
+        expect(document.getElementById('asciidoctor-browser-chartist-style').getAttribute('href')).toBe('css/chartist.min.css');
+        expect(document.getElementById('asciidoctor-browser-chartist-default-style').innerText).not.toBe('');
+        // Default Asciidoctor stylesheet must be present
+        expect(document.getElementById('asciidoctor-browser-style').getAttribute('href')).toBe('css/themes/asciidoctor.css');
         // Font Awesome must be present
-        expect(document.getElementById('font-awesome-style').getAttribute('href')).toBe('css/font-awesome.min.css');
+        expect(document.getElementById('asciidoctor-browser-font-awesome-style').getAttribute('href')).toBe('css/font-awesome.min.css');
         // Content must be converted
         expect(document.getElementById('content').innerHTML).toContain('<h1>Hello world</h1>');
         done();

@@ -16,7 +16,6 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
    */
   module.prepare = () => {
     module.appendMathJax();
-    module.appendHighlightJsScript();
     Dom.setViewport();
   };
 
@@ -30,8 +29,8 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
       const settings = await Settings.getRenderingSettings();
       const asciidoctorDocument = module.convert(source, settings);
 
-      Dom.removeElement('mathjax-refresh-js');
-      Dom.removeElement('asciidoctor-custom-js');
+      Dom.removeElement('asciidoctor-browser-mathjax-refresh-js');
+      Dom.removeElement('asciidoctor-browser-custom-js');
 
       // Save the scripts that are present at the root of the <body> to be able to restore them after the update
       // QUESTION: Should we remove this code ? Since using livereload and this extension is not recommended!
@@ -55,11 +54,21 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
   // REMIND: notitle attribute is automatically set when header_footer equals false.
   const showTitle = (doc) => !doc.isAttribute('noheader');
 
+  /**
+   * Is the :source-highlighter: attribute defined ?
+   * @param doc
+   */
+  const isSourceHighlighterEnabled = (doc) => doc.isAttribute('source-highlighter');
+
   module.convert = (source, settings) => {
     const options = buildAsciidoctorOptions(settings);
     const doc = processor.load(source, options);
     if (showTitle(doc)) {
       doc.setAttribute('showtitle');
+    }
+    if (isSourceHighlighterEnabled(doc)) {
+      // Force the source highlighter to Highlight.js (since we only support Highlight.js)
+      doc.setAttribute('source-highlighter', 'highlight.js');
     }
     return new AsciidoctorDocument(doc, doc.convert());
   };
@@ -68,7 +77,8 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
    * Append highlight.js script
    */
   module.appendHighlightJsScript = () => {
-    document.head.appendChild(Dom.createScriptElement({
+    Dom.appendOnce(document.head, Dom.createScriptElement({
+      id: 'asciidoctor-browser-highlightjs',
       src: webExtension.extension.getURL('js/vendor/highlight.min.js')
     }));
   };
@@ -96,8 +106,8 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
       .then(() => {
         // Highlight
         const highlightTheme = 'github';
-        document.head.appendChild(Dom.createStylesheetLinkElement({
-          id: `${highlightTheme}-highlight-style`,
+        Dom.appendOnce(document.head, Dom.createStylesheetLinkElement({
+          id: `asciidoctor-browser-${highlightTheme}-highlight-style`,
           href: webExtension.extension.getURL(`css/highlight/${highlightTheme}.css`)
         }));
       });
@@ -116,7 +126,7 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
   const preprocessing = (customJavaScript) => {
     if (customJavaScript && customJavaScript.loadDirective === 'before') {
       document.body.appendChild(Dom.createScriptElement({
-        id: 'asciidoctor-custom-js',
+        id: 'asciidoctor-browser-custom-js',
         innerHTML: customJavaScript.content
       }));
     }
@@ -128,7 +138,7 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
   const postprocessing = (customJavaScript) => {
     if (customJavaScript && customJavaScript.loadDirective === 'after') {
       document.body.appendChild(Dom.createScriptElement({
-        id: 'asciidoctor-custom-js',
+        id: 'asciidoctor-browser-custom-js',
         innerHTML: customJavaScript.content
       }));
     }
@@ -139,14 +149,14 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
     // Check if the theme is packaged in the extension... if not it's a custom theme
     if (themeNames.includes(themeName)) {
       Dom.replace(document.head, Dom.createStylesheetLinkElement({
-        id: 'asciidoctor-style',
+        id: 'asciidoctor-browser-style',
         href: webExtension.extension.getURL(`css/themes/${themeName}.css`)
       }));
     } else {
       const customThemeContent = await Settings.getSetting(Constants.CUSTOM_THEME_PREFIX + themeName);
       if (customThemeContent) {
         Dom.replace(document.head, Dom.createStyleElement({
-          id: 'asciidoctor-style',
+          id: 'asciidoctor-browser-style',
           innerHTML: customThemeContent
         }));
       }
@@ -183,7 +193,12 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
     forceLoadDynamicObjects();
     refreshMathJax();
     appendScripts(scripts);
-    syntaxHighlighting();
+    if (isSourceHighlighterEnabled(doc)) {
+      module.appendHighlightJsScript();
+      syntaxHighlighting();
+    } else {
+      Dom.removeElement('asciidoctor-browser-highlightjs');
+    }
     drawCharts();
   };
 
@@ -320,11 +335,11 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
    */
   const appendChartistStyle = () => {
     Dom.appendOnce(document.head, Dom.createStylesheetLinkElement({
-      id: 'chartist-style',
+      id: 'asciidoctor-browser-chartist-style',
       href: webExtension.extension.getURL('css/chartist.min.css')
     }));
     Dom.appendOnce(document.head, Dom.createStyleElement({
-      id: 'chartist-asciidoctor-style',
+      id: 'asciidoctor-browser-chartist-default-style',
       innerHTML: '.ct-chart .ct-series.ct-series-a .ct-line {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-line {stroke:#72B3CC} .ct-chart .ct-series.ct-series-a .ct-point {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-point {stroke:#72B3CC}'
     }));
   };
@@ -334,7 +349,7 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
    */
   const appendFontAwesomeStyle = () => {
     Dom.appendOnce(document.head, Dom.createStylesheetLinkElement({
-      id: 'font-awesome-style',
+      id: 'asciidoctor-browser-font-awesome-style',
       href: webExtension.extension.getURL('css/font-awesome.min.css')
     }));
   };
@@ -344,7 +359,7 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
    */
   const refreshMathJax = () => {
     document.body.appendChild(Dom.createScriptElement({
-      id: 'mathjax-refresh-js',
+      id: 'asciidoctor-browser-mathjax-refresh-js',
       innerHTML: 'if (window.MathJax && window.MathJax.Hub) { window.MathJax.Hub.Typeset(); }'
     }));
   };
