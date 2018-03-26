@@ -233,7 +233,14 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
     const customAttributes = settings.customAttributes;
     const safeMode = settings.safeMode;
     // Default attributes
-    const attributes = ['icons=font@', 'platform=opal', 'platform-opal', 'env=browser', 'env-browser', 'data-uri!'];
+    const attributes = [
+      'icons=font@',
+      'platform=opal',
+      'platform-opal',
+      'env=browser',
+      'env-browser',
+      'data-uri!',
+      'plantuml-server-url=http://www.plantuml.com/plantuml@'];
     const href = window.location.href;
     const fileName = href.split('/').pop();
     let fileExtension = fileName.split('.').pop();
