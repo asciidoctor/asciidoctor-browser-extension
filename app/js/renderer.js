@@ -15,7 +15,6 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
    * Initialize the HTML document
    */
   module.prepare = () => {
-    module.appendMathJax();
     Dom.setViewport();
   };
 
@@ -36,7 +35,6 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
       // QUESTION: Should we remove this code ? Since using livereload and this extension is not recommended!
       const scripts = document.body.querySelectorAll(':scope > script');
       detectLiveReloadJs(scripts);
-
       const customJavaScript = settings.customScript;
       clearBody();
       preprocessing(customJavaScript);
@@ -57,8 +55,16 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
   /**
    * Is the :source-highlighter: attribute defined ?
    * @param doc
+   * @returns {boolean}
    */
   const isSourceHighlighterEnabled = (doc) => doc.isAttribute('source-highlighter');
+
+  /**
+   * Is the :stem: attribute defined ?
+   * @param doc
+   * @returns {boolean}
+   */
+  const isStemEnabled = (doc) => doc.isAttribute('stem');
 
   module.convert = (source, settings) => {
     const options = buildAsciidoctorOptions(settings);
@@ -87,10 +93,12 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
    * Append MathJax script
    */
   module.appendMathJax = () => {
-    document.head.appendChild(Dom.createScriptElement({
+    Dom.appendOnce(document.head, Dom.createScriptElement({
+      id: 'asciidoctor-mathjax-config',
       src: webExtension.extension.getURL('vendor/MathJax/config.js')
     }));
-    document.head.appendChild(Dom.createScriptElement({
+    Dom.appendOnce(document.head, Dom.createScriptElement({
+      id: 'asciidoctor-mathjax-initialization',
       src: webExtension.extension.getURL('vendor/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML')
     }));
   };
@@ -191,7 +199,13 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
     document.body.appendChild(contentDiv);
 
     forceLoadDynamicObjects();
-    refreshMathJax();
+    if (isStemEnabled(doc)) {
+      module.appendMathJax();
+      refreshMathJax();
+    } else {
+      Dom.removeElement('asciidoctor-mathjax-config');
+      Dom.removeElement('asciidoctor-mathjax-initialization');
+    }
     appendScripts(scripts);
     if (isSourceHighlighterEnabled(doc)) {
       module.appendHighlightJsScript();
