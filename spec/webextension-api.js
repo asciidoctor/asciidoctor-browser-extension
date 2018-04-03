@@ -13,6 +13,9 @@ const browser = {
     getURL: path => path
   },
   runtime: {
-    getManifest: () => ({web_accessible_resources: []})
+    getManifest: () => ({web_accessible_resources: []}),
+    onMessage: {
+      addListener: () => {}
+    }
   }
 };
