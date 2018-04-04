@@ -29,7 +29,6 @@ console.log('Hello world')
     // When
     Renderer.update(source)
       .then(() => {
-        console.log(document.body);
         expect(document.getElementById('asciidoctor-browser-highlightjs').getAttribute('src')).toBe('js/vendor/highlight.min.js');
         const preElement = document.body.getElementsByTagName('pre')[0];
         const codeElement = preElement.getElementsByTagName('code')[0];
