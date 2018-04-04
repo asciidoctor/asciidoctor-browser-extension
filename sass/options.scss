@@ -1,0 +1,44 @@
+$body-size: 14px;
+$section-padding: 1rem 1rem;
+
+@import "bulma/sass/utilities/_all";
+@import "bulma/sass/base/minireset";
+@import "bulma/sass/base/generic";
+@import "bulma/sass/base/helpers";
+@import "bulma/sass/elements/button";
+@import "bulma/sass/elements/form";
+@import "bulma/sass/elements/icon";
+@import "bulma/sass/elements/notification";
+@import "bulma/sass/elements/other";
+@import "bulma/sass/elements/icon";
+@import "bulma/sass/elements/content";
+@import "bulma/sass/elements/container";
+@import "bulma/sass/layout/section";
+
+html {
+  min-width: 30rem;
+  background-color: transparent; // Firefox does not use a white background
+  overflow: auto; // no scrollbar on Firefox
+}
+
+.field:not(:last-child) {
+  margin-bottom: 2rem;
+}
+
+.notification.is-small {
+  font-size: 0.9rem;
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+}
+
+.notification > code {
+  white-space: nowrap;
+}
+
+.file {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.help {
+  color: #737373;
+}

@@ -5,6 +5,8 @@ const fs = require('fs');
 const log = require('bestikk-log');
 const bfs = require('bestikk-fs');
 const archiver = require('archiver');
+const sass = require('node-sass');
+const csso = require('csso');
 
 function Builder () {
 }
@@ -67,6 +69,19 @@ Builder.prototype.compress = function () {
   archive.finalize();
 };
 
+Builder.prototype.compileSass = function () {
+  log.task('compile Sass');
+  const source = 'sass/options.scss';
+  const destination = 'app/css/options.min.css';
+  log.transform('compile and minify', source, destination);
+  const result = sass.renderSync({
+    file: source,
+    includePaths: ['node_modules']
+  });
+  var minified = csso.minify(result.css);
+  fs.writeFileSync(destination, minified.css, 'utf-8');
+};
+
 Builder.prototype.copy = function () {
   log.task('copy vendor resources');
   // JavaScript files
@@ -76,7 +91,6 @@ Builder.prototype.copy = function () {
   bfs.copySync('node_modules/chartist/dist/chartist.min.js', 'app/js/vendor/chartist.min.js');
   // Stylesheets
   bfs.copySync('node_modules/asciidoctor.js/dist/css/asciidoctor.css', 'app/css/themes/asciidoctor.css');
-  bfs.copySync('node_modules/bootstrap/dist/css/bootstrap.min.css', 'app/css/bootstrap.min.css');
   bfs.copySync('node_modules/font-awesome/css/font-awesome.min.css', 'app/css/font-awesome.min.css');
   // Web Fonts
   bfs.copySync('node_modules/font-awesome/fonts/fontawesome-webfont.woff2', 'app/fonts/fontawesome-webfont.woff2');
@@ -87,5 +101,6 @@ Builder.prototype.dist = function () {
   this.copy();
   this.uncommentFontsImport();
   this.replaceImagesURL();
+  this.compileSass();
   this.compress();
 };
