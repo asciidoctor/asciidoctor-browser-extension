@@ -117,7 +117,7 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
    */
   const preprocessing = (customJavaScript) => {
     if (customJavaScript && customJavaScript.loadDirective === 'before') {
-      document.body.appendChild(Dom.createScriptElement({
+      document.head.appendChild(Dom.createScriptElement({
         id: 'asciidoctor-browser-custom-js',
         innerHTML: customJavaScript.content
       }));
@@ -129,7 +129,7 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
    */
   const postprocessing = (customJavaScript) => {
     if (customJavaScript && customJavaScript.loadDirective === 'after') {
-      document.body.appendChild(Dom.createScriptElement({
+      document.head.appendChild(Dom.createScriptElement({
         id: 'asciidoctor-browser-custom-js',
         innerHTML: customJavaScript.content
       }));
