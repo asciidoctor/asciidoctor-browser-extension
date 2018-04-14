@@ -49,7 +49,7 @@ asciidoctor.browser.loader = (webExtension, document, location, Settings, Render
         // Update the content
         Renderer.update(source);
       } else {
-        // Display plain content
+        // Display the content in plain text
         document.body.innerHTML = '';
         const preElement = document.createElement('pre');
         preElement.style = 'word-wrap: break-word; white-space: pre-wrap;';
