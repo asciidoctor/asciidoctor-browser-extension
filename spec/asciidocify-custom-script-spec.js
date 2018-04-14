@@ -18,16 +18,18 @@ describe('Append a custom script', () => {
       values[Constants.SAFE_MODE_KEY] = 'safe';
       values[Constants.JS_KEY] = 'bar';
       values[Constants.JS_LOAD_KEY] = 'before';
-      values[Constants.CUSTOM_JS_PREFIX + 'bar'] = 'const bar = \'bar\';';
+      values[Constants.CUSTOM_JS_PREFIX + 'bar'] = 'document.body.appendChild(document.createElement(\'strong\'));';
       callback(values);
     });
     // When
     Renderer.update(source)
       .then(() => {
-        // the custom script must be the first element in the <body>
-        expect(document.body.children[0].innerText).toBe('const bar = \'bar\';');
-        // the next element must be the content
-        expect(document.body.children[1].id).toBe('content');
+        // the custom script must be present in <head>
+        expect(Array.from(document.head.children).find(element => element.id === 'asciidoctor-browser-custom-js').innerText).toBe('document.body.appendChild(document.createElement(\'strong\'));');
+        // the <b> element created by the custom JavaScript will be removed by the rendering phase (because the script run before)
+        expect(Array.from(document.body.children).find(element => element.tagName.toLowerCase() === 'strong')).toBeUndefined();
+        // the first element in the body must be the content
+        expect(document.body.children[0].id).toBe('content');
         done();
       });
   });
@@ -44,16 +46,17 @@ describe('Append a custom script', () => {
       values[Constants.SAFE_MODE_KEY] = 'safe';
       values[Constants.JS_KEY] = 'foo';
       values[Constants.JS_LOAD_KEY] = 'after';
-      values[Constants.CUSTOM_JS_PREFIX + 'foo'] = 'const foo = \'foo\';';
+      values[Constants.CUSTOM_JS_PREFIX + 'foo'] = 'document.body.appendChild(document.createElement(\'i\'));';
       callback(values);
     });
     // When
     Renderer.update(source)
       .then(() => {
-        // the content must be the first element in the <body>
+        expect(Array.from(document.head.children).find(element => element.id === 'asciidoctor-browser-custom-js').innerText).toBe('document.body.appendChild(document.createElement(\'i\'));');
+        // the <i> element created by the custom JavaScript must be present (because the script run after the rendering phase)
+        expect(Array.from(document.body.children).find(element => element.tagName.toLowerCase() === 'i')).toBeDefined();
+        // the first element in the body must be the content
         expect(document.body.children[0].id).toBe('content');
-        // the custom script must be present in the <body>
-        expect(Array.from(document.body.children).find(element => element.id === 'asciidoctor-browser-custom-js').innerText).toBe('const foo = \'foo\';');
         done();
       });
   });

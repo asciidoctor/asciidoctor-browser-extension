@@ -36,7 +36,6 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
       const scripts = document.body.querySelectorAll(':scope > script');
       detectLiveReloadJs(scripts);
       const customJavaScript = settings.customScript;
-      clearBody();
       preprocessing(customJavaScript);
       await updateBody(asciidoctorDocument, scripts);
       postprocessing(customJavaScript);
@@ -122,18 +121,11 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
   };
 
   /**
-   * Clear <body>
-   */
-  const clearBody = () => {
-    document.body.innerHTML = '';
-  };
-
-  /**
    * @param customJavaScript
    */
   const preprocessing = (customJavaScript) => {
     if (customJavaScript && customJavaScript.loadDirective === 'before') {
-      document.body.appendChild(Dom.createScriptElement({
+      document.head.appendChild(Dom.createScriptElement({
         id: 'asciidoctor-browser-custom-js',
         innerHTML: customJavaScript.content
       }));
@@ -145,7 +137,7 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
    */
   const postprocessing = (customJavaScript) => {
     if (customJavaScript && customJavaScript.loadDirective === 'after') {
-      document.body.appendChild(Dom.createScriptElement({
+      document.head.appendChild(Dom.createScriptElement({
         id: 'asciidoctor-browser-custom-js',
         innerHTML: customJavaScript.content
       }));
@@ -196,6 +188,7 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
     let contentDiv = document.createElement('div');
     contentDiv.id = 'content';
     contentDiv.innerHTML = asciidoctorDocument.html;
+    document.body.innerHTML = ''; // clear <body>
     document.body.appendChild(contentDiv);
 
     forceLoadDynamicObjects();

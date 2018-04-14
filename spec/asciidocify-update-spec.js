@@ -40,7 +40,6 @@ describe('Update the HTML document', () => {
     // When
     Renderer.update(source)
       .then(() => {
-        console.log('document', document);
         // Chartist must be present
         expect(document.getElementById('asciidoctor-browser-chartist-style').getAttribute('href')).toBe('css/chartist.min.css');
         expect(document.getElementById('asciidoctor-browser-chartist-default-style').innerText).not.toBe('');
