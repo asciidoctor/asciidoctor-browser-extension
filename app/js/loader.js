@@ -1,6 +1,16 @@
 asciidoctor.browser.loader = (webExtension, document, location, Settings, Renderer) => {
   const module = {};
 
+  webExtension.runtime.onMessage.addListener(function handleMessage (message, sender) {
+    if (sender.id === webExtension.runtime.id) {
+      if (message.status === 'extension-enabled') {
+        module.load();
+      } else if (message.status === 'extension-disabled') {
+        unloadExtension();
+      }
+    }
+  });
+
   module.load = async () => {
     const txtExtensionRegex = /\.txt[.|?]?.*?$/;
     if (location.href.match(txtExtensionRegex)) {
@@ -22,7 +32,8 @@ asciidoctor.browser.loader = (webExtension, document, location, Settings, Render
     startAutoReload();
   };
 
-  const fetchContent = () => {
+  const unloadExtension = () => {
+    clearInterval(autoReloadInterval);
     $.ajax({
       url: location.href,
       cache: false,
@@ -30,9 +41,42 @@ asciidoctor.browser.loader = (webExtension, document, location, Settings, Render
         if (isHtmlContentType(request)) {
           return;
         }
-        module.loadContent(request);
+        displayContentAsPlainText(request.responseText);
       }
     });
+  };
+
+  /**
+   * Display content as plain text.
+   * @param text
+   */
+  const displayContentAsPlainText = (text) => {
+    const preElement = document.createElement('pre');
+    preElement.style = 'word-wrap: break-word; white-space: pre-wrap;';
+    preElement.innerText = text;
+    document.head.innerHTML = '';
+    document.body.className = '';
+    document.body.innerHTML = '';
+    document.body.appendChild(preElement);
+  };
+
+  const fetchContent = () => {
+    // Check if the content is available before using an AJAX query
+    if (document.body.getElementsByClassName('pre').length === 1 && document.body.childNodes.length === 1) {
+      Renderer.prepare();
+      Renderer.update(document.body.getElementsByClassName('pre')[0].innerText);
+    } else {
+      $.ajax({
+        url: location.href,
+        cache: false,
+        complete: (request) => {
+          if (isHtmlContentType(request)) {
+            return;
+          }
+          module.loadContent(request);
+        }
+      });
+    }
   };
 
   const reloadContent = async (source) => {
@@ -46,15 +90,9 @@ asciidoctor.browser.loader = (webExtension, document, location, Settings, Render
       }
       // Content has changed...
       if (await Settings.isExtensionEnabled()) {
-        // Update the content
         Renderer.update(source);
       } else {
-        // Display the content in plain text
-        document.body.innerHTML = '';
-        const preElement = document.createElement('pre');
-        preElement.style = 'word-wrap: break-word; white-space: pre-wrap;';
-        preElement.innerText = source;
-        document.body.appendChild(preElement);
+        displayContentAsPlainText(source);
       }
       // Update md5sum
       const value = {};
