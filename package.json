@@ -26,12 +26,13 @@
   "license": "MIT",
   "devDependencies": {
     "archiver": "2.0.3",
-    "asciidoctor.js": "1.5.6-rc.1",
     "asciidoctor-plantuml": "0.8.1",
+    "asciidoctor.js": "1.5.6-rc.1",
     "bestikk-fs": "0.1.0",
     "bestikk-log": "0.1.0",
-    "bootstrap": "3.3.7",
+    "bulma": "0.6.2",
     "chartist": "0.8.3",
+    "csso": "^3.5.0",
     "eslint": "4.8.0",
     "eslint-config-standard": "10.2.1",
     "eslint-plugin-import": "2.7.0",
@@ -43,10 +44,14 @@
     "jquery": "3.3.1",
     "karma": "1.7.1",
     "karma-chrome-launcher": "2.2.0",
-    "karma-jasmine": "1.1.1"
+    "karma-jasmine": "1.1.1",
+    "node-sass": "4.8.3"
   },
   "keywords": [
+    "browser",
     "chrome",
+    "opera",
+    "firefox",
     "extension",
     "asciidoctor"
   ]

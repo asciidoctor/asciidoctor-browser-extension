@@ -1,3 +1,5 @@
+'use strict';
+
 const webExtension = typeof browser === 'undefined' ? chrome : browser;
 
 (() => {
@@ -10,16 +12,15 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser;
   const inputCustomAttributes = document.getElementById('inputCustomAttributes');
   const inputLoadJavaScript = Array.from(document.body.querySelectorAll('input[name=optionsLoadJavaScript]'));
 
-  const addCustomThemeAlert = document.getElementById('addCustomThemeAlert');
-  const addCustomJavaScriptAlert = document.getElementById('addCustomJavaScriptAlert');
-  const saveAlert = document.getElementById('saveAlert');
-  const enablingLocalFileAlert = document.getElementById('enablingLocalFileAlert');
+  const addCustomThemeNotification = document.getElementById('addCustomThemeNotification');
+  const addCustomJavaScriptNotification = document.getElementById('addCustomJavaScriptNotification');
+  const enablingLocalFileNotification = document.getElementById('enablingLocalFileNotification');
   const openExtensionsPageLink = document.getElementById('openExtensionsPageLink');
 
-  const showEnablingLocalFileAlert = () => {
+  const showEnablingLocalFileNotification = () => {
     openExtensionsPageLink.onclick = () => webExtension.tabs.create({'url': 'chrome://extensions/?id=' + webExtension.runtime.id});
-    initAlert(enablingLocalFileAlert);
-    enablingLocalFileAlert.classList.remove('hidden');
+    initNotification(enablingLocalFileNotification);
+    enablingLocalFileNotification.classList.remove('is-hidden');
   };
 
   const initEnablingLocalFileAlert = () => {
@@ -28,12 +29,12 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser;
     if (typeof webExtension.runtime.getBrowserInfo === 'function') {
       webExtension.runtime.getBrowserInfo().then((info) => {
         if (info.name.includes('Chrome') || info.name.includes('Opera')) {
-          showEnablingLocalFileAlert();
+          showEnablingLocalFileNotification();
         }
       });
     } else {
       // Assume that we are running Chrome or Opera (even if it can be Edge)
-      showEnablingLocalFileAlert();
+      showEnablingLocalFileNotification();
     }
   };
 
@@ -101,11 +102,11 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser;
     selectJavaScript.value = localStorage['JS'];
   };
 
-  const initAlert = (element) => {
-    element.getElementsByClassName('close').item(0).onclick = () => {
-      element.classList.add('hidden');
+  const initNotification = (element) => {
+    element.getElementsByClassName('delete').item(0).onclick = () => {
+      element.classList.add('is-hidden');
     };
-    element.classList.add('hidden');
+    element.classList.add('is-hidden');
   };
 
   const addNewOpt = (parentElement, name) => {
@@ -161,79 +162,86 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser;
     return fileName.substr(0, fileName.lastIndexOf('.')) || fileName;
   };
 
-  const buildAlert = (exists, name, type) => {
-    let alertClasses;
-    let alertMessage;
+  const buildNotification = (exists, name, type) => {
+    let classes;
+    let message;
     if (!exists) {
-      alertClasses = ['alert', 'alert-sm', 'alert-info'];
-      alertMessage = `New ${type} <b>${name}</b> has been added!`;
+      classes = ['notification', 'is-small', 'is-info'];
+      message = `New ${type} <b>${name}</b> has been added!`;
     } else {
-      alertClasses = ['alert', 'alert-sm', 'alert-warning'];
-      alertMessage = `Existing ${type} <b>${name}</b> has been replaced!`;
+      classes = ['notification', 'is-small', 'is-warning'];
+      message = `Existing ${type} <b>${name}</b> has been replaced!`;
     }
-    return {classes: alertClasses, message: alertMessage};
+    return {classes: classes, message: message};
   };
 
-  const showAlert = (element, alert) => {
-    element.classList.add(...alert.classes);
-    element.getElementsByClassName('content').item(0).innerHTML = alert.message;
-    element.classList.remove('hidden');
+  const showNotification = (element, notification) => {
+    element.classList.add(...notification.classes);
+    element.getElementsByClassName('notification-text').item(0).innerHTML = notification.message;
+    element.classList.remove('is-hidden');
   };
 
-  const resetAlert = (element) => {
-    element.classList.add('hidden');
-    element.classList.remove('alert', 'alert-sm', 'alert-info', 'alert-warning');
+  const resetNotification = (element) => {
+    element.classList.add('is-hidden');
+    element.classList.remove('notification', 'is-small', 'is-info', 'is-warning');
   };
 
   const selectOpt = (parentElement, name) => {
     parentElement.value = name;
   };
 
-  const initSaveIndicators = (opts, optionsChangedFunction, saveOptionsFunction) => {
-    const timeout = opts.timeout || 200;
-    const inputsIdentifier = opts.inputsIdentifier || '.form-input';
+  const initAutoSave = () => {
+    function saving (controlElement) {
+      if (controlElement) {
+        console.log('controlElement', controlElement);
+        controlElement.classList.add('is-loading');
+        controlElement.getElementsByClassName('icon').item(0).classList.add('is-hidden');
+      }
+    }
 
-    document.body.querySelectorAll('[data-save-indicator]').forEach((element) => {
-      let iconSaved = document.createElement('i');
-      iconSaved.classList.add('save-indicator-saved', 'fa', 'fa-check-circle');
-      let iconSaving = document.createElement('i');
-      iconSaving.classList.add('save-indicator-saving', 'fa', 'fa-spinner', 'fa-pulse');
-      element.appendChild(iconSaved);
-      element.appendChild(iconSaving);
-      element.classList.add('input-group-addon', 'group-addon', 'save-indicator-group-saved');
-    });
+    function saved (controlElement) {
+      if (controlElement) {
+        console.log('controlElement', controlElement);
+        controlElement.classList.remove('is-loading');
+        controlElement.getElementsByClassName('icon').item(0).classList.remove('is-hidden');
+      }
+    }
 
     let saveAction;
-    document.body.querySelectorAll(inputsIdentifier).forEach((element) => {
-      element.onchange = () => {
-        if (optionsChangedFunction()) {
-          const inputName = element.getAttribute('name');
-          const saveIndicatorComp = document.body.querySelector(`[data-save-indicator='${inputName}']`);
-          // Update status to let user know options are being saved.
-          saveIndicatorComp.classList.remove('save-indicator-group-saved');
-          saveIndicatorComp.classList.add('save-indicator-group-saving');
-          clearTimeout(saveAction);
-          saveAction = setTimeout(() => {
-            saveOptionsFunction();
-            // Update status to let user know options were saved.
-            saveIndicatorComp.classList.remove('save-indicator-group-saving');
-            saveIndicatorComp.classList.add('save-indicator-group-saved');
-          }, timeout);
+    const save = (controlElement) => {
+      if (optionsChanged()) {
+        saving(controlElement);
+        clearTimeout(saveAction);
+        saveAction = setTimeout(() => {
+          saveOptions();
+          saved(controlElement);
+        }, 150);
+      }
+    };
+
+    Array.from(document.body.querySelectorAll('.form-input')).forEach((element) => {
+      if (element.tagName.toLowerCase() === 'input' && element.type === 'text') {
+        const parentElement = element.parentElement;
+        let controlElement;
+        if (parentElement.classList.contains('has-save-indicator') && parentElement.classList.contains('control')) {
+          controlElement = parentElement;
         }
-      };
+        element.onkeyup = element.oninput = element.onpaste = element.onchange = () => save(controlElement);
+      } else {
+        element.onchange = () => save();
+      }
     });
   };
 
   restoreOptions();
 
-  initAlert(saveAlert);
-  initAlert(addCustomThemeAlert);
-  initAlert(addCustomJavaScriptAlert);
+  initNotification(addCustomThemeNotification);
+  initNotification(addCustomJavaScriptNotification);
   initEnablingLocalFileAlert();
 
   const inputCustomThemeElement = document.getElementById('inputCustomTheme');
   inputCustomThemeElement.onchange = () => {
-    resetAlert(addCustomThemeAlert);
+    resetNotification(addCustomThemeNotification);
     const files = inputCustomThemeElement.files;
     if (files.length !== 0) {
       const file = files[0];
@@ -242,20 +250,20 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser;
       const options = Array.from(customThemeOptGroup.querySelectorAll('option'));
       const maybeTheme = options.find((element) => element.value === themeName);
       const themeExists = typeof maybeTheme !== 'undefined';
-      const alert = buildAlert(themeExists, themeName, 'theme');
+      const alert = buildNotification(themeExists, themeName, 'theme');
       if (!themeExists) {
         addNewOpt(customThemeOptGroup, themeName);
       }
       selectOpt(selectTheme, themeName);
       updateThemeFile(file, themeName);
-      showAlert(addCustomThemeAlert, alert);
+      showNotification(addCustomThemeNotification, alert);
       inputCustomThemeElement.value = '';
     }
   };
 
   const inputCustomJavaScriptElement = document.getElementById('inputCustomJavaScript');
   inputCustomJavaScriptElement.onchange = () => {
-    resetAlert(addCustomJavaScriptAlert);
+    resetNotification(addCustomJavaScriptNotification);
     const files = inputCustomJavaScriptElement.files;
     if (files.length !== 0) {
       const file = files[0];
@@ -263,17 +271,17 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser;
       const options = Array.from(selectJavaScript.querySelectorAll('option'));
       const maybeJavaScript = options.find((element) => element.value === javaScriptName);
       const javaScriptExists = typeof maybeJavaScript !== 'undefined';
-      const alert = buildAlert(javaScriptExists, javaScriptName, 'JavaScript');
+      const alert = buildNotification(javaScriptExists, javaScriptName, 'JavaScript');
       if (!javaScriptExists) {
         addNewOpt(selectJavaScript, javaScriptName);
       }
       selectOpt(selectJavaScript, javaScriptName);
       updateJavaScriptFile(file, javaScriptName);
-      showAlert(addCustomJavaScriptAlert, alert);
+      showNotification(addCustomJavaScriptNotification, alert);
       inputCustomJavaScriptElement.value = '';
     }
   };
 
-  // Initialize save indicators
-  initSaveIndicators({}, optionsChanged, saveOptions);
+  // Automatically save the options
+  initAutoSave();
 })(webExtension, document);

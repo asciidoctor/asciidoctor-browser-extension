@@ -1,223 +1,213 @@
+<!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Asciidoctor.js Live Preview Options</title>
-  <link rel="stylesheet" href="../css/bootstrap.min.css">
   <link rel="stylesheet" href="../css/font-awesome.min.css">
-  <style>
-    html {
-      min-width: 35rem
-    }
-
-    .alert-sm {
-      margin-top: 10px;
-      margin-bottom: 15px;
-      padding: 5px 10px;
-    }
-
-    .input-group-addon.save-indicator-group-saved {
-      border: 1px solid #3c763d;
-      color: #3c763d;
-      background-color: #dff0d8;
-    }
-
-    .input-group-addon.save-indicator-group-saving {
-      border: 1px solid #31708f;
-      color: #31708f;
-      background-color: #d9edf7;
-    }
-
-    .save-indicator-group-saving .save-indicator-saved {
-      display: none;
-    }
-
-    .save-indicator-group-saved .save-indicator-saving {
-      display: none;
-    }
-  </style>
+  <link rel="stylesheet" href="../css/options.css">
 </head>
 <body>
-<div class="container">
-  <h1>Options</h1>
-
-  <div id="enablingLocalFileAlert" class="alert alert-info hidden">
-    <button type="button" class="close">
-      <span aria-hidden="true">&times;</span>
-      <span class="sr-only">Close</span>
-    </button>
-    <div class="content">
+<section class="section">
+  <div class="container">
+    <div id="enablingLocalFileNotification" class="notification is-info is-small is-hidden">
+      <button class="delete"></button>
       <strong><i class="fa fa-info-circle"></i> Heads up!</strong>
       If your are using Chrome or Opera, in order to use this extension on local files (i.e. files on this computer),
-      you must check the option <code>Allow access to file URLs</code> on the <a id="openExtensionsPageLink" href="#">chrome://extensions</a> page
+      you must check the option <code>Allow access to file URLs</code> on the <a id="openExtensionsPageLink" href="#">chrome://extensions</a>
+      page
     </div>
-  </div>
-  <form class="form-horizontal" role="form">
-    <div class="form-group">
-      <label for="inputCustomAttributes" class="col-lg-2 control-label">Custom attributes</label>
-      <div class="col-lg-10">
-        <div class="input-group">
-          <input type="text" class="form-control form-input" id="inputCustomAttributes" name="inputCustomAttributes">
-          <span data-save-indicator="inputCustomAttributes"></span>
+
+    <form>
+      <div class="field">
+        <label class="label" for="inputCustomAttributes">Custom attributes</label>
+        <div class="control is-expanded has-icons-right has-save-indicator">
+          <input id="inputCustomAttributes" class="input form-input" type="text" placeholder="" >
+          <span class="icon is-small is-right">
+            <i class="fa fa-check"></i>
+          </span>
+          <p class="help">
+            A string of space-separated key/value attribute pairs (e.g., source-highlighter=highlight.js).
+            <a href="http://asciidoctor.org/docs/user-manual/#attributes">Learn more</a> about attributes.
+          </p>
         </div>
-        <span class="help-block">A string of space-separated key/value attribute pairs (e.g., source-highlighter=highlightjs).
-          <a href="http://asciidoctor.org/docs/user-manual/#attributes">Learn more</a> about attributes.</span>
       </div>
-    </div>
-    <div class="form-group">
-      <label for="selectSafeMode" class="col-lg-2 control-label">Safe mode</label>
-      <div class="col-lg-10">
-        <div class="input-group">
-          <select class="form-control form-input" id="selectSafeMode" name="selectSafeMode">
-            <option value="unsafe">unsafe</option>
-            <option value="safe">safe</option>
-            <option value="server">server</option>
-            <option value="secure">secure</option>
-          </select>
-          <span data-save-indicator="selectSafeMode"></span>
+      <div class="field">
+        <label class="label" for="selectSafeMode">Safe mode</label>
+        <div class="control has-icons-left">
+          <div class="select">
+            <select id="selectSafeMode" class="form-input">
+              <option value="unsafe">unsafe</option>
+              <option value="safe">safe</option>
+              <option value="server">server</option>
+              <option value="secure">secure</option>
+            </select>
+          </div>
+          <div class="icon is-small is-left">
+            <i class="fa fa-lock"></i>
+          </div>
         </div>
-        <span class="help-block">Controls features related to security.
-          <a href="http://asciidoctor.org/docs/user-manual/#running-asciidoctor-securely">Learn more</a> about these values.
+        <p class="help">
+          Controls features related to security.
+          <a href="http://asciidoctor.org/docs/user-manual/#running-asciidoctor-securely">Learn more</a> about these
+          values.
+        </p>
+      </div>
+      <div class="field">
+        <label class="label" for="inputAllowTxtExtension">Files extension</label>
+        <label class="checkbox">
+          <input id="inputAllowTxtExtension" type="checkbox" class="form-input">
+          Preview files with <code>txt</code> extension
+        </label>
+        <span class="help">
+          By default the extension will render <code>ad</code>, <code>adoc</code>, <code>asc</code> and <code>asciidoc</code> files.
         </span>
       </div>
-    </div>
-    <div class="form-group">
-      <label for="inputAllowTxtExtension" class="col-lg-2 control-label">Preview .txt files</label>
-      <div class="col-lg-10">
-        <div class="input-group">
-          <div class="checkbox">
-            <label>
-              <input class="form-input" type="checkbox" id="inputAllowTxtExtension" name="inputAllowTxtExtension">
-            </label>
+      <div class="field">
+        <label class="label" for="selectRemotePollFrequency">Poll for changes to files loaded from URLs</label>
+        <div class="control has-icons-left">
+          <div class="select">
+            <select id="selectRemotePollFrequency" class="form-input">
+              <option value="0">disabled</option>
+              <option value="1">1s</option>
+              <option value="2">2s</option>
+              <option value="3">3s</option>
+              <option value="5">5s</option>
+              <option value="8">8s</option>
+            </select>
           </div>
-          <span data-save-indicator="inputAllowTxtExtension"></span>
+          <div class="icon is-small is-left">
+            <i class="fa fa-refresh"></i>
+          </div>
+          <span class="help">
+            URLs use the <code>http</code> or <code>https</code> protocol.
+          </span>
         </div>
-        <span class="help-block">Preview files with .txt extension.</span>
       </div>
-    </div>
-    <div class="form-group">
-      <label for="selectRemotePollFrequency" class="col-lg-2 control-label">Poll for changes to files loaded from URLs</label>
-      <div class="col-lg-10">
-        <div class="input-group">
-          <select class="form-control form-input" id="selectRemotePollFrequency" name="selectRemotePollFrequency">
-            <option value="0">disabled</option>
-            <option value="1">1s</option>
-            <option value="2">2s</option>
-            <option value="3">3s</option>
-            <option value="5">5s</option>
-            <option value="8">8s</option>
-          </select>
-          <span data-save-indicator="selectRemotePollFrequency"></span>
+      <div class="field">
+        <label class="label" for="selectLocalPollFrequency">Poll for changes to local files</label>
+        <div class="control has-icons-left">
+          <div class="select">
+            <select id="selectLocalPollFrequency" class="form-input">
+              <option value="0">disabled</option>
+              <option value="1">1s</option>
+              <option value="2">2s</option>
+              <option value="3">3s</option>
+              <option value="5">5s</option>
+              <option value="8">8s</option>
+            </select>
+          </div>
+          <div class="icon is-small is-left">
+            <i class="fa fa-refresh"></i>
+          </div>
         </div>
-        <span class="help-block">URLs use the <code>http</code> or <code>https</code> protocol.</span>
+        <span class="help">
+          Local files use the <code>file</code> protocol (or no protocol).
+        </span>
       </div>
-    </div>
-    <div class="form-group">
-      <label for="selectLocalPollFrequency" class="col-lg-2 control-label">Poll for changes to local files</label>
-      <div class="col-lg-10">
-        <div class="input-group">
-          <select class="form-control form-input" id="selectLocalPollFrequency" name="selectLocalPollFrequency">
-            <option value="0">disabled</option>
-            <option value="1">1s</option>
-            <option value="2">2s</option>
-            <option value="3">3s</option>
-            <option value="5">5s</option>
-            <option value="8">8s</option>
-          </select>
-          <span data-save-indicator="selectLocalPollFrequency"></span>
+      <div class="field">
+        <label class="label" for="selectTheme">Theme / Stylesheet</label>
+        <div class="control has-icons-left">
+          <div class="select">
+            <select id="selectTheme" class="form-input">
+              <optgroup label="Default">
+                <option>asciidoctor</option>
+                <option>colony</option>
+                <option>foundation</option>
+                <option>foundation-lime</option>
+                <option>foundation-potion</option>
+                <option>github</option>
+                <option>golo</option>
+                <option>iconic</option>
+                <option>maker</option>
+                <option>readthedocs</option>
+                <option>riak</option>
+                <option>rocket-panda</option>
+                <option>rubygems</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="icon is-small is-left">
+            <i class="fa fa-paint-brush"></i>
+          </div>
         </div>
-        <span class="help-block">Local files use the <code>file</code> protocol (or no protocol).</span>
+        <p class="help">
+          The CSS styles to apply to the rendered HTML.
+        </p>
+        <div class="file is-small">
+          <label class="file-label">
+            <input class="file-input" type="file" id="inputCustomTheme" accept="text/css">
+            <span class="file-cta">
+              <span class="file-icon">
+                <i class="fa fa-upload"></i>
+              </span>
+              <span class="file-label">
+                Add a stylesheet…
+              </span>
+            </span>
+          </label>
+        </div>
+        <div id="addCustomThemeNotification" class="notification">
+          <button class="delete"></button>
+          <div class="notification-text"></div>
+        </div>
       </div>
-    </div>
-    <div class="form-group">
-      <label for="selectTheme" class="col-lg-2 control-label">Theme / Stylesheet</label>
-      <div class="col-lg-10">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="input-group">
-              <select class="form-control form-input" id="selectTheme" name="selectTheme">
-                <optgroup label="Default">
-                  <option>asciidoctor</option>
-                  <option>colony</option>
-                  <option>foundation</option>
-                  <option>foundation-lime</option>
-                  <option>foundation-potion</option>
-                  <option>github</option>
-                  <option>golo</option>
-                  <option>iconic</option>
-                  <option>maker</option>
-                  <option>readthedocs</option>
-                  <option>riak</option>
-                  <option>rocket-panda</option>
-                  <option>rubygems</option>
-                </optgroup>
-              </select>
-              <span data-save-indicator="selectTheme"></span>
+      <div class="field">
+        <label class="label" for="selectJavaScript">JavaScript</label>
+        <div class="control has-icons-left">
+          <div class="select">
+            <select id="selectJavaScript" class="form-input">
+              <option value=""></option>
+            </select>
+          </div>
+          <div class="icon is-small is-left">
+            <i class="fa fa-code"></i>
+          </div>
+        </div>
+        <p class="help">
+          Add a custom JavaScript to the rendered HTML.
+        </p>
+        <div class="file is-small">
+          <label class="file-label">
+            <input class="file-input" type="file" id="inputCustomJavaScript" accept="application/javascript">
+            <span class="file-cta">
+              <span class="file-icon">
+                <i class="fa fa-upload"></i>
+              </span>
+              <span class="file-label">
+                Add a JavaScript…
+              </span>
+            </span>
+          </label>
+        </div>
+        <div id="addCustomJavaScriptNotification" class="notification">
+          <button class="delete"></button>
+          <div class="notification-text"></div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Load the JavaScript…</label>
+        <div class="field">
+          <div class="control">
+            <div>
+              <label class="radio">
+                <input type="radio" name="optionsLoadJavaScript" id="optionsJavaScriptAfter" value="after" class="form-input">
+                … after the document has been rendered
+              </label>
             </div>
-            <span class="help-block">The CSS styles to apply to the rendered HTML.</span>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-12">
-            <b>Add Stylesheet...</b>
-            <input type="file" id="inputCustomTheme" accept="text/css">
-            <div id="addCustomThemeAlert" role="alert">
-              <button type="button" class="close">
-                <span aria-hidden="true">&times;</span>
-                <span class="sr-only">Close</span>
-              </button>
-              <div class="content"></div>
+            <div>
+              <label class="radio">
+                <input type="radio" name="optionsLoadJavaScript" id="optionsJavaScriptBefore" value="before" class="form-input">
+                … before the document has been rendered
+              </label>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="form-group">
-      <label for="selectTheme" class="col-lg-2 control-label">JavaScript</label>
-      <div class="col-lg-10">
-        <div class="input-group">
-          <select class="form-control form-input" id="selectJavaScript" name="selectJavaScript">
-            <option value=""></option>
-          </select>
-          <span data-save-indicator="selectJavaScript"></span>
-        </div>
-        <span class="help-block">Add a custom JavaScript to the rendered HTML.</span>
-        <b>Add JavaScript...</b>
-        <input type="file" id="inputCustomJavaScript" accept="application/javascript">
-        <div id="addCustomJavaScriptAlert" role="alert">
-          <button type="button" class="close">
-            <span aria-hidden="true">&times;</span>
-            <span class="sr-only">Close</span>
-          </button>
-          <div class="content"></div>
-        </div>
-        <br/>
-        <div class="input-group">
-          <b>Load the JavaScript...</b>
-          <div class="radio">
-            <label>
-              <input class="form-input" type="radio" name="optionsLoadJavaScript" id="optionsJavaScriptAfter" value="after">
-              after the document has been rendered
-            </label>
-          </div>
-          <div class="radio">
-            <label>
-              <input class="form-input" type="radio" name="optionsLoadJavaScript" id="optionJavaScriptBefore" value="before">
-              before the document has been rendered
-            </label>
-          </div>
-          <span data-save-indicator="optionsLoadJavaScript"></span>
-        </div>
-      </div>
-    </div>
-  </form>
-  <br/>
-  <div id="saveAlert" class="alert alert-success">
-    <button type="button" class="close">
-      <span aria-hidden="true">&times;</span>
-      <span class="sr-only">Close</span>
-    </button>
-    <div class="content"></div>
+    </form>
   </div>
-</div>
+</section>
+
 </body>
 <script src="../js/options.js"></script>
 </html>
