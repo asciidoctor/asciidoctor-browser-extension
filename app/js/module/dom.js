@@ -24,6 +24,42 @@ asciidoctor.browser.dom = ((document) => {
   }
 
   /**
+   * Replace a <link rel="stylesheet"> if the element changed.
+   * Effectively comparing the href attribute.
+   * @param parent
+   * @param stylesheetLinkElementAttributes
+   */
+  module.replaceStylesheetLinkElement = (parent, stylesheetLinkElementAttributes) => {
+    const element = document.getElementById(stylesheetLinkElementAttributes.id);
+    if (element) {
+      if (element.href === stylesheetLinkElementAttributes.href) {
+        // nothing to do
+        return;
+      }
+      element.parentNode.removeChild(element);
+    }
+    parent.appendChild(module.createStylesheetLinkElement(stylesheetLinkElementAttributes));
+  }
+
+  /**
+   * Replace a <style type="text/css"> if the element changed.
+   * Effectively comparing the innerHTML attribute.
+   * @param parent
+   * @param stylesheetLinkElementAttributes
+   */
+  module.replaceStyleElement = (parent, styleElementAttributes) => {
+    const element = document.getElementById(styleElementAttributes.id);
+    if (element) {
+      if (element.innerHTML === styleElementAttributes.innerHTML) {
+        // nothing to do
+        return;
+      }
+      element.parentNode.removeChild(element);
+    }
+    parent.appendChild(module.createStyleElement(styleElementAttributes));
+  }
+
+  /**
    * Remove a element by id from the document.
    * @param id The element's id
    */

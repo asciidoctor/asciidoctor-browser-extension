@@ -148,18 +148,35 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
     const themeNames = Theme.getDefaultThemeNames();
     // Check if the theme is packaged in the extension... if not it's a custom theme
     if (themeNames.includes(themeName)) {
-      Dom.replace(document.head, Dom.createStylesheetLinkElement({
+      Dom.replaceStylesheetLinkElement(document.head, {
         id: 'asciidoctor-browser-style',
         href: webExtension.extension.getURL(`css/themes/${themeName}.css`)
-      }));
+      });
     } else {
       const customThemeContent = await Settings.getSetting(Constants.CUSTOM_THEME_PREFIX + themeName);
       if (customThemeContent) {
-        Dom.replace(document.head, Dom.createStyleElement({
+        Dom.replaceStyleElement(document.head, {
           id: 'asciidoctor-browser-style',
           innerHTML: customThemeContent
-        }));
+        });
       }
+    }
+  };
+
+  /**
+   * Update the <div id="content"> element.
+   * @param html The new HTML content
+   */
+  const updateContent = (html) => {
+    const contentElement = document.getElementById('content');
+    if (contentElement) {
+      contentElement.innerHTML = html;
+    } else {
+      let contentDiv = document.createElement('div');
+      contentDiv.id = 'content';
+      contentDiv.innerHTML = html;
+      document.body.innerHTML = ''; // clear <body>
+      document.body.appendChild(contentDiv);
     }
   };
 
@@ -185,11 +202,7 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
     if (maxWidth) {
       document.body.style.maxWidth = maxWidth;
     }
-    let contentDiv = document.createElement('div');
-    contentDiv.id = 'content';
-    contentDiv.innerHTML = asciidoctorDocument.html;
-    document.body.innerHTML = ''; // clear <body>
-    document.body.appendChild(contentDiv);
+    updateContent(asciidoctorDocument.html);
 
     forceLoadDynamicObjects();
     if (isStemEnabled(doc)) {
