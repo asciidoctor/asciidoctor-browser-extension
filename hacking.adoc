@@ -29,20 +29,16 @@ This command will produce a zip file that can be load in Chrome: [.path]_dist/as
 This project is using a code linter to enforce code consistency. 
 To make sure that the code you have contributed, follow the code rules, execute the following command:
 
- $ npm run lint
+ $ npm run lint:code
 
 == Add-on Linter
 
 Mozilla provides a Node.js package to validate an add-on.
-You can install the linter with `npm`:
+You can run the linter with `npm`:
 
- $ npm install -g addons-linter
+ $ npm run lint:firefox
 
-This command will install the package globally, so you can use the linter from any directory on your machine.
-
-After installation, run the linter on the archive produced by `npm run build`:
-
- $ addons-linter dist/asciidoctor-browser-extension.zip
+NOTE: The linter will inspect the archive produced by `npm run build`, so make sure the file `dist/asciidoctor-browser-extension.zip` is present before running this command.
 
 == Release
 

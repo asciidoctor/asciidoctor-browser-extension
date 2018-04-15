@@ -22,6 +22,7 @@ before_install:
 - export PATH=$HOME/.yarn/bin:$PATH
 
 script:
-- npm run lint
-- npm run build
-- npm run test
+- yarn lint:code
+- yarn build
+- yarn lint:firefox
+- yarn test
