@@ -32,18 +32,33 @@ asciidoctor.browser.loader = (webExtension, document, location, Settings, Render
     startAutoReload();
   };
 
-  const unloadExtension = () => {
-    clearInterval(autoReloadInterval);
-    $.ajax({
-      url: location.href,
-      cache: false,
-      complete: (request) => {
-        if (isHtmlContentType(request)) {
+  const executeRequest = (url) => new Promise((resolve, reject) => {
+    const request = new XMLHttpRequest();
+    if (request.overrideMimeType) {
+      request.overrideMimeType('text/plain;charset=utf-8');
+    }
+    request.onreadystatechange = (event) => {
+      // XMLHttpRequest.DONE === 4
+      if (request.readyState === XMLHttpRequest.DONE) {
+        if (request.status === 200 || request.status === 0) {
+          resolve(request);
           return;
         }
-        displayContentAsPlainText(request.responseText);
+        reject(request);
       }
-    });
+    };
+    // disable cache
+    request.open('GET', `${url}?_=${new Date().getTime()}`, true);
+    request.send(null);
+  });
+
+  const unloadExtension = async () => {
+    clearInterval(autoReloadInterval);
+    const request = await executeRequest(location.href);
+    if (isHtmlContentType(request)) {
+      return;
+    }
+    displayContentAsPlainText(request.responseText);
   };
 
   /**
@@ -60,22 +75,17 @@ asciidoctor.browser.loader = (webExtension, document, location, Settings, Render
     document.body.appendChild(preElement);
   };
 
-  const fetchContent = () => {
+  const fetchContent = async () => {
     // Check if the content is available before using an AJAX query
     if (document.body.getElementsByClassName('pre').length === 1 && document.body.childNodes.length === 1) {
       Renderer.prepare();
       Renderer.update(document.body.getElementsByClassName('pre')[0].innerText);
     } else {
-      $.ajax({
-        url: location.href,
-        cache: false,
-        complete: (request) => {
-          if (isHtmlContentType(request)) {
-            return;
-          }
-          module.loadContent(request);
-        }
-      });
+      const request = await getRequest(location.href);
+      if (isHtmlContentType(request)) {
+        return;
+      }
+      module.loadContent(request);
     }
   };
 
@@ -112,19 +122,9 @@ asciidoctor.browser.loader = (webExtension, document, location, Settings, Render
       // Poll is disabled!
       return;
     }
-    autoReloadInterval = setInterval(() => {
-      $.ajax({
-        beforeSend: (xhr) => {
-          if (xhr.overrideMimeType) {
-            xhr.overrideMimeType('text/plain;charset=utf-8');
-          }
-        },
-        url: location.href,
-        cache: false,
-        success: (source) => {
-          reloadContent(source);
-        }
-      });
+    autoReloadInterval = setInterval(async () => {
+      const request = await executeRequest(location.href);
+      reloadContent(request.responseText);
     }, pollFrequency * 1000);
   };
 
