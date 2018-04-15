@@ -15,7 +15,9 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser;
   const addCustomThemeNotification = document.getElementById('addCustomThemeNotification');
   const addCustomJavaScriptNotification = document.getElementById('addCustomJavaScriptNotification');
   const enablingLocalFileNotification = document.getElementById('enablingLocalFileNotification');
+  const materialDesignChromeNotification = document.getElementById('materialDesignChromeNotification');
   const openExtensionsPageLink = document.getElementById('openExtensionsPageLink');
+  const openFlagsPageLink = document.getElementById('openFlagsPageLink');
 
   const showEnablingLocalFileNotification = () => {
     openExtensionsPageLink.onclick = () => webExtension.tabs.create({'url': 'chrome://extensions/?id=' + webExtension.runtime.id});
@@ -23,18 +25,29 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser;
     enablingLocalFileNotification.classList.remove('is-hidden');
   };
 
+  const showMaterialDesignChromeNotification = () => {
+    openFlagsPageLink.onclick = () => webExtension.tabs.create({'url': 'chrome://flags/#enable-md-extensions'});
+    initNotification(materialDesignChromeNotification);
+    materialDesignChromeNotification.classList.remove('is-hidden');
+  };
+
   const initEnablingLocalFileAlert = () => {
     // This API is currently only implemented in Firefox and Firefox Mobile.
     // Reference: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/getBrowserInfo
     if (typeof webExtension.runtime.getBrowserInfo === 'function') {
       webExtension.runtime.getBrowserInfo().then((info) => {
-        if (info.name.includes('Chrome') || info.name.includes('Opera')) {
+        if (info.name.includes('Chrome')) {
+          showEnablingLocalFileNotification();
+          showMaterialDesignChromeNotification();
+        }
+        if (info.name.includes('Opera')) {
           showEnablingLocalFileNotification();
         }
       });
     } else {
       // Assume that we are running Chrome or Opera (even if it can be Edge)
       showEnablingLocalFileNotification();
+      showMaterialDesignChromeNotification();
     }
   };
 
