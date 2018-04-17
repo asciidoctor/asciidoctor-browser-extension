@@ -9,8 +9,9 @@
   },
   "scripts": {
     "test": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
-    "build": "npm run lint && node npm/build.js",
-    "lint": "eslint app/js/*.js app/js/vendor/asciidoctor-*.js npm"
+    "build": "npm run lint:code && node npm/build.js",
+    "lint:code": "eslint app/js/*.js app/js/vendor/asciidoctor-*.js npm",
+    "lint:firefox": "addons-linter dist/asciidoctor-browser-extension.zip"
   },
   "homepage": "https://github.com/asciidoctor/asciidoctor-chrome-extension",
   "author": {
@@ -25,6 +26,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "addons-linter": "0.41.0",
     "archiver": "2.0.3",
     "asciidoctor-plantuml": "0.8.1",
     "asciidoctor.js": "1.5.6-rc.1",
@@ -32,7 +34,7 @@
     "bestikk-log": "0.1.0",
     "bulma": "0.6.2",
     "chartist": "0.8.3",
-    "csso": "^3.5.0",
+    "csso": "3.5.0",
     "eslint": "4.8.0",
     "eslint-config-standard": "10.2.1",
     "eslint-plugin-import": "2.7.0",
