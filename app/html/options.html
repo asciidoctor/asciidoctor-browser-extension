@@ -13,16 +13,21 @@
     <div id="enablingLocalFileNotification" class="notification is-info is-small is-hidden">
       <button class="delete"></button>
       <strong><i class="fa fa-info-circle"></i> Heads up!</strong>
-      If your are using Chrome or Opera, in order to use this extension on local files (i.e. files on this computer),
+      If you are using Chrome or Opera, in order to use this extension on local files (i.e. files on this computer),
       you must check the option <code>Allow access to file URLs</code> on the <a id="openExtensionsPageLink" href="#">chrome://extensions</a>
       page
     </div>
-
+    <div id="materialDesignChromeNotification" class="notification is-danger is-small is-hidden">
+      <button class="delete"></button>
+      <strong><i class="fa fa-exclamation-circle"></i> Important!</strong>
+      If you are using Chrome 65 and the scrollbar is missing, do <i>not</i> freak out, it's just a <i class="fa fa-bug"></i> in the new Chrome material UI.
+      To workaround this issue, you must disable the new material UI on the <a id="openFlagsPageLink" href="#">chrome://flags/#enable-md-extensions</a> page
+    </div>
     <form>
       <div class="field">
         <label class="label" for="inputCustomAttributes">Custom attributes</label>
         <div class="control is-expanded has-icons-right has-save-indicator">
-          <input id="inputCustomAttributes" class="input form-input" type="text" placeholder="" >
+          <input id="inputCustomAttributes" class="input form-input" type="text" placeholder="">
           <span class="icon is-small is-right">
             <i class="fa fa-check"></i>
           </span>
@@ -191,13 +196,15 @@
           <div class="control">
             <div>
               <label class="radio">
-                <input type="radio" name="optionsLoadJavaScript" id="optionsJavaScriptAfter" value="after" class="form-input">
+                <input type="radio" name="optionsLoadJavaScript" id="optionsJavaScriptAfter" value="after"
+                       class="form-input">
                 … after the document has been rendered
               </label>
             </div>
             <div>
               <label class="radio">
-                <input type="radio" name="optionsLoadJavaScript" id="optionsJavaScriptBefore" value="before" class="form-input">
+                <input type="radio" name="optionsLoadJavaScript" id="optionsJavaScriptBefore" value="before"
+                       class="form-input">
                 … before the document has been rendered
               </label>
             </div>
