@@ -193,7 +193,6 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser;
   const initAutoSave = () => {
     function saving (controlElement) {
       if (controlElement) {
-        console.log('controlElement', controlElement);
         controlElement.classList.add('is-loading');
         controlElement.getElementsByClassName('icon').item(0).classList.add('is-hidden');
       }
@@ -201,7 +200,6 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser;
 
     function saved (controlElement) {
       if (controlElement) {
-        console.log('controlElement', controlElement);
         controlElement.classList.remove('is-loading');
         controlElement.getElementsByClassName('icon').item(0).classList.remove('is-hidden');
       }
