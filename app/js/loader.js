@@ -30,12 +30,6 @@ asciidoctor.browser.loader = (webExtension, document, location, XMLHttpRequest, 
     }
   };
 
-  const loadContent = async (request) => {
-    Renderer.prepare();
-    await Renderer.update(request.responseText);
-    startAutoReload();
-  };
-
   const executeRequest = (url) => new Promise((resolve, reject) => {
     const request = new XMLHttpRequest();
     if (request.overrideMimeType) {
@@ -80,17 +74,20 @@ asciidoctor.browser.loader = (webExtension, document, location, XMLHttpRequest, 
   };
 
   const fetchContent = async () => {
+    let textContent;
     // Check if the content is available before using an AJAX query
     if (document.body.getElementsByTagName('pre').length === 1 && document.body.childNodes.length === 1) {
-      Renderer.prepare();
-      await Renderer.update(document.body.getElementsByTagName('pre')[0].innerText);
+      textContent = document.body.getElementsByTagName('pre')[0].innerText;
     } else {
       const request = await executeRequest(location.href);
       if (isHtmlContentType(request)) {
         return;
       }
-      await loadContent(request);
+      textContent = request.responseText;
     }
+    Renderer.prepare();
+    await Renderer.update(textContent);
+    startAutoReload();
   };
 
   const reloadContent = async (source) => {
