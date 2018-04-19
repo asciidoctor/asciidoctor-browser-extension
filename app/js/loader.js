@@ -16,7 +16,7 @@ asciidoctor.browser.loader = (webExtension, document, location, XMLHttpRequest, 
     if (await Settings.isExtensionEnabled()) {
       await module.load();
     }
-  }
+  };
 
   module.load = async () => {
     const txtExtensionRegex = /\.txt[.|?]?.*?$/;
