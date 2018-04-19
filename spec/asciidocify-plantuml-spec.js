@@ -31,6 +31,9 @@ Bob -> Alice : hello
         const plantumlImg = plantumlDiv.getElementsByTagName('img')[0];
         expect(plantumlImg.getAttribute('src')).toBe('http://www.plantuml.com/plantuml/png/SyfFKj2rKt3CoKnELR1Io4ZDoSa70000');
         done();
-      });
+      })
+      .catch((error) => {
+        fail(error);
+      })
   });
 });

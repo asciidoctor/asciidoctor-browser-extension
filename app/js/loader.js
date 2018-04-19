@@ -1,4 +1,4 @@
-asciidoctor.browser.loader = (webExtension, document, location, Settings, Renderer) => {
+asciidoctor.browser.loader = (webExtension, document, location, XMLHttpRequest, Settings, Renderer) => {
   const module = {};
 
   webExtension.runtime.onMessage.addListener(function handleMessage (message, sender) {
@@ -10,6 +10,13 @@ asciidoctor.browser.loader = (webExtension, document, location, Settings, Render
       }
     }
   });
+
+  module.init = async () => {
+    // Extension is enabled ?
+    if (await Settings.isExtensionEnabled()) {
+      await module.load();
+    }
+  }
 
   module.load = async () => {
     const txtExtensionRegex = /\.txt[.|?]?.*?$/;
@@ -23,12 +30,9 @@ asciidoctor.browser.loader = (webExtension, document, location, Settings, Render
     }
   };
 
-  module.loadContent = async (request) => {
-    // Extension is enabled ?
-    if (await Settings.isExtensionEnabled()) {
-      Renderer.prepare();
-      await Renderer.update(request.responseText);
-    }
+  const loadContent = async (request) => {
+    Renderer.prepare();
+    await Renderer.update(request.responseText);
     startAutoReload();
   };
 
@@ -85,7 +89,7 @@ asciidoctor.browser.loader = (webExtension, document, location, Settings, Render
       if (isHtmlContentType(request)) {
         return;
       }
-      await module.loadContent(request);
+      await loadContent(request);
     }
   };
 
