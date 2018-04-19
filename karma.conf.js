@@ -4,7 +4,6 @@ module.exports = function (config) {
     files: [
       'spec/webextension-api.js',
       'app/js/vendor/highlight.min.js',
-      'app/js/vendor/jquery.min.js',
       "app/js/vendor/chartist.min.js",
       "app/js/vendor/plantuml.min.js",
       'app/js/vendor/md5.js',
