@@ -16,10 +16,10 @@ asciidoctor.browser.loader = (webExtension, document, location, Settings, Render
     if (location.href.match(txtExtensionRegex)) {
       // .txt extension should be allowed ?
       if (await Settings.isTxtExtAllowed()) {
-        fetchContent();
+        await fetchContent();
       }
     } else {
-      fetchContent();
+      await fetchContent();
     }
   };
 
@@ -27,7 +27,7 @@ asciidoctor.browser.loader = (webExtension, document, location, Settings, Render
     // Extension is enabled ?
     if (await Settings.isExtensionEnabled()) {
       Renderer.prepare();
-      Renderer.update(request.responseText);
+      await Renderer.update(request.responseText);
     }
     startAutoReload();
   };
@@ -77,15 +77,15 @@ asciidoctor.browser.loader = (webExtension, document, location, Settings, Render
 
   const fetchContent = async () => {
     // Check if the content is available before using an AJAX query
-    if (document.body.getElementsByClassName('pre').length === 1 && document.body.childNodes.length === 1) {
+    if (document.body.getElementsByTagName('pre').length === 1 && document.body.childNodes.length === 1) {
       Renderer.prepare();
-      Renderer.update(document.body.getElementsByClassName('pre')[0].innerText);
+      await Renderer.update(document.body.getElementsByTagName('pre')[0].innerText);
     } else {
-      const request = await getRequest(location.href);
+      const request = await executeRequest(location.href);
       if (isHtmlContentType(request)) {
         return;
       }
-      module.loadContent(request);
+      await module.loadContent(request);
     }
   };
 
