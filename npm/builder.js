@@ -85,7 +85,7 @@ Builder.prototype.compileSass = function () {
 Builder.prototype.copy = function () {
   log.task('copy vendor resources');
   // JavaScript files
-  bfs.copySync('node_modules/asciidoctor.js/dist/asciidoctor.js', 'app/js/vendor/asciidoctor.js');
+  bfs.copySync('node_modules/asciidoctor.js/dist/browser/asciidoctor.js', 'app/js/vendor/asciidoctor.js');
   bfs.copySync('node_modules/asciidoctor-plantuml/dist/browser/asciidoctor-plantuml.js', 'app/js/vendor/plantuml.min.js');
   bfs.copySync('node_modules/chartist/dist/chartist.min.js', 'app/js/vendor/chartist.min.js');
   // Stylesheets
