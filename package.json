@@ -28,7 +28,7 @@
   "devDependencies": {
     "addons-linter": "0.41.0",
     "archiver": "2.0.3",
-    "asciidoctor-plantuml": "0.8.1",
+    "asciidoctor-plantuml": "0.8.4",
     "asciidoctor.js": "1.5.6",
     "bestikk-fs": "0.1.0",
     "bestikk-log": "0.1.0",

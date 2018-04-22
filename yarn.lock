@@ -320,11 +320,10 @@ asap@~2.0.3:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/asap/-/asap-2.0.6.tgz#e50347611d7e690943208bbdafebcbc2fb866d46"
 
-asciidoctor-plantuml@0.8.1:
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/asciidoctor-plantuml/-/asciidoctor-plantuml-0.8.1.tgz#bc59e6fdf8ce050510b8a4654265830607a15e6d"
+asciidoctor-plantuml@0.8.4:
+  version "0.8.4"
+  resolved "https://registry.yarnpkg.com/asciidoctor-plantuml/-/asciidoctor-plantuml-0.8.4.tgz#296bc415323f4d42a263690bb38f521d0ae77f50"
   dependencies:
-    asciidoctor.js "1.5.6-rc.1"
     mkdirp "^0.5.1"
     plantuml-encoder "^1.2.5"
     randomstring "^1.1.5"
@@ -335,12 +334,6 @@ asciidoctor.js@1.5.6:
   resolved "https://registry.yarnpkg.com/asciidoctor.js/-/asciidoctor.js-1.5.6.tgz#12f4810c62ea47867da145e819fc93b0674b5431"
   dependencies:
     opal-runtime "1.0.3"
-
-asciidoctor.js@1.5.6-rc.1:
-  version "1.5.6-rc.1"
-  resolved "https://registry.yarnpkg.com/asciidoctor.js/-/asciidoctor.js-1.5.6-rc.1.tgz#8bdd07d817817e626bc3e2e09aa35500bfce4b3d"
-  dependencies:
-    opal-runtime "1.0.2"
 
 asn1@~0.2.3:
   version "0.2.3"
@@ -3409,13 +3402,6 @@ onetime@^2.0.0:
   resolved "https://registry.yarnpkg.com/onetime/-/onetime-2.0.1.tgz#067428230fd67443b2794b22bba528b6867962d4"
   dependencies:
     mimic-fn "^1.0.0"
-
-opal-runtime@1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/opal-runtime/-/opal-runtime-1.0.2.tgz#dae7669f23943b3f3fbba77b718a7e4977f4af73"
-  dependencies:
-    glob "6.0.4"
-    xmlhttprequest "1.8.0"
 
 opal-runtime@1.0.3:
   version "1.0.3"
