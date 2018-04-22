@@ -31,12 +31,6 @@ asciidoctor.browser.settings = ((webExtension, Constants) => {
   module.isExtensionEnabled = () => module.getSetting(Constants.ENABLE_RENDER_KEY);
 
   /**
-   * Is "LiveReload" currently enabled on the page ?
-   * @returns {Promise<boolean>}
-   */
-  module.isLiveReloadDetected = () => module.getSetting(Constants.LIVERELOADJS_DETECTED_KEY);
-
-  /**
    * Get the local poll frequency defined in the options page.
    */
   module.getLocalPollFrequency = async () => {

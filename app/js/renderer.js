@@ -31,13 +31,9 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
       Dom.removeElement('asciidoctor-browser-mathjax-refresh-js');
       Dom.removeElement('asciidoctor-browser-custom-js');
 
-      // Save the scripts that are present at the root of the <body> to be able to restore them after the update
-      // QUESTION: Should we remove this code ? Since using livereload and this extension is not recommended!
-      const scripts = document.body.querySelectorAll(':scope > script');
-      detectLiveReloadJs(scripts);
       const customJavaScript = settings.customScript;
       preprocessing(customJavaScript);
-      await updateBody(asciidoctorDocument, scripts);
+      await updateBody(asciidoctorDocument);
       postprocessing(customJavaScript);
       return true;
     } catch (error) {
@@ -183,9 +179,8 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
   /**
    * Update the HTML document with the Asciidoctor document
    * @param asciidoctorDocument The Asciidoctor document
-   * @param scripts The scripts to restore
    */
-  const updateBody = async (asciidoctorDocument, scripts) => {
+  const updateBody = async (asciidoctorDocument) => {
     const doc = asciidoctorDocument.doc;
     if (doc.getAttribute('icons') === 'font') {
       appendFontAwesomeStyle();
@@ -212,7 +207,6 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
       Dom.removeElement('asciidoctor-mathjax-config');
       Dom.removeElement('asciidoctor-mathjax-initialization');
     }
-    appendScripts(scripts);
     if (isSourceHighlighterEnabled(doc)) {
       module.appendHighlightJsScript();
       syntaxHighlighting();
@@ -288,38 +282,6 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
       // Pass attributes as String
       'attributes': attributes.join(' ')
     };
-  };
-
-  /**
-   * Detect LiveReload.js script to avoid multiple refreshes
-   */
-  const detectLiveReloadJs = (scripts) => {
-    let liveReloadDetected = false;
-    for (let script of scripts) {
-      if (script.src.indexOf(Constants.LIVERELOADJS_FILENAME) !== -1) {
-        // LiveReload.js detected!
-        liveReloadDetected = true;
-        break;
-      }
-    }
-    const value = {};
-    value[Constants.LIVERELOADJS_DETECTED_KEY] = liveReloadDetected;
-    webExtension.storage.local.set(value);
-  };
-
-  /**
-   * Append saved scripts
-   */
-  const appendScripts = (scripts) => {
-    for (let script of scripts) {
-      if (!isMathTexScript(script)) {
-        document.body.appendChild(script);
-      }
-    }
-  };
-
-  const isMathTexScript = (script) => {
-    return /math\/tex/i.test(script.type);
   };
 
   /**

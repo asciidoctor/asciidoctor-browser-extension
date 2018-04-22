@@ -112,25 +112,21 @@ asciidoctor.browser.loader = (webExtension, document, location, XMLHttpRequest, 
   };
 
   const reloadContent = async (source) => {
-    const liveReloadDetected = await Settings.isLiveReloadDetected();
-    // LiveReload.js has been detected
-    if (!liveReloadDetected) {
-      const md5key = 'md5' + location.href;
-      const md5sum = await Settings.getSetting(md5key);
-      if (md5sum && md5sum === md5(source)) {
-        return;
-      }
-      // Content has changed...
-      if (await Settings.isExtensionEnabled()) {
-        Renderer.update(source);
-      } else {
-        displayContentAsPlainText(source);
-      }
-      // Update md5sum
-      const value = {};
-      value[md5key] = md5(source);
-      webExtension.storage.local.set(value);
+    const md5key = 'md5' + location.href;
+    const md5sum = await Settings.getSetting(md5key);
+    if (md5sum && md5sum === md5(source)) {
+      return;
     }
+    // Content has changed...
+    if (await Settings.isExtensionEnabled()) {
+      Renderer.update(source);
+    } else {
+      displayContentAsPlainText(source);
+    }
+    // Update md5sum
+    const value = {};
+    value[md5key] = md5(source);
+    webExtension.storage.local.set(value);
   };
 
   let autoReloadInterval;
