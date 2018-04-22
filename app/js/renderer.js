@@ -274,6 +274,10 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
     if (customAttributes) {
       attributes.push(customAttributes);
     }
+    const parts = href.split('/'); // break the string into an array
+    parts.pop(); // remove its last element
+    const pwd = parts.join('/');
+    attributes.push(`docdir=${pwd}`);
     if (attributesQueryParameters.length > 0) {
       Array.prototype.push.apply(attributes, attributesQueryParameters);
     }
