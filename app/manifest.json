@@ -1,6 +1,7 @@
 {
   "name":"Asciidoctor.js Live Preview",
   "version":"1.5.5.112",
+  "author": "Guillaume Grossetie",
   "manifest_version":2,
 
   "description":"Render AsciiDoc (.ad, .adoc, .asc, .asciidoc) as HTML inside your browser!",
