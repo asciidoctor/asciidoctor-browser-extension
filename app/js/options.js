@@ -61,7 +61,7 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser;
     localStorage['THEME'] = selectTheme.value;
     localStorage['JS'] = selectJavaScript.value;
     localStorage['JS_LOAD'] = inputLoadJavaScript.find((element) => element.checked).value;
-    webExtension.extension.getBackgroundPage().refreshOptions();
+    webExtension.runtime.getBackgroundPage((page) => page.refreshOptions());
   };
 
   /**
