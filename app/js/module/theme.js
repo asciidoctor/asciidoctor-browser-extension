@@ -1,5 +1,5 @@
 // exports
-asciidoctor.browser.theme = ((webExtension, Constants) => {
+asciidoctor.browser.theme = ((webExtension, Settings, Constants) => {
   const module = {};
 
   /**
@@ -46,9 +46,8 @@ asciidoctor.browser.theme = ((webExtension, Constants) => {
         resolve(true);
         return;
       }
-      module.getSetting(Constants.CUSTOM_THEME_PREFIX + themeName, (customThemeContent) => {
-        resolve(!!customThemeContent);
-      });
+      Settings.getSetting(Constants.CUSTOM_THEME_PREFIX + themeName)
+        .then((customThemeContent) => resolve(!!customThemeContent));
     });
   }
 

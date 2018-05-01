@@ -3,6 +3,7 @@ module.exports = function (config) {
     frameworks: ['jasmine'],
     files: [
       'spec/webextension-api.js',
+      'spec/helper.js',
       'app/js/vendor/highlight.min.js',
       "app/js/vendor/chartist.min.js",
       "app/js/vendor/plantuml.min.js",
