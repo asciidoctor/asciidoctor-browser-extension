@@ -1,0 +1,171 @@
+= Asciidoctor &amp; co : un mariage idéal
+:icons: font
+:data-uri: true
+:toc:
+:allow-uri-read: true
+:source-highlighter: prettier
+
+This is a preambule...
+
+## First section
+
+toc::[]
+
+hello. <<Allo hello()>>
+
+== Extensions
+
+.PlantUML diagram
+[plantuml]
+----
+Bob -> Alice : hello
+----
+
+.Chart
+[chart,line]
+....
+January,February,March
+28,48,40
+65,59,80
+....
+
+.Chart with a csv
+chart::sales.csv[bar,800,500]
+
+== Allo hello()
+
+A simple list:
+
+ * one
+ * two
+
+emoji:heart[lg]
+
+icon:edge[]
+
+Here is an unordered list:
+
+* a
+* b
+* c
+
+Here is a numbered list:
+
+1. One
+2. Two
+3. Three
+
+> I hold it that a little rebellion now and then is a good thing,
+> and as necessary in the political world as storms in the physical.
+> -- Thomas Jefferson, Papers of Thomas Jefferson: Volume 11
+
+```js
+alert("hello world");
+```
+
+.Tab size
+:tabsize: 2
+[source,java]
+----
+@Main(title="Main")
+public class Main {
+	public static void main(String[] args) {
+		System.out.println("Hello world");
+	}
+}
+----
+
+.AsciiDoc in AsciiDoc
+[source,asciidoc]
+----
+= AsciiDoc in Asciidoc
+
+This is so meta!
+
+=== Awesome
+
+This is working great :)
+
+Even macro icon:yolo[]
+----
+
+*bold* and single b**o**ld.
+_italic_ and single i__t__alic.
+
+*_bold italic phrase_*
+
+^super^script phrase
+
+~sub~script phrase
+
+[.lead]
+This text will be styled as a lead paragraph (i.e., larger font).
+
+https://asciidoctor.org - automatic!
+
+http://asciidoctor.org[Asciidoctor]
+
+https://github.com/asciidoctor[Asciidoctor @ *GitHub*]
+
+== More syntax
+
+This is a {link}[link]. This is another link http://www.google.fr[Google]
+
+.Table Title
+[cols="2*", options="header"]
+|===
+|Name of Column 1 |Name of Column 2 |Name of Column 3
+
+|Cell in column 1, row 1
+|Cell in column 2, row 1
+|Cell in column 3, row 1
+
+|Cell in column 1, row 2
+|Cell in column 2, row 2
+|Cell in column 3, row 2
+|===
+
+NOTE: Note that...
+
+TIP: Pro tip...
+
+IMPORTANT: Don't forget...
+
+WARNING: Watch out for...
+
+CAUTION: Ensure that...
+
+== Include macro
+
+.Built-in
+asciidoctor-version:: {asciidoctor-version}
+safe-mode-name:: {safe-mode-name}
+docdir:: {docdir}
+
+include::{docdir}/b.adoc[]
+
+include::./b.adoc[]
+
+include::b.adoc[]
+
+include::subdir/c.adoc[]
+
+== Links
+
+link:b1.adoc[Second document]
+
+A statement.footnote:[Clarification about this statement.]
+
+A bold statement.footnoteref:[disclaimer,Opinions are my own.]
+
+Another bold statement.footnoteref:[disclaimer]
+
+== Attributes
+
+Attribute A: {attribute-a}
+
+Attribute B: {attribute-b}
+
+Attribute C: {attribute-c}
+
+Attribute D: {attribute-d}
