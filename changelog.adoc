@@ -1,8 +1,21 @@
 = Changelog
 
-== Unreleased
+== 1.5.6.100
 
-* Add meta viewport tag to rendered HTML
+* Add `<meta name="viewport">` to the rendered HTML (thanks @mattpalermo)
+* Remove JQuery dependency
+* Use ECMAScript 6 features to improve the code readability and structure
+* Us the `stylesheet` query string to configure the stylesheet per document `?stylesheet=github`
+* Upgrade to Asciidoctor.js 1.5.6
+* Allow to configure the polling to remote and local files
+* Don't show document title when `noheader` attribute is set (thanks @mojavelinux)
+* Use `highlight.js` as the default `source-highlighter`
+* Add PlantUML extension to render diagram
+* Load MathJax only when `stem` attribute is defined
+* Improve the performance on the first rendering
+* Improve the performance when enabling/disabling the extension
+* Redesign the options page using Bulma
+* Add the Mozilla addons linter in the build process
 
 == 1.5.5.112
 
