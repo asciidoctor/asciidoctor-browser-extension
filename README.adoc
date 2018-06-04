@@ -1,6 +1,16 @@
 = Asciidoctor Browser Extension
 Guillaume Grossetie
 
+ifndef::env-github[:icons: font]
+ifdef::env-github[]
+:outfilesuffix: .adoc
+:caution-caption: :fire:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
+
 :uri-license: https://github.com/asciidoctor/asciidoctor-chrome-extension/blob/master/LICENSE
 :uri-hacking: https://github.com/asciidoctor/asciidoctor-chrome-extension/blob/master/hacking.adoc
 :uri-changelog: https://github.com/asciidoctor/asciidoctor-chrome-extension/blob/master/changelog.adoc
@@ -25,8 +35,8 @@ image:https://dev.opera.com/extensions/branding-guidelines/addons_206x58_en@2x.p
  3. Open local or remote .ad, .adoc, .asc, .asciidoc files in your browser
  4. Enjoy!
 
-WARNING: Due to a https://code.google.com/p/chromium/issues/detail?id=365107[Chromium bug] the `Allow access to file URLs` is lost on extension update.
-If preview of local files isn't working, make sure to uncheck and recheck the `Allow access to file URLs`.
+WARNING: On Firefox, pages viewed directly from GitHub may not render properly. This is result of a https://bugzilla.mozilla.org/show_bug.cgi?id=1267027[Firefox bug] carrying over the restrictive content security policies (CSP) that GitHub sends to content inserted by the WebExtension.
+Please note that this issue can also occured on other websites with restictive CSP.
 
 === Firefox
 
