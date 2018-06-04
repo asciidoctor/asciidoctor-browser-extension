@@ -35,14 +35,14 @@ image:https://dev.opera.com/extensions/branding-guidelines/addons_206x58_en@2x.p
  3. Open local or remote .ad, .adoc, .asc, .asciidoc files in your browser
  4. Enjoy!
 
-WARNING: On Firefox, pages viewed directly from GitHub may not render properly. This is result of a https://bugzilla.mozilla.org/show_bug.cgi?id=1267027[Firefox bug] carrying over the restrictive content security policies (CSP) that GitHub sends to content inserted by the WebExtension.
-Please note that this issue can also occured on other websites with restictive CSP.
-
 === Firefox
 
  1. Install the extension from the {uri-mozilla-addon}[Firefox Add-ons website]
  2. Open local or remote .ad, .adoc, .asc, .asciidoc files in Firefox
  3. Enjoy!
+
+WARNING: On Firefox, pages viewed directly from GitHub may not render properly. This is result of a https://bugzilla.mozilla.org/show_bug.cgi?id=1267027[Firefox bug] carrying over the restrictive content security policies (CSP) that GitHub sends to content inserted by the WebExtension.
+Please note that this issue can also occured on other websites with restictive CSP.
 
 == Installation
 
