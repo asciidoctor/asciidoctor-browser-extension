@@ -78,7 +78,11 @@ const {refreshOptions, enableDisableRender} = ((webExtension) => {
     webExtension.storage.local.set({'ENABLE_RENDER': enableRender});
 
     // Update the extension icon
-    const iconPath = enableRender ? 'img/enabled.png' : 'img/disabled.png';
+    const iconPrefix = enableRender ? 'enabled' : 'disabled';
+    const iconPath = {
+      16: `img/${iconPrefix}-16.png`,
+      32: `img/${iconPrefix}-32.png`
+    };
     if (typeof webExtension.browserAction.setIcon === 'function') {
       webExtension.browserAction.setIcon({path: iconPath});
     } else if (typeof webExtension.browserAction.setTitle === 'function') {

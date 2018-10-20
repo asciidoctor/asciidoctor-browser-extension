@@ -11,13 +11,12 @@
   "options_ui":{
     "page":"html/options.html"
   },
-
-  "icons":{
-    "16":"img/asciidoc_icon_16.png",
-    "48":"img/asciidoc_icon_48.png",
-    "128":"img/asciidoc_icon_128.png"
+  "icons": {
+    "16": "img/asciidoctor-logo-fill-color-16.png",
+    "48": "img/asciidoctor-logo-fill-color-48.png",
+    "96": "img/asciidoctor-logo-fill-color-96.png",
+    "128": "img/asciidoctor-logo-fill-color-128.png"
   },
-
   "content_scripts":[
     {
       "matches":[
