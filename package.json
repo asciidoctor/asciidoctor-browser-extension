@@ -3,9 +3,8 @@
   "description": "Render AsciiDoc (.ad, .adoc, .asc, .asciidoc) as HTML inside Chrome!",
   "version": "1.5.5",
   "engines": {
-    "node": ">=4",
-    "npm": ">=3.0.0",
-    "yarn": ">=1.1.0"
+    "node": ">=8.11",
+    "npm": ">=5.0.0"
   },
   "scripts": {
     "test": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
