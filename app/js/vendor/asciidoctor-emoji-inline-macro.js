@@ -1675,7 +1675,7 @@ processor.Extensions.register(function () {
     var defaultSize = 24;
 
     self.process(function (parent, target, attrs) {
-      var sizeAttr = attrs['$[]']('size');
+      var sizeAttr = attrs.size;
       var size;
       if (sizeAttr && sizeMap[sizeAttr]) {
         size = sizeMap[sizeAttr];

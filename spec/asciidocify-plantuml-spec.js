@@ -24,7 +24,7 @@ Bob -> Alice : hello
         const plantumlDiv = document.body.getElementsByClassName('plantuml')[0];
         expect(plantumlDiv).toBeDefined();
         const plantumlImg = plantumlDiv.getElementsByTagName('img')[0];
-        expect(plantumlImg.getAttribute('src')).toBe('http://www.plantuml.com/plantuml/png/SyfFKj2rKt3CoKnELR1Io4ZDoSa70000');
+        expect(plantumlImg.getAttribute('src')).toBe('http://www.plantuml.com/plantuml/png/SoWkIImgAStDuNBAJrBGjLDmpCbCJbMmKiX8pSd9vt98pKi1IW80');
         done();
       })
       .catch((error) => {
