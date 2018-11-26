@@ -86,7 +86,7 @@ See the <<changelog#, changelog>> file.
 
 == Copyright
 
-Copyright (C) 2013-2017 Guillaume Grossetie.
+Copyright (C) 2013-2018 Guillaume Grossetie.
 Free use of this software is granted under the terms of the MIT License.
 
 See the {uri-license}[LICENSE] file for details.
