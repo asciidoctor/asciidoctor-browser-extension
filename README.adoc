@@ -41,8 +41,13 @@ image:https://dev.opera.com/extensions/branding-guidelines/addons_206x58_en@2x.p
  2. Open local or remote .ad, .adoc, .asc, .asciidoc files in Firefox
  3. Enjoy!
 
-WARNING: On Firefox, pages viewed directly from GitHub may not render properly. This is result of a https://bugzilla.mozilla.org/show_bug.cgi?id=1267027[Firefox bug] carrying over the restrictive content security policies (CSP) that GitHub sends to content inserted by the WebExtension.
-Please note that this issue can also occured on other websites with restictive CSP.
+[WARNING]
+====
+On Firefox, pages viewed directly from GitHub may not render properly. This is result of a https://bugzilla.mozilla.org/show_bug.cgi?id=1267027[Firefox bug] carrying over the restrictive content security policies (CSP) that GitHub sends to content inserted by the WebExtension.
+
+In addition, Firefox does not allow access to `file://` URLs unless explicit user input.
+It means that you must type or copy the `file://` URL into your browser address bar and then press "Enter".
+====
 
 == Installation
 
