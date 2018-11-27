@@ -43,11 +43,13 @@ image:https://dev.opera.com/extensions/branding-guidelines/addons_206x58_en@2x.p
 
 [WARNING]
 ====
-On Firefox, pages viewed directly from GitHub may not render properly. This is result of a https://bugzilla.mozilla.org/show_bug.cgi?id=1267027[Firefox bug] carrying over the restrictive content security policies (CSP) that GitHub sends to content inserted by the WebExtension.
+On Firefox, pages viewed directly from GitHub may not render properly.
+This is result of a https://bugzilla.mozilla.org/show_bug.cgi?id=1267027[Firefox bug] carrying over the Content Security Policies (CSP).
+The restrictive CSP sent by GitHub are applied to the content inserted by the WebExtension.
 
-In addition, Firefox does not allow access to `file://` URLs unless explicit user input.
-It means that you must type or copy the `file://` URL into your browser address bar and then press "Enter".
-There's an open issue in the https://bugzilla.mozilla.org/show_bug.cgi?id=1266960[Firefox bug tracker] to fix this limitation.
+In addition, Firefox does not trigger the extension when navigating to a `file://` from a link.
+Instead, you have to enter the `file://` URL directly into the address bar of the browser.
+If you do navigate to a `file://` URL from a link, simply highlight the address bar and press "Enter" to force the extension to load. There's an open issue in the https://bugzilla.mozilla.org/show_bug.cgi?id=1266960[Firefox bug tracker] to fix this limitation.
 ====
 
 == Installation
