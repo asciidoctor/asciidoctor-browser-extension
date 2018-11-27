@@ -47,6 +47,7 @@ On Firefox, pages viewed directly from GitHub may not render properly. This is r
 
 In addition, Firefox does not allow access to `file://` URLs unless explicit user input.
 It means that you must type or copy the `file://` URL into your browser address bar and then press "Enter".
+There's an open issue in the https://bugzilla.mozilla.org/show_bug.cgi?id=1266960[Firefox bug tracker] to fix this limitation.
 ====
 
 == Installation
