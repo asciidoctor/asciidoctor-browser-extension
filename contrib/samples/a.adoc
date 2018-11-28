@@ -1,4 +1,4 @@
-= Asciidoctor &amp; co : un mariage idéal
+= Asciidoctor &amp; JavaScript : não é à toa
 :icons: font
 :data-uri: true
 :toc:
@@ -11,7 +11,7 @@ This is a preambule...
 
 toc::[]
 
-hello. <<Allo hello()>>
+Welcome. <<Allo! hello?()>>
 
 == Extensions
 
@@ -56,22 +56,17 @@ January,February,March
 .Chart with a csv
 chart::sales.csv[bar,800,500]
 
-== Allo hello()
-
-A simple list:
-
- * one
- * two
-
-emoji:heart[lg]
-
-icon:edge[]
+== Allo! hello?()
 
 Here is an unordered list:
 
 * a
 * b
 * c
+
+emoji:heart[lg]
+
+icon:edge[]
 
 Here is a numbered list:
 
@@ -88,8 +83,7 @@ alert("hello world");
 ```
 
 .Tab size
-:tabsize: 2
-[source,java]
+[source,java,tabsize=2]
 ----
 @Main(title="Main")
 public class Main {
@@ -99,6 +93,14 @@ public class Main {
 }
 ----
 
+.Reset indent
+[source,kotlin,indent=0]
+----
+    fun sum(a: Int, b: Int): Int {
+        return a + b
+    }
+----
+
 .AsciiDoc in AsciiDoc
 [source,asciidoc]
 ----
@@ -106,11 +108,9 @@ public class Main {
 
 This is so meta!
 
-=== Awesome
+== Awesome
 
-This is working great :)
-
-Even macro icon:yolo[]
+We can even use macro icon:yolo[]
 ----
 
 *bold* and single b**o**ld.
