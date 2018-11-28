@@ -47,7 +47,7 @@ On Firefox, pages viewed directly from GitHub may not render properly.
 This is result of a https://bugzilla.mozilla.org/show_bug.cgi?id=1267027[Firefox bug] carrying over the Content Security Policies (CSP).
 The restrictive CSP sent by GitHub are applied to the content inserted by the WebExtension.
 
-In addition, Firefox does not trigger the extension when navigating to a `file://` from a link.
+In addition, the extension does not automatically trigger in Firefox when navigating to a `file://` from a link.
 Instead, you have to enter the `file://` URL directly into the address bar of the browser.
 If you do navigate to a `file://` URL from a link, simply highlight the address bar and press "Enter" to force the extension to load. There's an open issue in the https://bugzilla.mozilla.org/show_bug.cgi?id=1266960[Firefox bug tracker] to fix this limitation.
 ====
