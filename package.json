@@ -32,7 +32,7 @@
     "bestikk-fs": "0.1.0",
     "bestikk-log": "0.1.0",
     "bulma": "0.7.1",
-    "chartist": "0.8.3",
+    "chartist": "0.11.0",
     "csso": "3.5.0",
     "eslint": "4.8.0",
     "eslint-config-standard": "10.2.1",

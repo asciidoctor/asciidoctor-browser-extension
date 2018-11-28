@@ -58,7 +58,6 @@ processor.Extensions.register(function () {
       lines.shift();
       const data = lines.map(line => line.split(','));
       const html = asciidoctor.browser.extensions.Chart.process(data, labels, attrs);
-      console.log(attrs);
       return self.createBlock(parent, 'pass', html, attrs, {});
     });
   });
