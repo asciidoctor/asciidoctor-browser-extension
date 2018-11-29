@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
-    "build": "npm run lint:code && node npm/build.js",
+    "build:highlightjs": "browserify src/js/highlight.js --standalone hljs | uglifyjs > app/js/vendor/highlight.min.js",
+    "build": "npm run lint:code && npm run build:highlightjs && node tasks/build.js",
     "lint:code": "eslint app/js/*.js app/js/vendor/asciidoctor-*.js npm",
     "lint:firefox": "addons-linter dist/asciidoctor-browser-extension.zip"
   },
@@ -25,12 +26,13 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "addons-linter": "^1.3.6",
+    "addons-linter": "1.4.1",
     "archiver": "2.0.3",
     "asciidoctor-plantuml": "0.10.0",
-    "asciidoctor.js": "^1.5.9",
+    "asciidoctor.js": "1.5.9",
     "bestikk-fs": "0.1.0",
     "bestikk-log": "0.1.0",
+    "browserify": "16.2.3",
     "bulma": "0.7.1",
     "chartist": "0.11.0",
     "csso": "3.5.0",
@@ -41,11 +43,13 @@
     "eslint-plugin-promise": "3.5.0",
     "eslint-plugin-standard": "3.0.1",
     "font-awesome": "4.7.0",
+    "highlight.js": "9.13.1",
     "jasmine-core": "2.8.0",
-    "karma": "^3.0.0",
+    "karma": "3.1.1",
     "karma-chrome-launcher": "2.2.0",
     "karma-jasmine": "1.1.1",
-    "node-sass": "^4.9.4"
+    "node-sass": "4.10.0",
+    "uglify-js": "3.4.9"
   },
   "keywords": [
     "browser",

@@ -71,7 +71,7 @@ Builder.prototype.compress = function () {
 
 Builder.prototype.compileSass = function () {
   log.task('compile Sass');
-  const source = 'sass/options.scss';
+  const source = 'src/sass/options.scss';
   const destination = 'app/css/options.min.css';
   log.transform('compile and minify', source, destination);
   const result = sass.renderSync({
