@@ -2,6 +2,8 @@
 
 == 1.5.9.100
 
+* Add more languages to highlight.js (dockerfile, elm, golo, gradle, haskell, handlebars, kotlin, rust, swift, yaml, typescript)
+* Upgrade chartist to 0.11.0
 * Use the new Asciidoctor logo
 * Upgrade to Asciidoctor.js 1.5.9
 
