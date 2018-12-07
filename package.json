@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
+    "test:nosandbox": "karma start --single-run --browsers ChromeHeadlessNoSandbox karma.conf.js",
     "build:highlightjs": "browserify src/js/highlight.js --standalone hljs | uglifyjs > app/js/vendor/highlight.min.js",
     "build": "npm run lint:code && npm run build:highlightjs && node tasks/build.js",
     "lint:code": "eslint app/js/*.js app/js/vendor/asciidoctor-*.js npm",
@@ -49,6 +50,7 @@
     "karma-chrome-launcher": "2.2.0",
     "karma-jasmine": "1.1.1",
     "node-sass": "4.10.0",
+    "puppeteer": "^1.11.0",
     "uglify-js": "3.4.9"
   },
   "keywords": [
