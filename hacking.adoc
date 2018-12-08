@@ -26,6 +26,27 @@ This command will produce a zip file that can be load in Chrome: [.path]_dist/as
 +
  $ npm run test
 
+[IMPORTANT]
+====
+The tests suite is run against an Headless instance of Chromium.
+When you installed the development dependencies, https://github.com/GoogleChrome/puppeteer[Puppeteer] had automatically installed Chromium for your platform.
+So you shouldn't need to manually install Chromium or Chrome in order to run the tests suite.
+
+It's not recommended, but if your are running the tests suite as `root`, you will see the following error in the console:
+
+```
+INFO [launcher]: Starting browser ChromeHeadless
+ERROR [launcher]: Cannot start ChromeHeadless
+	ERROR:zygote_host_impl_linux.cc(89)] Running as root without --no-sandbox is not supported. See https://crbug.com/638180.
+```
+
+To workaround this issue you can run the following command instead:
+
+ $ npm run test:nosandbox
+
+It will launch a Chromium instance with the `--no-sandbox` argument.
+====
+
 This project is using a code linter to enforce code consistency. 
 To make sure that the code you have contributed, follow the code rules, execute the following command:
 
