@@ -16,7 +16,7 @@ endif::[]
 :uri-changelog: https://github.com/asciidoctor/asciidoctor-chrome-extension/blob/master/changelog.adoc
 :uri-chrome-webstore: https://chrome.google.com/webstore/detail/asciidoctorjs-live-previe/iaalpfgpbocpdfblpnhhgllgbdbchmia
 :uri-mozilla-addon: https://addons.mozilla.org/firefox/addon/asciidoctorjs-live-preview
-:uri-opera-addon: https://addons.opera.com/fr/extensions/details/asciidoctorjs-live-preview
+:uri-opera-addon: https://addons.opera.com/extensions/details/asciidoctorjs-live-preview
 
 This project uses https://github.com/asciidoctor/asciidoctor.js[Asciidoctor.js] to preview AsciiDoc as HTML inside Chrome (or Chromium), Firefox and Opera!
 
