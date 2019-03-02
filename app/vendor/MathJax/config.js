@@ -6,7 +6,7 @@ var MathJax = {
     ignoreClass: 'nostem|nolatexmath'
   },
   asciimath2jax: {
-    delimiters: [['\\$', '\\$']],
+    delimiters: [['\\$', '\\$'], ['\\$\\$', '\\$\\$']],
     ignoreClass: 'nostem|noasciimath'
   }
 };

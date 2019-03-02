@@ -1,0 +1,38 @@
+= Math formulas
+:stem:
+
+== Inline
+
+.stem inline asciimath
+Lorem ipsum  stem:[((a),(b))] dolor
+
+.stem inline latexmath
+sit amet stem:[\forall x \in X, \quad \exists y \leq \epsilon] consectetur
+
+.asciimath inline
+adipiscing elit asciimath:[{(2x,+,17y,=,23),(x,-,y,=,5):}] sed
+
+.latexmath inline
+do eiusmod latexmath:[\cos (2\theta) = \cos^2 \theta - \sin^2 \theta] tempor
+
+== Block/display
+.stem block asciimath
+[stem]
+++++
+lim_(N->oo) sum_(i=0)^N
+++++
+.stem block latexmath
+[stem]
+++++
+x=\frac{1+y}{1+2z^2}
+++++
+.block asciimath
+[asciimath]
+++++
+f'(x) = dy/dx
+++++
+.block latexmath
+[latexmath]
+++++
+k_{n+1} = n^2 + k_n^2 - k_{n-1}
+++++
