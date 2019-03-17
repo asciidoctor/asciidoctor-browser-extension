@@ -69,7 +69,7 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser;
    */
   const restoreOptions = () => {
     inputCustomAttributes.value = localStorage['CUSTOM_ATTRIBUTES'] || '';
-    selectSafeMode.value = localStorage['SAFE_MODE'] || 'secure';
+    selectSafeMode.value = localStorage['SAFE_MODE'] || 'safe';
     selectLocalPollFrequency.value = localStorage['LOCAL_POLL_FREQUENCY'] || '2';
     selectRemotePollFrequency.value = localStorage['REMOTE_POLL_FREQUENCY'] || '2';
     inputAllowTxtExtension.checked = localStorage['ALLOW_TXT_EXTENSION'] === 'true';

@@ -4,7 +4,7 @@ asciidoctor.browser.settings = ((webExtension, Constants) => {
   class RenderingSettings {
     constructor (customAttributes, safeMode, customScript) {
       this.customAttributes = customAttributes;
-      this.safeMode = safeMode || 'secure';
+      this.safeMode = safeMode || 'safe';
       this.customScript = customScript;
     }
   }
