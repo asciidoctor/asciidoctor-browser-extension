@@ -17,12 +17,12 @@ describe('Retrieve the rendering settings', () => {
       });
   });
 
-  it('should return \'secure\' if the safe mode is undefined', (done) => {
+  it('should return \'safe\' if the safe mode is undefined', (done) => {
     helper.configureParameters();
 
     Settings.getRenderingSettings()
       .then((renderingSettings) => {
-        expect(renderingSettings.safeMode).toBe('secure');
+        expect(renderingSettings.safeMode).toBe('safe');
         done();
       });
   });
