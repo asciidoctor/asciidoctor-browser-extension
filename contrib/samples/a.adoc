@@ -78,6 +78,12 @@ Here is a numbered list:
 > and as necessary in the political world as storms in the physical.
 > -- Thomas Jefferson, Papers of Thomas Jefferson: Volume 11
 
+.Toggle Me
+[%collapsible]
+====
+This content is revealed when "Toggle Me" is clicked.
+====
+
 ```js
 alert("hello world");
 ```
