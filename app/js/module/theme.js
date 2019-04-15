@@ -1,6 +1,7 @@
+/* global asciidoctor */
 // exports
-asciidoctor.browser.theme = ((webExtension, Settings, Constants) => {
-  const module = {};
+asciidoctor.browser.theme = (webExtension, Settings, Constants) => {
+  const module = {}
 
   /**
    * Get the theme name.
@@ -8,18 +9,18 @@ asciidoctor.browser.theme = ((webExtension, Settings, Constants) => {
    * @returns {Promise<String>}
    */
   module.getThemeName = (asciidoctorDocument) => {
-    const stylesheetAttribute = asciidoctorDocument.getAttribute('stylesheet');
+    const stylesheetAttribute = asciidoctorDocument.getAttribute('stylesheet')
     if (typeof stylesheetAttribute !== 'undefined' && stylesheetAttribute !== '') {
-      const themeName = stylesheetAttribute.replace(/\.css$/, '');
+      const themeName = stylesheetAttribute.replace(/\.css$/, '')
       return hasTheme(themeName)
         .then((result) => {
           if (result) {
-            return Promise.resolve(themeName);
+            return Promise.resolve(themeName)
           }
-          return getThemeNameFromSettings();
-        });
+          return getThemeNameFromSettings()
+        })
     }
-    return getThemeNameFromSettings();
+    return getThemeNameFromSettings()
   }
 
   /**
@@ -27,11 +28,11 @@ asciidoctor.browser.theme = ((webExtension, Settings, Constants) => {
    * @returns {Array}
    */
   module.getDefaultThemeNames = () => {
-    const webAccessibleResources = webExtension.runtime.getManifest().web_accessible_resources;
-    const themeRegexp = /^css\/themes\/(.*)\.css$/i;
+    const webAccessibleResources = webExtension.runtime.getManifest().web_accessible_resources
+    const themeRegexp = /^css\/themes\/(.*)\.css$/i
     return webAccessibleResources
       .filter(item => themeRegexp.test(item))
-      .map(item => item.replace(themeRegexp, '$1'));
+      .map(item => item.replace(themeRegexp, '$1'))
   }
 
   /**
@@ -41,14 +42,14 @@ asciidoctor.browser.theme = ((webExtension, Settings, Constants) => {
    */
   const hasTheme = (themeName) => {
     return new Promise((resolve) => {
-      const themeNames = module.getDefaultThemeNames();
+      const themeNames = module.getDefaultThemeNames()
       if (themeNames.includes(themeName)) {
-        resolve(true);
-        return;
+        resolve(true)
+        return
       }
       Settings.getSetting(Constants.CUSTOM_THEME_PREFIX + themeName)
-        .then((customThemeContent) => resolve(!!customThemeContent));
-    });
+        .then((customThemeContent) => resolve(!!customThemeContent))
+    })
   }
 
   /**
@@ -58,11 +59,11 @@ asciidoctor.browser.theme = ((webExtension, Settings, Constants) => {
   const getThemeNameFromSettings = () => {
     return new Promise((resolve) => {
       webExtension.storage.local.get(Constants.THEME_KEY, (settings) => {
-        const theme = settings[Constants.THEME_KEY] || 'asciidoctor';
-        resolve(theme);
-      });
-    });
+        const theme = settings[Constants.THEME_KEY] || 'asciidoctor'
+        resolve(theme)
+      })
+    })
   }
 
-  return module;
-});
+  return module
+}

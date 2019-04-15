@@ -1,3 +1,4 @@
+/* global processor */
 // https://github.com/jollygoodcode/twemoji/blob/3476e2700600ef2c89ffa34313b11b91e5f9baba/lib/twemoji/data/emoji-unicode.yml
 var emojiMap = {
   'mahjong': '1f004',
@@ -1661,29 +1662,29 @@ var emojiMap = {
   'copyright': 'a9',
   'registered_sign': 'ae',
   'shibuya': 'e50a'
-};
+}
 
 // processor is defined in renderer.js
 processor.Extensions.register(function () {
   this.inlineMacro(function () {
-    var self = this;
+    var self = this
 
-    self.named('emoji');
-    self.positionalAttributes('size');
+    self.named('emoji')
+    self.positionalAttributes('size')
 
-    var sizeMap = {'1x': 17, 'lg': 24, '2x': 34, '3x': 50, '4x': 68, '5x': 85};
-    var defaultSize = 24;
+    var sizeMap = { '1x': 17, 'lg': 24, '2x': 34, '3x': 50, '4x': 68, '5x': 85 }
+    var defaultSize = 24
 
     self.process(function (parent, target, attrs) {
-      var sizeAttr = attrs.size;
-      var size;
+      var sizeAttr = attrs.size
+      var size
       if (sizeAttr && sizeMap[sizeAttr]) {
-        size = sizeMap[sizeAttr];
+        size = sizeMap[sizeAttr]
       } else {
-        size = defaultSize;
+        size = defaultSize
       }
-      var emojiUnicode = emojiMap[target];
-      return '<img class="emoji" draggable="false" height="' + size + 'px" width="' + size + 'px" src="https://twemoji.maxcdn.com/2/svg/' + emojiUnicode + '.svg">';
-    });
-  });
-});
+      var emojiUnicode = emojiMap[target]
+      return '<img class="emoji" draggable="false" height="' + size + 'px" width="' + size + 'px" src="https://twemoji.maxcdn.com/2/svg/' + emojiUnicode + '.svg">'
+    })
+  })
+})

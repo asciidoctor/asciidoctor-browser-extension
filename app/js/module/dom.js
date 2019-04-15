@@ -1,6 +1,7 @@
+/* global asciidoctor */
 // exports
-asciidoctor.browser.dom = ((document) => {
-  const module = {};
+asciidoctor.browser.dom = (document) => {
+  const module = {}
   /**
    * Append a child element to the parent if the child element does not exist in the document.
    * @param parent The parent element
@@ -8,7 +9,7 @@ asciidoctor.browser.dom = ((document) => {
    */
   module.appendOnce = (parent, childElement) => {
     if (document.getElementById(childElement.id) === null) {
-      parent.appendChild(childElement);
+      parent.appendChild(childElement)
     }
   }
 
@@ -19,8 +20,8 @@ asciidoctor.browser.dom = ((document) => {
    * @param childElement
    */
   module.replace = (parent, childElement) => {
-    module.removeElement(childElement.id);
-    parent.appendChild(childElement);
+    module.removeElement(childElement.id)
+    parent.appendChild(childElement)
   }
 
   /**
@@ -30,15 +31,15 @@ asciidoctor.browser.dom = ((document) => {
    * @param stylesheetLinkElementAttributes
    */
   module.replaceStylesheetLinkElement = (parent, stylesheetLinkElementAttributes) => {
-    const element = document.getElementById(stylesheetLinkElementAttributes.id);
+    const element = document.getElementById(stylesheetLinkElementAttributes.id)
     if (element) {
       if (element.href === stylesheetLinkElementAttributes.href) {
         // nothing to do
-        return;
+        return
       }
-      element.parentNode.removeChild(element);
+      element.parentNode.removeChild(element)
     }
-    parent.appendChild(module.createStylesheetLinkElement(stylesheetLinkElementAttributes));
+    parent.appendChild(module.createStylesheetLinkElement(stylesheetLinkElementAttributes))
   }
 
   /**
@@ -48,15 +49,15 @@ asciidoctor.browser.dom = ((document) => {
    * @param stylesheetLinkElementAttributes
    */
   module.replaceStyleElement = (parent, styleElementAttributes) => {
-    const element = document.getElementById(styleElementAttributes.id);
+    const element = document.getElementById(styleElementAttributes.id)
     if (element) {
       if (element.innerHTML === styleElementAttributes.innerHTML) {
         // nothing to do
-        return;
+        return
       }
-      element.parentNode.removeChild(element);
+      element.parentNode.removeChild(element)
     }
-    parent.appendChild(module.createStyleElement(styleElementAttributes));
+    parent.appendChild(module.createStyleElement(styleElementAttributes))
   }
 
   /**
@@ -64,9 +65,9 @@ asciidoctor.browser.dom = ((document) => {
    * @param id The element's id
    */
   module.removeElement = (id) => {
-    const element = document.getElementById(id);
+    const element = document.getElementById(id)
     if (element) {
-      element.parentNode.removeChild(element);
+      element.parentNode.removeChild(element)
     }
   }
 
@@ -75,9 +76,9 @@ asciidoctor.browser.dom = ((document) => {
    * @param attributes
    */
   module.createStyleElement = (attributes) => {
-    const style = document.createElement('style');
-    style.type = 'text/css';
-    return Object.assign(style, attributes);
+    const style = document.createElement('style')
+    style.type = 'text/css'
+    return Object.assign(style, attributes)
   }
 
   /**
@@ -86,9 +87,9 @@ asciidoctor.browser.dom = ((document) => {
    * @returns {HTMLLinkElement}
    */
   module.createStylesheetLinkElement = (attributes) => {
-    const stylesheetLink = document.createElement('link');
-    stylesheetLink.rel = 'stylesheet';
-    return Object.assign(stylesheetLink, attributes);
+    const stylesheetLink = document.createElement('link')
+    stylesheetLink.rel = 'stylesheet'
+    return Object.assign(stylesheetLink, attributes)
   }
 
   /**
@@ -97,9 +98,9 @@ asciidoctor.browser.dom = ((document) => {
    * @returns {HTMLScriptElement}
    */
   module.createScriptElement = (attributes) => {
-    const scriptElement = document.createElement('script');
-    scriptElement.type = 'text/javascript';
-    return Object.assign(scriptElement, attributes);
+    const scriptElement = document.createElement('script')
+    scriptElement.type = 'text/javascript'
+    return Object.assign(scriptElement, attributes)
   }
 
   /**
@@ -109,10 +110,10 @@ asciidoctor.browser.dom = ((document) => {
   module.decodeEntities = (value) => {
     // QUESTION: Should we use a solution that does not rely on DOM ?
     // https://github.com/mathiasbynens/he
-    let div = document.createElement('div');
-    div.innerHTML = value;
-    return div.textContent;
-  };
+    let div = document.createElement('div')
+    div.innerHTML = value
+    return div.textContent
+  }
 
   /**
    * @param value
@@ -120,10 +121,10 @@ asciidoctor.browser.dom = ((document) => {
    */
   module.escape = (value) => {
     // QUESTION: Should we use https://lodash.com/docs/4.17.4#escape ?
-    let div = document.createElement('div');
-    div.textContent = decodeURIComponent(value);
-    return div.innerHTML;
-  };
+    let div = document.createElement('div')
+    div.textContent = decodeURIComponent(value)
+    return div.innerHTML
+  }
 
   /**
    * Set the appropriate viewport <meta> tag
@@ -131,14 +132,14 @@ asciidoctor.browser.dom = ((document) => {
   module.setViewport = () => {
     // Remove existing viewport meta elements.
     document.getElementsByName('viewport').forEach((existingViewport) => {
-      existingViewport.remove();
-    });
+      existingViewport.remove()
+    })
     // Set the viewport meta element that we want.
-    const viewportMeta = document.createElement('meta');
-    viewportMeta.name = 'viewport';
-    viewportMeta.content = 'width=device-width, initial-scale=1.0';
-    document.head.appendChild(viewportMeta);
+    const viewportMeta = document.createElement('meta')
+    viewportMeta.name = 'viewport'
+    viewportMeta.content = 'width=device-width, initial-scale=1.0'
+    document.head.appendChild(viewportMeta)
   }
 
-  return module;
-});
+  return module
+}

@@ -7,8 +7,8 @@ module.exports = function (config) {
       'spec/webextension-api.js',
       'spec/helper.js',
       'app/js/vendor/highlight.min.js',
-      "app/js/vendor/chartist.min.js",
-      "app/js/vendor/plantuml.min.js",
+      'app/js/vendor/chartist.min.js',
+      'app/js/vendor/plantuml.min.js',
       'app/js/vendor/md5.js',
       'app/js/vendor/asciidoctor.js',
       'app/js/module/namespace.js',
@@ -17,9 +17,9 @@ module.exports = function (config) {
       'app/js/module/theme.js',
       'app/js/loader.js',
       'app/js/renderer.js',
-      "app/js/vendor/asciidoctor-chart-block-macro.js",
-      "app/js/vendor/asciidoctor-emoji-inline-macro.js",
-      "app/js/vendor/asciidoctor-plantuml-register.js",
+      'app/js/vendor/asciidoctor-chart-block-macro.js',
+      'app/js/vendor/asciidoctor-emoji-inline-macro.js',
+      'app/js/vendor/asciidoctor-plantuml-register.js',
       'spec/**/*-spec.js'
     ],
     reporters: ['progress'],
@@ -36,5 +36,5 @@ module.exports = function (config) {
     autoWatch: false,
     singleRun: false, // Karma captures browsers, runs the tests and exits
     concurrency: Infinity
-  });
-};
+  })
+}

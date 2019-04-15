@@ -1,9 +1,11 @@
-const webExtension = typeof browser === 'undefined' ? chrome : browser;
+/* global chrome, browser */
+// eslint-disable-next-line no-unused-vars
+const webExtension = typeof browser === 'undefined' ? chrome : browser
 
-const asciidoctor = {};
-asciidoctor.browser = {};
+const asciidoctor = {}
+asciidoctor.browser = {}
 
-asciidoctor.browser.constants = (() => {
+asciidoctor.browser.constants = () => {
   const module = {
     ENABLE_RENDER_KEY: 'ENABLE_RENDER',
     ALLOW_TXT_EXTENSION_KEY: 'ALLOW_TXT_EXTENSION',
@@ -19,8 +21,5 @@ asciidoctor.browser.constants = (() => {
     REMOTE_POLL_FREQUENCY_KEY: 'REMOTE_POLL_FREQUENCY',
     LOCAL_POLL_FREQUENCY_KEY: 'LOCAL_POLL_FREQUENCY'
   }
-  return module;
-});
-
-
-
+  return module
+}
