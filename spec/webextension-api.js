@@ -15,7 +15,8 @@ const browser = {
   runtime: {
     getManifest: () => ({web_accessible_resources: []}),
     onMessage: {
-      addListener: () => {}
+      addListener: () => {
+      }
     }
   }
 };
