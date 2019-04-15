@@ -85,11 +85,11 @@ Builder.prototype.compileSass = function () {
 Builder.prototype.copy = function () {
   log.task('copy vendor resources');
   // JavaScript files
-  bfs.copySync('node_modules/asciidoctor.js/dist/browser/asciidoctor.js', 'app/js/vendor/asciidoctor.js');
+  bfs.copySync('node_modules/@asciidoctor/core/dist/browser/asciidoctor.js', 'app/js/vendor/asciidoctor.js');
   bfs.copySync('node_modules/asciidoctor-plantuml/dist/browser/asciidoctor-plantuml.js', 'app/js/vendor/plantuml.min.js');
   bfs.copySync('node_modules/chartist/dist/chartist.min.js', 'app/js/vendor/chartist.min.js');
   // Stylesheets
-  bfs.copySync('node_modules/asciidoctor.js/dist/css/asciidoctor.css', 'app/css/themes/asciidoctor.css');
+  bfs.copySync('node_modules/@asciidoctor/core/dist/css/asciidoctor.css', 'app/css/themes/asciidoctor.css');
   bfs.copySync('node_modules/font-awesome/css/font-awesome.min.css', 'app/css/font-awesome.min.css');
   // Web Fonts
   bfs.copySync('node_modules/font-awesome/fonts/fontawesome-webfont.woff2', 'app/fonts/fontawesome-webfont.woff2');

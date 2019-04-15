@@ -26,7 +26,7 @@ console.log('Hello world')
         expect(document.getElementById('asciidoctor-browser-highlightjs').getAttribute('src')).toBe('js/vendor/highlight.min.js');
         const preElement = document.body.getElementsByTagName('pre')[0];
         const codeElement = preElement.getElementsByTagName('code')[0];
-        expect(preElement.classList.contains('highlightjs')).toBeTruthy();
+        expect(preElement.classList.contains('highlight')).toBeTruthy();
         expect(codeElement.classList.contains('hljs')).toBeTruthy();
         expect(codeElement.innerText).toBe('console.log(\'Hello world\')');
         expect(codeElement.getElementsByTagName('span').length).toBeGreaterThan(0);
