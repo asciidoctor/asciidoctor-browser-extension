@@ -715,7 +715,7 @@ b.conum * { color: inherit !important; }
 
 .conum:not([data-value]):empty { display: none; }
 
-body { background-image: url('../images/maker/body-bg.png?1459771834'); padding-bottom: 5em; }
+body { background-image: url('../../img/themes/maker/body-bg.png?1459771834'); padding-bottom: 5em; }
 
 #header, #content { background-color: #fff; -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15); }
 
