@@ -1,48 +1,50 @@
-function configureParameters(params) {
+/* global spyOn, browser */
+function configureParameters (params) {
   if (typeof params === 'undefined') {
-    params = [];
+    params = []
   }
   spyOn(browser.storage.local, 'set').and.callFake(() => {
     // noop
-  });
+  })
   spyOn(browser.storage.local, 'get').and.callFake((name, callback) => {
-    callback(params);
-  });
+    callback(params)
+  })
 };
 
-function createXMLHttpRequestMock() {
+function createXMLHttpRequestMock () {
   const mockXMLHttpRequest = function () {
-  };
+  }
   mockXMLHttpRequest.prototype.open = () => {
-  };
+  }
   mockXMLHttpRequest.prototype.setRequestHeader = () => {
-  };
+  }
   mockXMLHttpRequest.prototype.getResponseHeader = () => {
-  };
-  mockXMLHttpRequest.DONE = 4;
+  }
+  mockXMLHttpRequest.DONE = 4
   mockXMLHttpRequest.prototype.send = function () {
-    const event = {};
-    this.readyState = mockXMLHttpRequest.DONE;
-    this.status = 0;
-    this.responseText = '= Hello world';
-    this.onreadystatechange(event);
-  };
-  return mockXMLHttpRequest;
+    const event = {}
+    this.readyState = mockXMLHttpRequest.DONE
+    this.status = 0
+    this.responseText = '= Hello world'
+    this.onreadystatechange(event)
+  }
+  return mockXMLHttpRequest
 };
 
-function plainTextDocument(document, text) {
-  document.body.innerHTML = '';
-  const textPlainElement = document.createElement('pre');
-  textPlainElement.innerHTML = text;
-  document.body.appendChild(textPlainElement);
+function plainTextDocument (document, text) {
+  document.body.innerHTML = ''
+  const textPlainElement = document.createElement('pre')
+  textPlainElement.innerHTML = text
+  document.body.appendChild(textPlainElement)
 }
 
-function configureManifest(manifest) {
+function configureManifest (manifest) {
   spyOn(browser.runtime, 'getManifest').and.callFake(() => {
-    return manifest;
-  });
+    return manifest
+  })
 };
 
+// eslint-disable-next-line no-unused-vars
 const helper = {
   configureParameters: configureParameters,
   configureManifest: configureManifest,
