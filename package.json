@@ -1,5 +1,5 @@
 {
-  "name": "asciidoctor-chrome-extension",
+  "name": "asciidoctor-browser-extension",
   "description": "Render AsciiDoc (.ad, .adoc, .asc, .asciidoc) as HTML inside your browser!",
   "version": "2.0.0",
   "engines": {
@@ -14,16 +14,16 @@
     "lint:code": "standard karma.conf.js app/js/*.js app/js/module/**.js app/js/vendor/asciidoctor-*.js tasks/**.js spec/**.js",
     "lint:firefox": "addons-linter dist/asciidoctor-browser-extension.zip"
   },
-  "homepage": "https://github.com/asciidoctor/asciidoctor-chrome-extension",
+  "homepage": "https://github.com/asciidoctor/asciidoctor-browser-extension",
   "author": {
     "name": "Guillaume Grossetie"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:asciidoctor/asciidoctor-chrome-extension.git"
+    "url": "git@github.com:asciidoctor/asciidoctor-browser-extension.git"
   },
   "bugs": {
-    "url": "https://github.com/asciidoctor/asciidoctor-chrome-extension/issues"
+    "url": "https://github.com/asciidoctor/asciidoctor-browser-extension/issues"
   },
   "license": "MIT",
   "devDependencies": {
