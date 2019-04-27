@@ -4,6 +4,7 @@
 :toc:
 :allow-uri-read: true
 :source-highlighter: prettier
+:highlightjs-languages: scilab, reasonml
 
 This is a preambule...
 
@@ -87,6 +88,31 @@ This content is revealed when "Toggle Me" is clicked.
 ```js
 alert("hello world");
 ```
+
+.Additional Highlight.js language
+```scilab
+s1 = serial(Port = "COM1", BaudRate = 4800);
+sopen(s1);
+sput(s1, "*IDN?");
+out = sget(s1)
+sclose(s1);
+sdelete(s1);
+clear s1;
+```
+
+.Additional Highlight.js language
+[source,reasonml]
+----
+type schoolPerson = Teacher | Director | Student(string);
+
+let greeting = person =>
+  switch (person) {
+  | Teacher => "Hey Professor!"
+  | Director => "Hello Director."
+  | Student("Richard") => "Still here Ricky?"
+  | Student(anyOtherName) => "Hey, " ++ anyOtherName ++ "."
+  };
+----
 
 .Tab size
 [source,java,tabsize=2]

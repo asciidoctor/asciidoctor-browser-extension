@@ -23,13 +23,8 @@ console.log('Hello world')
 ----`;
     Renderer.update(source)
       .then(() => {
-        expect(document.getElementById('asciidoctor-browser-highlightjs').getAttribute('src')).toBe('js/vendor/highlight.min.js');
-        const preElement = document.body.getElementsByTagName('pre')[0];
-        const codeElement = preElement.getElementsByTagName('code')[0];
-        expect(preElement.classList.contains('highlight')).toBeTruthy();
-        expect(codeElement.classList.contains('hljs')).toBeTruthy();
-        expect(codeElement.innerText).toBe('console.log(\'Hello world\')');
-        expect(codeElement.getElementsByTagName('span').length).toBeGreaterThan(0);
+        expect(document.getElementById('asciidoctor-browser-highlightjs').getAttribute('src')).toBe('js/vendor/highlight.js/highlight.min.js');
+        expect(document.getElementById('asciidoctor-browser-highlightjs-refresh').getAttribute('src')).toBe('js/vendor/highlight.js/refresh.js');
         done();
       });
   });
@@ -52,12 +47,6 @@ console.log('Hello world')
     Renderer.update(source)
       .then(() => {
         expect(document.getElementById('asciidoctor-browser-highlightjs')).toBeNull();
-        const preElement = document.body.getElementsByTagName('pre')[0];
-        const codeElement = preElement.getElementsByTagName('code')[0];
-        expect(preElement.classList.contains('highlightjs')).toBeFalsy();
-        expect(codeElement.classList.contains('hljs')).toBeFalsy();
-        expect(codeElement.innerText).toBe('console.log(\'Hello world\')');
-        expect(codeElement.getElementsByTagName('span').length).toBe(0);
         done();
       });
   });

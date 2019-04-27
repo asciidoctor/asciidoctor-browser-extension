@@ -1,4 +1,4 @@
-function configureParameters (params) {
+function configureParameters(params) {
   if (typeof params === 'undefined') {
     params = [];
   }
@@ -10,7 +10,7 @@ function configureParameters (params) {
   });
 };
 
-function createXMLHttpRequestMock () {
+function createXMLHttpRequestMock() {
   const mockXMLHttpRequest = function () {
   };
   mockXMLHttpRequest.prototype.open = () => {
@@ -30,14 +30,14 @@ function createXMLHttpRequestMock () {
   return mockXMLHttpRequest;
 };
 
-function plainTextDocument (document, text) {
+function plainTextDocument(document, text) {
   document.body.innerHTML = '';
   const textPlainElement = document.createElement('pre');
   textPlainElement.innerHTML = text;
   document.body.appendChild(textPlainElement);
 }
 
-function configureManifest (manifest) {
+function configureManifest(manifest) {
   spyOn(browser.runtime, 'getManifest').and.callFake(() => {
     return manifest;
   });
