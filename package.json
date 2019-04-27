@@ -11,7 +11,7 @@
     "test:nosandbox": "karma start --single-run --browsers ChromeHeadlessNoSandbox karma.conf.js",
     "build:highlightjs": "node tasks/update-highlight-languages.js",
     "build": "npm run lint:code && node tasks/build.js",
-    "lint:code": "standard karma.conf.js app/js/*.js app/js/module/**.js app/js/vendor/asciidoctor-*.js tasks/**.js",
+    "lint:code": "standard karma.conf.js app/js/*.js app/js/module/**.js app/js/vendor/asciidoctor-*.js tasks/**.js spec/**.js",
     "lint:firefox": "addons-linter dist/asciidoctor-browser-extension.zip"
   },
   "homepage": "https://github.com/asciidoctor/asciidoctor-chrome-extension",
