@@ -28,7 +28,7 @@
   "license": "MIT",
   "devDependencies": {
     "@asciidoctor/core": "2.0.3",
-    "addons-linter": "^1.8.0",
+    "addons-linter": "1.9.1",
     "archiver": "3.0.0",
     "asciidoctor-plantuml": "1.1.13",
     "bestikk-fs": "1.0.0",
@@ -40,13 +40,13 @@
     "eslint": "^5.16.0",
     "font-awesome": "4.7.0",
     "jasmine-core": "3.4.0",
-    "karma": "^4.0.1",
+    "karma": "4.1.0",
     "karma-chrome-launcher": "2.2.0",
     "karma-jasmine": "2.0.1",
-    "node-sass": "^4.11.0",
-    "puppeteer": "1.14.0",
+    "node-sass": "4.12.0",
+    "puppeteer": "1.15.0",
     "standard": "12.0.1",
-    "uglify-js": "3.5.4"
+    "uglify-js": "3.5.9"
   },
   "keywords": [
     "browser",
