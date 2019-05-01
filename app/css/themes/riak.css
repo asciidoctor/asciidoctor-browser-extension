@@ -734,7 +734,7 @@ p > em { font-family: 'Noticia Text', serif; font-weight: 400; font-size: 95%; }
 .admonitionblock > table td.icon .icon-tip:before { text-shadow: 0 0 20px white, 1px 1px 2px rgba(155, 155, 0, 0.8); }
 .admonitionblock > table td.content { font-family: 'Noticia Text', italic; font-size: 90%; font-style: italic; border: 0; padding: 15px; }
 
-.admonitionblock .literalblock > .content > pre, .admonitionblock .listingblock > .content > pre { background-image: url('../images/riak/info-bg.jpg'); }
+.admonitionblock .literalblock > .content > pre, .admonitionblock .listingblock > .content > pre { background-image: url('../../img/themes/riak/info-bg.jpg'); }
 
 .exampleblock > .content { background-color: transparent; border-color: #c9c9c9; }
 

@@ -27,7 +27,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@asciidoctor/core": "^2.0.0",
+    "@asciidoctor/core": "2.0.3",
     "addons-linter": "^1.8.0",
     "archiver": "3.0.0",
     "asciidoctor-plantuml": "1.1.13",
