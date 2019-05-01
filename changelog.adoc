@@ -1,5 +1,11 @@
 = Changelog
 
+== 2.0.0
+
+* Load additional languages for highlight.js (using `:highlightjs-languages:` attribute)
+* Upgrade to Asciidoctor.js 2.0.3
+* The default safe mode is now safe (was secure)
+
 == 1.5.9.100
 
 * Add more languages to highlight.js (dockerfile, elm, golo, gradle, haskell, handlebars, kotlin, rust, swift, yaml, typescript)
