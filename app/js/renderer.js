@@ -301,13 +301,21 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
       'plantuml-server-url=http://www.plantuml.com/plantuml@']
     const href = window.location.href
     const fileName = href.split('/').pop()
-    let fileExtension = fileName.split('.').pop()
-    if (fileExtension !== '') {
+    attributes.push(`docfile=${fileName}`)
+    const fileNameExtensionPair = fileName.split('.')
+
+    if (fileNameExtensionPair.length > 1) {
+      let fileExtension = fileNameExtensionPair[fileNameExtensionPair.length - 1]
       // Remove query parameters
       fileExtension = fileExtension.split('?')[0]
       // Remove fragment identifier
       fileExtension = fileExtension.split('#')[0]
       attributes.push(`outfilesuffix=.${fileExtension}`)
+      attributes.push(`docfilesuffix=${fileExtension}`)
+    }
+    if (fileNameExtensionPair.length > 0) {
+      let docname = fileNameExtensionPair[0]
+      attributes.push(`docname=${docname}`)
     }
     if (customAttributes) {
       attributes.push(customAttributes)
