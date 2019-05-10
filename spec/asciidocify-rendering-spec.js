@@ -1,4 +1,4 @@
-/* global describe, it, expect, asciidoctor, helper, browser, fail */
+/* global describe, it, expect, asciidoctor, browser */
 describe('Load document attributes', () => {
   const Constants = asciidoctor.browser.constants()
   const Dom = asciidoctor.browser.dom(document)
