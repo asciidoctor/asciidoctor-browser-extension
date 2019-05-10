@@ -301,7 +301,7 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
       'plantuml-server-url=http://www.plantuml.com/plantuml@']
     const href = window.location.href
     const fileName = href.split('/').pop()
-    attributes.push(`docfile=${fileName}`)
+    attributes.push(`docfile=${href}`)
     const fileNameExtensionPair = fileName.split('.')
 
     if (fileNameExtensionPair.length > 1) {
@@ -310,11 +310,11 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
       fileExtension = fileExtension.split('?')[0]
       // Remove fragment identifier
       fileExtension = fileExtension.split('#')[0]
-      attributes.push(`outfilesuffix=.${fileExtension}`)
-      attributes.push(`docfilesuffix=${fileExtension}`)
+      attributes.push(`outfilesuffix=.html`)
+      attributes.push(`docfilesuffix=.${fileExtension}`)
     }
     if (fileNameExtensionPair.length > 0) {
-      let docname = fileNameExtensionPair[0]
+      const docname = fileNameExtensionPair[0]
       attributes.push(`docname=${docname}`)
     }
     if (customAttributes) {
