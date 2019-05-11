@@ -314,7 +314,7 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
       attributes.push(`docfilesuffix=.${fileExtension}`)
     }
     if (fileNameExtensionPair.length > 0) {
-      let docname = fileNameExtensionPair[0]
+      const docname = fileNameExtensionPair[0]
       attributes.push(`docname=${docname}`)
     }
     if (customAttributes) {
