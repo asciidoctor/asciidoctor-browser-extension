@@ -15,7 +15,6 @@ describe('Load document attributes', () => {
 
   it('should set outfilesuffix correct', () => {
     const decodeURI = document.location.href.split('/')
-    const expected = decodeURI[decodeURI.length - 1].split('.')[1]
     const html = Renderer.convert('= {outfilesuffix}', {}).html
     expect(html).toBe('<h1>.html</h1>\n')
   })
