@@ -30,7 +30,7 @@
     "@asciidoctor/core": "2.0.3",
     "addons-linter": "1.9.1",
     "archiver": "3.0.0",
-    "asciidoctor-plantuml": "1.1.13",
+    "asciidoctor-kroki": "^0.2.0",
     "bestikk-fs": "1.0.0",
     "bestikk-log": "0.1.0",
     "browserify": "16.2.3",

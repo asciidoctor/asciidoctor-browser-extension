@@ -1,0 +1,200 @@
+= Diagrams
+
+== PlantUML diagram
+
+plantuml::components.puml[]
+
+== Block diagram
+
+:action: generates
+
+[blockdiag,block-diag,svg,subs=+attributes]
+----
+blockdiag {
+  Kroki -> {action} -> "Block diagrams";
+  Kroki -> is -> "very easy!";
+
+  Kroki [color = "greenyellow"];
+  "Block diagrams" [color = "pink"];
+  "very easy!" [color = "orange"];
+}
+----
+
+== Sequence diagram
+
+[seqdiag]
+----
+seqdiag {
+  browser  -> webserver [label = "GET /seqdiag/svg/base64"];
+  webserver  -> processor [label = "Convert text to image"];
+  webserver <-- processor;
+  browser <-- webserver;
+}
+----
+
+== Activity diagram
+
+[actdiag]
+----
+actdiag {
+  write -> convert -> image
+
+  lane user {
+    label = "User"
+    write [label = "Writing text"];
+    image [label = "Get diagram image"];
+  }
+  lane Kroki {
+    convert [label = "Convert text to image"];
+  }
+}
+----
+
+== Network diagram
+
+[nwdiag]
+----
+nwdiag {
+  network dmz {
+    address = "210.x.x.x/24"
+
+    web01 [address = "210.x.x.1"];
+    web02 [address = "210.x.x.2"];
+  }
+  network internal {
+    address = "172.x.x.x/24";
+
+    web01 [address = "172.x.x.1"];
+    web02 [address = "172.x.x.2"];
+    db01;
+    db02;
+  }
+}
+----
+
+== C4 with PlantUML
+
+[c4plantuml]
+----
+@startuml
+!include C4_Context.puml
+
+title System Context diagram for Internet Banking System
+
+Person(customer, "Banking Customer", "A customer of the bank, with personal bank accounts.")
+System(banking_system, "Internet Banking System", "Allows customers to check their accounts.")
+
+System_Ext(mail_system, "E-mail system", "The internal Microsoft Exchange e-mail system.")
+System_Ext(mainframe, "Mainframe Banking System", "Stores all of the core banking information.")
+
+Rel(customer, banking_system, "Uses")
+Rel_Back(customer, mail_system, "Sends e-mails to")
+Rel_Neighbor(banking_system, mail_system, "Sends e-mails", "SMTP")
+Rel(banking_system, mainframe, "Uses")
+@enduml
+----
+
+== Ditaa
+
+[ditaa]
+----
+      +--------+
+      |        |
+      |  User  |
+      |        |
+      +--------+
+          ^
+  request |
+          v
+  +-------------+
+  |             |
+  |    Kroki    |
+  |             |---+
+  +-------------+   |
+       ^  ^         | inflate
+       |  |         |
+       v  +---------+
+  +-------------+
+  |             |
+  |    Ditaa    |
+  |             |----+
+  +-------------+    |
+             ^       | process
+             |       |
+             +-------+
+----
+
+== Erd
+
+[erd]
+----
+[Person]
+*name
+height
+weight
++birth_location_id
+
+[Location]
+*id
+city
+state
+country
+
+Person *--1 Location
+----
+
+== GraphViz
+
+[graphviz]
+----
+digraph D {
+  subgraph cluster_p {
+    label = "Kroki";
+    subgraph cluster_c1 {
+      label = "Server";
+      Filebeat;
+      subgraph cluster_gc_1 {
+        label = "Docker/Server";
+        Java;
+      }
+      subgraph cluster_gc_2 {
+        label = "Docker/Mermaid";
+        "Node.js";
+        "Puppeteer";
+        "Chrome";
+      }
+    }
+    subgraph cluster_c2 {
+      label = "CLI";
+      Golang;
+    }
+  }
+}
+----
+
+== Mermaid
+
+[mermaid,width=640,height=480]
+----
+graph TD
+  A[ Anyone ] -->|Can help | B( Go to github.com/yuzutech/kroki )
+  B --> C{ How to contribute? }
+  C --> D[ Reporting bugs ]
+  C --> E[ Sharing ideas ]
+  C --> F[ Advocating ]
+----
+
+== Svgbob
+
+[svgbob]
+----
+                  .-,(  ),-.
+   ___  _      .-(          )-.
+  [___]|=| -->(                )      __________
+  /::/ |_|     '-(          ).-' --->[_...__... ]
+                  '-.( ).-'
+                          \      ____   __
+                           '--->|    | |==|
+                                |____| |  |
+                                /::::/ |__|
+----

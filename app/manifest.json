@@ -62,10 +62,10 @@
         "js/renderer.js",
         "js/asciidocify.js",
         "js/vendor/chartist.min.js",
-        "js/vendor/plantuml.min.js",
+        "js/vendor/kroki.js",
         "js/vendor/asciidoctor-chart-block-macro.js",
         "js/vendor/asciidoctor-emoji-inline-macro.js",
-        "js/vendor/asciidoctor-plantuml-register.js"
+        "js/vendor/asciidoctor-kroki-register.js"
       ]
     }
   ],
@@ -92,10 +92,10 @@
     "img/themes/riak/*.png",
     "img/themes/riak/*.jpg",
     "js/vendor/highlight.js/*",
-    "js/vendor/plantuml.min.js",
+    "js/vendor/kroki.js",
     "js/vendor/asciidoctor-chart-block-macro.js",
     "js/vendor/asciidoctor-emoji-inline-macro.js",
-    "js/vendor/asciidoctor-plantuml-register.js",
+    "js/vendor/asciidoctor-kroki-register.js",
     "js/vendor/asciidoctor.js",
     "js/vendor/md5.js",
     "js/loader.js",

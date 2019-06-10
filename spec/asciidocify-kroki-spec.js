@@ -21,10 +21,33 @@ Bob -> Alice : hello
 
     Renderer.update(source)
       .then(() => {
-        const plantumlDiv = document.body.getElementsByClassName('plantuml')[0]
+        const plantumlDiv = document.body.getElementsByClassName('kroki')[0]
         expect(plantumlDiv).toBeDefined()
         const plantumlImg = plantumlDiv.getElementsByTagName('img')[0]
-        expect(plantumlImg.getAttribute('src')).toBe('http://www.plantuml.com/plantuml/png/SoWkIImgAStDuNBAJrBGjLDmpCbCJbMmKiX8pSd9vt98pKi1IW80')
+        expect(plantumlImg.getAttribute('src')).toBe('https://kroki.io/plantuml/svg/eNpzyk9S0LVTcMzJTE5VsFLISM3JyQcAPHcGKw==')
+        done()
+      })
+      .catch((error) => {
+        fail(error)
+      })
+  })
+
+  it('should render an external GraphViz diagram', (done) => {
+    const params = []
+    params[Constants.CUSTOM_ATTRIBUTES_KEY] = ''
+    params[Constants.SAFE_MODE_KEY] = 'safe'
+    helper.configureParameters(params)
+
+    const source = `
+graphviz::http://localhost:9876/base/spec/fixtures/hello.dot[]
+`
+
+    Renderer.update(source)
+      .then(() => {
+        const plantumlDiv = document.body.getElementsByClassName('kroki')[0]
+        expect(plantumlDiv).toBeDefined()
+        const plantumlImg = plantumlDiv.getElementsByTagName('img')[0]
+        expect(plantumlImg.getAttribute('src')).toBe('https://kroki.io/graphviz/svg/eNpLyUwvSizIUHBXqOZSUPBIzcnJ17ULzy_KSeGq5QIAjfEJJA==')
         done()
       })
       .catch((error) => {
