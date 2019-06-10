@@ -1,3 +1,4 @@
+// Document title with accented characters and HTML character entity
 = Asciidoctor &amp; JavaScript : não é à toa
 :icons: font
 :data-uri: true
@@ -6,8 +7,9 @@
 :source-highlighter: prettier
 :highlightjs-languages: scilab, reasonml
 
-This is a preambule...
+This is a preamble...
 
+// Markdow compatible syntax
 ## First section
 
 toc::[]
@@ -15,36 +17,6 @@ toc::[]
 Welcome. <<Allo! hello?()>>
 
 == Extensions
-
-.PlantUML diagram
-[plantuml]
-----
-Bob -> Alice : hello
-----
-
-.Ditaa diagram
-[ditaa]
-....
-+----------+   +-------------+
-|cAAA      |   |             |
-|          +---+ Application |
-| Database |   |      cRED{d}|
-|       {s}|   +-------------+
-+----------+
-....
-
-.Graphviz (DOT) diagram
-[graphviz]
-....
-digraph foo {
-  node [style=rounded]
-  node1 [shape=box]
-  node2 [fillcolor=yellow, style="rounded,filled", shape=diamond]
-  node3 [shape=record, label="{ a | b | c }"]
-
-  node1 -> node2 -> node3
-}
-....
 
 .Chart
 [chart,line]
@@ -191,12 +163,16 @@ WARNING: Watch out for...
 
 CAUTION: Ensure that...
 
-== Include macro
+== Built-in attributes
 
-.Built-in
 asciidoctor-version:: {asciidoctor-version}
 safe-mode-name:: {safe-mode-name}
 docdir:: {docdir}
+docname:: {docname}
+outfilesuffix:: {outfilesuffix}
+docfilesuffix:: {docfilesuffix}
+
+== Include macro
 
 include::{docdir}/b.adoc[]
 
@@ -216,7 +192,7 @@ A bold statement.footnoteref:[disclaimer,Opinions are my own.]
 
 Another bold statement.footnoteref:[disclaimer]
 
-== Attributes
+== Custom attributes
 
 Attribute A: {attribute-a}
 
