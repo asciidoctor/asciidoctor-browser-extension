@@ -4,11 +4,12 @@ module.exports = function (config) {
   config.set({
     frameworks: ['jasmine'],
     files: [
+      { pattern: 'spec/fixtures/hello.dot', included: false, served: true, watched: false, nocache: true },
       'spec/webextension-api.js',
       'spec/helper.js',
-      'app/js/vendor/highlight.min.js',
+      'app/js/vendor/highlight.js/highlight.min.js',
       'app/js/vendor/chartist.min.js',
-      'app/js/vendor/plantuml.min.js',
+      'app/js/vendor/kroki.js',
       'app/js/vendor/md5.js',
       'app/js/vendor/asciidoctor.js',
       'app/js/module/namespace.js',
@@ -19,7 +20,7 @@ module.exports = function (config) {
       'app/js/renderer.js',
       'app/js/vendor/asciidoctor-chart-block-macro.js',
       'app/js/vendor/asciidoctor-emoji-inline-macro.js',
-      'app/js/vendor/asciidoctor-plantuml-register.js',
+      'app/js/vendor/asciidoctor-kroki-register.js',
       'spec/**/*-spec.js'
     ],
     reporters: ['progress'],
