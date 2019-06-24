@@ -1,5 +1,10 @@
 = Changelog
 
+== 2.1.0
+
+* Set built-in attributes docfile, docname and docfilesuffix (thanks @utopalex & @ehmkah)
+* Use Kroki extension to render diagrams (support BlockDiag, SeqDiag, ActDiag, NwDiag, C4, Ditaa, Erd, GraphViz, Mermaid, Nomnoml, PlantUML, SvgBob and UMLet diagrams!)
+
 == 2.0.0
 
 * Load additional languages for highlight.js (using `:highlightjs-languages:` attribute)
