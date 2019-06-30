@@ -2,9 +2,11 @@
 // exports
 asciidoctor.browser.settings = (webExtension, Constants) => {
   class RenderingSettings {
-    constructor (customAttributes, safeMode, customScript) {
+    constructor (customAttributes, safeMode, krokiEnabled, krokiServerUrl, customScript) {
       this.customAttributes = customAttributes
       this.safeMode = safeMode || 'safe'
+      this.krokiEnabled = krokiEnabled
+      this.krokiServerUrl = krokiServerUrl
       this.customScript = customScript
     }
   }
@@ -23,6 +25,18 @@ asciidoctor.browser.settings = (webExtension, Constants) => {
    * @returns {Promise<boolean>}
    */
   module.isTxtExtAllowed = async () => await module.getSetting(Constants.ALLOW_TXT_EXTENSION_KEY) === 'true'
+
+  /**
+   * Is the Kroki extension enabled ?
+   * @returns {Promise<boolean>}
+   */
+  module.isKrokiEnabled = async () => await module.getSetting(Constants.ENABLE_KROKI_KEY) === 'true'
+
+  /**
+   * Get the Kroki server URL.
+   * @returns {Promise<String>}
+   */
+  module.getKrokiServerUrl = async () => module.getSetting(Constants.KROKI_SERVER_URL_KEY)
 
   /**
    * Is the extension currently enabled ?
@@ -66,6 +80,8 @@ asciidoctor.browser.settings = (webExtension, Constants) => {
    */
   module.getRenderingSettings = async () => {
     const settings = await module.getSettings([
+      Constants.KROKI_SERVER_URL_KEY,
+      Constants.ENABLE_KROKI_KEY,
       Constants.CUSTOM_ATTRIBUTES_KEY,
       Constants.SAFE_MODE_KEY,
       Constants.JS_KEY,
@@ -74,14 +90,18 @@ asciidoctor.browser.settings = (webExtension, Constants) => {
     const customAttributes = settings[Constants.CUSTOM_ATTRIBUTES_KEY]
     const safeMode = settings[Constants.SAFE_MODE_KEY]
     const customJavaScriptContent = await getCustomScriptContent(customJavaScriptName)
+    const krokiServerUrl = settings[Constants.KROKI_SERVER_URL_KEY]
+    const krokiEnabled = settings[Constants.ENABLE_KROKI_KEY] === 'true'
     if (customJavaScriptContent) {
       const customJavaScriptLoadDirective = settings[Constants.JS_LOAD_KEY]
       return new RenderingSettings(
         customAttributes,
         safeMode,
+        krokiEnabled,
+        krokiServerUrl,
         new CustomJavaScript(customJavaScriptContent, customJavaScriptLoadDirective))
     }
-    return new RenderingSettings(customAttributes, safeMode)
+    return new RenderingSettings(customAttributes, safeMode, krokiEnabled, krokiServerUrl)
   }
 
   const getCustomScriptContent = async (customJavaScriptName) =>

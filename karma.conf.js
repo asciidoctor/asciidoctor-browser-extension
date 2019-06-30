@@ -20,7 +20,6 @@ module.exports = function (config) {
       'app/js/renderer.js',
       'app/js/vendor/asciidoctor-chart-block-macro.js',
       'app/js/vendor/asciidoctor-emoji-inline-macro.js',
-      'app/js/vendor/asciidoctor-kroki-register.js',
       'spec/**/*-spec.js'
     ],
     reporters: ['progress'],

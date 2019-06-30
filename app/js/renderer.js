@@ -1,4 +1,4 @@
-/* global Asciidoctor, asciidoctor, location, Chartist */
+/* global location, XMLHttpRequest, asciidoctor, Asciidoctor, AsciidoctorKroki, Chartist */
 const processor = Asciidoctor({ runtime: { platform: 'browser' } })
 
 // exports
@@ -8,6 +8,40 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
       this.doc = doc
       this.html = html
     }
+  }
+
+  const httpGet = (uri, encoding = 'utf8') => {
+    let data = ''
+    let status = -1
+    try {
+      const xhr = new XMLHttpRequest()
+      xhr.open('GET', uri, false)
+      if (encoding === 'binary') {
+        xhr.responseType = 'arraybuffer'
+      }
+      xhr.addEventListener('load', function () {
+        status = this.status
+        if (status === 200 || status === 0) {
+          if (encoding === 'binary') {
+            const arrayBuffer = xhr.response
+            const byteArray = new Uint8Array(arrayBuffer)
+            for (let i = 0; i < byteArray.byteLength; i++) {
+              data += String.fromCharCode(byteArray[i])
+            }
+          } else {
+            data = this.responseText
+          }
+        }
+      })
+      xhr.send()
+    } catch (e) {
+      throw new Error(`Error reading file: ${uri}; reason: ${e.message}`)
+    }
+    // assume that no data means it doesn't exist
+    if (status === 404 || !data) {
+      throw new Error(`No such file: ${uri}`)
+    }
+    return data
   }
 
   const module = {}
@@ -298,7 +332,7 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
       'env=browser',
       'env-browser',
       'data-uri!',
-      'plantuml-server-url=http://www.plantuml.com/plantuml@']
+      `kroki-server-url=${settings.krokiServerUrl}@`]
     const href = window.location.href
     const fileName = href.split('/').pop()
     attributes.push(`docfile=${href}`)
@@ -327,12 +361,27 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
     if (attributesQueryParameters.length > 0) {
       Array.prototype.push.apply(attributes, attributesQueryParameters)
     }
+    const registry = processor.Extensions.create()
+    if (settings.krokiEnabled) {
+      AsciidoctorKroki.register(registry, {
+        vfs: {
+          read: (path, encoding = 'utf8') => {
+            return httpGet(path, encoding)
+          },
+          exists: (_) => {
+            return false
+          },
+          add: (_) => {
+            // no-op
+          }
+        }
+      })
+    }
     return {
       'safe': safeMode,
-      // Force backend to html5
-      'backend': 'html5',
-      // Pass attributes as String
-      'attributes': attributes.join(' ')
+      'extension_registry': registry,
+      'backend': 'html5', // Force backend to html5
+      'attributes': attributes.join(' ') // Pass attributes as String
     }
   }
 
