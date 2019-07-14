@@ -1,12 +1,14 @@
 $body-size: 14px;
 $section-padding: 1rem 1rem;
+$label-weight: 600;
 
 @import "bulma/sass/utilities/_all";
 @import "bulma/sass/base/minireset";
 @import "bulma/sass/base/generic";
 @import "bulma/sass/base/helpers";
+@import "bulma/sass/elements/title";
 @import "bulma/sass/elements/button";
-@import "bulma/sass/elements/form";
+@import "bulma/sass/form/_all";
 @import "bulma/sass/elements/icon";
 @import "bulma/sass/elements/notification";
 @import "bulma/sass/elements/other";
@@ -41,4 +43,19 @@ html {
 
 .help {
   color: #737373;
+}
+
+fieldset {
+  padding: 1rem;
+  border: 1px solid #cccccc;
+  margin-bottom: 1.5rem;
+
+  .field:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+
+  legend {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
 }

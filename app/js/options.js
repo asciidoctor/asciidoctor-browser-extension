@@ -11,6 +11,8 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
   const selectRemotePollFrequency = document.getElementById('selectRemotePollFrequency')
   const inputAllowTxtExtension = document.getElementById('inputAllowTxtExtension')
   const inputCustomAttributes = document.getElementById('inputCustomAttributes')
+  const inputEnableKroki = document.getElementById('inputEnableKroki')
+  const inputKrokiServerURL = document.getElementById('inputKrokiServerURL')
   const inputLoadJavaScript = Array.from(document.body.querySelectorAll('input[name=optionsLoadJavaScript]'))
 
   const addCustomThemeNotification = document.getElementById('addCustomThemeNotification')
@@ -45,6 +47,8 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
       localStorage['LOCAL_POLL_FREQUENCY'] !== selectLocalPollFrequency.value ||
       localStorage['REMOTE_POLL_FREQUENCY'] !== selectRemotePollFrequency.value ||
       localStorage['ALLOW_TXT_EXTENSION'] !== inputAllowTxtExtension.checked.toString() ||
+      localStorage['ENABLE_KROKI'] !== inputEnableKroki.checked.toString() ||
+      localStorage['KROKI_SERVER_URL'] !== inputKrokiServerURL.value ||
       localStorage['THEME'] !== selectTheme.value ||
       localStorage['JS'] !== selectJavaScript.value ||
       localStorage['JS_LOAD'] !== inputLoadJavaScript.find((element) => element.checked).value
@@ -59,6 +63,8 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
     localStorage['LOCAL_POLL_FREQUENCY'] = selectLocalPollFrequency.value
     localStorage['REMOTE_POLL_FREQUENCY'] = selectRemotePollFrequency.value
     localStorage['ALLOW_TXT_EXTENSION'] = inputAllowTxtExtension.checked
+    localStorage['ENABLE_KROKI'] = inputEnableKroki.checked
+    localStorage['KROKI_SERVER_URL'] = inputKrokiServerURL.value
     localStorage['THEME'] = selectTheme.value
     localStorage['JS'] = selectJavaScript.value
     localStorage['JS_LOAD'] = inputLoadJavaScript.find((element) => element.checked).value
@@ -74,6 +80,8 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
     selectLocalPollFrequency.value = localStorage['LOCAL_POLL_FREQUENCY'] || '2'
     selectRemotePollFrequency.value = localStorage['REMOTE_POLL_FREQUENCY'] || '2'
     inputAllowTxtExtension.checked = localStorage['ALLOW_TXT_EXTENSION'] === 'true'
+    inputEnableKroki.checked = localStorage['ENABLE_KROKI'] === 'true'
+    inputKrokiServerURL.value = localStorage['KROKI_SERVER_URL'] || 'https://kroki.io'
     const loadJavaScriptValue = ['before', 'after'].includes(localStorage['JS_LOAD']) ? localStorage['JS_LOAD'] : 'after'
     inputLoadJavaScript.find((element) => element.value === loadJavaScriptValue).checked = true
 

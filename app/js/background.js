@@ -105,6 +105,8 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
       'CUSTOM_ATTRIBUTES': localStorage['CUSTOM_ATTRIBUTES'],
       'SAFE_MODE': localStorage['SAFE_MODE'],
       'ALLOW_TXT_EXTENSION': localStorage['ALLOW_TXT_EXTENSION'],
+      'ENABLE_KROKI': localStorage['ENABLE_KROKI'],
+      'KROKI_SERVER_URL': localStorage['KROKI_SERVER_URL'],
       'THEME': localStorage['THEME'],
       'JS': localStorage['JS'],
       'JS_LOAD': localStorage['JS_LOAD'],

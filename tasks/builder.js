@@ -80,7 +80,7 @@ Builder.prototype.compileSass = function () {
     file: source,
     includePaths: ['node_modules']
   })
-  var minified = csso.minify(result.css)
+  const minified = csso.minify(result.css)
   fs.writeFileSync(destination, minified.css, 'utf-8')
 }
 
