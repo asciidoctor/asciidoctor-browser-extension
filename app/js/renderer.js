@@ -336,6 +336,8 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
     const href = window.location.href
     const fileName = href.split('/').pop()
     attributes.push(`docfile=${href}`)
+    // Inter-document cross references must point to AsciiDoc source files
+    attributes.push(`outfilesuffix=.adoc`)
     const fileNameExtensionPair = fileName.split('.')
 
     if (fileNameExtensionPair.length > 1) {
@@ -344,7 +346,6 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
       fileExtension = fileExtension.split('?')[0]
       // Remove fragment identifier
       fileExtension = fileExtension.split('#')[0]
-      attributes.push(`outfilesuffix=.html`)
       attributes.push(`docfilesuffix=.${fileExtension}`)
     }
     if (fileNameExtensionPair.length > 0) {
