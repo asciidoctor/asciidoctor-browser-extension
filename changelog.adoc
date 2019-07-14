@@ -1,5 +1,11 @@
 = Changelog
 
+== 2.2.0
+
+* Fix inter-document cross references by using `.adoc` as `outfilesuffix` (thanks @jmini)
+* Disable the diagram extension by default (can be enabled in options page)
+* The Kroki server URL can now be configured in the options page (for instance, you can point to a local instance)
+
 == 2.1.0
 
 * Set built-in attributes docfile, docname and docfilesuffix (thanks @utopalex & @ehmkah)
