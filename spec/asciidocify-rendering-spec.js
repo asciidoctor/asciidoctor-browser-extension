@@ -15,7 +15,12 @@ describe('Load document attributes', () => {
 
   it('should set outfilesuffix correct', () => {
     const html = Renderer.convert('= {outfilesuffix}', {}).html
-    expect(html).toBe('<h1>.html</h1>\n')
+    expect(html).toBe('<h1>.adoc</h1>\n')
+  })
+
+  it('should resolve inter-document cross reference', () => {
+    const html = Renderer.convert('Refer to <<document-b.adoc#section-b,Section B>> for more information.', {}).html
+    expect(html).toBe('<div class="paragraph">\n<p>Refer to <a href="document-b.adoc#section-b">Section B</a> for more information.</p>\n</div>')
   })
 
   it('should set docfilesuffix correct', () => {
