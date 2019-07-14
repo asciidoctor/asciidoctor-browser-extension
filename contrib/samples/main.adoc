@@ -174,17 +174,23 @@ docfilesuffix:: {docfilesuffix}
 
 == Include macro
 
-include::{docdir}/b.adoc[]
+.Relative path to `docdir`
+include::{docdir}/tip-version.adoc[]
 
-include::./b.adoc[]
+.Relative path using `./`
+include::./tip-version.adoc[]
 
-include::b.adoc[]
+.Relative path (no prefix)
+include::tip-version.adoc[]
 
-include::subdir/c.adoc[]
+.Relative path using a sub-directory
+include::_partials/tips.adoc[]
 
 == Links
 
-link:b1.adoc[Second document]
+link:chapter-1.adoc[First chapter]
+
+Refer to <<chapter-1.adoc#_section_b,Section B>> for more information.
 
 A statement.footnote:[Clarification about this statement.]
 
