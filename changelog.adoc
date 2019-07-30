@@ -1,5 +1,9 @@
 = Changelog
 
+== 2.2.1
+
+* Bump version to publish on https://addons.mozilla.org.
+
 == 2.2.0
 
 * Fix inter-document cross references by using `.adoc` as `outfilesuffix` (thanks @jmini)
