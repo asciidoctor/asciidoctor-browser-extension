@@ -17,14 +17,13 @@ describe('Syntax highlighting', () => {
     
 == Code block
 
-[source,js]
+[source#code,js]
 ----
 console.log('Hello world')
 ----`
     Renderer.update(source)
       .then(() => {
-        expect(document.getElementById('asciidoctor-browser-highlightjs').getAttribute('src')).toBe('js/vendor/highlight.js/highlight.min.js')
-        expect(document.getElementById('asciidoctor-browser-highlightjs-refresh').getAttribute('src')).toBe('js/vendor/highlight.js/refresh.js')
+        expect(document.getElementById('code').querySelectorAll('code > span').length).toBe(2)
         done()
       })
   })
@@ -39,14 +38,14 @@ console.log('Hello world')
     
 == Code block
 
-[source,js]
+[source#code,js]
 ----
 console.log('Hello world')
 ----`
 
     Renderer.update(source)
       .then(() => {
-        expect(document.getElementById('asciidoctor-browser-highlightjs')).toBeNull()
+        expect(document.getElementById('code').querySelectorAll('code > span').length).toBe(0)
         done()
       })
   })
