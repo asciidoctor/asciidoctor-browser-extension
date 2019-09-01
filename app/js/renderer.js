@@ -1,4 +1,4 @@
-/* global location, XMLHttpRequest, asciidoctor, Asciidoctor, AsciidoctorKroki, Chartist */
+/* global location, XMLHttpRequest, asciidoctor, Asciidoctor, AsciidoctorKroki, Chartist, hljs */
 const processor = Asciidoctor({ runtime: { platform: 'browser' } })
 
 // exports
@@ -64,7 +64,6 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
       const asciidoctorDocument = module.convert(source, settings)
 
       Dom.removeElement('asciidoctor-browser-mathjax-refresh')
-      Dom.removeElement('asciidoctor-browser-highlightjs-refresh')
       Dom.removeElement('asciidoctor-browser-custom-js')
 
       // Save the scripts that are present at the root of the <body> to be able to restore them after the update
@@ -112,26 +111,6 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
       doc.setAttribute('source-highlighter', 'highlight.js')
     }
     return new AsciidoctorDocument(doc, doc.convert())
-  }
-
-  /**
-   * Append highlight.js script
-   */
-  module.appendHighlightJsScript = (doc) => {
-    Dom.appendOnce(document.head, Dom.createScriptElement({
-      id: 'asciidoctor-browser-highlightjs',
-      src: webExtension.extension.getURL('js/vendor/highlight.js/highlight.min.js')
-    }))
-    const languages = doc.getAttribute('highlightjs-languages')
-    if (languages) {
-      for (let lang of languages.split(',')) {
-        lang = lang.trim()
-        Dom.appendOnce(document.head, Dom.createScriptElement({
-          id: `asciidoctor-browser-highlightjs-${lang}`,
-          src: webExtension.extension.getURL(`js/vendor/highlight.js/languages/${lang}.min.js`)
-        }))
-      }
-    }
   }
 
   /**
@@ -286,10 +265,7 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
     }
     appendScripts(scripts)
     if (isSourceHighlighterEnabled(doc)) {
-      module.appendHighlightJsScript(doc)
       syntaxHighlighting()
-    } else {
-      Dom.removeElement('asciidoctor-browser-highlightjs')
     }
     drawCharts()
   }
@@ -422,10 +398,14 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
    * Syntax highlighting with Highlight.js
    */
   const syntaxHighlighting = () => {
-    document.body.appendChild(Dom.createScriptElement({
-      id: 'asciidoctor-browser-highlightjs-refresh',
-      src: webExtension.extension.getURL('js/vendor/highlight.js/refresh.js')
-    }))
+    document.body.querySelectorAll('pre.highlight > code').forEach((node) => {
+      const match = /language-(\S+)/.exec(node.className)
+      if (match !== null && hljs.getLanguage(match[1]) !== null) {
+        hljs.highlightBlock(node)
+      } else {
+        node.className += ' hljs'
+      }
+    })
   }
 
   /**
