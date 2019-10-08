@@ -288,7 +288,7 @@
     "fonts/fontawesome-webfont.woff2",
     "fonts/fontawesome-webfont.woff",
     "fonts/fontawesome-webfont.ttf",
-    "vendor/MathJax/*"
+    "vendor/MathJax-3.0.0/*"
   ],
   "permissions":[
     "storage",
