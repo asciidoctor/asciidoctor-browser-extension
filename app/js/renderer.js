@@ -116,40 +116,40 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
   /**
    * Append MathJax script
    */
-  module.appendMathJax = (doc) => {
+  module.initializeMathJax = (doc) => {
     const eqnumsValue = doc.getAttribute('eqnums', 'none')
-    const eqnumsOption = ` equationNumbers: { autoNumber: "${eqnumsValue}" } `
     const content = `
-MathJax.Hub.Config({
-  messageStyle: "none",
-  tex2jax: {
-    inlineMath: [['\\\\(','\\\\)']],
+function adjustDisplay(math, doc) {
+  if ((node = math.start.node.parentNode) && (node = node.parentNode) && node.classList.contains('stemblock')) {
+    math.typesetRoot.setAttribute('display', 'true');
+  }
+}
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\\\(', '\\\\)']],
     displayMath: [['\\\\[', '\\\\]']],
-    ignoreClass: 'nostem|nolatexmath'
+    processEscapes: false,
+    tags: "${eqnumsValue}"
   },
-  asciimath2jax: {
-    delimiters: [['\\\\$', '\\\\$']],
-    ignoreClass: 'nostem|noasciimath'
-  },
-  TeX: {${eqnumsOption}}
-})
-MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
-  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
-    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains('stemblock')) {
-      data.math.root.display = "block"
+  options: {
+    ignoreHtmlClass: 'nostem|noasciimath',
+    renderActions: {
+      adjustDisplay: [151, (doc) => {for (math of doc.math) {adjustDisplay(math, doc)}}, adjustDisplay]
     }
-    return data
-  })
-})`
-    var element = Dom.createScriptElement({
+  },
+  asciimath: {
+    delimiters: [['\\\\$', '\\\\$']]
+  },
+  loader: {load: ['input/asciimath', 'output/chtml', 'ui/menu']}
+};`
+    document.body.appendChild(Dom.createScriptElement({
       id: 'asciidoctor-mathjax-config',
       innerHTML: content
-    })
-    element.setAttribute('type', 'text/x-mathjax-config')
-    Dom.appendOnce(document.head, element)
-    Dom.appendOnce(document.head, Dom.createScriptElement({
+    }))
+    document.body.appendChild(Dom.createScriptElement({
       id: 'asciidoctor-mathjax-initialization',
-      src: webExtension.extension.getURL('vendor/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML')
+      src: webExtension.extension.getURL('vendor/MathJax-3.0.0/tex-chtml-full.js'),
+      async: true
     }))
   }
 
@@ -257,8 +257,7 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
 
     forceLoadDynamicObjects()
     if (isStemEnabled(doc)) {
-      module.appendMathJax(doc)
-      refreshMathJax()
+      module.initializeMathJax(doc)
     } else {
       Dom.removeElement('asciidoctor-mathjax-config')
       Dom.removeElement('asciidoctor-mathjax-initialization')
@@ -454,16 +453,6 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
     Dom.appendOnce(document.head, Dom.createStylesheetLinkElement({
       id: 'asciidoctor-browser-font-awesome-style',
       href: webExtension.extension.getURL('css/font-awesome.min.css')
-    }))
-  }
-
-  /**
-   *
-   */
-  const refreshMathJax = () => {
-    document.body.appendChild(Dom.createScriptElement({
-      id: 'asciidoctor-browser-mathjax-refresh',
-      src: webExtension.extension.getURL('vendor/MathJax/refresh.js')
     }))
   }
 
