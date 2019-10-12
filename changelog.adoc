@@ -1,5 +1,13 @@
 = Changelog
 
+== 2.3.0
+
+* Upgrade to MathJax 3.0.0 (thanks @sindzicat)
+* Use server-side syntax highlighting (thanks @john-cj)
+* Upgrade addons-linter (Firefox) to 1.15.0
+* Upgrade Puppeteer to 1.20.0
+* Bump eslint-utils from 1.3.1 to 1.4.2
+
 == 2.2.1
 
 * Bump version to publish on https://addons.mozilla.org.
