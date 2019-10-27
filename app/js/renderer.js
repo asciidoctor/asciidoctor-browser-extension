@@ -63,7 +63,6 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
       const settings = await Settings.getRenderingSettings()
       const asciidoctorDocument = module.convert(source, settings)
 
-      Dom.removeElement('asciidoctor-browser-mathjax-refresh')
       Dom.removeElement('asciidoctor-browser-custom-js')
 
       // Save the scripts that are present at the root of the <body> to be able to restore them after the update
@@ -118,10 +117,10 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
    */
   module.initializeMathJax = (doc) => {
     const eqnumsValue = doc.getAttribute('eqnums', 'none')
-    const content = `
-function adjustDisplay(math, doc) {
-  if ((node = math.start.node.parentNode) && (node = node.parentNode) && node.classList.contains('stemblock')) {
-    math.typesetRoot.setAttribute('display', 'true');
+    const content = `function adjustDisplay(math, doc) {
+  let node = math.start.node.parentNode
+  if (node && (node = node.parentNode) && node.classList.contains('stemblock')) {
+    math.root.attributes.set('display', 'block')
   }
 }
 window.MathJax = {
@@ -134,7 +133,7 @@ window.MathJax = {
   options: {
     ignoreHtmlClass: 'nostem|noasciimath',
     renderActions: {
-      adjustDisplay: [151, (doc) => {for (math of doc.math) {adjustDisplay(math, doc)}}, adjustDisplay]
+      adjustDisplay: [25, (doc) => {for (math of doc.math) {adjustDisplay(math, doc)}}, adjustDisplay]
     }
   },
   asciimath: {
