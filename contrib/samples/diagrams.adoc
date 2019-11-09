@@ -1,4 +1,5 @@
 = Diagrams
+:kroki-fetch-diagram:
 
 == PlantUML diagram
 
