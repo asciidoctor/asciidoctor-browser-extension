@@ -15977,12 +15977,9 @@ function diagramBlock (context) {
       try {
         return processKroki(this, parent, attrs, diagramType, diagramText, context)
       } catch (e) {
-        if (e.name === 'UnsupportedFormatError' || e.name === 'InvalidConfigurationError') {
-          console.warn(`Skipping ${diagramType} block. ${e.message}`)
-          attrs.role = role ? `${role} kroki-error` : 'kroki-error'
-          return this.createBlock(parent, attrs['cloaked-context'], diagramText, attrs)
-        }
-        throw e
+        console.warn(`Skipping ${diagramType} block. ${e.message}`)
+        attrs.role = role ? `${role} kroki-error` : 'kroki-error'
+        return this.createBlock(parent, attrs['cloaked-context'], diagramText, attrs)
       }
     })
   }
