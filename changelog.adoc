@@ -1,5 +1,10 @@
 = Changelog
 
+== 2.3.1
+
+* Fix Kroki on Firefox (thanks @mbeckerle)
+* Set display block on stemblock
+
 == 2.3.0
 
 * Upgrade to MathJax 3.0.0 (thanks @sindzicat)

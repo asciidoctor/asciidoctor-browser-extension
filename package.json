@@ -1,7 +1,7 @@
 {
   "name": "asciidoctor-browser-extension",
   "description": "Render AsciiDoc (.ad, .adoc, .asc, .asciidoc) as HTML inside your browser!",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "engines": {
     "node": ">=8.11",
     "npm": ">=5.0.0"
@@ -30,7 +30,7 @@
     "@asciidoctor/core": "2.0.3",
     "addons-linter": "1.15.0",
     "archiver": "3.0.0",
-    "asciidoctor-kroki": "^0.2.0",
+    "asciidoctor-kroki": "0.4.0",
     "bestikk-fs": "1.0.0",
     "bestikk-log": "0.1.0",
     "browserify": "16.2.3",
