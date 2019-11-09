@@ -336,6 +336,8 @@ window.MathJax = {
     if (attributesQueryParameters.length > 0) {
       Array.prototype.push.apply(attributes, attributesQueryParameters)
     }
+    // Forcibly remove the "kroki-fetch-diagram" attribute because this feature is not supported in a browser environment.
+    attributes.push('kroki-fetch-diagram!')
     const registry = processor.Extensions.create()
     if (settings.krokiEnabled) {
       AsciidoctorKroki.register(registry, {

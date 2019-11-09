@@ -240,6 +240,7 @@
         "js/vendor/highlight.js/languages/zephir.min.js",
         "js/vendor/asciidoctor.js",
         "js/vendor/md5.js",
+        "js/vendor/kroki.js",
         "js/module/namespace.js",
         "js/module/settings.js",
         "js/module/dom.js",
@@ -248,7 +249,6 @@
         "js/renderer.js",
         "js/asciidocify.js",
         "js/vendor/chartist.min.js",
-        "js/vendor/kroki.js",
         "js/vendor/asciidoctor-chart-block-macro.js",
         "js/vendor/asciidoctor-emoji-inline-macro.js"
       ]
