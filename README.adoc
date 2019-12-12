@@ -28,7 +28,7 @@ image:https://dev.opera.com/extensions/branding-guidelines/addons_206x58_en@2x.p
 
 == Usage
 
-=== Chrome, Chromium or Opera
+=== Chrome, Chromium, Brave or Opera
 
  1. Install the extension from the {uri-chrome-webstore}[Chrome Web Store] or the {uri-opera-addon}[Opera Add-ons website]
  2. Check `Allow access to file URLs` in `chrome://extensions`
@@ -56,7 +56,7 @@ If you do navigate to a `file://` URL from a link, simply highlight the address 
 
 Loading your local copy of the extension on Chrome (or Chromium), Firefox or Opera is super easy!
 
-=== Chrome, Chromium or Opera
+=== Chrome, Chromium, Brave or Opera
 
  1. Check `Developer mode` in `chrome://extensions`
  2. Click `Load unpacked extension...` and select the extension `app` directory
@@ -77,7 +77,7 @@ To see your changes, click the `Reload` link in `about:debugging`.
 
 The extension can be configured via an options page.
 
-To open the options page, in Chrome or Opera, right-click the extension icon and choose Options on the menu.
+To open the options page, in Chrome, Brave or Opera, right-click the extension icon and choose Options on the menu.
 You can also go to `chrome://extensions` and click the Options link.
 
 In Firefox, go to `about:addons` and click the More link or the Preferences button.
