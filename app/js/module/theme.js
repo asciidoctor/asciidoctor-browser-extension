@@ -5,11 +5,10 @@ asciidoctor.browser.theme = (webExtension, Settings, Constants) => {
 
   /**
    * Get the theme name.
-   * @param asciidoctorDocument The Asciidoctor document
+   * @param stylesheetAttribute The stylesheet attribute value
    * @returns {Promise<String>}
    */
-  module.getThemeName = (asciidoctorDocument) => {
-    const stylesheetAttribute = asciidoctorDocument.getAttribute('stylesheet')
+  module.getThemeName = (stylesheetAttribute) => {
     if (typeof stylesheetAttribute !== 'undefined' && stylesheetAttribute !== '') {
       const themeName = stylesheetAttribute.replace(/\.css$/, '')
       return hasTheme(themeName)

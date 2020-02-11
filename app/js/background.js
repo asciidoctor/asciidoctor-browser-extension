@@ -1,5 +1,5 @@
-/* global chrome, browser, localStorage */
-const webExtension = typeof browser === 'undefined' ? chrome : browser
+/* global webExtension, asciidoctor, localStorage */
+const Converter = asciidoctor.browser.converter(webExtension)
 
 // exports
 const { refreshOptions, enableDisableRender } = ((webExtension) => {
@@ -48,6 +48,24 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
     }
   })
 
+  webExtension.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+    if (request.action === 'fetch-convert') {
+      Converter.fetchAndConvert(sender.tab.url, request.initial)
+        .then(result => {
+          if (result) {
+            sendResponse(result)
+          } else {
+            sendResponse({})
+          }
+        })
+      return true
+    } else if (request.action === 'convert') {
+      Converter.convert(sender.tab.url, request.source)
+        .then(result => sendResponse(result))
+      return true
+    }
+  })
+
   webExtension.tabs.onUpdated.addListener((tabId, changeInfo) => {
     if (changeInfo.status === 'complete' && tabId === injectTabId) {
       const tabs = webExtension.extension.getViews({ type: 'tab' })
@@ -55,6 +73,10 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
       tabs[tabs.length - 1].inject(injectText)
     }
   })
+
+  const disableExtension = tab => {
+    webExtension.tabs.reload(tab.id)
+  }
 
   const notifyTab = (tab, status) => {
     webExtension.tabs.sendMessage(tab.id, { status: status })
@@ -94,7 +116,14 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
     }
 
     // Reload the active tab in the current windows that matches
-    findActiveTab((activeTab) => notifyTab(activeTab, enableRender ? 'extension-disabled' : 'extension-enabled'))
+    findActiveTab((activeTab) => {
+      if (enableRender) {
+        // opposite action, the extension was enabled, so we disable!
+        disableExtension(activeTab)
+      } else {
+        notifyTab(activeTab, 'extension-enabled')
+      }
+    })
 
     // Switch the flag
     enableRender = !enableRender
