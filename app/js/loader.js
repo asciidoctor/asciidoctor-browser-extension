@@ -6,8 +6,6 @@ asciidoctor.browser.loader = (webExtension, document, location, XMLHttpRequest, 
     if (sender.id === webExtension.runtime.id) {
       if (message.status === 'extension-enabled') {
         module.load()
-      } else if (message.status === 'extension-disabled') {
-        unloadExtension()
       }
     }
   })
@@ -50,15 +48,6 @@ asciidoctor.browser.loader = (webExtension, document, location, XMLHttpRequest, 
     request.open('GET', `${url}?_=${new Date().getTime()}`, true)
     request.send(null)
   })
-
-  const unloadExtension = async () => {
-    clearInterval(autoReloadInterval)
-    const request = await executeRequest(location.href)
-    if (isHtmlContentType(request)) {
-      return
-    }
-    displayContentAsPlainText(request.responseText)
-  }
 
   /**
    * Display content as plain text.

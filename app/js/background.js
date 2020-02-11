@@ -56,6 +56,10 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
     }
   })
 
+  const disableExtension = tab => {
+    webExtension.tabs.reload(tab.id)
+  }
+
   const notifyTab = (tab, status) => {
     webExtension.tabs.sendMessage(tab.id, { status: status })
   }
@@ -94,7 +98,14 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
     }
 
     // Reload the active tab in the current windows that matches
-    findActiveTab((activeTab) => notifyTab(activeTab, enableRender ? 'extension-disabled' : 'extension-enabled'))
+    findActiveTab((activeTab) => {
+      if (enableRender) {
+        // opposite action, the extension was enabled, so we disable!
+        disableExtension(activeTab)
+      } else {
+        notifyTab(activeTab, 'extension-enabled')
+      }
+    })
 
     // Switch the flag
     enableRender = !enableRender
