@@ -12,10 +12,10 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
 
   /**
    * Update the content of the HTML document
-   * @param html AsciiDoc converted to HTML
+   * @param backgroundConverterResponse The response sent by the background script
    * @returns {Promise<boolean>}
    */
-  module.updateHTML = async (asciidoctorDocument) => {
+  module.updateHTML = async (backgroundConverterResponse) => {
     try {
       Dom.removeElement('asciidoctor-browser-custom-js')
       // Save the scripts that are present at the root of the <body> to be able to restore them after the update
@@ -25,7 +25,7 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
       const settings = await Settings.getRenderingSettings()
       const customJavaScript = settings.customScript
       preprocessing(customJavaScript)
-      await updateBodyHTML(asciidoctorDocument, scripts)
+      await updateBodyHTML(backgroundConverterResponse, scripts)
       postprocessing(customJavaScript)
       return true
     } catch (error) {

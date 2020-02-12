@@ -1,11 +1,8 @@
 /* global md5, asciidoctor, XMLHttpRequest, Asciidoctor, AsciidoctorKroki */
 const processor = Asciidoctor({ runtime: { platform: 'browser' } })
 
-asciidoctor.browser.converter = (webExtension) => {
+asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
   const module = {}
-
-  const Constants = asciidoctor.browser.constants()
-  const Settings = asciidoctor.browser.settings(webExtension, Constants)
 
   const executeRequest = (url) => new Promise((resolve, reject) => {
     const request = new XMLHttpRequest()

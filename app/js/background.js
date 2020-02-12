@@ -1,5 +1,7 @@
 /* global webExtension, asciidoctor, localStorage */
-const Converter = asciidoctor.browser.converter(webExtension)
+const Constants = asciidoctor.browser.constants()
+const Settings = asciidoctor.browser.settings(webExtension, Constants)
+const Converter = asciidoctor.browser.converter(webExtension, Constants, Settings)
 
 // exports
 const { refreshOptions, enableDisableRender } = ((webExtension) => {
