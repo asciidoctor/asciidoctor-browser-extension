@@ -70,7 +70,7 @@ window.MathJax = {
     }))
     document.body.appendChild(Dom.createScriptElement({
       id: 'asciidoctor-mathjax-initialization',
-      src: webExtension.extension.getURL('vendor/MathJax-3.0.0/tex-chtml-full.js'),
+      src: webExtension.extension.getURL('vendor/MathJax-3.0.1/tex-chtml-full.js'),
       async: true
     }))
   }
