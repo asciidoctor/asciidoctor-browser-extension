@@ -64,13 +64,19 @@ window.MathJax = {
   },
   loader: {load: ['input/asciimath', 'output/chtml', 'ui/menu']}
 };`
-    document.body.appendChild(Dom.createScriptElement({
+    Dom.appendOnce(document.head, Dom.createScriptElement({
       id: 'asciidoctor-mathjax-config',
       innerHTML: content
     }))
-    document.body.appendChild(Dom.createScriptElement({
+    Dom.appendOnce(document.head, Dom.createScriptElement({
       id: 'asciidoctor-mathjax-initialization',
-      src: webExtension.extension.getURL('vendor/MathJax-3.0.0/tex-chtml-full.js'),
+      src: webExtension.extension.getURL('vendor/MathJax-3.0.1/tex-chtml-full.js'),
+      async: true
+    }))
+    Dom.removeElement('asciidoctor-mathjax-typesetting')
+    document.head.appendChild(Dom.createScriptElement({
+      id: 'asciidoctor-mathjax-typesetting',
+      innerHTML: `if (MathJax && typeof MathJax.typesetPromise === 'function') { MathJax.typesetPromise() }`,
       async: true
     }))
   }
