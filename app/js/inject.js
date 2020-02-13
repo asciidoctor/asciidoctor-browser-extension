@@ -10,7 +10,7 @@ asciidoctor.browser.inject = ((webExtension, document, location) => {
 
   const inject = (source) => {
     if (!alreadyRun) {
-      webExtension.runtime.sendMessage({ action: 'convert' }, function (response) {
+      webExtension.runtime.sendMessage({ action: 'convert', source }, function (response) {
         if (response && response.html) {
           Renderer.updateHTML(response)
         }
