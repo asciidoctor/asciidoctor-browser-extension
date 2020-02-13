@@ -52,38 +52,30 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
   const isStemEnabled = (doc) => doc.isAttribute('stem')
 
   module.convert = async (url, source) => {
-    let result
-    if (await Settings.isExtensionEnabled()) {
-      const settings = await Settings.getRenderingSettings()
-      const options = buildAsciidoctorOptions(settings, url)
-      const doc = processor.load(source, options)
-      if (showTitle(doc)) {
-        doc.setAttribute('showtitle')
-      }
-      if (isSourceHighlighterEnabled(doc)) {
-        // Force the source highlighter to Highlight.js (since we only support Highlight.js)
-        doc.setAttribute('source-highlighter', 'highlight.js')
-      }
-      result = {
-        html: doc.convert(),
-        text: source,
-        title: doc.getDoctitle({ use_fallback: true }),
-        doctype: doc.getDoctype(),
-        attributes: {
-          isSourceHighlighterEnabled: isSourceHighlighterEnabled(doc),
-          isStemEnabled: isStemEnabled(doc),
-          isFontIcons: doc.getAttribute('icons') === 'font',
-          maxWidth: doc.getAttribute('max-width'),
-          eqnumsValue: doc.getAttribute('eqnums', 'none'),
-          stylesheet: doc.getAttribute('stylesheet')
-        }
-      }
-    } else {
-      result = {
-        text: source
+    const settings = await Settings.getRenderingSettings()
+    const options = buildAsciidoctorOptions(settings, url)
+    const doc = processor.load(source, options)
+    if (showTitle(doc)) {
+      doc.setAttribute('showtitle')
+    }
+    if (isSourceHighlighterEnabled(doc)) {
+      // Force the source highlighter to Highlight.js (since we only support Highlight.js)
+      doc.setAttribute('source-highlighter', 'highlight.js')
+    }
+    return {
+      html: doc.convert(),
+      text: source,
+      title: doc.getDoctitle({ use_fallback: true }),
+      doctype: doc.getDoctype(),
+      attributes: {
+        isSourceHighlighterEnabled: isSourceHighlighterEnabled(doc),
+        isStemEnabled: isStemEnabled(doc),
+        isFontIcons: doc.getAttribute('icons') === 'font',
+        maxWidth: doc.getAttribute('max-width'),
+        eqnumsValue: doc.getAttribute('eqnums', 'none'),
+        stylesheet: doc.getAttribute('stylesheet')
       }
     }
-    return result
   }
 
   module.fetchAndConvert = async (url, initial) => {
@@ -93,21 +85,26 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
       return undefined
     }
     const source = request.responseText
-    const md5key = 'md5' + url
-    if (!initial) {
-      const md5sum = await Settings.getSetting(md5key)
-      if (md5sum && md5sum === md5(source)) {
-        // content didn't change!
-        return undefined
+    if (await Settings.isExtensionEnabled()) {
+      const md5key = 'md5' + url
+      if (!initial) {
+        const md5sum = await Settings.getSetting(md5key)
+        if (md5sum && md5sum === md5(source)) {
+          // content didn't change!
+          return undefined
+        }
       }
+      // content has changed...
+      const result = await module.convert(url, source)
+      // Update md5sum
+      const value = {}
+      value[md5key] = md5(source)
+      webExtension.storage.local.set(value)
+      return result
     }
-    // content has changed...
-    const result = await module.convert(url, source)
-    // Update md5sum
-    const value = {}
-    value[md5key] = md5(source)
-    webExtension.storage.local.set(value)
-    return result
+    return {
+      text: source
+    }
   }
 
   /**
