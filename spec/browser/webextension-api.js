@@ -17,6 +17,8 @@ const browser = {
     onMessage: {
       addListener: () => {
       }
+    },
+    sendMessage: (message, callback) => {
     }
   }
 }
