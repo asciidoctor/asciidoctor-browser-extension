@@ -66,6 +66,8 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
         .then(result => sendResponse(result))
       return true
     }
+    // send an empty response to avoid the pesky error "The message port closed before a response was received"
+    sendResponse({})
   })
 
   webExtension.tabs.onUpdated.addListener((tabId, changeInfo) => {
