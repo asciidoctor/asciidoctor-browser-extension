@@ -1,5 +1,10 @@
 = Changelog
 
+== 2.4.0
+
+* Move the fetch and convert functions in the background script (as the latest version of Chrome 80+ blocks `XMLHttpRequest` sent by the content script)
+* Upgrade to MathJax 3.0.1
+
 == 2.3.1
 
 * Fix Kroki on Firefox (thanks @mbeckerle)
