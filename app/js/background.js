@@ -34,7 +34,7 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
           }, (selectedTextPerFrame) => {
             if (webExtension.runtime.lastError) {
               // eslint-disable-next-line no-console
-              console.log('error:' + webExtension.runtime.lastError.message)
+              console.error('error:' + webExtension.runtime.lastError.message)
             } else if (selectedTextPerFrame.length > 0 && typeof selectedTextPerFrame[0] === 'string') {
               injectText = selectedTextPerFrame[0]
               webExtension.tabs.create({
@@ -60,10 +60,12 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
             sendResponse({})
           }
         })
+        .catch((error) => sendResponse({ error: getErrorInfo(error) }))
       return true
     } else if (request.action === 'convert') {
       Converter.convert(sender.tab.url, request.source)
         .then(result => sendResponse(result))
+        .catch((error) => sendResponse({ error: getErrorInfo(error) }))
       return true
     }
     // send an empty response to avoid the pesky error "The message port closed before a response was received"
@@ -77,6 +79,18 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
       tabs[tabs.length - 1].inject(injectText)
     }
   })
+
+  const getErrorInfo = (error) => {
+    let errorInfo = {}
+    if (typeof error === 'object') {
+      Object.getOwnPropertyNames(error).forEach(function (key) {
+        errorInfo[key] = error[key]
+      }, error)
+    } else {
+      errorInfo.message = error
+    }
+    return errorInfo
+  }
 
   const disableExtension = tab => {
     webExtension.tabs.reload(tab.id)

@@ -45,9 +45,13 @@ asciidoctor.browser.loader = (webExtension, document, location, XMLHttpRequest, 
 
   const fetchContent = () => {
     webExtension.runtime.sendMessage({ action: 'fetch-convert', initial: true }, async function (response) {
-      if (response && response.html) {
+      if (response) {
         Renderer.prepare()
-        await Renderer.updateHTML(response)
+        if (response.html) {
+          Renderer.updateHTML(response)
+        } else if (response.error) {
+          Renderer.showError(response.error)
+        }
         startAutoReload()
       }
     })
@@ -71,6 +75,8 @@ asciidoctor.browser.loader = (webExtension, document, location, XMLHttpRequest, 
             Renderer.updateHTML(response)
           } else if (response.text) {
             displayContentAsPlainText(response.text)
+          } else if (response.error) {
+            Renderer.showError(response.error)
           }
         }
       })
