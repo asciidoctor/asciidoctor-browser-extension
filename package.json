@@ -45,7 +45,7 @@
     "node-sass": "4.12.0",
     "puppeteer": "^1.20.0",
     "sinon": "^8.1.1",
-    "standard": "12.0.1",
+    "standard": "14.3.3",
     "uglify-js": "3.5.9"
   },
   "keywords": [

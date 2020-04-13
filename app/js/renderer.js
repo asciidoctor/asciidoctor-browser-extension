@@ -86,7 +86,7 @@ window.MathJax = {
     Dom.removeElement('asciidoctor-mathjax-typesetting')
     document.head.appendChild(Dom.createScriptElement({
       id: 'asciidoctor-mathjax-typesetting',
-      innerHTML: `if (MathJax && typeof MathJax.typesetPromise === 'function') { MathJax.typesetPromise() }`,
+      innerHTML: 'if (MathJax && typeof MathJax.typesetPromise === \'function\') { MathJax.typesetPromise() }',
       async: true
     }))
   }
@@ -161,7 +161,7 @@ window.MathJax = {
     if (contentElement) {
       contentElement.innerHTML = html
     } else {
-      let contentDiv = document.createElement('div')
+      const contentDiv = document.createElement('div')
       contentDiv.id = 'content'
       contentDiv.innerHTML = html
       document.body.innerHTML = '' // clear <body>
@@ -212,7 +212,7 @@ window.MathJax = {
    */
   const detectLiveReloadJs = (scripts) => {
     let liveReloadDetected = false
-    for (let script of scripts) {
+    for (const script of scripts) {
       if (script.src.indexOf(Constants.LIVERELOADJS_FILENAME) !== -1) {
         // LiveReload.js detected!
         liveReloadDetected = true
@@ -228,7 +228,7 @@ window.MathJax = {
    * Append saved scripts
    */
   const appendScripts = (scripts) => {
-    for (let script of scripts) {
+    for (const script of scripts) {
       if (!isMathTexScript(script)) {
         document.body.appendChild(script)
       }
@@ -258,10 +258,10 @@ window.MathJax = {
    */
   const drawCharts = () => {
     document.body.querySelectorAll('div.ct-chart').forEach((node) => {
-      let options = {
-        height: node.dataset['chartHeight'],
-        width: node.dataset['chartWidth'],
-        colors: node.dataset['chartColors'].split(',')
+      const options = {
+        height: node.dataset.chartHeight,
+        width: node.dataset.chartWidth,
+        colors: node.dataset.chartColors.split(',')
       }
       const dataset = Object.assign({}, node.dataset)
       const series = Object.values(Object.keys(dataset)
@@ -270,11 +270,11 @@ window.MathJax = {
           obj[key] = dataset[key]
           return obj
         }, {})).map(value => value.split(','))
-      let data = {
-        labels: node.dataset['chartLabels'].split(','),
+      const data = {
+        labels: node.dataset.chartLabels.split(','),
         series: series
       }
-      Chartist[node.dataset['chartType']](node, data, options)
+      Chartist[node.dataset.chartType](node, data, options)
     })
   }
 
