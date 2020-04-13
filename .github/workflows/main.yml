@@ -23,10 +23,9 @@ jobs:
           npm ci
       - name: Lint, build and test
         run: |
-          npm run lint:code
           npm run build
           npm run lint:firefox
-          npm test
+          npm t
   build-windows:
     runs-on: windows-latest
     strategy:
@@ -45,6 +44,5 @@ jobs:
           npm ci
       - name: Lint, build and test
         run: |
-          npm run lint
           npm run build
-          npm run test
+          npm t
