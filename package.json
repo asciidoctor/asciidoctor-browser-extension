@@ -32,7 +32,6 @@
     "asciidoctor-kroki": "0.7.0",
     "bestikk-fs": "1.0.0",
     "bestikk-log": "0.1.0",
-    "browserify": "16.5.1",
     "bulma": "0.8.2",
     "chai": "^4.2.0",
     "chartist": "0.11.4",
@@ -45,8 +44,7 @@
     "node-sass": "4.13.1",
     "puppeteer": "^2.1.1",
     "sinon": "^9.0.2",
-    "standard": "14.3.3",
-    "uglify-js": "3.8.1"
+    "standard": "14.3.3"
   },
   "keywords": [
     "browser",
