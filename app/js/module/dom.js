@@ -110,7 +110,7 @@ asciidoctor.browser.dom = (document) => {
   module.decodeEntities = (value) => {
     // QUESTION: Should we use a solution that does not rely on DOM ?
     // https://github.com/mathiasbynens/he
-    let div = document.createElement('div')
+    const div = document.createElement('div')
     div.innerHTML = value
     return div.textContent
   }
@@ -121,7 +121,7 @@ asciidoctor.browser.dom = (document) => {
    */
   module.escape = (value) => {
     // QUESTION: Should we use https://lodash.com/docs/4.17.4#escape ?
-    let div = document.createElement('div')
+    const div = document.createElement('div')
     div.textContent = decodeURIComponent(value)
     return div.innerHTML
   }

@@ -190,7 +190,7 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
     const fileName = href.split('/').pop()
     attributes.push(`docfile=${href}`)
     // Inter-document cross references must point to AsciiDoc source files
-    attributes.push(`outfilesuffix=.adoc`)
+    attributes.push('outfilesuffix=.adoc')
     const fileNameExtensionPair = fileName.split('.')
 
     if (fileNameExtensionPair.length > 1) {
@@ -241,10 +241,10 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
       })
     }
     return {
-      'safe': safeMode,
-      'extension_registry': registry,
-      'backend': 'html5', // Force backend to html5
-      'attributes': attributes.join(' ') // Pass attributes as String
+      safe: safeMode,
+      extension_registry: registry,
+      backend: 'html5', // Force backend to html5
+      attributes: attributes.join(' ') // Pass attributes as String
     }
   }
 

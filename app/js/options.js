@@ -21,7 +21,7 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
   const openExtensionsPageLink = document.getElementById('openExtensionsPageLink')
 
   const showEnablingLocalFileNotification = () => {
-    openExtensionsPageLink.onclick = () => webExtension.tabs.create({ 'url': 'chrome://extensions/?id=' + webExtension.runtime.id })
+    openExtensionsPageLink.onclick = () => webExtension.tabs.create({ url: 'chrome://extensions/?id=' + webExtension.runtime.id })
     initNotification(enablingLocalFileNotification)
     enablingLocalFileNotification.classList.remove('is-hidden')
   }
@@ -42,32 +42,32 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
   }
 
   const optionsChanged = () => {
-    return localStorage['CUSTOM_ATTRIBUTES'] !== inputCustomAttributes.value ||
-      localStorage['SAFE_MODE'] !== selectSafeMode.value ||
-      localStorage['LOCAL_POLL_FREQUENCY'] !== selectLocalPollFrequency.value ||
-      localStorage['REMOTE_POLL_FREQUENCY'] !== selectRemotePollFrequency.value ||
-      localStorage['ALLOW_TXT_EXTENSION'] !== inputAllowTxtExtension.checked.toString() ||
-      localStorage['ENABLE_KROKI'] !== inputEnableKroki.checked.toString() ||
-      localStorage['KROKI_SERVER_URL'] !== inputKrokiServerURL.value ||
-      localStorage['THEME'] !== selectTheme.value ||
-      localStorage['JS'] !== selectJavaScript.value ||
-      localStorage['JS_LOAD'] !== inputLoadJavaScript.find((element) => element.checked).value
+    return localStorage.CUSTOM_ATTRIBUTES !== inputCustomAttributes.value ||
+      localStorage.SAFE_MODE !== selectSafeMode.value ||
+      localStorage.LOCAL_POLL_FREQUENCY !== selectLocalPollFrequency.value ||
+      localStorage.REMOTE_POLL_FREQUENCY !== selectRemotePollFrequency.value ||
+      localStorage.ALLOW_TXT_EXTENSION !== inputAllowTxtExtension.checked.toString() ||
+      localStorage.ENABLE_KROKI !== inputEnableKroki.checked.toString() ||
+      localStorage.KROKI_SERVER_URL !== inputKrokiServerURL.value ||
+      localStorage.THEME !== selectTheme.value ||
+      localStorage.JS !== selectJavaScript.value ||
+      localStorage.JS_LOAD !== inputLoadJavaScript.find((element) => element.checked).value
   }
 
   /**
    * Saves options to localStorage.
    */
   const saveOptions = () => {
-    localStorage['CUSTOM_ATTRIBUTES'] = inputCustomAttributes.value
-    localStorage['SAFE_MODE'] = selectSafeMode.value
-    localStorage['LOCAL_POLL_FREQUENCY'] = selectLocalPollFrequency.value
-    localStorage['REMOTE_POLL_FREQUENCY'] = selectRemotePollFrequency.value
-    localStorage['ALLOW_TXT_EXTENSION'] = inputAllowTxtExtension.checked
-    localStorage['ENABLE_KROKI'] = inputEnableKroki.checked
-    localStorage['KROKI_SERVER_URL'] = inputKrokiServerURL.value
-    localStorage['THEME'] = selectTheme.value
-    localStorage['JS'] = selectJavaScript.value
-    localStorage['JS_LOAD'] = inputLoadJavaScript.find((element) => element.checked).value
+    localStorage.CUSTOM_ATTRIBUTES = inputCustomAttributes.value
+    localStorage.SAFE_MODE = selectSafeMode.value
+    localStorage.LOCAL_POLL_FREQUENCY = selectLocalPollFrequency.value
+    localStorage.REMOTE_POLL_FREQUENCY = selectRemotePollFrequency.value
+    localStorage.ALLOW_TXT_EXTENSION = inputAllowTxtExtension.checked
+    localStorage.ENABLE_KROKI = inputEnableKroki.checked
+    localStorage.KROKI_SERVER_URL = inputKrokiServerURL.value
+    localStorage.THEME = selectTheme.value
+    localStorage.JS = selectJavaScript.value
+    localStorage.JS_LOAD = inputLoadJavaScript.find((element) => element.checked).value
     webExtension.runtime.getBackgroundPage((page) => page.refreshOptions())
   }
 
@@ -75,40 +75,40 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
    * Restores options to saved value from localStorage.
    */
   const restoreOptions = () => {
-    inputCustomAttributes.value = localStorage['CUSTOM_ATTRIBUTES'] || ''
-    selectSafeMode.value = localStorage['SAFE_MODE'] || 'safe'
-    selectLocalPollFrequency.value = localStorage['LOCAL_POLL_FREQUENCY'] || '2'
-    selectRemotePollFrequency.value = localStorage['REMOTE_POLL_FREQUENCY'] || '2'
-    inputAllowTxtExtension.checked = localStorage['ALLOW_TXT_EXTENSION'] === 'true'
-    inputEnableKroki.checked = localStorage['ENABLE_KROKI'] === 'true'
-    inputKrokiServerURL.value = localStorage['KROKI_SERVER_URL'] || 'https://kroki.io'
-    const loadJavaScriptValue = ['before', 'after'].includes(localStorage['JS_LOAD']) ? localStorage['JS_LOAD'] : 'after'
+    inputCustomAttributes.value = localStorage.CUSTOM_ATTRIBUTES || ''
+    selectSafeMode.value = localStorage.SAFE_MODE || 'safe'
+    selectLocalPollFrequency.value = localStorage.LOCAL_POLL_FREQUENCY || '2'
+    selectRemotePollFrequency.value = localStorage.REMOTE_POLL_FREQUENCY || '2'
+    inputAllowTxtExtension.checked = localStorage.ALLOW_TXT_EXTENSION === 'true'
+    inputEnableKroki.checked = localStorage.ENABLE_KROKI === 'true'
+    inputKrokiServerURL.value = localStorage.KROKI_SERVER_URL || 'https://kroki.io'
+    const loadJavaScriptValue = ['before', 'after'].includes(localStorage.JS_LOAD) ? localStorage.JS_LOAD : 'after'
     inputLoadJavaScript.find((element) => element.value === loadJavaScriptValue).checked = true
 
     // Themes
-    const customThemeNames = JSON.parse(localStorage['CUSTOM_THEME_NAMES'] || '[]')
+    const customThemeNames = JSON.parse(localStorage.CUSTOM_THEME_NAMES || '[]')
     if (customThemeNames.length > 0) {
       const customThemesOptGroup = getCustomThemeOptGroup()
-      for (let customThemeName of customThemeNames) {
-        let optionElement = document.createElement('option')
+      for (const customThemeName of customThemeNames) {
+        const optionElement = document.createElement('option')
         optionElement.value = customThemeName
         optionElement.innerText = customThemeName
         customThemesOptGroup.appendChild(optionElement)
       }
     }
-    selectTheme.value = localStorage['THEME'] || 'asciidoctor'
+    selectTheme.value = localStorage.THEME || 'asciidoctor'
 
     // JavaScripts
-    const customJavaScriptNames = JSON.parse(localStorage['CUSTOM_JS_NAMES'] || '[]')
+    const customJavaScriptNames = JSON.parse(localStorage.CUSTOM_JS_NAMES || '[]')
     if (customJavaScriptNames.length > 0) {
-      for (let customJavaScriptName of customJavaScriptNames) {
-        let optionElement = document.createElement('option')
+      for (const customJavaScriptName of customJavaScriptNames) {
+        const optionElement = document.createElement('option')
         optionElement.value = customJavaScriptName
         optionElement.innerText = customJavaScriptName
         selectJavaScript.appendChild(optionElement)
       }
     }
-    selectJavaScript.value = localStorage['JS']
+    selectJavaScript.value = localStorage.JS
   }
 
   const initNotification = (element) => {
@@ -140,10 +140,10 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
     const reader = new FileReader()
     reader.onload = (evt) => {
       const fileString = evt.target.result
-      const customThemeNames = JSON.parse(localStorage['CUSTOM_THEME_NAMES'] || '[]')
+      const customThemeNames = JSON.parse(localStorage.CUSTOM_THEME_NAMES || '[]')
       if (!customThemeNames.includes(themeName)) {
         customThemeNames.push(themeName)
-        localStorage['CUSTOM_THEME_NAMES'] = JSON.stringify(customThemeNames)
+        localStorage.CUSTOM_THEME_NAMES = JSON.stringify(customThemeNames)
       }
       localStorage['CUSTOM_THEME_' + themeName] = fileString
       saveOptions()
@@ -155,10 +155,10 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
     const reader = new FileReader()
     reader.onload = (evt) => {
       const fileString = evt.target.result
-      const customJavaScriptNames = JSON.parse(localStorage['CUSTOM_JS_NAMES'] || '[]')
+      const customJavaScriptNames = JSON.parse(localStorage.CUSTOM_JS_NAMES || '[]')
       if (!customJavaScriptNames.includes(javaScriptName)) {
         customJavaScriptNames.push(javaScriptName)
-        localStorage['CUSTOM_JS_NAMES'] = JSON.stringify(customJavaScriptNames)
+        localStorage.CUSTOM_JS_NAMES = JSON.stringify(customJavaScriptNames)
       }
       localStorage['CUSTOM_JS_' + javaScriptName] = fileString
       saveOptions()

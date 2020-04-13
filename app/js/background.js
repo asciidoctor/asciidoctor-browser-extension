@@ -16,9 +16,9 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
   webExtension.runtime.onInstalled.addListener(() => {
     if (webExtension.contextMenus) {
       webExtension.contextMenus.create({
-        'id': renderSelectionMenuItemId,
-        'title': 'Render selection',
-        'contexts': ['selection']
+        id: renderSelectionMenuItemId,
+        title: 'Render selection',
+        contexts: ['selection']
       })
 
       webExtension.contextMenus.onClicked.addListener((info) => {
@@ -38,8 +38,8 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
             } else if (selectedTextPerFrame.length > 0 && typeof selectedTextPerFrame[0] === 'string') {
               injectText = selectedTextPerFrame[0]
               webExtension.tabs.create({
-                'url': webExtension.extension.getURL('html/inject.html'),
-                'active': true
+                url: webExtension.extension.getURL('html/inject.html'),
+                active: true
               }, (tab) => {
                 injectTabId = tab.id
               })
@@ -81,7 +81,7 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
   })
 
   const getErrorInfo = (error) => {
-    let errorInfo = {}
+    const errorInfo = {}
     if (typeof error === 'object') {
       Object.getOwnPropertyNames(error).forEach(function (key) {
         errorInfo[key] = error[key]
@@ -102,7 +102,7 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
 
   const findActiveTab = (callback) => {
     let tabFound = false
-    for (let matchTabUrl of matchesTabUrl) {
+    for (const matchTabUrl of matchesTabUrl) {
       webExtension.tabs.query({ active: true, currentWindow: true, url: matchTabUrl }, (tabs) => {
         if (!tabFound && tabs.length > 0) {
           callback(tabs[0])
@@ -116,7 +116,7 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
 
   module.enableDisableRender = () => {
     // Save the status of the extension
-    webExtension.storage.local.set({ 'ENABLE_RENDER': enableRender })
+    webExtension.storage.local.set({ ENABLE_RENDER: enableRender })
 
     // Update the extension icon
     const iconPrefix = enableRender ? 'enabled' : 'disabled'
@@ -127,7 +127,7 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
     if (typeof webExtension.browserAction.setIcon === 'function') {
       webExtension.browserAction.setIcon({ path: iconPath })
     } else if (typeof webExtension.browserAction.setTitle === 'function') {
-      webExtension.browserAction.setTitle({ 'title': `Asciidoctor.js Preview (${enableRender ? '✔' : '✘'})` })
+      webExtension.browserAction.setTitle({ title: `Asciidoctor.js Preview (${enableRender ? '✔' : '✘'})` })
     } else {
       // eslint-disable-next-line no-console
       console.log(`Asciidoctor.js Preview (${enableRender ? 'enabled' : 'disabled'})`)
@@ -149,18 +149,18 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
 
   module.refreshOptions = () => {
     webExtension.storage.local.set({
-      'CUSTOM_ATTRIBUTES': localStorage['CUSTOM_ATTRIBUTES'],
-      'SAFE_MODE': localStorage['SAFE_MODE'],
-      'ALLOW_TXT_EXTENSION': localStorage['ALLOW_TXT_EXTENSION'],
-      'ENABLE_KROKI': localStorage['ENABLE_KROKI'],
-      'KROKI_SERVER_URL': localStorage['KROKI_SERVER_URL'],
-      'THEME': localStorage['THEME'],
-      'JS': localStorage['JS'],
-      'JS_LOAD': localStorage['JS_LOAD'],
-      'LOCAL_POLL_FREQUENCY': localStorage['LOCAL_POLL_FREQUENCY'],
-      'REMOTE_POLL_FREQUENCY': localStorage['REMOTE_POLL_FREQUENCY']
+      CUSTOM_ATTRIBUTES: localStorage.CUSTOM_ATTRIBUTES,
+      SAFE_MODE: localStorage.SAFE_MODE,
+      ALLOW_TXT_EXTENSION: localStorage.ALLOW_TXT_EXTENSION,
+      ENABLE_KROKI: localStorage.ENABLE_KROKI,
+      KROKI_SERVER_URL: localStorage.KROKI_SERVER_URL,
+      THEME: localStorage.THEME,
+      JS: localStorage.JS,
+      JS_LOAD: localStorage.JS_LOAD,
+      LOCAL_POLL_FREQUENCY: localStorage.LOCAL_POLL_FREQUENCY,
+      REMOTE_POLL_FREQUENCY: localStorage.REMOTE_POLL_FREQUENCY
     })
-    const customThemeNames = JSON.parse(localStorage['CUSTOM_THEME_NAMES'] || '[]')
+    const customThemeNames = JSON.parse(localStorage.CUSTOM_THEME_NAMES || '[]')
     if (customThemeNames.length > 0) {
       customThemeNames.forEach((themeName) => {
         const themeNameKey = 'CUSTOM_THEME_' + themeName
@@ -169,7 +169,7 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
         webExtension.storage.local.set(themeObj)
       })
     }
-    const customJavaScriptNames = JSON.parse(localStorage['CUSTOM_JS_NAMES'] || '[]')
+    const customJavaScriptNames = JSON.parse(localStorage.CUSTOM_JS_NAMES || '[]')
     if (customJavaScriptNames.length > 0) {
       customJavaScriptNames.forEach((javaScriptName) => {
         const javaScriptNameKey = 'CUSTOM_JS_' + javaScriptName
