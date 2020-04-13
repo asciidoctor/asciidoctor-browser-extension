@@ -35,7 +35,7 @@
     "browserify": "16.2.3",
     "bulma": "0.7.5",
     "chai": "^4.2.0",
-    "chartist": "0.11.0",
+    "chartist": "0.11.4",
     "csso": "4.0.3",
     "dirty-chai": "^2.0.1",
     "eslint": "^5.16.0",
