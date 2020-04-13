@@ -27,7 +27,7 @@
   "license": "MIT",
   "devDependencies": {
     "@asciidoctor/core": "2.1.1",
-    "addons-linter": "1.15.0",
+    "addons-linter": "1.23.0",
     "archiver": "3.1.1",
     "asciidoctor-kroki": "0.4.0",
     "bestikk-fs": "1.0.0",
