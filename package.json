@@ -46,7 +46,7 @@
     "puppeteer": "^2.1.1",
     "sinon": "^8.1.1",
     "standard": "14.3.3",
-    "uglify-js": "3.5.9"
+    "uglify-js": "3.8.1"
   },
   "keywords": [
     "browser",
