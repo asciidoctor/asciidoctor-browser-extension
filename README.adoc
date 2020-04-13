@@ -24,7 +24,7 @@ image:https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v
 image:https://addons.cdn.mozilla.net/static/img/addons-buttons/AMO-button_1.png[link={uri-mozilla-addon}]
 image:https://dev.opera.com/extensions/branding-guidelines/addons_206x58_en@2x.png[link={uri-opera-addon},width=206px]
 
-*Project health:* image:https://travis-ci.org/asciidoctor/asciidoctor-browser-extension.svg?branch=master[Build Status, link="https://travis-ci.org/asciidoctor/asciidoctor-browser-extension"]
+*Project health:* image:https://travis-ci.org/asciidoctor/asciidoctor-browser-extension.svg?branch=master[Build Status, link="https://travis-ci.org/asciidoctor/asciidoctor-browser-extension"] image:https://github.com/asciidoctor/asciidoctor-browser-extension/workflows/CI/badge.svg[Build Status, link="https://github.com/asciidoctor/asciidoctor-browser-extension/actions?query=workflow%3ACI"]
 
 == Usage
 
