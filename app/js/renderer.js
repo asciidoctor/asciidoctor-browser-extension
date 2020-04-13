@@ -29,17 +29,27 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
       postprocessing(customJavaScript)
       return true
     } catch (error) {
-      showErrorMessage(`${error.name} : ${error.message}`)
-      // eslint-disable-next-line no-console
-      console.error(error.stack)
+      this.showError(error)
       return false
     }
   }
 
   /**
+   * Update the content of the HTML to show the error
+   * @param error An error
+   */
+  module.showError = (error) => {
+    const message = `${error.name} : ${error.message}`
+    const messageText = `<p>${message}</p>`
+    document.body.innerHTML = `<div id="content"><h4>Error</h4>${messageText}</div>`
+    // eslint-disable-next-line no-console
+    console.error(error.stack)
+  }
+
+  /**
    * Append MathJax script
    */
-  module.initializeMathJax = (eqnumsValue) => {
+  const initializeMathJax = (eqnumsValue) => {
     const content = `function adjustDisplay(math, doc) {
   let node = math.start.node.parentNode
   if (node && (node = node.parentNode) && node.classList.contains('stemblock')) {
@@ -185,7 +195,7 @@ window.MathJax = {
 
     forceLoadDynamicObjects()
     if (attributes.isStemEnabled) {
-      module.initializeMathJax(attributes.eqnumsValue)
+      initializeMathJax(attributes.eqnumsValue)
     } else {
       Dom.removeElement('asciidoctor-mathjax-config')
       Dom.removeElement('asciidoctor-mathjax-initialization')
@@ -299,15 +309,6 @@ window.MathJax = {
     document.body.querySelectorAll('iframe').forEach((node) => {
       node.setAttribute('src', node.getAttribute('src'))
     })
-  }
-
-  /**
-   * Show an error message
-   * @param message The error message
-   */
-  const showErrorMessage = (message) => {
-    const messageText = `<p>${message}</p>`
-    document.body.innerHTML = `<div id="content"><h4>Error</h4>${messageText}</div>`
   }
 
   return module

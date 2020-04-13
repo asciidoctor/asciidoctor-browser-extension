@@ -5,23 +5,24 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
   const module = {}
 
   const executeRequest = (url) => new Promise((resolve, reject) => {
-    const request = new XMLHttpRequest()
-    if (request.overrideMimeType) {
-      request.overrideMimeType('text/plain;charset=utf-8')
-    }
-    request.onreadystatechange = (event) => {
-      // XMLHttpRequest.DONE === 4
-      if (request.readyState === XMLHttpRequest.DONE) {
-        if (request.status === 200 || request.status === 0) {
-          resolve(request)
-          return
-        }
-        reject(request)
+    try {
+      const request = new XMLHttpRequest()
+      if (request.overrideMimeType) {
+        request.overrideMimeType('text/plain;charset=utf-8')
       }
+      request.onreadystatechange = (event) => {
+        if (request.readyState === XMLHttpRequest.DONE) {
+          resolve(request)
+        }
+      }
+      // disable cache
+      request.open('GET', url, true)
+      request.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+      request.send(null)
+    } catch (err) {
+      console.log(`Unable to GET ${url}`, err)
+      reject(err)
     }
-    // disable cache
-    request.open('GET', `${url}?_=${new Date().getTime()}`, true)
-    request.send(null)
   })
 
   /**
@@ -82,6 +83,10 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
     const request = await executeRequest(url)
     if (isHtmlContentType(request)) {
       // content is not plain-text!
+      return undefined
+    }
+    if (request.status !== 200 && request.status !== 0) {
+      // unsuccessful request!
       return undefined
     }
     const source = request.responseText
