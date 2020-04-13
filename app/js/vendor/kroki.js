@@ -15924,6 +15924,17 @@ InvalidConfigurationError.prototype = new Error
 
 const getServerUrl = (doc) => doc.getAttribute('kroki-server-url') || 'https://kroki.io'
 
+const getTextContent = (doc, text, type, format, vfs) => {
+  const serverUrl = getServerUrl(doc)
+  const data = Buffer.from(text, 'utf8')
+  const compressed = pako.deflate(data, { level: 9 })
+  const base64 = Buffer.from(compressed)
+    .toString('base64')
+    .replace(/\+/g, '-').replace(/\//g, '_')
+  let diagramUrl = `${serverUrl}/${type}/${format}/${base64}`
+  return require('./fetch').getTextContent(diagramUrl, vfs)
+}
+
 const createImageSrc = (doc, text, type, target, format, vfs) => {
   const serverUrl = getServerUrl(doc)
   const shouldFetch = doc.isAttribute('kroki-fetch-diagram')
@@ -15945,24 +15956,49 @@ const processKroki = (processor, parent, attrs, diagramType, diagramText, contex
   // Be careful not to specify "specialcharacters" or your diagram code won't be valid anymore!
   const subs = attrs.subs
   if (subs) {
-    diagramText = parent.$apply_subs(diagramText, parent.$resolve_subs(subs), true)
+    diagramText = parent.applySubstitutions(diagramText, parent.$resolve_subs(subs))
   }
-  const role = attrs.role
   const blockId = attrs.id
   const title = attrs.title
-  const target = attrs.target
   const format = attrs.format || 'svg'
-  const imageUrl = createImageSrc(doc, diagramText, diagramType, target, format, context.vfs)
+  let role = attrs.role
+  if (role) {
+    if (format) {
+      role = `${role} kroki-format-${format} kroki`
+    } else {
+      role = `${role} kroki`
+    }
+  } else {
+    role = 'kroki'
+  }
   const blockAttrs = {
-    role: role ? `${role} kroki` : 'kroki',
-    target: imageUrl,
-    alt: target || 'diagram',
-    title
+    role,
+    title,
+    format
+  }
+  const inline = attrs['inline-option'] === ''
+  if (inline) {
+    blockAttrs['inline-option'] = ''
+  }
+  const interactive = attrs['interactive-option'] === ''
+  if (interactive) {
+    blockAttrs['interactive-option'] = ''
   }
   if (blockId) {
     blockAttrs.id = blockId
   }
-  return processor.createImageBlock(parent, blockAttrs)
+  if (format === 'txt' || format === 'atxt' || format === 'utxt') {
+    const content = getTextContent(doc, diagramText, diagramType, format, context.vfs)
+    return processor.createBlock(parent, 'literal', content, blockAttrs, {})
+  } else {
+    const target = attrs.target
+    const imageUrl = createImageSrc(doc, diagramText, diagramType, target, format, context.vfs)
+    const imageBlockAttrs = Object.assign({}, blockAttrs, {
+      target: imageUrl,
+      alt: target || 'diagram'
+    })
+    return processor.createImageBlock(parent, imageBlockAttrs)
+  }
 }
 
 function diagramBlock (context) {
@@ -15973,7 +16009,7 @@ function diagramBlock (context) {
     self.process((parent, reader, attrs) => {
       const diagramType = this.name.toString()
       const role = attrs.role
-      let diagramText = reader.getString()
+      let diagramText = reader.$read()
       try {
         return processKroki(this, parent, attrs, diagramType, diagramText, context)
       } catch (e) {
@@ -15996,7 +16032,7 @@ function diagramBlockMacro (name, context) {
       }
       const role = attrs.role
       const diagramType = name
-      target = parent.$apply_subs(target, ['attributes'])
+      target = parent.applySubstitutions(target, ['attributes'])
       try {
         const diagramText = vfs.read(target)
         return processKroki(this, parent, attrs, diagramType, diagramText, context)
@@ -16010,7 +16046,11 @@ function diagramBlockMacro (name, context) {
 }
 
 module.exports.register = function register (registry, context = {}) {
-  const names = ['plantuml', 'ditaa', 'graphviz', 'blockdiag', 'seqdiag', 'actdiag', 'nwdiag', 'c4plantuml', 'erd', 'mermaid', 'nomnoml', 'svgbob', 'umlet']
+  // patch context in case of Antora
+  if (typeof context.contentCatalog !== 'undefined' && typeof context.contentCatalog.addFile === 'function' && typeof context.file !== 'undefined') {
+    context.vfs = require('./antora-adapter')(context.file, context.contentCatalog, context.vfs)
+  }
+  const names = ['plantuml', 'ditaa', 'graphviz', 'blockdiag', 'seqdiag', 'actdiag', 'nwdiag', 'packetdiag', 'rackdiag', 'c4plantuml', 'erd', 'mermaid', 'nomnoml', 'svgbob', 'umlet', 'vega', 'vegalite']
   if (typeof registry.register === 'function') {
     registry.register(function () {
       for (let name of names) {
@@ -16028,7 +16068,7 @@ module.exports.register = function register (registry, context = {}) {
 }
 
 }).call(this,require("buffer").Buffer)
-},{"./fetch":undefined,"./node-fs":60,"buffer":4,"pako":14}],60:[function(require,module,exports){
+},{"./antora-adapter":undefined,"./fetch":undefined,"./node-fs":60,"buffer":4,"pako":14}],60:[function(require,module,exports){
 const fs = require('fs')
 const path = require('path')
 const mkdirp = require('mkdirp')
