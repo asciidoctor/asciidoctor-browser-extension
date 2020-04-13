@@ -9,7 +9,7 @@
   }
   mocha.setup({
     ui: 'bdd',
-    ignoreLeaks: true,
+    checkLeaks: false,
     reporter: reporter
   })
 
