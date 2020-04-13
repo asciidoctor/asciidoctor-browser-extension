@@ -1,5 +1,26 @@
 = Changelog
 
+== 2.5.0
+
+* Upgrade Asciidoctor.js from 2.0.3 to 2.1.1
+* Show errors thrown by the background script on the page (thanks @doub)
+* Catch exceptions thrown by the initial XMLHttpRequest
+* Use the `Cache-Control` header to make sure that we fetch the latest version available
+* Upgrade Asciidoctor Kroki from 0.4.0 to 0.7.0 with new diagrams: `packetdiag`, `rackdiag`, `vega` and `vegalite`
+* Upgrade chartist from 0.11.0 to 0.11.4
+* Upgrade bulma from 0.7.5 to 0.8.2
+* Update development dependencies
+** Bump eslint from 5.16.0 to 6.8.0
+** Bump sinon from 8.1.1 to 9.0.2
+** Bump browserify from 16.2.3 to 16.5.1
+** Bump uglify-js from 3.5.9 to 3.8.1
+** Bump archiver from 3.0.0 to 3.1.1
+** Bump csso from 3.5.1 to 4.0.3
+** Bump mocha from 7.0.1 to 7.1.1
+** Bump puppeteer from 1.20.0 to 2.1.1
+** Bump standard.js to 14.3.3
+* Use GitHub Actions
+
 == 2.4.0
 
 * Move the fetch and convert functions in the background script (as the latest version of Chrome 80+ blocks `XMLHttpRequest` sent by the content script)
