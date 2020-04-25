@@ -1,5 +1,13 @@
 = Changelog
 
+== 2.4.1
+
+Publish a new version with the same content as 2.3.1.
+
+== 2.4.0
+
+⚠️ This version contains a major issue and has been unpublished.
+
 == 2.3.1
 
 * Fix Kroki on Firefox (thanks @mbeckerle)
