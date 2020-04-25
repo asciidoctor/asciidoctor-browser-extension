@@ -154,11 +154,11 @@ window.MathJax = {
 
   /**
    * Append styles
-   * @param doc
+   * @param stylesheetAttribute
    */
-  const appendStyles = (doc) => {
+  const appendStyles = (stylesheetAttribute) => {
     // Theme
-    return Theme.getThemeName(doc)
+    return Theme.getThemeName(stylesheetAttribute)
       .then(appendThemeStyle)
       .then(() => {
         // Highlight
@@ -237,10 +237,11 @@ window.MathJax = {
    */
   const updateBody = async (asciidoctorDocument, scripts) => {
     const doc = asciidoctorDocument.doc
+    const attributes = doc.attributes
     if (doc.getAttribute('icons') === 'font') {
       appendFontAwesomeStyle()
     }
-    await appendStyles(doc)
+    await appendStyles(attributes.stylesheet)
     appendChartistStyle()
 
     const title = doc.getDoctitle({ use_fallback: true })
