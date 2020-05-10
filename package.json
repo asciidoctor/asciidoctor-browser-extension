@@ -26,7 +26,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@asciidoctor/core": "2.1.1",
+    "@asciidoctor/core": "2.2.0",
     "addons-linter": "1.24.0",
     "archiver": "4.0.1",
     "asciidoctor-kroki": "0.8.2",
