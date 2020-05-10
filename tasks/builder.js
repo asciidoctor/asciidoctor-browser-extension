@@ -33,6 +33,14 @@ Builder.prototype.replaceImagesURL = function () {
   themesNamesWithImages.forEach(replaceURL)
 }
 
+Builder.prototype.removeSourceMapReferences = function () {
+  const path = 'app/js/vendor/chartist.min.js'
+  var data = fs.readFileSync(path, 'utf8')
+  log.debug(`Remove sourcemap in ${path}`)
+  data = data.replace(/\n\/\/# sourceMappingURL=(.*)/, '')
+  fs.writeFileSync(path, data, 'utf8')
+}
+
 Builder.prototype.clean = function () {
   log.task('clean')
   log.debug('remove dist directory')
@@ -102,6 +110,7 @@ Builder.prototype.dist = function () {
   this.copy()
   this.uncommentFontsImport()
   this.replaceImagesURL()
+  this.removeSourceMapReferences()
   this.compileSass()
   this.compress()
 }
