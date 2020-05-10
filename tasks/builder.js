@@ -42,7 +42,8 @@ Builder.prototype.clean = function () {
 
 Builder.prototype.compress = function () {
   log.task('compress')
-  const outputPath = 'dist/asciidoctor-browser-extension.zip'
+  const version = require(`${__dirname}/../app/manifest.json`).version
+  const outputPath = `dist/asciidoctor-browser-extension-${version}.zip`
   const output = fs.createWriteStream(outputPath)
   const archive = archiver('zip', { zlib: { level: 9 } })
 
