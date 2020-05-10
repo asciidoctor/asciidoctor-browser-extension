@@ -1,5 +1,5 @@
 /**
- * @license Asciidoctor.js 2.1.1 | MIT | https://github.com/asciidoctor/asciidoctor.js
+ * @license Asciidoctor.js 2.2.0 | MIT | https://github.com/asciidoctor/asciidoctor.js
  */
 (function(undefined) {
   // @note
@@ -41234,18 +41234,24 @@ var toHash = function (object) {
  */
 var fromHash = function (hash) {
   var object = {}
-  var data = hash.$$smap
-  for (var key in data) {
-    object[key] = data[key]
+  if (hash) {
+    var data = hash.$$smap
+    for (var key in data) {
+      var value = data[key]
+      object[key] = value === Opal.nil ? undefined : value
+    }
   }
   return object
 }
 
 var fromHashKeys = function (hash) {
   var object = {}
-  var data = hash.$$keys
-  for (var key in data) {
-    object[key.toString()] = data[key].value
+  if (hash) {
+    var data = hash.$$keys
+    for (var key in data) {
+      var value = data[key].value
+      object[key.toString()] = value === Opal.nil ? undefined : value
+    }
   }
   return object
 }
@@ -41266,13 +41272,13 @@ var prepareOptions = function (options) {
 }
 
 function initializeClass (superClass, className, functions, defaultFunctions, argProxyFunctions) {
-  var scope = Opal.klass(Opal.Object, superClass, className, function () {})
+  var scope = Opal.klass(Opal.Object, superClass, className, function () { })
   var postConstructFunction
   var initializeFunction
   var constructorFunction
   var defaultFunctionsOverridden = {}
   for (var functionName in functions) {
-    if (functions.hasOwnProperty(functionName)) {
+    if (Object.prototype.hasOwnProperty.call(functions, functionName)) {
       (function (functionName) {
         var userFunction = functions[functionName]
         if (functionName === 'postConstruct') {
@@ -41282,12 +41288,12 @@ function initializeClass (superClass, className, functions, defaultFunctions, ar
         } else if (functionName === 'constructor') {
           constructorFunction = userFunction
         } else {
-          if (defaultFunctions && defaultFunctions.hasOwnProperty(functionName)) {
+          if (defaultFunctions && Object.prototype.hasOwnProperty.call(defaultFunctions, functionName)) {
             defaultFunctionsOverridden[functionName] = true
           }
           Opal.def(scope, '$' + functionName, function () {
             var args
-            if (argProxyFunctions && argProxyFunctions.hasOwnProperty(functionName)) {
+            if (argProxyFunctions && Object.prototype.hasOwnProperty.call(argProxyFunctions, functionName)) {
               args = argProxyFunctions[functionName](arguments)
             } else {
               args = arguments
@@ -41355,7 +41361,7 @@ function initializeClass (superClass, className, functions, defaultFunctions, ar
   })
   if (defaultFunctions) {
     for (var defaultFunctionName in defaultFunctions) {
-      if (defaultFunctions.hasOwnProperty(defaultFunctionName) && !defaultFunctionsOverridden.hasOwnProperty(defaultFunctionName)) {
+      if (Object.prototype.hasOwnProperty.call(defaultFunctions, defaultFunctionName) && !Object.prototype.hasOwnProperty.call(defaultFunctionsOverridden, defaultFunctionName)) {
         (function (defaultFunctionName) {
           var defaultFunction = defaultFunctions[defaultFunctionName]
           Opal.def(scope, '$' + defaultFunctionName, function () {
@@ -41394,7 +41400,7 @@ function initializeClass (superClass, className, functions, defaultFunctions, ar
  *
  * const doc = asciidoctor.load("= Document Title\n\nfirst paragraph\n\nsecond paragraph", { 'safe': 'safe' }) // Parse an AsciiDoc string into a document object
  */
-var Asciidoctor = Opal.Asciidoctor['$$class']
+var Asciidoctor = Opal.Asciidoctor.$$class
 
 /**
  * Get Asciidoctor core version number.
@@ -41588,19 +41594,19 @@ AbstractBlock.prototype.getSourceLocation = function () {
   if (sourceLocation === Opal.nil) {
     return undefined
   }
-  sourceLocation['getFile'] = function () {
+  sourceLocation.getFile = function () {
     var file = this.file
     return file === Opal.nil ? undefined : file
   }
-  sourceLocation['getDirectory'] = function () {
+  sourceLocation.getDirectory = function () {
     var dir = this.dir
     return dir === Opal.nil ? undefined : dir
   }
-  sourceLocation['getPath'] = function () {
+  sourceLocation.getPath = function () {
     var path = this.path
     return path === Opal.nil ? undefined : path
   }
-  sourceLocation['getLineNumber'] = function () {
+  sourceLocation.getLineNumber = function () {
     var lineno = this.lineno
     return lineno === Opal.nil ? undefined : lineno
   }
@@ -41758,7 +41764,10 @@ AbstractBlock.prototype.getLineNumber = function () {
  * @memberof AbstractBlock
  */
 AbstractBlock.prototype.hasSections = function () {
-  return this['$sections?']()
+  // REMIND: call directly the underlying method "$sections?"
+  // once https://github.com/asciidoctor/asciidoctor/pull/3591 is merged and a new version is released.
+  // return this['$sections?']()
+  return this.next_section_index !== Opal.nil && this.next_section_index > 0
 }
 
 /**
@@ -41937,9 +41946,9 @@ Section.prototype.getName = function () {
  * Methods for managing AsciiDoc content blocks.
  *
  * @example
- * block = Asciidoctor::Block.new(parent, :paragraph, source: '_This_ is a <test>')
- * block.content
- * => "<em>This</em> is a &lt;test&gt;"
+ * block = asciidoctor.Block.create(parent, 'paragraph', {source: '_This_ is a <test>'})
+ * block.getContent()
+ * // "<em>This</em> is a &lt;test&gt;"
  *
  * @namespace
  * @extends AbstractBlock
@@ -42011,6 +42020,48 @@ var AbstractNode = Opal.Asciidoctor.AbstractNode
  */
 AbstractNode.prototype.applySubstitutions = function (text, subs) {
   return this.$apply_subs(text, subs)
+}
+
+/**
+ * Resolve the list of comma-delimited subs against the possible options.
+ *
+ * @param {string} subs - The comma-delimited String of substitution names or aliases.
+ * @param {string} [type] - A String representing the context for which the subs are being resolved (default: 'block').
+ * @param {Array<string>} [defaults] - An Array of substitutions to start with when computing incremental substitutions (default: undefined).
+ * @param {string} [subject] - The String to use in log messages to communicate the subject for which subs are being resolved (default: undefined)
+ *
+ * @returns {Array<string>} - An Array of Strings representing the substitution operation or nothing if no subs are found.
+ * @memberof AbstractNode
+ */
+AbstractNode.prototype.resolveSubstitutions = function (subs, type, defaults, subject) {
+  if (typeof type === 'undefined') {
+    type = 'block'
+  }
+  if (typeof defaults === 'undefined') {
+    defaults = Opal.nil
+  }
+  if (typeof subject === 'undefined') {
+    subject = Opal.nil
+  }
+  return this.$resolve_subs(subs, type, defaults, subject)
+}
+
+/**
+ * Call {@link AbstractNode#resolveSubstitutions} for the 'block' type.
+ *
+ * @see {@link AbstractNode#resolveSubstitutions}
+ */
+AbstractNode.prototype.resolveBlockSubstitutions = function (subs, defaults, subject) {
+  return this.resolveSubstitutions(subs, 'block', defaults, subject)
+}
+
+/**
+ * Call {@link AbstractNode#resolveSubstitutions} for the 'inline' type with the subject set as passthrough macro.
+ *
+ * @see {@link AbstractNode#resolveSubstitutions}
+ */
+AbstractNode.prototype.resolvePassSubstitutions = function (subs) {
+  return this.resolveSubstitutions(subs, 'inline', undefined, 'passthrough macro')
 }
 
 /**
@@ -43078,6 +43129,43 @@ Document.prototype.hasHeader = function () {
 }
 
 /**
+ * Replay attribute assignments at the block level.
+ *
+ * <i>This method belongs to an internal API that deals with how attributes are managed by the processor.</i>
+ * If you understand why this group of methods are necessary, and what they do, feel free to use them.
+ * <strong>However, keep in mind they are subject to change at any time.</strong>
+ *
+ * @param {Object} blockAttributes - A JSON of attributes
+ * @memberof Document
+ */
+Document.prototype.playbackAttributes = function (blockAttributes) {
+  blockAttributes = toHash(blockAttributes)
+  if (blockAttributes) {
+    var attrEntries = blockAttributes['$[]']('attribute_entries')
+    if (attrEntries && Array.isArray(attrEntries)) {
+      var result = []
+      for (var i = 0; i < attrEntries.length; i++) {
+        var attrEntryObject = attrEntries[i]
+        if (attrEntryObject && typeof attrEntryObject === 'object' && attrEntryObject.constructor.name === 'Object') {
+          attrEntryObject.$name = function () {
+            return this.name
+          }
+          attrEntryObject.$value = function () {
+            return this.value
+          }
+          attrEntryObject.$negate = function () {
+            return this.negate
+          }
+        }
+        result.push(attrEntryObject)
+      }
+      blockAttributes['$[]=']('attribute_entries', result)
+    }
+  }
+  this.$playback_attributes(blockAttributes)
+}
+
+/**
  * Delete the specified attribute from the document if the name is not locked.
  * If the attribute is locked, false is returned.
  * Otherwise, the attribute is deleted.
@@ -43101,6 +43189,15 @@ Document.prototype.deleteAttribute = function (name) {
  */
 Document.prototype.isAttributeLocked = function (key) {
   return this['$attribute_locked?'](key)
+}
+
+/**
+ * Restore the attributes to the previously saved state (attributes in header).
+ *
+ * @memberof Document
+ */
+Document.prototype.restoreAttributes = function () {
+  return this.$restore_attributes()
 }
 
 /**
@@ -43642,7 +43739,7 @@ Reader.prototype.isEmpty = function () {
  */
 Reader.prototype.peekLine = function (direct) {
   direct = direct || false
-  var line = this['$peek_line'](direct)
+  var line = this.$peek_line(direct)
   return line === Opal.nil ? undefined : line
 }
 
@@ -43655,7 +43752,7 @@ Reader.prototype.peekLine = function (direct) {
  * @memberof Reader
  */
 Reader.prototype.readLine = function () {
-  var line = this['$read_line']()
+  var line = this.$read_line()
   return line === Opal.nil ? undefined : line
 }
 
@@ -43671,7 +43768,7 @@ Reader.prototype.readLine = function () {
  * @memberof Reader
  */
 Reader.prototype.readLines = function () {
-  return this['$read_lines']()
+  return this.$read_lines()
 }
 
 /**
@@ -43685,7 +43782,7 @@ Reader.prototype.readLines = function () {
  * @memberof Reader
  */
 Reader.prototype.read = function () {
-  return this['$read']()
+  return this.$read()
 }
 
 /**
@@ -43695,7 +43792,7 @@ Reader.prototype.read = function () {
  * @memberof Reader
  */
 Reader.prototype.advance = function () {
-  return this['$advance']()
+  return this.$advance()
 }
 
 // Cursor API
@@ -43747,7 +43844,7 @@ Cursor.prototype.getLineNumber = function () {
 function initializeLoggerFormatterClass (className, functions) {
   var superclass = Opal.const_get_qualified(Opal.Logger, 'Formatter')
   return initializeClass(superclass, className, functions, {}, {
-    'call': function (args) {
+    call: function (args) {
       for (var i = 0; i < args.length; i++) {
         // convert all (Opal) Hash arguments to JSON.
         if (typeof args[i] === 'object' && '$$smap' in args[i]) {
@@ -43762,17 +43859,17 @@ function initializeLoggerFormatterClass (className, functions) {
 function initializeLoggerClass (className, functions) {
   var superClass = Opal.const_get_qualified(Opal.Asciidoctor, 'Logger')
   return initializeClass(superClass, className, functions, {}, {
-    'add': function (args) {
+    add: function (args) {
       if (args.length >= 2 && typeof args[2] === 'object' && '$$smap' in args[2]) {
         var message = args[2]
         var messageObject = fromHash(message)
         messageObject.getText = function () {
-          return this['text']
+          return this.text
         }
         messageObject.getSourceLocation = function () {
-          return this['source_location']
+          return this.source_location
         }
-        messageObject['$inspect'] = function () {
+        messageObject.$inspect = function () {
           var sourceLocation = this.getSourceLocation()
           if (sourceLocation) {
             return sourceLocation.getPath() + ': line ' + sourceLocation.getLineNumber() + ': ' + this.getText()
@@ -43891,14 +43988,14 @@ MemoryLogger.prototype.getMessages = function () {
       // also convert the message attribute
       messageObject.message = fromHash(messageObject.message)
       messageObject.getText = function () {
-        return this.message['text']
+        return this.message.text
       }
     }
     messageObject.getSeverity = function () {
       return this.severity.toString()
     }
     messageObject.getSourceLocation = function () {
-      return this.message['source_location']
+      return this.message.source_location
     }
     result.push(messageObject)
   }
@@ -44003,7 +44100,7 @@ var log = function (logger, level, message) {
 }
 RubyLogger.prototype.add = function (severity, message, programName) {
   var severityValue = typeof severity === 'string' ? LoggerSeverity[severity.toUpperCase()] : severity
-  this['$add'](severityValue, message, programName)
+  this.$add(severityValue, message, programName)
 }
 RubyLogger.prototype.log = RubyLogger.prototype.add
 RubyLogger.prototype.debug = function (message) {
@@ -44095,9 +44192,9 @@ Timings.create = function () {
 Timings.prototype.printReport = function (to, subject) {
   var outputFunction
   if (to) {
-    if (typeof to['$add'] === 'function') {
+    if (typeof to.$add === 'function') {
       outputFunction = function (message) {
-        to['$add'](1, message)
+        to.$add(1, message)
       }
     } else if (typeof to.log === 'function') {
       outputFunction = to.log
@@ -44110,7 +44207,7 @@ Timings.prototype.printReport = function (to, subject) {
     }
   } else {
     outputFunction = function (message) {
-      Opal.gvars.stdout['$write'](message)
+      Opal.gvars.stdout.$write(message)
     }
   }
   if (subject) {
@@ -44167,7 +44264,7 @@ SyntaxHighlighter.register = function (names, functions) {
     }
   }
   var scope = initializeClass(SyntaxHighlighterBase, name, functions, {}, {
-    'format': function (args) {
+    format: function (args) {
       if (args.length >= 2 && typeof args[2] === 'object' && '$$smap' in args[2]) {
         args[2] = fromHash(args[2])
       }
@@ -44176,7 +44273,7 @@ SyntaxHighlighter.register = function (names, functions) {
       }
       return args
     },
-    'highlight': function (args) {
+    highlight: function (args) {
       if (args.length >= 3 && typeof args[3] === 'object' && '$$smap' in args[3]) {
         var opts = args[3]
         opts = fromHash(opts)
@@ -44207,7 +44304,7 @@ SyntaxHighlighter.register = function (names, functions) {
     }
   })
   for (var functionName in functions) {
-    if (functions.hasOwnProperty(functionName)) {
+    if (Object.prototype.hasOwnProperty.call(functions, functionName)) {
       (function (functionName) {
         var userFunction = functions[functionName]
         if (functionName === 'handlesHighlighting') {
@@ -44225,7 +44322,7 @@ SyntaxHighlighter.register = function (names, functions) {
   Opal.def(scope, '$name', function () {
     return name
   })
-  SyntaxHighlighter['$register'](scope, names)
+  SyntaxHighlighter.$register(scope, names)
   return scope
 }
 
@@ -44265,7 +44362,623 @@ Opal.Asciidoctor.SyntaxHighlighterBase = SyntaxHighlighterBase
  * @memberof SyntaxHighlighterBase
  */
 SyntaxHighlighterBase.prototype.registerFor = function (names) {
-  SyntaxHighlighter['$register'](this, names)
+  SyntaxHighlighter.$register(this, names)
+}
+
+// Table API
+
+/**
+ * Methods for managing AsciiDoc tables.
+ * @namespace
+ * @extends AbstractBlock
+ */
+var Table = Opal.Asciidoctor.Table
+
+/**
+ * Create a new Table element.
+ * @param {AbstractBlock} parent
+ * @param {Object|undefined} attributes
+ * @returns {Table} - a new {Table} object
+ */
+Table.create = function (parent, attributes) {
+  return this.$new(parent, toHash(attributes))
+}
+
+/**
+ * Get the caption of the table.
+ * @returns {string}
+ * @memberof Table
+ */
+Table.prototype.getCaption = function () {
+  return this.caption
+}
+
+/**
+ * Get the rows of this table.
+ * @returns {Table.Rows} - an {Table.Rows} object with the members "head", "body" and "foot"
+ * @memberof Table
+ */
+Table.prototype.getRows = function () {
+  return this.rows
+}
+
+/**
+ * Get the columns of this table.
+ * @returns {Array<Column>}
+ * @memberof Table
+ */
+Table.prototype.getColumns = function () {
+  return this.columns
+}
+
+/**
+ * Get the head rows of this table.
+ * @returns {Array<Array<Cell>>} - an Array of Array of Cell
+ * @memberof Table
+ */
+Table.prototype.getHeadRows = function () {
+  return this.rows.head
+}
+
+/**
+ * Check if the table has a head rows.
+ * @returns {boolean}
+ * @memberof Table
+ */
+Table.prototype.hasHeadRows = function () {
+  return this.rows !== Opal.nil && this.rows.head.length > 0
+}
+
+/**
+ * Get the body rows of this table.
+ * @returns {Array<Array<Cell>>} - an Array of Array of Cell
+ * @memberof Table
+ */
+Table.prototype.getBodyRows = function () {
+  return this.rows.body
+}
+
+/**
+ * Check if the table has a body rows.
+ * @returns {boolean}
+ */
+Table.prototype.hasBodyRows = function () {
+  return this.rows !== Opal.nil && this.rows.body.length > 0
+}
+
+/**
+ * Get the foot rows of this table.
+ * @returns {Array<Array<Cell>>} - an Array of Array of Cell
+ * @memberof Table
+ */
+Table.prototype.getFootRows = function () {
+  return this.rows.foot
+}
+
+/**
+ * Check if the table has a foot rows.
+ * @returns {boolean}
+ */
+Table.prototype.hasFootRows = function () {
+  return this.rows !== Opal.nil && this.rows.foot.length > 0
+}
+
+/**
+ * Check if the table has a header option set.
+ * @returns {boolean}
+ * @memberof Table
+ */
+Table.prototype.hasHeaderOption = function () {
+  return this.has_header_option
+}
+
+/**
+ * Check if the table has the footer option set.
+ * @returns {boolean}
+ * @memberof Table
+ */
+Table.prototype.hasFooterOption = function () {
+  var footerOption = this.getAttributes()['footer-option']
+  return footerOption === ''
+}
+
+/**
+ * Check if the table has the autowidth option set.
+ * @returns {boolean}
+ * @memberof Table
+ */
+Table.prototype.hasAutowidthOption = function () {
+  var autowidthOption = this.getAttributes()['autowidth-option']
+  return autowidthOption === ''
+}
+
+/**
+ * Get the number of rows in the table.
+ * Please note that the header and footer rows are also counted.
+ * @returns {number|undefined}
+ * @memberof Table
+ */
+Table.prototype.getRowCount = function () {
+  return this.getAttribute('rowcount')
+}
+
+/**
+ * Set the number of rows in the table.
+ * Please note that the header and footer rows are also counted.
+ * @param {number} value - the value
+ * @memberof Table
+ */
+Table.prototype.setRowCount = function (value) {
+  this.setAttribute('rowcount', value)
+}
+
+/**
+ * Get the number of columns in the table.
+ * @returns {number|undefined}
+ * @memberof Table
+ */
+Table.prototype.getColumnCount = function () {
+  return this.getAttribute('colcount')
+}
+
+/**
+ * Set the number of columns in the table.
+ * @param {number} value - the value
+ * @memberof Table
+ */
+Table.prototype.setColumnCount = function (value) {
+  this.setAttribute('colcount', value)
+}
+
+// Rows
+
+/**
+ * @namespace
+ */
+var Rows = Opal.Asciidoctor.Table.Rows
+
+/**
+ * Create a new Rows element.
+ * @param {array<array<Cell>>} head
+ * @param {array<array<Cell>>} foot
+ * @param {array<array<Cell>>} body
+ * @returns Rows
+ */
+Rows.create = function (head, foot, body) {
+  return this.$new(head, foot, body)
+}
+
+/**
+ * Get head rows.
+ * @returns {array<array<Cell>>}
+ */
+Rows.prototype.getHead = function () {
+  return this.head
+}
+
+/**
+ * Get foot rows.
+ * @returns {array<array<Cell>>}
+ */
+Rows.prototype.getFoot = function () {
+  return this.foot
+}
+
+/**
+ * Get body rows.
+ * @returns {array<array<Cell>>}
+ */
+Rows.prototype.getBody = function () {
+  return this.body
+}
+
+/**
+ * Retrieve the rows grouped by section as a nested Array.
+ *
+ * Creates a 2-dimensional array of two element entries.
+ * The first element is the section name as a string.
+ * The second element is the Array of rows in that section.
+ * The entries are in document order (head, foot, body).
+ * @returns {[[string, array<array<Cell>>], [string, array<array<Cell>>], [string, array<array<Cell>>]]}
+ */
+Rows.prototype.bySection = function () {
+  return [['head', this.head], ['body', this.body], ['foot', this.foot]]
+}
+
+// Table Column
+
+/**
+ * Methods to manage the columns of an AsciiDoc table.
+ * In particular, it keeps track of the column specs.
+ * @namespace
+ * @extends AbstractNode
+ */
+var Column = Opal.Asciidoctor.Table.Column
+
+/**
+ * Create a new Column element.
+ * @param {Table} table
+ * @param {number} index
+ * @param {Object|undefined} attributes
+ * @returns Column
+ */
+Column.create = function (table, index, attributes) {
+  return this.$new(table, index, toHash(attributes))
+}
+
+/**
+ * Get the column number of this cell.
+ * @returns {number|undefined}
+ * @memberof Column
+ */
+Column.prototype.getColumnNumber = function () {
+  return this.getAttribute('colnumber')
+}
+
+/**
+ * Get the width of this cell.
+ * @returns {string|undefined}
+ * @memberof Column
+ */
+Column.prototype.getWidth = function () {
+  return this.getAttribute('width')
+}
+
+/**
+ * Get the horizontal align of this cell.
+ * @returns {string|undefined}
+ * @memberof Column
+ */
+Column.prototype.getHorizontalAlign = function () {
+  return this.getAttribute('halign')
+}
+
+/**
+ * Get the vertical align of this cell.
+ * @returns {string|undefined}
+ * @memberof Column
+ */
+Column.prototype.getVerticalAlign = function () {
+  return this.getAttribute('valign')
+}
+
+/**
+ * Get the style of this cell.
+ * @returns {string}
+ * @memberof Column
+ */
+Column.prototype.getStyle = function () {
+  var style = this.style
+  return style === Opal.nil ? undefined : style
+}
+
+// Table Cell
+
+/**
+ * Methods for managing the cells in an AsciiDoc table.
+ * @namespace
+ * @extends AbstractBlock
+ */
+var Cell = Opal.Asciidoctor.Table.Cell
+
+/**
+ * Create a new Cell element
+ * @param {Column} column
+ * @param {string} cellText
+ * @param {Object|undefined} attributes
+ * @param {Object|undefined} opts
+ * @returns {Cell}
+ */
+Cell.create = function (column, cellText, attributes, opts) {
+  return this.$new(column, cellText, toHash(attributes), toHash(opts))
+}
+
+/**
+ * Get the column span of this {@link Cell} node.
+ * @returns {number} - An Integer of the number of columns this cell will span (default: undefined)
+ * @memberof Cell
+ */
+Cell.prototype.getColumnSpan = function () {
+  var colspan = this.colspan
+  return colspan === Opal.nil ? undefined : colspan
+}
+
+/**
+ * Set the column span of this {@link Cell} node.
+ * @param {number} value
+ * @returns {number} - The new colspan value
+ * @memberof Cell
+ */
+Cell.prototype.setColumnSpan = function (value) {
+  return this['$colspan='](value)
+}
+
+/**
+ * Get the row span of this {@link Cell} node
+ * @returns {number|undefined} - An Integer of the number of rows this cell will span (default: undefined)
+ * @memberof Cell
+ */
+Cell.prototype.getRowSpan = function () {
+  var rowspan = this.rowspan
+  return rowspan === Opal.nil ? undefined : rowspan
+}
+
+/**
+ * Set the row span of this {@link Cell} node
+ * @param {number} value
+ * @returns {number} - The new rowspan value
+ * @memberof Cell
+ */
+Cell.prototype.setRowSpan = function (value) {
+  return this['$rowspan='](value)
+}
+
+/**
+ * Get the content of the cell.
+ * This method should not be used for cells in the head row or that have the literal style.
+ * @returns {string}
+ * @memberof Cell
+ */
+Cell.prototype.getContent = function () {
+  return this.$content()
+}
+
+/**
+ * Get the text of the cell.
+ * @returns {string}
+ * @memberof Cell
+ */
+Cell.prototype.getText = function () {
+  return this.$text()
+}
+
+/**
+ * Get the source of the cell.
+ * @returns {string}
+ * @memberof Cell
+ */
+Cell.prototype.getSource = function () {
+  return this.$source()
+}
+
+/**
+ * Get the lines of the cell.
+ * @returns {Array<string>}
+ * @memberof Cell
+ */
+Cell.prototype.getLines = function () {
+  return this.$lines()
+}
+
+/**
+ * Get the line number of the cell.
+ * @returns {number|undefined}
+ * @memberof Cell
+ */
+Cell.prototype.getLineNumber = function () {
+  var lineno = this.$lineno()
+  return lineno === Opal.nil ? undefined : lineno
+}
+
+/**
+ * Get the source file of the cell.
+ * @returns {string|undefined}
+ * @memberof Cell
+ */
+Cell.prototype.getFile = function () {
+  var file = this.$file()
+  return file === Opal.nil ? undefined : file
+}
+
+/**
+ * Get the style of the cell.
+ * @returns {string|undefined}
+ * @memberof Cell
+ */
+Cell.prototype.getStyle = function () {
+  var style = this.$style()
+  return style === Opal.nil ? undefined : style
+}
+
+/**
+ * Get the column of this cell.
+ * @returns {Column|undefined}
+ * @memberof Cell
+ */
+Cell.prototype.getColumn = function () {
+  var column = this.$column()
+  return column === Opal.nil ? undefined : column
+}
+
+/**
+ * Get the width of this cell.
+ * @returns {string|undefined}
+ * @memberof Cell
+ */
+Cell.prototype.getWidth = function () {
+  return this.getAttribute('width')
+}
+
+/**
+ * Get the column width in percentage of this cell.
+ * @returns {string|undefined}
+ * @memberof Cell
+ */
+Cell.prototype.getColumnPercentageWidth = function () {
+  return this.getAttribute('colpcwidth')
+}
+
+/**
+ * Get the nested {Document} of this cell when style is 'asciidoc'.
+ * @returns {Document|undefined} - the nested {Document}
+ * @memberof Cell
+ */
+Cell.prototype.getInnerDocument = function () {
+  const innerDocument = this.inner_document
+  return innerDocument === Opal.nil ? undefined : innerDocument
+}
+
+// Templates
+
+/**
+ * @description
+ * This API is experimental and subject to change.
+ *
+ * Please note that this API is currently only available in a Node environment.
+ * We recommend to use a custom converter if you are running in the browser.
+ *
+ * @namespace
+ * @module Converter/TemplateConverter
+ */
+var TemplateConverter = Opal.Asciidoctor.Converter.TemplateConverter
+
+if (TemplateConverter) {
+  // Alias
+  Opal.Asciidoctor.TemplateConverter = TemplateConverter
+
+  /**
+   * Create a new TemplateConverter.
+   * @param {string} backend - the backend name
+   * @param templateDirectories - a list of template directories
+   * @param {Object} opts - a JSON of options
+   * @param {string} opts.template_engine - the name of the template engine
+   * @param {Object} [opts.template_cache] - an optional template cache
+   * @param {Object} [opts.template_cache.scans] - a JSON of template objects keyed by template name keyed by path patterns
+   * @param {Object} [opts.template_cache.templates] - a JSON of template objects keyed by file paths
+   * @returns {TemplateConverter}
+   * @memberof Converter/TemplateConverter
+   */
+  TemplateConverter.create = function (backend, templateDirectories, opts) {
+    if (opts && opts.template_cache) {
+      opts.template_cache = toHash(opts.template_cache)
+    }
+    this.$new(backend, templateDirectories, toHash(opts))
+  }
+
+  /**
+   * @returns {Object} - The global cache
+   * @memberof Converter/TemplateConverter
+   */
+  TemplateConverter.getCache = function () {
+    var caches = fromHash(this.caches)
+    if (caches) {
+      if (caches.scans) {
+        caches.scans = fromHash(caches.scans)
+        for (var key in caches.scans) {
+          caches.scans[key] = fromHash(caches.scans[key])
+        }
+      }
+      if (caches.templates) {
+        caches.templates = fromHash(caches.templates)
+      }
+    }
+    return caches
+  }
+
+  /**
+   * Clear the global cache.
+   * @memberof Converter/TemplateConverter
+   */
+  TemplateConverter.clearCache = function () {
+    this.$clear_caches()
+  }
+
+  /**
+   * Convert an {AbstractNode} to the backend format using the named template.
+   *
+   * Looks for a template that matches the value of the template name or,
+   * if the template name is not specified, the value of the {@see AbstractNode.getNodeName} function.
+   *
+   * @param {AbstractNode} node - the AbstractNode to convert
+   * @param {string} templateName - the {string} name of the template to use, or the node name of the node if a template name is not specified. (optional, default: undefined)
+   * @param {Object} opts - an optional JSON that is passed as local variables to the template. (optional, default: undefined)
+   * @returns {string} - The {string} result from rendering the template
+   * @memberof Converter/TemplateConverter
+   */
+  TemplateConverter.prototype.convert = function (node, templateName, opts) {
+    return this.$convert(node, templateName, toHash(opts))
+  }
+
+  /**
+   * Checks whether there is a template registered with the specified name.
+   *
+   * @param {string} name - the {string} template name
+   * @returns {boolean} - a {boolean} that indicates whether a template is registered for the specified template name.
+   * @memberof Converter/TemplateConverter
+   */
+  TemplateConverter.prototype.handles = function (name) {
+    return this['$handles?'](name)
+  }
+
+  /**
+   * Retrieves the templates that this converter manages.
+   *
+   * @returns {Object} - a JSON of template objects keyed by template name
+   * @memberof Converter/TemplateConverter
+   */
+  TemplateConverter.prototype.getTemplates = function () {
+    return fromHash(this.$templates())
+  }
+
+  /**
+   * Registers a template with this converter.
+   *
+   * @param {string} name - the {string} template name
+   * @param {Object} template - the template object to register
+   * @returns {Object} - the template object
+   * @memberof Converter/TemplateConverter
+   */
+  TemplateConverter.prototype.register = function (name, template) {
+    return this.$register(name, template)
+  }
+
+  /**
+   * @namespace
+   * @description
+   * This API is experimental and subject to change.
+   *
+   * Please note that this API is currently only available in a Node environment.
+   * We recommend to use a custom converter if you are running in the browser.
+   *
+   * A pluggable adapter for integrating a template engine into the built-in template converter.
+   */
+  var TemplateEngine = {}
+  TemplateEngine.registry = {}
+
+  // Alias
+  Opal.Asciidoctor.TemplateEngine = TemplateEngine
+
+  /**
+   * Register a template engine adapter for the given names.
+   * @param {string|Array} names - a {string} name or an {Array} of {string} names
+   * @param {Object} templateEngineAdapter - a template engine adapter instance
+   * @example
+   *  const fs = require('fs')
+   *  class DotTemplateEngineAdapter {
+   *    constructor () {
+   *      this.doT = require('dot')
+   *    }
+   *    compile (file, _) {
+   *      const templateFn = this.doT.template(fs.readFileSync(file, 'utf8'))
+   *      return {
+   *        render: templateFn
+   *      }
+   *    }
+   *  }
+   *  asciidoctor.TemplateEngine.register('dot, new DotTemplateEngineAdapter())
+   * @memberof TemplateEngine
+   */
+  TemplateEngine.register = function (names, templateEngineAdapter) {
+    if (typeof names === 'string') {
+      this.registry[names] = templateEngineAdapter
+    } else {
+      // array
+      for (var i = 0; i < names.length; i++) {
+        var name = names[i]
+        this.registry[name] = templateEngineAdapter
+      }
+    }
+  }
 }
 
 /* global Opal, fromHash, toHash, initializeClass */
@@ -44431,7 +45144,7 @@ Registry.prototype.prefer = function (name, processor) {
   }
   if (typeof processor === 'object' || processor.$$is_class) {
     // processor is an instance or a class
-    return this['$prefer'](name, processor)
+    return this.$prefer(name, processor)
   } else {
     // processor is a function/lambda
     return Opal.send(this, 'prefer', name && [name], toBlock(processor))
@@ -44614,7 +45327,7 @@ Registry.prototype.hasInlineMacros = function () {
  * @returns an {array} of Extension proxy objects.
  */
 Registry.prototype.getPreprocessors = function () {
-  return this['$preprocessors']()
+  return this.$preprocessors()
 }
 
 /**
@@ -44624,7 +45337,7 @@ Registry.prototype.getPreprocessors = function () {
  * @returns an {array} of Extension proxy objects.
  */
 Registry.prototype.getTreeProcessors = function () {
-  return this['$tree_processors']()
+  return this.$tree_processors()
 }
 
 /**
@@ -44634,7 +45347,7 @@ Registry.prototype.getTreeProcessors = function () {
  * @returns an {array} of Extension proxy objects.
  */
 Registry.prototype.getIncludeProcessors = function () {
-  return this['$include_processors']()
+  return this.$include_processors()
 }
 
 /**
@@ -44644,7 +45357,7 @@ Registry.prototype.getIncludeProcessors = function () {
  * @returns an {array} of Extension proxy objects.
  */
 Registry.prototype.getPostprocessors = function () {
-  return this['$postprocessors']()
+  return this.$postprocessors()
 }
 
 /**
@@ -44655,7 +45368,7 @@ Registry.prototype.getPostprocessors = function () {
  * @returns an {array} of Extension proxy objects.
  */
 Registry.prototype.getDocinfoProcessors = function (location) {
-  return this['$docinfo_processors'](location)
+  return this.$docinfo_processors(location)
 }
 
 /**
@@ -44665,7 +45378,7 @@ Registry.prototype.getDocinfoProcessors = function (location) {
  * @returns an {array} of Extension proxy objects.
  */
 Registry.prototype.getBlocks = function () {
-  return this.block_extensions['$values']()
+  return this.block_extensions.$values()
 }
 
 /**
@@ -44675,7 +45388,7 @@ Registry.prototype.getBlocks = function () {
  * @returns an {array} of Extension proxy objects.
  */
 Registry.prototype.getBlockMacros = function () {
-  return this.block_macro_extensions['$values']()
+  return this.block_macro_extensions.$values()
 }
 
 /**
@@ -44685,7 +45398,7 @@ Registry.prototype.getBlockMacros = function () {
  * @returns an {array} of Extension proxy objects.
  */
 Registry.prototype.getInlineMacros = function () {
-  return this['$inline_macros']()
+  return this.$inline_macros()
 }
 
 /**
@@ -44709,7 +45422,7 @@ Registry.prototype.getInlineMacroFor = function (name) {
  */
 Registry.prototype.getBlockFor = function (name, context) {
   if (typeof context === 'undefined') {
-    var ext = this['$find_block_extension'](name)
+    var ext = this.$find_block_extension(name)
     return ext === Opal.nil ? undefined : ext
   }
   var result = this['$registered_for_block?'](name, context)
@@ -45551,29 +46264,56 @@ Opal.Asciidoctor.ConverterBackendTraits = ConverterBackendTraits
  */
 ConverterFactory.register = function (converter, backends) {
   var object
-  var buildBackendTraitsFromInstance = instance => {
+  var buildBackendTraitsFromObject = function (obj) {
     return Object.assign({},
-      instance.basebackend ? { basebackend: instance.basebackend } : {},
-      instance.outfilesuffix ? { outfilesuffix: instance.outfilesuffix } : {},
-      instance.filetype ? { filetype: instance.filetype } : {},
-      instance.htmlsyntax ? { htmlsyntax: instance.htmlsyntax } : {},
-      instance.supports_templates ? { supports_templates: instance.supports_templates } : {}
+      obj.basebackend ? { basebackend: obj.basebackend } : {},
+      obj.outfilesuffix ? { outfilesuffix: obj.outfilesuffix } : {},
+      obj.filetype ? { filetype: obj.filetype } : {},
+      obj.htmlsyntax ? { htmlsyntax: obj.htmlsyntax } : {},
+      obj.supports_templates ? { supports_templates: obj.supports_templates } : {}
     )
+  }
+  var assignBackendTraitsToInstance = function (obj, instance) {
+    if (obj.backend_traits) {
+      instance.backend_traits = toHash(obj.backend_traits)
+    } else if (obj.backendTraits) {
+      instance.backend_traits = toHash(obj.backendTraits)
+    } else if (obj.basebackend || obj.outfilesuffix || obj.filetype || obj.htmlsyntax || obj.supports_templates) {
+      instance.backend_traits = toHash(buildBackendTraitsFromObject(obj))
+    }
+  }
+  var bridgeHandlesMethodToInstance = function (obj, instance) {
+    bridgeMethodToInstance(obj, instance, '$handles?', 'handles', function () {
+      return true
+    })
+  }
+  var bridgeComposedMethodToInstance = function (obj, instance) {
+    bridgeMethodToInstance(obj, instance, '$composed', 'composed')
+  }
+  var bridgeMethodToInstance = function (obj, instance, methodName, functionName, defaultImplementation) {
+    if (typeof obj[methodName] === 'undefined') {
+      if (typeof obj[functionName] === 'function') {
+        instance[methodName] = obj[functionName]
+      } else if (defaultImplementation) {
+        instance[methodName] = defaultImplementation
+      }
+    }
+  }
+  var addRespondToMethod = function (instance) {
+    if (typeof instance['$respond_to?'] !== 'function') {
+      instance['$respond_to?'] = function (name) {
+        return typeof this[name] === 'function'
+      }
+    }
   }
   if (typeof converter === 'function') {
     // Class
     object = initializeClass(ConverterBase, converter.constructor.name, {
-      'initialize': function (backend, opts) {
+      initialize: function (backend, opts) {
         var self = this
         var result = new converter(backend, opts) // eslint-disable-line
         Object.assign(this, result)
-        if (result.backend_traits) {
-          self.backend_traits = toHash(result.backend_traits)
-        } else if (result.backendTraits) {
-          self.backend_traits = toHash(result.backendTraits)
-        } else if (result.basebackend || result.outfilesuffix || result.filetype || result.htmlsyntax || result.supports_templates) {
-          self.$init_backend_traits(toHash(buildBackendTraitsFromInstance(result)))
-        }
+        assignBackendTraitsToInstance(result, self)
         var propertyNames = Object.getOwnPropertyNames(converter.prototype)
         for (var i = 0; i < propertyNames.length; i++) {
           var propertyName = propertyNames[i]
@@ -45584,6 +46324,9 @@ ConverterFactory.register = function (converter, backends) {
         if (typeof result.$convert === 'undefined' && typeof result.convert === 'function') {
           self.$convert = result.convert
         }
+        bridgeHandlesMethodToInstance(result, self)
+        bridgeComposedMethodToInstance(result, self)
+        addRespondToMethod(self)
         self.super(backend, opts)
       }
     })
@@ -45593,9 +46336,9 @@ ConverterFactory.register = function (converter, backends) {
     if (typeof converter.$convert === 'undefined' && typeof converter.convert === 'function') {
       converter.$convert = converter.convert
     }
-    if (converter.basebackend || converter.outfilesuffix || converter.filetype || converter.htmlsyntax || converter.supports_templates) {
+    assignBackendTraitsToInstance(converter, converter)
+    if (converter.backend_traits) {
       // "extends" ConverterBackendTraits
-      converter.backend_traits = toHash(buildBackendTraitsFromInstance(converter))
       var converterBackendTraitsFunctionNames = [
         'basebackend',
         'filetype',
@@ -45611,6 +46354,9 @@ ConverterFactory.register = function (converter, backends) {
       }
       converter.$$meta = ConverterBackendTraits
     }
+    bridgeHandlesMethodToInstance(converter, converter)
+    bridgeComposedMethodToInstance(converter, converter)
+    addRespondToMethod(converter)
     object = converter
   }
   var args = [object].concat(backends)
@@ -45640,6 +46386,36 @@ ConverterFactory.getDefault = function (initialize) {
  */
 ConverterFactory.prototype.create = function (backend, opts) {
   return this.$create(backend, toHash(opts))
+}
+
+/**
+ * Get the converter registry.
+ * @returns the registry of converter instances or classes keyed by backend name
+ * @memberof Converter/Factory
+ */
+ConverterFactory.getRegistry = function () {
+  return fromHash(Converter.$registry())
+}
+
+/**
+ * Lookup the custom converter registered with this factory to handle the specified backend.
+ *
+ * @param {string} backend - The {string} backend name.
+ * @returns the {Converter} class or instance registered to convert the specified backend or undefined if no match is found.
+ * @memberof Converter/Factory
+ */
+ConverterFactory.for = function (backend) {
+  const converter = Converter.$for(backend)
+  return converter === Opal.nil ? undefined : converter
+}
+
+/*
+ * Unregister any custom converter classes that are registered with this factory.
+ * Intended for testing only!
+ */
+ConverterFactory.unregisterAll = function () {
+  var internalRegistry = Converter.DefaultFactory.$$cvars['@@registry']
+  Converter.DefaultFactory.$$cvars['@@registry'] = toHash({ html5: internalRegistry['$[]']('html5') })
 }
 
 // Built-in converter
@@ -45679,7 +46455,7 @@ Html5Converter.prototype.convert = function (node, transform, opts) {
 }
 
 
-var ASCIIDOCTOR_JS_VERSION = '2.1.1';
+var ASCIIDOCTOR_JS_VERSION = '2.2.0';
 
   /**
    * Get Asciidoctor.js version number.
