@@ -5,21 +5,37 @@ asciidoctor.browser.inject = ((webExtension, document, location) => {
   const Settings = asciidoctor.browser.settings(webExtension, Constants)
   const Theme = asciidoctor.browser.theme(webExtension, Settings, Constants)
   const Renderer = asciidoctor.browser.renderer(webExtension, document, Constants, Settings, Dom, Theme)
+  const Converter = asciidoctor.browser.converter(webExtension, Constants, Settings)
 
   let alreadyRun = false
 
-  const inject = (source) => {
+  const inject = async (source) => {
     if (!alreadyRun) {
-      webExtension.runtime.sendMessage({ action: 'convert', source }, function (response) {
-        if (response) {
-          if (response.html) {
-            Renderer.updateHTML(response)
-          } else if (response.error) {
-            Renderer.showError(response.error)
-          }
+      const browserInfo = Settings.getBrowserInfo()
+      if (browserInfo.name === 'Firefox') {
+        let response = {}
+        try {
+          response = await Converter.convert(location.href, source)
+        } catch (e) {
+          response.error = e
         }
-      })
+        showResponse(response)
+      } else {
+        webExtension.runtime.sendMessage({ action: 'convert', source }, function (response) {
+          showResponse(response)
+        })
+      }
       alreadyRun = true
+    }
+  }
+
+  const showResponse = (response) => {
+    if (response) {
+      if (response.html) {
+        Renderer.updateHTML(response)
+      } else if (response.error) {
+        Renderer.showError(response.error)
+      }
     }
   }
 

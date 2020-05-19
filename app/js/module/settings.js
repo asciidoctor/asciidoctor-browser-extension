@@ -129,5 +129,22 @@ asciidoctor.browser.settings = (webExtension, Constants) => {
     })
   })
 
+  module.getBrowserInfo = () => {
+    const userAgent = navigator.userAgent
+    let name
+    if (userAgent.indexOf('Chrome') > -1) {
+      name = 'Chrome'
+    } else if (userAgent.indexOf('Safari') > -1) {
+      name = 'Safari'
+    } else if (userAgent.indexOf('Opera') > -1) {
+      name = 'Opera'
+    } else if (userAgent.indexOf('Firefox') > -1) {
+      name = 'Firefox'
+    } else {
+      name = 'Edge'
+    }
+    return { name: name }
+  }
+
   return module
 }

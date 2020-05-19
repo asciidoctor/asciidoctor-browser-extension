@@ -4,54 +4,6 @@ const processor = Asciidoctor({ runtime: { platform: 'browser' } })
 asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
   const module = {}
 
-  const executeRequest = (url) => new Promise((resolve, reject) => {
-    try {
-      const request = new XMLHttpRequest()
-      if (request.overrideMimeType) {
-        request.overrideMimeType('text/plain;charset=utf-8')
-      }
-      request.onreadystatechange = (event) => {
-        if (request.readyState === XMLHttpRequest.DONE) {
-          resolve(request)
-        }
-      }
-      // disable cache
-      request.open('GET', url, true)
-      request.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
-      request.send(null)
-    } catch (err) {
-      console.log(`Unable to GET ${url}`, err)
-      reject(err)
-    }
-  })
-
-  /**
-   * Is the content type html ?
-   * @param request The request
-   * @return true if the content type is html, false otherwise
-   */
-  const isHtmlContentType = (request) => {
-    const contentType = request.getResponseHeader('Content-Type')
-    return contentType && (contentType.indexOf('html') > -1)
-  }
-
-  // REMIND: notitle attribute is automatically set when header_footer equals false.
-  const showTitle = (doc) => !doc.isAttribute('noheader')
-
-  /**
-   * Is the :source-highlighter: attribute defined ?
-   * @param doc
-   * @returns {boolean}
-   */
-  const isSourceHighlighterEnabled = (doc) => doc.isAttribute('source-highlighter')
-
-  /**
-   * Is the :stem: attribute defined ?
-   * @param doc
-   * @returns {boolean}
-   */
-  const isStemEnabled = (doc) => doc.isAttribute('stem')
-
   module.convert = async (url, source) => {
     const settings = await Settings.getRenderingSettings()
     const options = buildAsciidoctorOptions(settings, url)
@@ -80,8 +32,8 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
   }
 
   module.fetchAndConvert = async (url, initial) => {
-    const request = await executeRequest(url)
-    if (isHtmlContentType(request)) {
+    const request = await module.executeRequest(url)
+    if (module.isHtmlContentType(request)) {
       // content is not plain-text!
       return undefined
     }
@@ -111,6 +63,54 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
       text: source
     }
   }
+
+  module.executeRequest = (url) => new Promise((resolve, reject) => {
+    try {
+      const request = new XMLHttpRequest()
+      if (request.overrideMimeType) {
+        request.overrideMimeType('text/plain;charset=utf-8')
+      }
+      request.onreadystatechange = (event) => {
+        if (request.readyState === XMLHttpRequest.DONE) {
+          resolve(request)
+        }
+      }
+      // disable cache
+      request.open('GET', url, true)
+      request.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+      request.send(null)
+    } catch (err) {
+      console.error(`Unable to GET ${url}`, err)
+      reject(err)
+    }
+  })
+
+  /**
+   * Is the content type html ?
+   * @param request The request
+   * @return true if the content type is html, false otherwise
+   */
+  module.isHtmlContentType = (request) => {
+    const contentType = request.getResponseHeader('Content-Type')
+    return contentType && (contentType.indexOf('html') > -1)
+  }
+
+  // REMIND: notitle attribute is automatically set when header_footer equals false.
+  const showTitle = (doc) => !doc.isAttribute('noheader')
+
+  /**
+   * Is the :source-highlighter: attribute defined ?
+   * @param doc
+   * @returns {boolean}
+   */
+  const isSourceHighlighterEnabled = (doc) => doc.isAttribute('source-highlighter')
+
+  /**
+   * Is the :stem: attribute defined ?
+   * @param doc
+   * @returns {boolean}
+   */
+  const isStemEnabled = (doc) => doc.isAttribute('stem')
 
   /**
    * Parse URL query parameters
