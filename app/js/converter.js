@@ -69,6 +69,7 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
       title: doc.getDoctitle({ use_fallback: true }),
       doctype: doc.getDoctype(),
       attributes: {
+        tocPosition: doc.getAttribute('toc-position'),
         isSourceHighlighterEnabled: isSourceHighlighterEnabled(doc),
         isStemEnabled: isStemEnabled(doc),
         isFontIcons: doc.getAttribute('icons') === 'font',
