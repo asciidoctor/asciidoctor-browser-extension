@@ -29,7 +29,7 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
       postprocessing(customJavaScript)
       return true
     } catch (error) {
-      this.showError(error)
+      module.showError(error)
       return false
     }
   }
@@ -187,11 +187,19 @@ window.MathJax = {
     const maxWidth = attributes.maxWidth
 
     document.title = Dom.decodeEntities(title)
-    document.body.className = doctype
     if (maxWidth) {
       document.body.style.maxWidth = maxWidth
     }
     updateContent(backgroundConverterResponse.html)
+    let tocClassNames = ''
+    if (attributes.tocPosition === 'left' || attributes.tocPosition === 'right') {
+      tocClassNames = ` toc2 toc-${attributes.tocPosition}`
+      const tocElement = document.getElementById('toc')
+      if (tocElement !== null) {
+        tocElement.className = 'toc2'
+      }
+    }
+    document.body.className = `${doctype}${tocClassNames}`
 
     forceLoadDynamicObjects()
     if (attributes.isStemEnabled) {
