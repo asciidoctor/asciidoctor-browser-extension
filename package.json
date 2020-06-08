@@ -32,7 +32,7 @@
     "asciidoctor-kroki": "0.8.2",
     "bestikk-fs": "1.0.0",
     "bestikk-log": "0.1.0",
-    "bulma": "0.8.2",
+    "bulma": "0.9.0",
     "chai": "^4.2.0",
     "chartist": "0.11.4",
     "csso": "4.0.3",
