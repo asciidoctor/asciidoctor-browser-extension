@@ -192,7 +192,7 @@ window.MathJax = {
     }
     updateContent(converterResponse.html)
     let tocClassNames = ''
-    if (attributes.tocPosition === 'left' || attributes.tocPosition === 'right') {
+    if (attributes.hasSections && (attributes.tocPosition === 'left' || attributes.tocPosition === 'right')) {
       tocClassNames = ` toc2 toc-${attributes.tocPosition}`
       const tocElement = document.getElementById('toc')
       if (tocElement !== null) {
