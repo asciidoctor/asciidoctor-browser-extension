@@ -171,26 +171,26 @@ window.MathJax = {
 
   /**
    * Update the HTML document with the Asciidoctor document
-   * @param backgroundConverterResponse The response sent by the background script
+   * @param converterResponse The response sent by the converter
    * @param scripts The scripts to restore
    */
-  const updateBodyHTML = async (backgroundConverterResponse, scripts) => {
-    const attributes = backgroundConverterResponse.attributes
+  const updateBodyHTML = async (converterResponse, scripts) => {
+    const attributes = converterResponse.attributes
     if (attributes.isFontIcons) {
       appendFontAwesomeStyle()
     }
     await appendStyles(attributes.stylesheet)
     appendChartistStyle()
 
-    const title = backgroundConverterResponse.title
-    const doctype = backgroundConverterResponse.doctype
+    const title = converterResponse.title
+    const doctype = converterResponse.doctype
     const maxWidth = attributes.maxWidth
 
     document.title = Dom.decodeEntities(title)
     if (maxWidth) {
       document.body.style.maxWidth = maxWidth
     }
-    updateContent(backgroundConverterResponse.html)
+    updateContent(converterResponse.html)
     let tocClassNames = ''
     if (attributes.tocPosition === 'left' || attributes.tocPosition === 'right') {
       tocClassNames = ` toc2 toc-${attributes.tocPosition}`
