@@ -140,17 +140,26 @@ asciidoctor.browser.loader = (webExtension, document, location, XMLHttpRequest, 
         const request = await Converter.executeRequest(location.href)
         reloadContent(request.responseText)
       } else {
-        webExtension.runtime.sendMessage({ action: 'fetch-convert' }, function (response) {
-          if (response) {
-            if (response.html) {
-              Renderer.updateHTML(response)
-            } else if (response.text) {
-              displayContentAsPlainText(response.text)
-            } else if (response.error) {
-              Renderer.showError(response.error)
+        try {
+          webExtension.runtime.sendMessage({ action: 'fetch-convert' }, function (response) {
+            if (response) {
+              if (response.html) {
+                Renderer.updateHTML(response)
+              } else if (response.text) {
+                displayContentAsPlainText(response.text)
+              } else if (response.error) {
+                Renderer.showError(response.error)
+              }
             }
+          })
+        } catch (e) {
+          if (e.message === 'Extension context invalidated.') {
+            // extension has been disabled, stop auto reload
+            clearInterval(autoReloadInterval)
+            return
           }
-        })
+          throw e
+        }
       }
     }, pollFrequency * 1000)
   }
