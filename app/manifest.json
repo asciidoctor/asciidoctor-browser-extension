@@ -1,15 +1,11 @@
 {
-  "name":"Asciidoctor.js Live Preview",
-  "version":"2.6.0.1",
+  "name": "Asciidoctor.js Live Preview",
+  "version": "2.6.0.1",
   "author": "Guillaume Grossetie",
-  "manifest_version":2,
-
-  "description":"Render AsciiDoc (.ad, .adoc, .asc, .asciidoc) as HTML inside your browser!",
-
-  "options_page":"html/options.html",
-
-  "options_ui":{
-    "page":"html/options.html"
+  "manifest_version": 2,
+  "description": "Render AsciiDoc (.ad, .adoc, .asc, .asciidoc) as HTML inside your browser!",
+  "options_ui": {
+    "page": "html/options.html"
   },
   "icons": {
     "16": "img/asciidoctor-logo-fill-color-16.png",
@@ -17,9 +13,9 @@
     "96": "img/asciidoctor-logo-fill-color-96.png",
     "128": "img/asciidoctor-logo-fill-color-128.png"
   },
-  "content_scripts":[
+  "content_scripts": [
     {
-      "matches":[
+      "matches": [
         "*://*/*.ad",
         "*://*/*.ad?*",
         "*://*/*.ad.*",
@@ -51,7 +47,7 @@
         "file://*/*.txt?*",
         "file://*/*.txt.*"
       ],
-      "js":[
+      "js": [
         "js/vendor/highlight.js/highlight.min.js",
         "js/vendor/highlight.js/languages/1c.min.js",
         "js/vendor/highlight.js/languages/abnf.min.js",
@@ -255,7 +251,7 @@
       ]
     }
   ],
-  "web_accessible_resources":[
+  "web_accessible_resources": [
     "css/themes/asciidoctor.css",
     "css/themes/colony.css",
     "css/themes/foundation.css",
@@ -292,7 +288,7 @@
     "fonts/fontawesome-webfont.ttf",
     "vendor/MathJax-3.0.1/*"
   ],
-  "permissions":[
+  "permissions": [
     "storage",
     "tabs",
     "activeTab",
@@ -313,10 +309,10 @@
     "*://*/*.txt.*",
     "contextMenus"
   ],
-  "browser_action":{
-    "default_title":"Asciidoctor.js Preview"
+  "browser_action": {
+    "default_title": "Asciidoctor.js Preview"
   },
-  "background":{
+  "background": {
     "scripts": [
       "js/vendor/md5.js",
       "js/vendor/asciidoctor.js",
