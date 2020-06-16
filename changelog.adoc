@@ -1,19 +1,25 @@
 = Changelog
 
-== 2.6.0 (unreleased)
+== Unreleased
 
+
+== 2.6.1 (2020-06-16)
+
+* Do not add the toc2 class if the document has no section - thanks @mnrvwl
+* Stop auto reload when the extension has been disabled - thanks @mnrvwl
+* Remove the deprecated options_page - thanks @mnrvwl
 * Upgrade Asciidoctor.js from 2.1.1 to 2.2.0
 * Upgrade Asciidoctor Kroki from 0.7.0 to 0.8.1
 * Support sidebar toc
 * Compatibility with Firefox, use the same codebase again!
 * Remove chartist sourcemap reference
 * Update development dependencies
-** Bump mocha from 7.1.1 to 7.2.0
-** Bump puppeteer from 2.1.1 to 3.1.0 
+** Bump mocha from 7.1.1 to 8.0.1
+** Bump puppeteer from 2.1.1 to 3.3.0 
 ** Bump standard from 14.3.3 to 14.3.4
 ** Bump node-sass from 4.14.0 to 4.14.1
 ** Bump archiver from 3.1.1 to 4.0.1
-** Bump addons-linter from 1.23.0 to 1.24.0
+** Bump addons-linter from 1.23.0 to 1.25.0
 
 == 2.5.0 (Chrome)
 
