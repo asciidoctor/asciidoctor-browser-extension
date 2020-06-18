@@ -6,7 +6,10 @@ This guide will give you all the necessary information you need to become a succ
 
 == Setup
 
-To build this project, you will need {uri-nodejs}[Node.js] >= 8.11 and `npm` (we recommend {uri-nvm}[nvm] to manage multiple active Node.js versions).
+To build this project, you will need {uri-nodejs}[Node] and `npm`.
+The best way to install Node is to use {uri-nvm}[nvm] (Node Version Manager).
+
+We recommend using the latest long term support (LTS) release of Node. While you can use other versions of Node, this extension is only tested against active LTS releases.
 
 NOTE: If you feel more comfortable with `yarn`, you can use it as an alternative to `npm`
 
