@@ -1,5 +1,6 @@
 /* global md5, asciidoctor, XMLHttpRequest, Asciidoctor, AsciidoctorKroki */
 const processor = Asciidoctor({ runtime: { platform: 'browser' } })
+const eqnumValidValues = ['none', 'all', 'ams']
 
 asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
   const module = {}
@@ -15,6 +16,15 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
       // Force the source highlighter to Highlight.js (since we only support Highlight.js)
       doc.setAttribute('source-highlighter', 'highlight.js')
     }
+    let eqnumsValue = doc.getAttribute('eqnums', 'none').toLowerCase()
+    if (eqnumsValue.trim().length === 0) {
+      // empty value is an alias for AMS-style equation numbering
+      eqnumsValue = 'ams'
+    }
+    if (!eqnumValidValues.includes(eqnumsValue)) {
+      // invalid values are not allowed, use AMS-style equation numbering
+      eqnumsValue = 'ams'
+    }
     return {
       html: doc.convert(),
       text: source,
@@ -27,7 +37,7 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
         isStemEnabled: isStemEnabled(doc),
         isFontIcons: doc.getAttribute('icons') === 'font',
         maxWidth: doc.getAttribute('max-width'),
-        eqnumsValue: doc.getAttribute('eqnums', 'none'),
+        eqnumsValue,
         stylesheet: doc.getAttribute('stylesheet')
       }
     }

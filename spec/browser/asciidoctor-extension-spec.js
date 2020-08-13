@@ -508,6 +508,108 @@ By default, the title must be shown.
     })
   })
 
+  describe('STEM', () => {
+    afterEach(() => {
+      helper.reset()
+    })
+
+    beforeEach(() => {
+      const mathjaxConfigElement = document.getElementById('asciidoctor-mathjax-config')
+      if (mathjaxConfigElement) {
+        mathjaxConfigElement.parentNode.removeChild(mathjaxConfigElement)
+      }
+    })
+
+    it('should configure AMS-style equation numbering when eqnums is empty', async () => {
+      const params = []
+      params[Constants.ENABLE_RENDER_KEY] = 'true'
+      params[Constants.CUSTOM_ATTRIBUTES_KEY] = ''
+      params[Constants.SAFE_MODE_KEY] = 'safe'
+      helper.configureParameters(params)
+
+      const source = `= Equation number
+:stem: latexmath
+:eqnums:
+
+stem:[\\sin(x^2)]`
+
+      const response = await Converter.convert(window.location.toString(), source)
+      await Renderer.updateHTML(response)
+      expect(document.getElementById('asciidoctor-mathjax-config').innerText).to.includes('tags: "ams"')
+    })
+
+    it('should disable equation numbering when eqnums is missing', async () => {
+      const params = []
+      params[Constants.ENABLE_RENDER_KEY] = 'true'
+      params[Constants.CUSTOM_ATTRIBUTES_KEY] = ''
+      params[Constants.SAFE_MODE_KEY] = 'safe'
+      helper.configureParameters(params)
+
+      const source = `= Equation number
+:stem: latexmath
+
+stem:[\\sin(x^2)]`
+
+      const response = await Converter.convert(window.location.toString(), source)
+      await Renderer.updateHTML(response)
+      expect(document.getElementById('asciidoctor-mathjax-config').innerText).to.includes('tags: "none"')
+    })
+
+    it('should configure AMS-style equation numbering when eqnums contains an invalid value', async () => {
+      const params = []
+      params[Constants.ENABLE_RENDER_KEY] = 'true'
+      params[Constants.CUSTOM_ATTRIBUTES_KEY] = ''
+      params[Constants.SAFE_MODE_KEY] = 'safe'
+      helper.configureParameters(params)
+
+      const source = `= Equation number
+:stem: latexmath
+:eqnums: invalid
+
+stem:[\\sin(x^2)]`
+
+      const response = await Converter.convert(window.location.toString(), source)
+      await Renderer.updateHTML(response)
+      expect(document.getElementById('asciidoctor-mathjax-config').innerText).to.includes('tags: "ams"')
+    })
+
+    it('should enable equation numbering when eqnums is all', async () => {
+      const params = []
+      params[Constants.ENABLE_RENDER_KEY] = 'true'
+      params[Constants.CUSTOM_ATTRIBUTES_KEY] = ''
+      params[Constants.SAFE_MODE_KEY] = 'safe'
+      helper.configureParameters(params)
+
+      const source = `= Equation number
+:stem: latexmath
+:eqnums: all
+
+stem:[\\sin(x^2)]`
+
+      const response = await Converter.convert(window.location.toString(), source)
+      await Renderer.updateHTML(response)
+      expect(document.getElementById('asciidoctor-mathjax-config').innerText).to.includes('tags: "all"')
+    })
+
+    it('should disable equation numbering when eqnums is none', async () => {
+      const params = []
+      params[Constants.ENABLE_RENDER_KEY] = 'true'
+      params[Constants.CUSTOM_ATTRIBUTES_KEY] = ''
+      params[Constants.SAFE_MODE_KEY] = 'safe'
+      helper.configureParameters(params)
+
+      const source = `= Equation number
+:stem: latexmath
+:eqnums: none
+
+stem:[\\sin(x^2)]`
+
+      const response = await Converter.convert(window.location.toString(), source)
+      await Renderer.updateHTML(response)
+      expect(document.getElementById('asciidoctor-mathjax-config').innerText).to.includes('tags: "none"')
+    })
+  })
+
   mocha.run(function (failures) {
     if (failures > 0) {
       console.error('%d failures', failures)
