@@ -35,7 +35,7 @@
     "bulma": "0.8.2",
     "chai": "^4.2.0",
     "chartist": "0.11.4",
-    "csso": "4.0.3",
+    "csso": "4.1.0",
     "dirty-chai": "^2.0.1",
     "eslint": "^6.8.0",
     "font-awesome": "4.7.0",
