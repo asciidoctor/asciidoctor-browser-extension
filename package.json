@@ -3,8 +3,8 @@
   "description": "Render AsciiDoc (.ad, .adoc, .asc, .asciidoc) as HTML inside your browser!",
   "version": "2.6.1",
   "engines": {
-    "node": ">=8.11",
-    "npm": ">=5.0.0"
+    "node": ">=14",
+    "npm": ">=6.0.0"
   },
   "scripts": {
     "test": "node spec/browser/run.js",
