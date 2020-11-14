@@ -1,6 +1,6 @@
 /* global processor */
 // https://github.com/jollygoodcode/twemoji/blob/3476e2700600ef2c89ffa34313b11b91e5f9baba/lib/twemoji/data/emoji-unicode.yml
-var emojiMap = {
+const emojiMap = {
   mahjong: '1f004',
   black_joker: '1f0cf',
   a_negative: '1f170',
@@ -1667,23 +1667,23 @@ var emojiMap = {
 // processor is defined in renderer.js
 processor.Extensions.register(function () {
   this.inlineMacro(function () {
-    var self = this
+    const self = this
 
     self.named('emoji')
     self.positionalAttributes('size')
 
-    var sizeMap = { '1x': 17, lg: 24, '2x': 34, '3x': 50, '4x': 68, '5x': 85 }
-    var defaultSize = 24
+    const sizeMap = { '1x': 17, lg: 24, '2x': 34, '3x': 50, '4x': 68, '5x': 85 }
+    const defaultSize = 24
 
     self.process(function (parent, target, attrs) {
-      var sizeAttr = attrs.size
-      var size
+      const sizeAttr = attrs.size
+      let size
       if (sizeAttr && sizeMap[sizeAttr]) {
         size = sizeMap[sizeAttr]
       } else {
         size = defaultSize
       }
-      var emojiUnicode = emojiMap[target]
+      const emojiUnicode = emojiMap[target]
       return '<img class="emoji" draggable="false" height="' + size + 'px" width="' + size + 'px" src="https://twemoji.maxcdn.com/2/svg/' + emojiUnicode + '.svg">'
     })
   })

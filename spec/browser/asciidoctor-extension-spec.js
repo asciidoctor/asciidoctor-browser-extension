@@ -44,7 +44,7 @@
       params[Constants.CUSTOM_JS_PREFIX + 'bar'] = 'document.body.appendChild(document.createElement(\'strong\'));'
       helper.configureParameters(params)
 
-      var contentElement = document.getElementById('content')
+      const contentElement = document.getElementById('content')
       if (contentElement) {
         contentElement.remove()
       }

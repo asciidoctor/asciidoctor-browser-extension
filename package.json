@@ -10,7 +10,7 @@
     "test": "node spec/browser/run.js",
     "build:highlightjs": "node tasks/update-highlight-languages.js",
     "build": "npm run lint:code && node tasks/build.js",
-    "lint:code": "standard app/js/*.js app/js/module/**.js app/js/vendor/asciidoctor-*.js tasks/**.js spec/**.js",
+    "lint:code": "standard app/js/*.js app/js/module/**.js app/js/vendor/asciidoctor-*.js tasks/**.js spec/**/**.js",
     "lint:firefox": "addons-linter dist/asciidoctor-browser-extension-*.zip"
   },
   "homepage": "https://github.com/asciidoctor/asciidoctor-browser-extension",
@@ -44,7 +44,7 @@
     "node-sass": "4.14.1",
     "puppeteer": "^5.3.1",
     "sinon": "^9.2.1",
-    "standard": "14.3.4"
+    "standard": "16.0.2"
   },
   "keywords": [
     "browser",
