@@ -1,6 +1,7 @@
 'use strict'
 module.exports = Builder
 
+const ospath = require('path')
 const fs = require('fs')
 const log = require('bestikk-log')
 const bfs = require('bestikk-fs')
@@ -24,7 +25,7 @@ Builder.prototype.replaceImagesURL = function () {
 
   function replaceURL (themeName) {
     const path = `app/css/themes/${themeName}.css`
-    var data = fs.readFileSync(path, 'utf8')
+    let data = fs.readFileSync(path, 'utf8')
     log.debug(`Replace images url in ${themeName}.css`)
     data = data.replace(/url\('\.\.\/images\/([^']+)'/, 'url(\'../../img/themes/$1\'')
     fs.writeFileSync(path, data, 'utf8')
@@ -35,7 +36,7 @@ Builder.prototype.replaceImagesURL = function () {
 
 Builder.prototype.removeSourceMapReferences = function () {
   const path = 'app/js/vendor/chartist.min.js'
-  var data = fs.readFileSync(path, 'utf8')
+  let data = fs.readFileSync(path, 'utf8')
   log.debug(`Remove sourcemap in ${path}`)
   data = data.replace(/\n\/\/# sourceMappingURL=(.*)/, '')
   fs.writeFileSync(path, data, 'utf8')
@@ -50,7 +51,8 @@ Builder.prototype.clean = function () {
 
 Builder.prototype.compress = function () {
   log.task('compress')
-  const version = require(`${__dirname}/../app/manifest.json`).version
+  const manifestPath = ospath.join(__dirname, '..', 'app', 'manifest.json')
+  const version = require(manifestPath).version
   const outputPath = `dist/asciidoctor-browser-extension-${version}.zip`
   const output = fs.createWriteStream(outputPath)
   const archive = archiver('zip', { zlib: { level: 9 } })
