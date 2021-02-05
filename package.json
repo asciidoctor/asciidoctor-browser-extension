@@ -29,7 +29,7 @@
     "@asciidoctor/core": "2.2.0",
     "addons-linter": "2.16.0",
     "archiver": "5.2.0",
-    "asciidoctor-kroki": "0.10.0",
+    "asciidoctor-kroki": "0.11.0",
     "bestikk-fs": "1.0.0",
     "bestikk-log": "0.1.0",
     "bulma": "0.9.1",
