@@ -42,7 +42,7 @@
     "mathjax": "3.0.1",
     "mocha": "^8.3.0",
     "node-sass": "5.0.0",
-    "puppeteer": "^7.0.1",
+    "puppeteer": "^7.1.0",
     "sinon": "^9.2.4",
     "standard": "16.0.3"
   },
