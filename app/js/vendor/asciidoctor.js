@@ -1,5 +1,5 @@
 /**
- * @license Asciidoctor.js 2.2.0 | MIT | https://github.com/asciidoctor/asciidoctor.js
+ * @license Asciidoctor.js 2.2.1 | MIT | https://github.com/asciidoctor/asciidoctor.js
  */
 (function(undefined) {
   // @note
@@ -20043,7 +20043,7 @@ Opal.modules["asciidoctor/js/opal_ext/browser"] = function(Opal) {
 Opal.modules["asciidoctor/js/asciidoctor_ext/browser/abstract_node"] = function(Opal) {
   var self = Opal.top, $nesting = [], nil = Opal.nil, $$$ = Opal.const_get_qualified, $$ = Opal.const_get_relative, $breaker = Opal.breaker, $slice = Opal.slice, $module = Opal.module, $klass = Opal.klass, $hash2 = Opal.hash2, $truthy = Opal.truthy;
 
-  Opal.add_stubs(['$uriish?', '$[]', '$web_path', '$path_resolver', '$descends_from?', '$base_dir', '$attr?', '$join', '$prepare_source_string', '$read', '$fetch', '$warn', '$logger', '$normalize_system_path', '$read_asset']);
+  Opal.add_stubs(['$uriish?', '$[]', '$web_path', '$path_resolver', '$descends_from?', '$base_dir', '$start_with?', '$attr?', '$join', '$prepare_source_string', '$read', '$fetch', '$warn', '$logger', '$normalize_system_path', '$read_asset']);
   return (function($base, $parent_nesting) {
     var self = $module($base, 'Asciidoctor');
 
@@ -20067,7 +20067,7 @@ Opal.modules["asciidoctor/js/asciidoctor_ext/browser/abstract_node"] = function(
         };
         doc = self.document;
         if ($truthy(($truthy($a = $$($nesting, 'Helpers')['$uriish?'](target)) ? $a : ($truthy($b = ($truthy($c = (start = opts['$[]']("start"))) ? $$($nesting, 'Helpers')['$uriish?'](start) : $c)) ? (target = doc.$path_resolver().$web_path(target, start)) : $b)))) {
-          if ($truthy(($truthy($a = doc.$path_resolver()['$descends_from?'](target, doc.$base_dir())) ? $a : doc['$attr?']("allow-uri-read")))) {
+          if ($truthy(($truthy($a = ($truthy($b = doc.$path_resolver()['$descends_from?'](target, doc.$base_dir())) ? $b : target['$start_with?']("chrome://"))) ? $a : doc['$attr?']("allow-uri-read")))) {
             
             try {
               if ($truthy(opts['$[]']("normalize"))) {
@@ -21784,7 +21784,7 @@ Opal.modules["asciidoctor/helpers"] = function(Opal) {
     (function($base, $parent_nesting) {
       var self = $module($base, 'Helpers');
 
-      var $nesting = [self].concat($parent_nesting), $Helpers_require_library$1, $Helpers_prepare_source_array$2, $Helpers_prepare_source_string$7, $Helpers_uriish$ques$10, $Helpers_encode_uri_component$11, $Helpers_encode_spaces_in_uri$12, $Helpers_rootname$13, $Helpers_basename$14, $Helpers_extname$ques$15, $Helpers_extname$16, $Helpers_extname$17, $Helpers_mkdir_p$18, $Helpers_int_to_roman$19, $Helpers_nextval$21, $Helpers_resolve_class$22, $Helpers_class_for_name$23;
+      var $nesting = [self].concat($parent_nesting), $Helpers_require_library$1, $Helpers_prepare_source_array$2, $Helpers_prepare_source_string$11, $Helpers_uriish$ques$16, $Helpers_encode_uri_component$17, $Helpers_encode_spaces_in_uri$18, $Helpers_rootname$19, $Helpers_basename$20, $Helpers_extname$ques$21, $Helpers_extname$22, $Helpers_extname$23, $Helpers_mkdir_p$24, $Helpers_int_to_roman$25, $Helpers_nextval$27, $Helpers_resolve_class$28, $Helpers_class_for_name$29;
 
       
       self.$module_function();
@@ -21850,10 +21850,14 @@ Opal.modules["asciidoctor/helpers"] = function(Opal) {
         };
       }, $Helpers_require_library$1.$$arity = -2);
       
-      Opal.def(self, '$prepare_source_array', $Helpers_prepare_source_array$2 = function $$prepare_source_array(data) {
-        var $$3, $$4, $$5, $$6, self = this, leading_2_bytes = nil, leading_bytes = nil, first = nil, $writer = nil;
+      Opal.def(self, '$prepare_source_array', $Helpers_prepare_source_array$2 = function $$prepare_source_array(data, trim_end) {
+        var $$3, $$4, $$5, $$6, $$7, $$8, $$9, $$10, self = this, leading_2_bytes = nil, leading_bytes = nil, first = nil, $writer = nil;
 
         
+        
+        if (trim_end == null) {
+          trim_end = true;
+        };
         if ($truthy(data['$empty?']())) {
           return []};
         if ((leading_2_bytes = (leading_bytes = (first = data['$[]'](0)).$unpack("C3")).$slice(0, 2))['$==']($$($nesting, 'BOM_BYTES_UTF_16LE'))) {
@@ -21862,58 +21866,104 @@ Opal.modules["asciidoctor/helpers"] = function(Opal) {
           $writer = [0, first.$byteslice(2, first.$bytesize())];
           $send(data, '[]=', Opal.to_a($writer));
           $writer[$rb_minus($writer["length"], 1)];;
-          return $send(data, 'map', [], ($$3 = function(line){var self = $$3.$$s || this;
+          return (function() {if ($truthy(trim_end)) {
+            return $send(data, 'map', [], ($$3 = function(line){var self = $$3.$$s || this;
 
-          
             
-            if (line == null) {
-              line = nil;
-            };
-            return line.$encode($$($nesting, 'UTF_8'), $$$($$$('::', 'Encoding'), 'UTF_16LE')).$rstrip();}, $$3.$$s = self, $$3.$$arity = 1, $$3));
+              
+              if (line == null) {
+                line = nil;
+              };
+              return line.$encode($$($nesting, 'UTF_8'), $$$($$$('::', 'Encoding'), 'UTF_16LE')).$rstrip();}, $$3.$$s = self, $$3.$$arity = 1, $$3))
+          } else {
+            return $send(data, 'map', [], ($$4 = function(line){var self = $$4.$$s || this;
+
+            
+              
+              if (line == null) {
+                line = nil;
+              };
+              return line.$encode($$($nesting, 'UTF_8'), $$$($$$('::', 'Encoding'), 'UTF_16LE')).$chomp();}, $$4.$$s = self, $$4.$$arity = 1, $$4))
+          }; return nil; })();
         } else if (leading_2_bytes['$==']($$($nesting, 'BOM_BYTES_UTF_16BE'))) {
           
           
           $writer = [0, first.$byteslice(2, first.$bytesize())];
           $send(data, '[]=', Opal.to_a($writer));
           $writer[$rb_minus($writer["length"], 1)];;
-          return $send(data, 'map', [], ($$4 = function(line){var self = $$4.$$s || this;
+          return (function() {if ($truthy(trim_end)) {
+            return $send(data, 'map', [], ($$5 = function(line){var self = $$5.$$s || this;
 
-          
             
-            if (line == null) {
-              line = nil;
-            };
-            return line.$encode($$($nesting, 'UTF_8'), $$$($$$('::', 'Encoding'), 'UTF_16BE')).$rstrip();}, $$4.$$s = self, $$4.$$arity = 1, $$4));
+              
+              if (line == null) {
+                line = nil;
+              };
+              return line.$encode($$($nesting, 'UTF_8'), $$$($$$('::', 'Encoding'), 'UTF_16BE')).$rstrip();}, $$5.$$s = self, $$5.$$arity = 1, $$5))
+          } else {
+            return $send(data, 'map', [], ($$6 = function(line){var self = $$6.$$s || this;
+
+            
+              
+              if (line == null) {
+                line = nil;
+              };
+              return line.$encode($$($nesting, 'UTF_8'), $$$($$$('::', 'Encoding'), 'UTF_16BE')).$chomp();}, $$6.$$s = self, $$6.$$arity = 1, $$6))
+          }; return nil; })();
         } else if (leading_bytes['$==']($$($nesting, 'BOM_BYTES_UTF_8'))) {
           
           $writer = [0, first.$byteslice(3, first.$bytesize())];
           $send(data, '[]=', Opal.to_a($writer));
           $writer[$rb_minus($writer["length"], 1)];};
         if (first.$encoding()['$==']($$($nesting, 'UTF_8'))) {
-          return $send(data, 'map', [], ($$5 = function(line){var self = $$5.$$s || this;
+          if ($truthy(trim_end)) {
+            return $send(data, 'map', [], ($$7 = function(line){var self = $$7.$$s || this;
+
+            
+              
+              if (line == null) {
+                line = nil;
+              };
+              return line.$rstrip();}, $$7.$$s = self, $$7.$$arity = 1, $$7))
+          } else {
+            return $send(data, 'map', [], ($$8 = function(line){var self = $$8.$$s || this;
+
+            
+              
+              if (line == null) {
+                line = nil;
+              };
+              return line.$chomp();}, $$8.$$s = self, $$8.$$arity = 1, $$8))
+          }
+        } else if ($truthy(trim_end)) {
+          return $send(data, 'map', [], ($$9 = function(line){var self = $$9.$$s || this;
 
           
             
             if (line == null) {
               line = nil;
             };
-            return line.$rstrip();}, $$5.$$s = self, $$5.$$arity = 1, $$5))
+            return line.$encode($$($nesting, 'UTF_8')).$rstrip();}, $$9.$$s = self, $$9.$$arity = 1, $$9))
         } else {
-          return $send(data, 'map', [], ($$6 = function(line){var self = $$6.$$s || this;
+          return $send(data, 'map', [], ($$10 = function(line){var self = $$10.$$s || this;
 
           
             
             if (line == null) {
               line = nil;
             };
-            return line.$encode($$($nesting, 'UTF_8')).$rstrip();}, $$6.$$s = self, $$6.$$arity = 1, $$6))
+            return line.$encode($$($nesting, 'UTF_8')).$chomp();}, $$10.$$s = self, $$10.$$arity = 1, $$10))
         };
-      }, $Helpers_prepare_source_array$2.$$arity = 1);
+      }, $Helpers_prepare_source_array$2.$$arity = -2);
       
-      Opal.def(self, '$prepare_source_string', $Helpers_prepare_source_string$7 = function $$prepare_source_string(data) {
-        var $$8, self = this, leading_2_bytes = nil, leading_bytes = nil;
+      Opal.def(self, '$prepare_source_string', $Helpers_prepare_source_string$11 = function $$prepare_source_string(data, trim_end) {
+        var $$12, $$14, self = this, leading_2_bytes = nil, leading_bytes = nil;
 
         
+        
+        if (trim_end == null) {
+          trim_end = true;
+        };
         if ($truthy(data['$nil_or_empty?']())) {
           return []};
         if ((leading_2_bytes = (leading_bytes = data.$unpack("C3")).$slice(0, 2))['$==']($$($nesting, 'BOM_BYTES_UTF_16LE'))) {
@@ -21929,31 +21979,49 @@ Opal.modules["asciidoctor/helpers"] = function(Opal) {
           };
         } else if ($truthy(data.$encoding()['$!=']($$($nesting, 'UTF_8')))) {
           data = data.$encode($$($nesting, 'UTF_8'))};
-        return $send([], 'tap', [], ($$8 = function(lines){var self = $$8.$$s || this, $$9;
-
-        
-          
-          if (lines == null) {
-            lines = nil;
-          };
-          return $send(data, 'each_line', [], ($$9 = function(line){var self = $$9.$$s || this;
+        if ($truthy(trim_end)) {
+          return $send([], 'tap', [], ($$12 = function(lines){var self = $$12.$$s || this, $$13;
 
           
             
-            if (line == null) {
-              line = nil;
+            if (lines == null) {
+              lines = nil;
             };
-            return lines['$<<'](line.$rstrip());}, $$9.$$s = self, $$9.$$arity = 1, $$9));}, $$8.$$s = self, $$8.$$arity = 1, $$8));
-      }, $Helpers_prepare_source_string$7.$$arity = 1);
+            return $send(data, 'each_line', [], ($$13 = function(line){var self = $$13.$$s || this;
+
+            
+              
+              if (line == null) {
+                line = nil;
+              };
+              return lines['$<<'](line.$rstrip());}, $$13.$$s = self, $$13.$$arity = 1, $$13));}, $$12.$$s = self, $$12.$$arity = 1, $$12))
+        } else {
+          return $send([], 'tap', [], ($$14 = function(lines){var self = $$14.$$s || this, $$15;
+
+          
+            
+            if (lines == null) {
+              lines = nil;
+            };
+            return $send(data, 'each_line', [], ($$15 = function(line){var self = $$15.$$s || this;
+
+            
+              
+              if (line == null) {
+                line = nil;
+              };
+              return lines['$<<'](line.$chomp());}, $$15.$$s = self, $$15.$$arity = 1, $$15));}, $$14.$$s = self, $$14.$$arity = 1, $$14))
+        };
+      }, $Helpers_prepare_source_string$11.$$arity = -2);
       
-      Opal.def(self, '$uriish?', $Helpers_uriish$ques$10 = function(str) {
+      Opal.def(self, '$uriish?', $Helpers_uriish$ques$16 = function(str) {
         var $a, self = this;
 
         return ($truthy($a = str['$include?'](":")) ? $$($nesting, 'UriSniffRx')['$match?'](str) : $a)
-      }, $Helpers_uriish$ques$10.$$arity = 1);
+      }, $Helpers_uriish$ques$16.$$arity = 1);
       if ($$($nesting, 'RUBY_ENGINE')['$==']("opal")) {
         
-        Opal.def(self, '$encode_uri_component', $Helpers_encode_uri_component$11 = function $$encode_uri_component(str) {
+        Opal.def(self, '$encode_uri_component', $Helpers_encode_uri_component$17 = function $$encode_uri_component(str) {
           var self = this;
 
           
@@ -21961,12 +22029,12 @@ Opal.modules["asciidoctor/helpers"] = function(Opal) {
           return m === '%20' ? '+' : '%' + m.charCodeAt(0).toString(16)
         })
       
-        }, $Helpers_encode_uri_component$11.$$arity = 1)
+        }, $Helpers_encode_uri_component$17.$$arity = 1)
       } else {
         nil
       };
       
-      Opal.def(self, '$encode_spaces_in_uri', $Helpers_encode_spaces_in_uri$12 = function $$encode_spaces_in_uri(str) {
+      Opal.def(self, '$encode_spaces_in_uri', $Helpers_encode_spaces_in_uri$18 = function $$encode_spaces_in_uri(str) {
         var self = this;
 
         if ($truthy(str['$include?'](" "))) {
@@ -21975,9 +22043,9 @@ Opal.modules["asciidoctor/helpers"] = function(Opal) {
         } else {
           return str
         }
-      }, $Helpers_encode_spaces_in_uri$12.$$arity = 1);
+      }, $Helpers_encode_spaces_in_uri$18.$$arity = 1);
       
-      Opal.def(self, '$rootname', $Helpers_rootname$13 = function $$rootname(filename) {
+      Opal.def(self, '$rootname', $Helpers_rootname$19 = function $$rootname(filename) {
         var self = this, last_dot_idx = nil;
 
         if ($truthy((last_dot_idx = filename.$rindex(".")))) {
@@ -21990,9 +22058,9 @@ Opal.modules["asciidoctor/helpers"] = function(Opal) {
         } else {
           return filename
         }
-      }, $Helpers_rootname$13.$$arity = 1);
+      }, $Helpers_rootname$19.$$arity = 1);
       
-      Opal.def(self, '$basename', $Helpers_basename$14 = function $$basename(filename, drop_ext) {
+      Opal.def(self, '$basename', $Helpers_basename$20 = function $$basename(filename, drop_ext) {
         var self = this;
 
         
@@ -22010,16 +22078,16 @@ Opal.modules["asciidoctor/helpers"] = function(Opal) {
         } else {
           return $$$('::', 'File').$basename(filename)
         };
-      }, $Helpers_basename$14.$$arity = -2);
+      }, $Helpers_basename$20.$$arity = -2);
       
-      Opal.def(self, '$extname?', $Helpers_extname$ques$15 = function(path) {
+      Opal.def(self, '$extname?', $Helpers_extname$ques$21 = function(path) {
         var $a, self = this, last_dot_idx = nil;
 
         return ($truthy($a = (last_dot_idx = path.$rindex("."))) ? path.$index("/", last_dot_idx)['$!']() : $a)
-      }, $Helpers_extname$ques$15.$$arity = 1);
+      }, $Helpers_extname$ques$21.$$arity = 1);
       if ($truthy($$$($$$('::', 'File'), 'ALT_SEPARATOR'))) {
         
-        Opal.def(self, '$extname', $Helpers_extname$16 = function $$extname(path, fallback) {
+        Opal.def(self, '$extname', $Helpers_extname$22 = function $$extname(path, fallback) {
           var $a, self = this, last_dot_idx = nil;
 
           
@@ -22037,10 +22105,10 @@ Opal.modules["asciidoctor/helpers"] = function(Opal) {
           } else {
             return fallback
           };
-        }, $Helpers_extname$16.$$arity = -2)
+        }, $Helpers_extname$22.$$arity = -2)
       } else {
         
-        Opal.def(self, '$extname', $Helpers_extname$17 = function $$extname(path, fallback) {
+        Opal.def(self, '$extname', $Helpers_extname$23 = function $$extname(path, fallback) {
           var self = this, last_dot_idx = nil;
 
           
@@ -22058,10 +22126,10 @@ Opal.modules["asciidoctor/helpers"] = function(Opal) {
           } else {
             return fallback
           };
-        }, $Helpers_extname$17.$$arity = -2)
+        }, $Helpers_extname$23.$$arity = -2)
       };
       
-      Opal.def(self, '$mkdir_p', $Helpers_mkdir_p$18 = function $$mkdir_p(dir) {
+      Opal.def(self, '$mkdir_p', $Helpers_mkdir_p$24 = function $$mkdir_p(dir) {
         var self = this, parent_dir = nil;
 
         if ($truthy($$$('::', 'File')['$directory?'](dir))) {
@@ -22087,14 +22155,14 @@ Opal.modules["asciidoctor/helpers"] = function(Opal) {
             } else { throw $err; }
           };;
         }
-      }, $Helpers_mkdir_p$18.$$arity = 1);
+      }, $Helpers_mkdir_p$24.$$arity = 1);
       Opal.const_set($nesting[0], 'ROMAN_NUMERALS', $hash2(["M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"], {"M": 1000, "CM": 900, "D": 500, "CD": 400, "C": 100, "XC": 90, "L": 50, "XL": 40, "X": 10, "IX": 9, "V": 5, "IV": 4, "I": 1}));
       self.$private_constant("ROMAN_NUMERALS");
       
-      Opal.def(self, '$int_to_roman', $Helpers_int_to_roman$19 = function $$int_to_roman(val) {
-        var $$20, self = this;
+      Opal.def(self, '$int_to_roman', $Helpers_int_to_roman$25 = function $$int_to_roman(val) {
+        var $$26, self = this;
 
-        return $send($$($nesting, 'ROMAN_NUMERALS'), 'map', [], ($$20 = function(l, i){var self = $$20.$$s || this, $a, $b, repeat = nil;
+        return $send($$($nesting, 'ROMAN_NUMERALS'), 'map', [], ($$26 = function(l, i){var self = $$26.$$s || this, $a, $b, repeat = nil;
 
         
           
@@ -22106,10 +22174,10 @@ Opal.modules["asciidoctor/helpers"] = function(Opal) {
             i = nil;
           };
           $b = val.$divmod(i), $a = Opal.to_ary($b), (repeat = ($a[0] == null ? nil : $a[0])), (val = ($a[1] == null ? nil : $a[1])), $b;
-          return $rb_times(l, repeat);}, $$20.$$s = self, $$20.$$arity = 2, $$20)).$join()
-      }, $Helpers_int_to_roman$19.$$arity = 1);
+          return $rb_times(l, repeat);}, $$26.$$s = self, $$26.$$arity = 2, $$26)).$join()
+      }, $Helpers_int_to_roman$25.$$arity = 1);
       
-      Opal.def(self, '$nextval', $Helpers_nextval$21 = function $$nextval(current) {
+      Opal.def(self, '$nextval', $Helpers_nextval$27 = function $$nextval(current) {
         var self = this, intval = nil;
 
         if ($truthy($$$('::', 'Integer')['$==='](current))) {
@@ -22123,9 +22191,9 @@ Opal.modules["asciidoctor/helpers"] = function(Opal) {
             return $rb_plus(intval, 1)
           };
         }
-      }, $Helpers_nextval$21.$$arity = 1);
+      }, $Helpers_nextval$27.$$arity = 1);
       
-      Opal.def(self, '$resolve_class', $Helpers_resolve_class$22 = function $$resolve_class(object) {
+      Opal.def(self, '$resolve_class', $Helpers_resolve_class$28 = function $$resolve_class(object) {
         var self = this;
 
         if ($truthy($$$('::', 'Class')['$==='](object))) {
@@ -22139,9 +22207,9 @@ Opal.modules["asciidoctor/helpers"] = function(Opal) {
             return nil
           };
         }
-      }, $Helpers_resolve_class$22.$$arity = 1);
+      }, $Helpers_resolve_class$28.$$arity = 1);
       
-      Opal.def(self, '$class_for_name', $Helpers_class_for_name$23 = function $$class_for_name(qualified_name) {
+      Opal.def(self, '$class_for_name', $Helpers_class_for_name$29 = function $$class_for_name(qualified_name) {
         var self = this, resolved = nil;
 
         try {
@@ -22158,7 +22226,7 @@ Opal.modules["asciidoctor/helpers"] = function(Opal) {
             } finally { Opal.pop_exception() }
           } else { throw $err; }
         }
-      }, $Helpers_class_for_name$23.$$arity = 1);
+      }, $Helpers_class_for_name$29.$$arity = 1);
     })($nesting[0], $nesting)
   })($nesting[0], $nesting)
 };
@@ -22765,7 +22833,7 @@ Opal.modules["asciidoctor/rx"] = function(Opal) {
     Opal.const_set($nesting[0], 'InlineSectionAnchorRx', new RegExp("" + " (\\\\)?\\[\\[([" + ($$($nesting, 'CC_ALPHA')) + "_:][" + ($$($nesting, 'CC_WORD')) + "\\-:.]*)(?:, *(" + ($$($nesting, 'CC_ANY')) + "+))?\\]\\]$"));
     Opal.const_set($nesting[0], 'InvalidSectionIdCharsRx', new RegExp("" + "<[^>]+>|&(?:[a-z][a-z]+\\d{0,2}|#\\d\\d\\d{0,4}|#x[\\da-f][\\da-f][\\da-f]{0,3});|[^ " + ($$($nesting, 'CC_WORD')) + "\\-.]+?"));
     Opal.const_set($nesting[0], 'SectionLevelStyleRx', /^sect\d$/);
-    Opal.const_set($nesting[0], 'AnyListRx', new RegExp("" + "^(?:[ \\t]*(?:-|\\*\\**|\\.\\.*|\\u2022|\\d+\\.|[a-zA-Z]\\.|[IVXivx]+\\))[ \\t]|(?!//[^/])[ \\t]*[^ \\t]" + ($$($nesting, 'CC_ANY')) + "*?(?::::{0,2}|;;)(?:$|[ \\t])|<?\\d+>[ \\t])"));
+    Opal.const_set($nesting[0], 'AnyListRx', new RegExp("" + "^(?:[ \\t]*(?:-|\\*\\**|\\.\\.*|\\u2022|\\d+\\.|[a-zA-Z]\\.|[IVXivx]+\\))[ \\t]|(?!//[^/])[ \\t]*[^ \\t]" + ($$($nesting, 'CC_ANY')) + "*?(?::::{0,2}|;;)(?:$|[ \\t])|<(?:\\d+|\\.)>[ \\t])"));
     Opal.const_set($nesting[0], 'UnorderedListRx', new RegExp("" + "^[ \\t]*(-|\\*\\**|\\u2022)[ \\t]+(" + ($$($nesting, 'CC_ANY')) + "*)$"));
     Opal.const_set($nesting[0], 'OrderedListRx', new RegExp("" + "^[ \\t]*(\\.\\.*|\\d+\\.|[a-zA-Z]\\.|[IVXivx]+\\))[ \\t]+(" + ($$($nesting, 'CC_ANY')) + "*)$"));
     Opal.const_set($nesting[0], 'OrderedListMarkerRxMap', $hash2(["arabic", "loweralpha", "lowerroman", "upperalpha", "upperroman"], {"arabic": /\d+\./, "loweralpha": /[a-z]\./, "lowerroman": /[ivx]+\)/, "upperalpha": /[A-Z]\./, "upperroman": /[IVX]+\)/}));
@@ -22825,15 +22893,15 @@ Opal.modules["asciidoctor/rx"] = function(Opal) {
     Opal.const_set($nesting[0], 'LeadingInlineAnchorRx', new RegExp("" + "^\\[\\[([" + ($$($nesting, 'CC_ALPHA')) + "_:][" + ($$($nesting, 'CC_WORD')) + "\\-:.]*)(?:, *(" + ($$($nesting, 'CC_ANY')) + "+?))?\\]\\]"));
     Opal.const_set($nesting[0], 'InlineBiblioAnchorRx', new RegExp("" + "^\\[\\[\\[([" + ($$($nesting, 'CC_ALPHA')) + "_:][" + ($$($nesting, 'CC_WORD')) + "\\-:.]*)(?:, *(" + ($$($nesting, 'CC_ANY')) + "+?))?\\]\\]\\]"));
     Opal.const_set($nesting[0], 'InlineEmailRx', new RegExp("" + "([\\\\>:/])?" + ($$($nesting, 'CG_WORD')) + "(?:&amp;|[" + ($$($nesting, 'CC_WORD')) + "\\-.%+])*@" + ($$($nesting, 'CG_ALNUM')) + "[" + ($$($nesting, 'CC_ALNUM')) + "_\\-.]*\\.[a-zA-Z]{2,5}\\b"));
-    Opal.const_set($nesting[0], 'InlineFootnoteMacroRx', new RegExp("" + "\\\\?footnote(?:(ref):|:([" + ($$($nesting, 'CC_WORD')) + "-]+)?)\\[(?:|(" + ($$($nesting, 'CC_ALL')) + "*?[^\\\\]))\\]", 'm'));
+    Opal.const_set($nesting[0], 'InlineFootnoteMacroRx', new RegExp("" + "\\\\?footnote(?:(ref):|:([" + ($$($nesting, 'CC_WORD')) + "-]+)?)\\[(?:|(" + ($$($nesting, 'CC_ALL')) + "*?[^\\\\]))\\](?!</a>)", 'm'));
     Opal.const_set($nesting[0], 'InlineImageMacroRx', new RegExp("" + "\\\\?i(?:mage|con):([^:\\s\\[](?:[^\\n\\[]*[^\\s\\[])?)\\[(|" + ($$($nesting, 'CC_ALL')) + "*?[^\\\\])\\]", 'm'));
     Opal.const_set($nesting[0], 'InlineIndextermMacroRx', new RegExp("" + "\\\\?(?:(indexterm2?):\\[(" + ($$($nesting, 'CC_ALL')) + "*?[^\\\\])\\]|\\(\\((" + ($$($nesting, 'CC_ALL')) + "+?)\\)\\)(?!\\)))", 'm'));
     Opal.const_set($nesting[0], 'InlineKbdBtnMacroRx', new RegExp("" + "(\\\\)?(kbd|btn):\\[(" + ($$($nesting, 'CC_ALL')) + "*?[^\\\\])\\]", 'm'));
-    Opal.const_set($nesting[0], 'InlineLinkRx', new RegExp("" + "(^|link:|" + ($$($nesting, 'CG_BLANK')) + "|&lt;|[>\\(\\)\\[\\];])(\\\\?(?:https?|file|ftp|irc)://[^\\s\\[\\]<]*([^\\s.,\\[\\]<]))(?:\\[(|" + ($$($nesting, 'CC_ALL')) + "*?[^\\\\])\\])?", 'm'));
+    Opal.const_set($nesting[0], 'InlineLinkRx', new RegExp("" + "(^|link:|" + ($$($nesting, 'CG_BLANK')) + "|&lt;|[>\\(\\)\\[\\];\"'])(\\\\?(?:https?|file|ftp|irc)://[^\\s\\[\\]<]*([^\\s.,\\[\\]<]))(?:\\[(|" + ($$($nesting, 'CC_ALL')) + "*?[^\\\\])\\])?", 'm'));
     Opal.const_set($nesting[0], 'InlineLinkMacroRx', new RegExp("" + "\\\\?(?:link|(mailto)):(|[^:\\s\\[][^\\s\\[]*)\\[(|" + ($$($nesting, 'CC_ALL')) + "*?[^\\\\])\\]", 'm'));
     Opal.const_set($nesting[0], 'MacroNameRx', new RegExp("" + "^" + ($$($nesting, 'CG_WORD')) + "[" + ($$($nesting, 'CC_WORD')) + "-]*$"));
     Opal.const_set($nesting[0], 'InlineStemMacroRx', new RegExp("" + "\\\\?(stem|(?:latex|ascii)math):([a-z]+(?:,[a-z-]+)*)?\\[(" + ($$($nesting, 'CC_ALL')) + "*?[^\\\\])\\]", 'm'));
-    Opal.const_set($nesting[0], 'InlineMenuMacroRx', new RegExp("" + "\\\\?menu:(" + ($$($nesting, 'CG_WORD')) + "|[" + ($$($nesting, 'CC_WORD')) + "&][^\\n\\[]*[^\\s\\[])\\[ *(?:|(" + ($$($nesting, 'CC_ALL')) + "*?[^\\\\]))?\\]", 'm'));
+    Opal.const_set($nesting[0], 'InlineMenuMacroRx', new RegExp("" + "\\\\?menu:(" + ($$($nesting, 'CG_WORD')) + "|[" + ($$($nesting, 'CC_WORD')) + "&][^\\n\\[]*[^\\s\\[])\\[ *(?:|(" + ($$($nesting, 'CC_ALL')) + "*?[^\\\\]))\\]", 'm'));
     Opal.const_set($nesting[0], 'InlineMenuRx', new RegExp("" + "\\\\?\"([" + ($$($nesting, 'CC_WORD')) + "&][^\"]*?[ \\n]+&gt;[ \\n]+[^\"]*)\""));
     Opal.const_set($nesting[0], 'InlinePassRx', $hash(false, ["+", "`", new RegExp("" + "(^|[^" + ($$($nesting, 'CC_WORD')) + ";:])(?:\\[([^\\]]+)\\])?(\\\\?(\\+|`)(\\S|\\S" + ($$($nesting, 'CC_ALL')) + "*?\\S)\\4)(?!" + ($$($nesting, 'CG_WORD')) + ")", 'm')], true, ["`", nil, new RegExp("" + "(^|[^`" + ($$($nesting, 'CC_WORD')) + "])(?:\\[([^\\]]+)\\])?(\\\\?(`)([^`\\s]|[^`\\s]" + ($$($nesting, 'CC_ALL')) + "*?\\S)\\4)(?![`" + ($$($nesting, 'CC_WORD')) + "])", 'm')]));
     Opal.const_set($nesting[0], 'SinglePlusInlinePassRx', new RegExp("" + "^(\\\\)?\\+(\\S|\\S" + ($$($nesting, 'CC_ALL')) + "*?\\S)\\+$", 'm'));
@@ -22876,7 +22944,7 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
   }
   var self = Opal.top, $nesting = [], nil = Opal.nil, $$$ = Opal.const_get_qualified, $$ = Opal.const_get_relative, $breaker = Opal.breaker, $slice = Opal.slice, $module = Opal.module, $hash2 = Opal.hash2, $hash = Opal.hash, $truthy = Opal.truthy, $send = Opal.send, $gvars = Opal.gvars;
 
-  Opal.add_stubs(['$freeze', '$+', '$keys', '$empty?', '$!', '$===', '$[]', '$join', '$include?', '$extract_passthroughs', '$each', '$sub_specialchars', '$sub_quotes', '$sub_attributes', '$sub_replacements', '$sub_macros', '$highlight_source', '$sub_callouts', '$sub_post_replacements', '$warn', '$logger', '$restore_passthroughs', '$clear', '$split', '$apply_subs', '$==', '$gsub', '$match?', '$compat_mode', '$convert_quoted_text', '$attributes', '$shift', '$store_attribute', '$!=', '$attribute_undefined', '$counter', '$key?', '$downcase', '$attribute_missing', '$info', '$squeeze', '$delete', '$reject', '$start_with?', '$do_replacement', '$extensions', '$inline_macros?', '$inline_macros', '$regexp', '$instance', '$slice', '$length', '$names', '$config', '$merge', '$[]=', '$-', '$normalize_text', '$parse_attributes', '$process_method', '$text', '$expand_subs', '$text=', '$convert', '$class', '$strip', '$>', '$index', '$min', '$compact', '$end_with?', '$map', '$chop', '$new', '$pop', '$rstrip', '$register', '$tr', '$basename', '$parse', '$<<', '$lstrip', '$split_simple_csv', '$partition', '$sub', '$encode_uri_component', '$style', '$parse_into', '$extname?', '$rindex', '$info?', '$catalog', '$fetch', '$outfilesuffix', '$natural_xrefs', '$resolve_id', '$find', '$footnotes', '$id', '$<', '$size', '$attr?', '$attr', '$to_s', '$read_next_id', '$callouts', '$syntax_highlighter', '$highlight?', '$sub_source', '$extract_callouts', '$name', '$to_sym', '$to_i', '$resolve_lines_to_highlight', '$highlight', '$nil_or_empty?', '$restore_callouts', '$count', '$to_a', '$concat', '$uniq', '$sort', '$*', '$parse_quoted_text_attributes', '$resolve_pass_subs', '$extract_inner_passthrough', '$basebackend?', '$error', '$chr', '$drop', '$&', '$resolve_subs', '$resolve_block_subs', '$private', '$=~', '$shorthand_property_syntax', '$each_char']);
+  Opal.add_stubs(['$freeze', '$+', '$keys', '$empty?', '$!', '$===', '$[]', '$join', '$include?', '$extract_passthroughs', '$each', '$sub_specialchars', '$sub_quotes', '$sub_attributes', '$sub_replacements', '$sub_macros', '$highlight_source', '$sub_callouts', '$sub_post_replacements', '$warn', '$logger', '$restore_passthroughs', '$clear', '$split', '$apply_subs', '$==', '$gsub', '$match?', '$compat_mode', '$convert_quoted_text', '$attributes', '$shift', '$store_attribute', '$!=', '$attribute_undefined', '$counter', '$key?', '$downcase', '$attribute_missing', '$info', '$squeeze', '$delete', '$reject', '$start_with?', '$do_replacement', '$extensions', '$inline_macros?', '$inline_macros', '$regexp', '$instance', '$slice', '$length', '$names', '$config', '$merge', '$[]=', '$-', '$normalize_text', '$parse_attributes', '$process_method', '$text', '$expand_subs', '$text=', '$convert', '$class', '$strip', '$>', '$index', '$min', '$compact', '$end_with?', '$map', '$chop', '$new', '$pop', '$rstrip', '$register', '$tr', '$basename', '$parse', '$<<', '$lstrip', '$split_simple_csv', '$partition', '$extract_attributes_from_text', '$sub', '$encode_uri_component', '$style', '$extname?', '$rindex', '$info?', '$catalog', '$fetch', '$outfilesuffix', '$natural_xrefs', '$resolve_id', '$find', '$footnotes', '$id', '$<', '$size', '$attr?', '$attr', '$to_s', '$read_next_id', '$callouts', '$syntax_highlighter', '$highlight?', '$sub_source', '$extract_callouts', '$name', '$to_sym', '$to_i', '$resolve_lines_to_highlight', '$highlight', '$nil_or_empty?', '$restore_callouts', '$count', '$to_a', '$|', '$sort', '$*', '$parse_quoted_text_attributes', '$resolve_pass_subs', '$extract_inner_passthrough', '$basebackend?', '$error', '$chr', '$drop', '$&', '$resolve_subs', '$resolve_block_subs', '$parse_into', '$private', '$=~', '$shorthand_property_syntax', '$concat', '$each_char']);
   return (function($base, $parent_nesting) {
     var self = $module($base, 'Asciidoctor');
 
@@ -22885,7 +22953,7 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
     (function($base, $parent_nesting) {
       var self = $module($base, 'Substitutors');
 
-      var $nesting = [self].concat($parent_nesting), $Substitutors_apply_subs$1, $Substitutors_apply_normal_subs$3, $Substitutors_apply_header_subs$4, $Substitutors_apply_reftext_subs$5, $Substitutors_sub_specialchars$6, $Substitutors_sub_quotes$7, $Substitutors_sub_attributes$10, $Substitutors_sub_replacements$16, $Substitutors_sub_macros$19, $Substitutors_sub_post_replacements$41, $Substitutors_sub_source$44, $Substitutors_sub_callouts$45, $Substitutors_highlight_source$47, $Substitutors_resolve_lines_to_highlight$48, $Substitutors_extract_passthroughs$50, $Substitutors_restore_passthroughs$54, $Substitutors_resolve_subs$56, $Substitutors_resolve_block_subs$58, $Substitutors_resolve_pass_subs$59, $Substitutors_expand_subs$60, $Substitutors_commit_subs$62, $Substitutors_parse_attributes$63, $Substitutors_extract_callouts$64, $Substitutors_restore_callouts$67, $Substitutors_extract_inner_passthrough$70, $Substitutors_convert_quoted_text$71, $Substitutors_do_replacement$72, $Substitutors_parse_quoted_text_attributes$73, $Substitutors_normalize_text$74, $Substitutors_split_simple_csv$75;
+      var $nesting = [self].concat($parent_nesting), $Substitutors_apply_subs$1, $Substitutors_apply_normal_subs$3, $Substitutors_apply_header_subs$4, $Substitutors_apply_reftext_subs$5, $Substitutors_sub_specialchars$6, $Substitutors_sub_quotes$7, $Substitutors_sub_attributes$10, $Substitutors_sub_replacements$16, $Substitutors_sub_macros$19, $Substitutors_sub_post_replacements$41, $Substitutors_sub_source$44, $Substitutors_sub_callouts$45, $Substitutors_highlight_source$47, $Substitutors_resolve_lines_to_highlight$48, $Substitutors_extract_passthroughs$51, $Substitutors_restore_passthroughs$55, $Substitutors_resolve_subs$57, $Substitutors_resolve_block_subs$59, $Substitutors_resolve_pass_subs$60, $Substitutors_expand_subs$61, $Substitutors_commit_subs$63, $Substitutors_parse_attributes$64, $Substitutors_extract_attributes_from_text$65, $Substitutors_extract_callouts$66, $Substitutors_restore_callouts$69, $Substitutors_extract_inner_passthrough$72, $Substitutors_convert_quoted_text$73, $Substitutors_do_replacement$74, $Substitutors_parse_quoted_text_attributes$75, $Substitutors_normalize_text$76, $Substitutors_split_simple_csv$77;
 
       
       Opal.const_set($nesting[0], 'SpecialCharsRx', /[<&>]/);
@@ -23520,8 +23588,8 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
               text = (($c = $gvars['~']) === nil ? nil : $c['$[]'](4));
             } else {
               
-              if (prefix['$==']("link:")) {
-                return (($c = $gvars['~']) === nil ? nil : $c['$[]'](0));};
+              $case = prefix;
+              if ("link:"['$===']($case) || "\""['$===']($case) || "'"['$===']($case)) {return (($c = $gvars['~']) === nil ? nil : $c['$[]'](0));};
               text = "";
               $case = (($c = $gvars['~']) === nil ? nil : $c['$[]'](3));
               if (")"['$===']($case)) {
@@ -23562,7 +23630,7 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
                 text = text.$gsub($$($nesting, 'ESC_R_SB'), $$($nesting, 'R_SB'))};
               if ($truthy(($truthy($c = doc.$compat_mode()['$!']()) ? text['$include?']("=") : $c))) {
                 
-                text = ($truthy($c = (attrs = $$($nesting, 'AttributeList').$new(text, self).$parse())['$[]'](1)) ? $c : "");
+                $d = self.$extract_attributes_from_text(text, ""), $c = Opal.to_ary($d), (text = ($c[0] == null ? nil : $c[0])), (attrs = ($c[1] == null ? nil : $c[1])), $d;
                 
                 $writer = ["id", attrs['$[]']("id")];
                 $send(link_opts, '[]=', Opal.to_a($writer));
@@ -23604,7 +23672,7 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
               $writer[$rb_minus($writer["length"], 1)];};
             return "" + (prefix) + ($$($nesting, 'Inline').$new(self, "anchor", text, link_opts).$convert()) + (suffix);}, $$33.$$s = self, $$33.$$arity = 0, $$33))};
         if ($truthy(($truthy($a = found_macroish) ? ($truthy($b = text['$include?']("link:")) ? $b : text['$include?']("ilto:")) : $a))) {
-          text = $send(text, 'gsub', [$$($nesting, 'InlineLinkMacroRx')], ($$34 = function(){var self = $$34.$$s || this, $c, mailto = nil, target = nil, mailto_text = nil, attrs = nil, link_opts = nil, $writer = nil;
+          text = $send(text, 'gsub', [$$($nesting, 'InlineLinkMacroRx')], ($$34 = function(){var self = $$34.$$s || this, $c, $d, mailto = nil, target = nil, mailto_text = nil, attrs = nil, link_opts = nil, $writer = nil;
 
           
             if ($truthy((($c = $gvars['~']) === nil ? nil : $c['$[]'](0))['$start_with?']($$($nesting, 'RS')))) {
@@ -23623,7 +23691,7 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
               if ($truthy(mailto)) {
                 if ($truthy(($truthy($c = doc.$compat_mode()['$!']()) ? text['$include?'](",") : $c))) {
                   
-                  text = ($truthy($c = (attrs = $$($nesting, 'AttributeList').$new(text, self).$parse())['$[]'](1)) ? $c : "");
+                  $d = self.$extract_attributes_from_text(text, ""), $c = Opal.to_ary($d), (text = ($c[0] == null ? nil : $c[0])), (attrs = ($c[1] == null ? nil : $c[1])), $d;
                   
                   $writer = ["id", attrs['$[]']("id")];
                   $send(link_opts, '[]=', Opal.to_a($writer));
@@ -23636,7 +23704,7 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
                     }};}
               } else if ($truthy(($truthy($c = doc.$compat_mode()['$!']()) ? text['$include?']("=") : $c))) {
                 
-                text = ($truthy($c = (attrs = $$($nesting, 'AttributeList').$new(text, self).$parse())['$[]'](1)) ? $c : "");
+                $d = self.$extract_attributes_from_text(text, ""), $c = Opal.to_ary($d), (text = ($c[0] == null ? nil : $c[0])), (attrs = ($c[1] == null ? nil : $c[1])), $d;
                 
                 $writer = ["id", attrs['$[]']("id")];
                 $send(link_opts, '[]=', Opal.to_a($writer));
@@ -23735,7 +23803,7 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
                 if ($truthy(text['$include?']($$($nesting, 'R_SB')))) {
                   text = text.$gsub($$($nesting, 'ESC_R_SB'), $$($nesting, 'R_SB'))};
                 if ($truthy(($truthy($c = doc.$compat_mode()['$!']()) ? text['$include?']("=") : $c))) {
-                  text = $$($nesting, 'AttributeList').$new(text, self).$parse_into(attrs)['$[]'](1)};};
+                  $d = self.$extract_attributes_from_text(text), $c = Opal.to_ary($d), (text = ($c[0] == null ? nil : $c[0])), (attrs = ($c[1] == null ? nil : $c[1])), $d};};
             };
             if ($truthy(doc.$compat_mode())) {
               fragment = refid
@@ -23803,7 +23871,7 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
             } else if ($truthy(($truthy($c = doc.$compat_mode()) ? $c : $$($nesting, 'Compliance').$natural_xrefs()['$!']()))) {
               
               $c = [fragment, "" + "#" + (fragment)], (refid = $c[0]), (target = $c[1]), $c;
-              if ($truthy(($truthy($c = self.$logger()['$info?']()) ? doc.$catalog()['$[]']("refs")['$[]'](refid) : $c))) {
+              if ($truthy(($truthy($c = self.$logger()['$info?']()) ? doc.$catalog()['$[]']("refs")['$[]'](refid)['$!']() : $c))) {
                 self.$logger().$info("" + "possible invalid reference: " + (refid))};
             } else if ($truthy(doc.$catalog()['$[]']("refs")['$[]'](fragment))) {
               $c = [fragment, "" + "#" + (fragment)], (refid = $c[0]), (target = $c[1]), $c
@@ -23829,7 +23897,7 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
             $writer[$rb_minus($writer["length"], 1)];;
             return $$($nesting, 'Inline').$new(self, "anchor", text, $hash2(["type", "target", "attributes"], {"type": "xref", "target": target, "attributes": attrs})).$convert();}, $$38.$$s = self, $$38.$$arity = 0, $$38))};
         if ($truthy(($truthy($a = found_macroish) ? text['$include?']("tnote") : $a))) {
-          text = $send(text, 'gsub', [$$($nesting, 'InlineFootnoteMacroRx')], ($$39 = function(){var self = $$39.$$s || this, $c, $d, $e, $$40, id = nil, index = nil, type = nil, target = nil, footnote = nil;
+          text = $send(text, 'gsub', [$$($nesting, 'InlineFootnoteMacroRx')], ($$39 = function(){var self = $$39.$$s || this, $c, $d, $e, $$40, id = nil, footnote = nil, index = nil, type = nil, target = nil;
 
           
             if ($truthy((($c = $gvars['~']) === nil ? nil : $c['$[]'](0))['$start_with?']($$($nesting, 'RS')))) {
@@ -23851,7 +23919,18 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
               text = (($c = $gvars['~']) === nil ? nil : $c['$[]'](3));
             };
             if ($truthy(id)) {
-              if ($truthy(text)) {
+              if ($truthy((footnote = $send(doc.$footnotes(), 'find', [], ($$40 = function(candidate){var self = $$40.$$s || this;
+
+              
+                
+                if (candidate == null) {
+                  candidate = nil;
+                };
+                return candidate.$id()['$=='](id);}, $$40.$$s = self, $$40.$$arity = 1, $$40))))) {
+                
+                $c = [footnote.$index(), footnote.$text()], (index = $c[0]), (text = $c[1]), $c;
+                $c = ["xref", id, nil], (type = $c[0]), (target = $c[1]), (id = $c[2]), $c;
+              } else if ($truthy(text)) {
                 
                 text = self.$restore_passthroughs(self.$normalize_text(text, true, true));
                 index = doc.$counter("footnote-number");
@@ -23859,21 +23938,8 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
                 $c = ["ref", nil], (type = $c[0]), (target = $c[1]), $c;
               } else {
                 
-                if ($truthy((footnote = $send(doc.$footnotes(), 'find', [], ($$40 = function(candidate){var self = $$40.$$s || this;
-
-                
-                  
-                  if (candidate == null) {
-                    candidate = nil;
-                  };
-                  return candidate.$id()['$=='](id);}, $$40.$$s = self, $$40.$$arity = 1, $$40))))) {
-                  $c = [footnote.$index(), footnote.$text()], (index = $c[0]), (text = $c[1]), $c
-                } else {
-                  
-                  self.$logger().$warn("" + "invalid footnote reference: " + (id));
-                  $c = [nil, id], (index = $c[0]), (text = $c[1]), $c;
-                };
-                $c = ["xref", id, nil], (type = $c[0]), (target = $c[1]), (id = $c[2]), $c;
+                self.$logger().$warn("" + "invalid footnote reference: " + (id));
+                $c = ["xref", id, id, nil], (type = $c[0]), (target = $c[1]), (text = $c[2]), (id = $c[3]), $c;
               }
             } else if ($truthy(text)) {
               
@@ -23942,7 +24008,7 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
           return $$($nesting, 'CalloutSourceRx')
         }; return nil; })();
         autonum = 0;
-        return $send(text, 'gsub', [callout_rx], ($$46 = function(){var self = $$46.$$s || this, $a;
+        return $send(text, 'gsub', [callout_rx], ($$46 = function(){var self = $$46.$$s || this, $a, $b;
           if (self.document == null) self.document = nil;
 
         if ($truthy((($a = $gvars['~']) === nil ? nil : $a['$[]'](2)))) {
@@ -23952,7 +24018,11 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
               return (autonum = $rb_plus(autonum, 1)).$to_s()
             } else {
               return (($a = $gvars['~']) === nil ? nil : $a['$[]'](4))
-            }; return nil; })(), $hash2(["id", "attributes"], {"id": self.document.$callouts().$read_next_id(), "attributes": $hash2(["guard"], {"guard": (($a = $gvars['~']) === nil ? nil : $a['$[]'](1))})})).$convert()
+            }; return nil; })(), $hash2(["id", "attributes"], {"id": self.document.$callouts().$read_next_id(), "attributes": $hash2(["guard"], {"guard": ($truthy($a = (($b = $gvars['~']) === nil ? nil : $b['$[]'](1))) ? $a : (function() {if ((($b = $gvars['~']) === nil ? nil : $b['$[]'](3))['$==']("--")) {
+              return ["<!--", "-->"]
+            } else {
+              return nil
+            }; return nil; })())})})).$convert()
           }}, $$46.$$s = self, $$46.$$arity = 0, $$46));
       }, $Substitutors_sub_callouts$45.$$arity = 1);
       
@@ -23978,7 +24048,7 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
           if ($truthy($rb_lt((start_line_number = self.$attr("start", 1).$to_i()), 1))) {
             start_line_number = 1}};
         if ($truthy(self['$attr?']("highlight"))) {
-          highlight_lines = self.$resolve_lines_to_highlight(source, self.$attr("highlight"))};
+          highlight_lines = self.$resolve_lines_to_highlight(source, self.$attr("highlight"), start_line_number)};
         $b = syntax_hl.$highlight(self, source, self.$attr("language"), $hash2(["callouts", "css_mode", "highlight_lines", "number_lines", "start_line_number", "style"], {"callouts": callout_marks, "css_mode": ($truthy($c = doc_attrs['$[]']("" + (syntax_hl_name) + "-css")) ? $c : "class").$to_sym(), "highlight_lines": highlight_lines, "number_lines": linenums_mode, "start_line_number": start_line_number, "style": doc_attrs['$[]']("" + (syntax_hl_name) + "-style")})), $a = Opal.to_ary($b), (highlighted = ($a[0] == null ? nil : $a[0])), (source_offset = ($a[1] == null ? nil : $a[1])), $b;
         if ($truthy(self.passthroughs['$empty?']())) {
         } else {
@@ -23992,10 +24062,14 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
         };
       }, $Substitutors_highlight_source$47.$$arity = 2);
       
-      Opal.def(self, '$resolve_lines_to_highlight', $Substitutors_resolve_lines_to_highlight$48 = function $$resolve_lines_to_highlight(source, spec) {
-        var $$49, self = this, lines = nil;
+      Opal.def(self, '$resolve_lines_to_highlight', $Substitutors_resolve_lines_to_highlight$48 = function $$resolve_lines_to_highlight(source, spec, start) {
+        var $$49, $$50, self = this, lines = nil, shift = nil;
 
         
+        
+        if (start == null) {
+          start = nil;
+        };
         lines = [];
         if ($truthy(spec['$include?'](" "))) {
           spec = spec.$delete(" ")};
@@ -24005,7 +24079,7 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
         } else {
           
           return spec.$split(";");
-        }; return nil; })(), 'map', [], ($$49 = function(entry){var self = $$49.$$s || this, $a, $b, negate = nil, delim = nil, from = nil, to = nil, line_nums = nil;
+        }; return nil; })(), 'map', [], ($$49 = function(entry){var self = $$49.$$s || this, $a, $b, negate = nil, delim = nil, from = nil, to = nil, line = nil;
 
         
           
@@ -24030,22 +24104,38 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
             $b = entry.$partition(delim), $a = Opal.to_ary($b), (from = ($a[0] == null ? nil : $a[0])), (delim = ($a[1] == null ? nil : $a[1])), (to = ($a[2] == null ? nil : $a[2])), $b;
             if ($truthy(($truthy($a = to['$empty?']()) ? $a : $rb_lt((to = to.$to_i()), 0)))) {
               to = $rb_plus(source.$count($$($nesting, 'LF')), 1)};
-            line_nums = Opal.Range.$new(from.$to_i(), to, false).$to_a();
             if ($truthy(negate)) {
-              return (lines = $rb_minus(lines, line_nums))
+              return (lines = $rb_minus(lines, Opal.Range.$new(from.$to_i(), to, false).$to_a()))
             } else {
-              return lines.$concat(line_nums)
+              return (lines = lines['$|'](Opal.Range.$new(from.$to_i(), to, false).$to_a()))
             };
           } else if ($truthy(negate)) {
             return lines.$delete(entry.$to_i())
+          } else if ($truthy(lines['$include?']((line = entry.$to_i()))['$!']())) {
+            return lines['$<<'](line)
           } else {
-            return lines['$<<'](entry.$to_i())
+            return nil
           };}, $$49.$$s = self, $$49.$$arity = 1, $$49));
-        return lines.$sort().$uniq();
-      }, $Substitutors_resolve_lines_to_highlight$48.$$arity = 2);
+        if ((shift = (function() {if ($truthy(start)) {
+          return $rb_minus(start, 1)
+        } else {
+          return 0
+        }; return nil; })())['$=='](0)) {
+        } else {
+          lines = $send(lines, 'map', [], ($$50 = function(it){var self = $$50.$$s || this;
+
+          
+            
+            if (it == null) {
+              it = nil;
+            };
+            return $rb_minus(it, shift);}, $$50.$$s = self, $$50.$$arity = 1, $$50))
+        };
+        return lines.$sort();
+      }, $Substitutors_resolve_lines_to_highlight$48.$$arity = -3);
       
-      Opal.def(self, '$extract_passthroughs', $Substitutors_extract_passthroughs$50 = function $$extract_passthroughs(text) {
-        var $a, $b, $$51, $$52, $$53, self = this, compat_mode = nil, passthrus = nil, pass_inline_char1 = nil, pass_inline_char2 = nil, pass_inline_rx = nil;
+      Opal.def(self, '$extract_passthroughs', $Substitutors_extract_passthroughs$51 = function $$extract_passthroughs(text) {
+        var $a, $b, $$52, $$53, $$54, self = this, compat_mode = nil, passthrus = nil, pass_inline_char1 = nil, pass_inline_char2 = nil, pass_inline_rx = nil;
         if (self.document == null) self.document = nil;
         if (self.passthroughs == null) self.passthroughs = nil;
 
@@ -24053,7 +24143,7 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
         compat_mode = self.document.$compat_mode();
         passthrus = self.passthroughs;
         if ($truthy(($truthy($a = ($truthy($b = text['$include?']("++")) ? $b : text['$include?']("$$"))) ? $a : text['$include?']("ss:")))) {
-          text = $send(text, 'gsub', [$$($nesting, 'InlinePassMacroRx')], ($$51 = function(){var self = $$51.$$s || this, $c, boundary = nil, attrlist = nil, escape_count = nil, preceding = nil, old_behavior = nil, attributes = nil, subs = nil, $writer = nil, passthru_key = nil;
+          text = $send(text, 'gsub', [$$($nesting, 'InlinePassMacroRx')], ($$52 = function(){var self = $$52.$$s || this, $c, boundary = nil, attrlist = nil, escape_count = nil, preceding = nil, old_behavior = nil, attributes = nil, subs = nil, $writer = nil, passthru_key = nil;
 
           
             if ($truthy((boundary = (($c = $gvars['~']) === nil ? nil : $c['$[]'](4))))) {
@@ -24118,10 +24208,10 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
                 $writer[$rb_minus($writer["length"], 1)];
               };
             };
-            return "" + (($truthy($c = preceding) ? $c : "")) + ($$($nesting, 'PASS_START')) + (passthru_key) + ($$($nesting, 'PASS_END'));}, $$51.$$s = self, $$51.$$arity = 0, $$51))};
+            return "" + (($truthy($c = preceding) ? $c : "")) + ($$($nesting, 'PASS_START')) + (passthru_key) + ($$($nesting, 'PASS_END'));}, $$52.$$s = self, $$52.$$arity = 0, $$52))};
         $b = $$($nesting, 'InlinePassRx')['$[]'](compat_mode), $a = Opal.to_ary($b), (pass_inline_char1 = ($a[0] == null ? nil : $a[0])), (pass_inline_char2 = ($a[1] == null ? nil : $a[1])), (pass_inline_rx = ($a[2] == null ? nil : $a[2])), $b;
         if ($truthy(($truthy($a = text['$include?'](pass_inline_char1)) ? $a : ($truthy($b = pass_inline_char2) ? text['$include?'](pass_inline_char2) : $b)))) {
-          text = $send(text, 'gsub', [pass_inline_rx], ($$52 = function(){var self = $$52.$$s || this, $c, preceding = nil, attrlist = nil, quoted_text = nil, escape_mark = nil, format_mark = nil, content = nil, old_behavior = nil, attributes = nil, $writer = nil, passthru_key = nil, subs = nil;
+          text = $send(text, 'gsub', [pass_inline_rx], ($$53 = function(){var self = $$53.$$s || this, $c, preceding = nil, attrlist = nil, quoted_text = nil, escape_mark = nil, format_mark = nil, content = nil, old_behavior = nil, attributes = nil, $writer = nil, passthru_key = nil, subs = nil;
 
           
             preceding = (($c = $gvars['~']) === nil ? nil : $c['$[]'](1));
@@ -24177,9 +24267,9 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
               $send(passthrus, '[]=', Opal.to_a($writer));
               $writer[$rb_minus($writer["length"], 1)];
             };
-            return "" + (preceding) + ($$($nesting, 'PASS_START')) + (passthru_key) + ($$($nesting, 'PASS_END'));}, $$52.$$s = self, $$52.$$arity = 0, $$52))};
+            return "" + (preceding) + ($$($nesting, 'PASS_START')) + (passthru_key) + ($$($nesting, 'PASS_END'));}, $$53.$$s = self, $$53.$$arity = 0, $$53))};
         if ($truthy(($truthy($a = text['$include?'](":")) ? ($truthy($b = text['$include?']("stem:")) ? $b : text['$include?']("math:")) : $a))) {
-          text = $send(text, 'gsub', [$$($nesting, 'InlineStemMacroRx')], ($$53 = function(){var self = $$53.$$s || this, $c, $d, type = nil, subs = nil, content = nil, $writer = nil, passthru_key = nil;
+          text = $send(text, 'gsub', [$$($nesting, 'InlineStemMacroRx')], ($$54 = function(){var self = $$54.$$s || this, $c, $d, type = nil, subs = nil, content = nil, $writer = nil, passthru_key = nil;
             if (self.document == null) self.document = nil;
 
           
@@ -24206,17 +24296,17 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
             $writer = [(passthru_key = passthrus.$size()), $hash2(["text", "subs", "type"], {"text": content, "subs": subs, "type": type})];
             $send(passthrus, '[]=', Opal.to_a($writer));
             $writer[$rb_minus($writer["length"], 1)];;
-            return "" + ($$($nesting, 'PASS_START')) + (passthru_key) + ($$($nesting, 'PASS_END'));}, $$53.$$s = self, $$53.$$arity = 0, $$53))};
+            return "" + ($$($nesting, 'PASS_START')) + (passthru_key) + ($$($nesting, 'PASS_END'));}, $$54.$$s = self, $$54.$$arity = 0, $$54))};
         return text;
-      }, $Substitutors_extract_passthroughs$50.$$arity = 1);
+      }, $Substitutors_extract_passthroughs$51.$$arity = 1);
       
-      Opal.def(self, '$restore_passthroughs', $Substitutors_restore_passthroughs$54 = function $$restore_passthroughs(text) {
-        var $$55, self = this, passthrus = nil;
+      Opal.def(self, '$restore_passthroughs', $Substitutors_restore_passthroughs$55 = function $$restore_passthroughs(text) {
+        var $$56, self = this, passthrus = nil;
         if (self.passthroughs == null) self.passthroughs = nil;
 
         
         passthrus = self.passthroughs;
-        return $send(text, 'gsub', [$$($nesting, 'PassSlotRx')], ($$55 = function(){var self = $$55.$$s || this, $a, pass = nil, subbed_text = nil, type = nil, attributes = nil, id = nil;
+        return $send(text, 'gsub', [$$($nesting, 'PassSlotRx')], ($$56 = function(){var self = $$56.$$s || this, $a, pass = nil, subbed_text = nil, type = nil, attributes = nil, id = nil;
 
         if ($truthy((pass = passthrus['$[]']((($a = $gvars['~']) === nil ? nil : $a['$[]'](1)).$to_i())))) {
             
@@ -24235,11 +24325,11 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
             
             self.$logger().$error("" + "unresolved passthrough detected: " + (text));
             return "??pass??";
-          }}, $$55.$$s = self, $$55.$$arity = 0, $$55));
-      }, $Substitutors_restore_passthroughs$54.$$arity = 1);
+          }}, $$56.$$s = self, $$56.$$arity = 0, $$56));
+      }, $Substitutors_restore_passthroughs$55.$$arity = 1);
       
-      Opal.def(self, '$resolve_subs', $Substitutors_resolve_subs$56 = function $$resolve_subs(subs, type, defaults, subject) {
-        var $$57, self = this, candidates = nil, modifiers_present = nil, resolved = nil, invalid = nil;
+      Opal.def(self, '$resolve_subs', $Substitutors_resolve_subs$57 = function $$resolve_subs(subs, type, defaults, subject) {
+        var $$58, self = this, candidates = nil, modifiers_present = nil, resolved = nil, invalid = nil;
 
         
         
@@ -24260,7 +24350,7 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
         if ($truthy(subs['$include?'](" "))) {
           subs = subs.$delete(" ")};
         modifiers_present = $$($nesting, 'SubModifierSniffRx')['$match?'](subs);
-        $send(subs.$split(","), 'each', [], ($$57 = function(key){var self = $$57.$$s || this, $a, $b, modifier_operation = nil, first = nil, resolved_keys = nil, resolved_key = nil, candidate = nil, $case = nil;
+        $send(subs.$split(","), 'each', [], ($$58 = function(key){var self = $$58.$$s || this, $a, $b, modifier_operation = nil, first = nil, resolved_keys = nil, resolved_key = nil, candidate = nil, $case = nil;
 
         
           
@@ -24314,7 +24404,7 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
             
             candidates = ($truthy($a = candidates) ? $a : []);
             return (candidates = $rb_plus(candidates, resolved_keys));
-          };}, $$57.$$s = self, $$57.$$arity = 1, $$57));
+          };}, $$58.$$s = self, $$58.$$arity = 1, $$58));
         if ($truthy(candidates)) {
         } else {
           return nil
@@ -24335,22 +24425,22 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
           }; return nil; })()) + (subject) + ": " + (invalid.$join(", ")));
         };
         return resolved;
-      }, $Substitutors_resolve_subs$56.$$arity = -2);
+      }, $Substitutors_resolve_subs$57.$$arity = -2);
       
-      Opal.def(self, '$resolve_block_subs', $Substitutors_resolve_block_subs$58 = function $$resolve_block_subs(subs, defaults, subject) {
+      Opal.def(self, '$resolve_block_subs', $Substitutors_resolve_block_subs$59 = function $$resolve_block_subs(subs, defaults, subject) {
         var self = this;
 
         return self.$resolve_subs(subs, "block", defaults, subject)
-      }, $Substitutors_resolve_block_subs$58.$$arity = 3);
+      }, $Substitutors_resolve_block_subs$59.$$arity = 3);
       
-      Opal.def(self, '$resolve_pass_subs', $Substitutors_resolve_pass_subs$59 = function $$resolve_pass_subs(subs) {
+      Opal.def(self, '$resolve_pass_subs', $Substitutors_resolve_pass_subs$60 = function $$resolve_pass_subs(subs) {
         var self = this;
 
         return self.$resolve_subs(subs, "inline", nil, "passthrough macro")
-      }, $Substitutors_resolve_pass_subs$59.$$arity = 1);
+      }, $Substitutors_resolve_pass_subs$60.$$arity = 1);
       
-      Opal.def(self, '$expand_subs', $Substitutors_expand_subs$60 = function $$expand_subs(subs) {
-        var $a, $$61, self = this, expanded_subs = nil;
+      Opal.def(self, '$expand_subs', $Substitutors_expand_subs$61 = function $$expand_subs(subs) {
+        var $a, $$62, self = this, expanded_subs = nil;
 
         if ($truthy($$$('::', 'Symbol')['$==='](subs))) {
           if (subs['$==']("none")) {
@@ -24361,7 +24451,7 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
         } else {
           
           expanded_subs = [];
-          $send(subs, 'each', [], ($$61 = function(key){var self = $$61.$$s || this, sub_group = nil;
+          $send(subs, 'each', [], ($$62 = function(key){var self = $$62.$$s || this, sub_group = nil;
 
           
             
@@ -24374,16 +24464,16 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
               return (expanded_subs = $rb_plus(expanded_subs, sub_group))
             } else {
               return expanded_subs['$<<'](key)
-            };}, $$61.$$s = self, $$61.$$arity = 1, $$61));
+            };}, $$62.$$s = self, $$62.$$arity = 1, $$62));
           if ($truthy(expanded_subs['$empty?']())) {
             return nil
           } else {
             return expanded_subs
           };
         }
-      }, $Substitutors_expand_subs$60.$$arity = 1);
+      }, $Substitutors_expand_subs$61.$$arity = 1);
       
-      Opal.def(self, '$commit_subs', $Substitutors_commit_subs$62 = function $$commit_subs() {
+      Opal.def(self, '$commit_subs', $Substitutors_commit_subs$63 = function $$commit_subs() {
         var $a, $b, $c, $d, self = this, default_subs = nil, $case = nil, custom_subs = nil, syntax_hl = nil, idx = nil, $writer = nil;
         if (self.default_subs == null) self.default_subs = nil;
         if (self.content_model == null) self.content_model = nil;
@@ -24421,9 +24511,9 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
           $send(self.subs, '[]=', Opal.to_a($writer));
           $writer[$rb_minus($writer["length"], 1)];};
         return nil;
-      }, $Substitutors_commit_subs$62.$$arity = 0);
+      }, $Substitutors_commit_subs$63.$$arity = 0);
       
-      Opal.def(self, '$parse_attributes', $Substitutors_parse_attributes$63 = function $$parse_attributes(attrlist, posattrs, opts) {
+      Opal.def(self, '$parse_attributes', $Substitutors_parse_attributes$64 = function $$parse_attributes(attrlist, posattrs, opts) {
         var $a, self = this, block = nil, into = nil;
         if (self.document == null) self.document = nil;
 
@@ -24453,22 +24543,47 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
         } else {
           return $$($nesting, 'AttributeList').$new(attrlist, block).$parse(posattrs)
         };
-      }, $Substitutors_parse_attributes$63.$$arity = -2);
+      }, $Substitutors_parse_attributes$64.$$arity = -2);
       self.$private();
       
-      Opal.def(self, '$extract_callouts', $Substitutors_extract_callouts$64 = function $$extract_callouts(source) {
-        var $$65, self = this, callout_marks = nil, lineno = nil, last_lineno = nil, callout_rx = nil;
+      Opal.def(self, '$extract_attributes_from_text', $Substitutors_extract_attributes_from_text$65 = function $$extract_attributes_from_text(text, default_text) {
+        var self = this, attrlist = nil, resolved_text = nil, attrs = nil;
+
+        
+        
+        if (default_text == null) {
+          default_text = nil;
+        };
+        attrlist = (function() {if ($truthy(text['$include?']($$($nesting, 'LF')))) {
+          
+          return text.$tr($$($nesting, 'LF'), " ");
+        } else {
+          return text
+        }; return nil; })();
+        if ($truthy((resolved_text = (attrs = $$($nesting, 'AttributeList').$new(attrlist, self).$parse())['$[]'](1)))) {
+          if (resolved_text['$=='](attrlist)) {
+            return [text, attrs.$clear()]
+          } else {
+            return [resolved_text, attrs]
+          }
+        } else {
+          return [default_text, attrs]
+        };
+      }, $Substitutors_extract_attributes_from_text$65.$$arity = -2);
+      
+      Opal.def(self, '$extract_callouts', $Substitutors_extract_callouts$66 = function $$extract_callouts(source) {
+        var $$67, self = this, callout_marks = nil, autonum = nil, lineno = nil, last_lineno = nil, callout_rx = nil;
 
         
         callout_marks = $hash2([], {});
-        lineno = 0;
+        autonum = (lineno = 0);
         last_lineno = nil;
         callout_rx = (function() {if ($truthy(self['$attr?']("line-comment"))) {
           return $$($nesting, 'CalloutExtractRxMap')['$[]'](self.$attr("line-comment"))
         } else {
           return $$($nesting, 'CalloutExtractRx')
         }; return nil; })();
-        source = $send(source.$split($$($nesting, 'LF'), -1), 'map', [], ($$65 = function(line){var self = $$65.$$s || this, $$66;
+        source = $send(source.$split($$($nesting, 'LF'), -1), 'map', [], ($$67 = function(line){var self = $$67.$$s || this, $$68;
 
         
           
@@ -24476,16 +24591,24 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
             line = nil;
           };
           lineno = $rb_plus(lineno, 1);
-          return $send(line, 'gsub', [callout_rx], ($$66 = function(){var self = $$66.$$s || this, $a, $writer = nil;
+          return $send(line, 'gsub', [callout_rx], ($$68 = function(){var self = $$68.$$s || this, $a, $b, $writer = nil;
 
           if ($truthy((($a = $gvars['~']) === nil ? nil : $a['$[]'](2)))) {
               return (($a = $gvars['~']) === nil ? nil : $a['$[]'](0)).$sub($$($nesting, 'RS'), "")
             } else {
               
-              ($truthy($a = callout_marks['$[]'](lineno)) ? $a : (($writer = [lineno, []]), $send(callout_marks, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]))['$<<']([(($a = $gvars['~']) === nil ? nil : $a['$[]'](1)), (($a = $gvars['~']) === nil ? nil : $a['$[]'](4))]);
+              ($truthy($a = callout_marks['$[]'](lineno)) ? $a : (($writer = [lineno, []]), $send(callout_marks, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]))['$<<']([($truthy($a = (($b = $gvars['~']) === nil ? nil : $b['$[]'](1))) ? $a : (function() {if ((($b = $gvars['~']) === nil ? nil : $b['$[]'](3))['$==']("--")) {
+                return ["<!--", "-->"]
+              } else {
+                return nil
+              }; return nil; })()), (function() {if ((($a = $gvars['~']) === nil ? nil : $a['$[]'](4))['$=='](".")) {
+                return (autonum = $rb_plus(autonum, 1)).$to_s()
+              } else {
+                return (($a = $gvars['~']) === nil ? nil : $a['$[]'](4))
+              }; return nil; })()]);
               last_lineno = lineno;
               return "";
-            }}, $$66.$$s = self, $$66.$$arity = 0, $$66));}, $$65.$$s = self, $$65.$$arity = 1, $$65)).$join($$($nesting, 'LF'));
+            }}, $$68.$$s = self, $$68.$$arity = 0, $$68));}, $$67.$$s = self, $$67.$$arity = 1, $$67)).$join($$($nesting, 'LF'));
         if ($truthy(last_lineno)) {
           if (last_lineno['$=='](lineno)) {
             source = "" + (source) + ($$($nesting, 'LF'))}
@@ -24493,10 +24616,10 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
           callout_marks = nil
         };
         return [source, callout_marks];
-      }, $Substitutors_extract_callouts$64.$$arity = 1);
+      }, $Substitutors_extract_callouts$66.$$arity = 1);
       
-      Opal.def(self, '$restore_callouts', $Substitutors_restore_callouts$67 = function $$restore_callouts(source, callout_marks, source_offset) {
-        var $$68, self = this, preamble = nil, autonum = nil, lineno = nil;
+      Opal.def(self, '$restore_callouts', $Substitutors_restore_callouts$69 = function $$restore_callouts(source, callout_marks, source_offset) {
+        var $$70, self = this, preamble = nil, lineno = nil;
 
         
         
@@ -24510,8 +24633,8 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
         } else {
           preamble = ""
         };
-        autonum = (lineno = 0);
-        return $rb_plus(preamble, $send(source.$split($$($nesting, 'LF'), -1), 'map', [], ($$68 = function(line){var self = $$68.$$s || this, $a, $b, $$69, conums = nil, guard = nil, conum = nil;
+        lineno = 0;
+        return $rb_plus(preamble, $send(source.$split($$($nesting, 'LF'), -1), 'map', [], ($$70 = function(line){var self = $$70.$$s || this, $a, $b, $$71, conums = nil, guard = nil, numeral = nil;
           if (self.document == null) self.document = nil;
 
         
@@ -24522,14 +24645,10 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
           if ($truthy((conums = callout_marks.$delete((lineno = $rb_plus(lineno, 1)))))) {
             if (conums.$size()['$=='](1)) {
               
-              $b = conums['$[]'](0), $a = Opal.to_ary($b), (guard = ($a[0] == null ? nil : $a[0])), (conum = ($a[1] == null ? nil : $a[1])), $b;
-              return "" + (line) + ($$($nesting, 'Inline').$new(self, "callout", (function() {if (conum['$=='](".")) {
-                return (autonum = $rb_plus(autonum, 1)).$to_s()
-              } else {
-                return conum
-              }; return nil; })(), $hash2(["id", "attributes"], {"id": self.document.$callouts().$read_next_id(), "attributes": $hash2(["guard"], {"guard": guard})})).$convert());
+              $b = conums['$[]'](0), $a = Opal.to_ary($b), (guard = ($a[0] == null ? nil : $a[0])), (numeral = ($a[1] == null ? nil : $a[1])), $b;
+              return "" + (line) + ($$($nesting, 'Inline').$new(self, "callout", numeral, $hash2(["id", "attributes"], {"id": self.document.$callouts().$read_next_id(), "attributes": $hash2(["guard"], {"guard": guard})})).$convert());
             } else {
-              return "" + (line) + ($send(conums, 'map', [], ($$69 = function(guard_it, conum_it){var self = $$69.$$s || this;
+              return "" + (line) + ($send(conums, 'map', [], ($$71 = function(guard_it, numeral_it){var self = $$71.$$s || this;
                 if (self.document == null) self.document = nil;
 
               
@@ -24538,21 +24657,17 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
                   guard_it = nil;
                 };
                 
-                if (conum_it == null) {
-                  conum_it = nil;
+                if (numeral_it == null) {
+                  numeral_it = nil;
                 };
-                return $$($nesting, 'Inline').$new(self, "callout", (function() {if (conum_it['$=='](".")) {
-                  return (autonum = $rb_plus(autonum, 1)).$to_s()
-                } else {
-                  return conum_it
-                }; return nil; })(), $hash2(["id", "attributes"], {"id": self.document.$callouts().$read_next_id(), "attributes": $hash2(["guard"], {"guard": guard_it})})).$convert();}, $$69.$$s = self, $$69.$$arity = 2, $$69)).$join(" "))
+                return $$($nesting, 'Inline').$new(self, "callout", numeral_it, $hash2(["id", "attributes"], {"id": self.document.$callouts().$read_next_id(), "attributes": $hash2(["guard"], {"guard": guard_it})})).$convert();}, $$71.$$s = self, $$71.$$arity = 2, $$71)).$join(" "))
             }
           } else {
             return line
-          };}, $$68.$$s = self, $$68.$$arity = 1, $$68)).$join($$($nesting, 'LF')));
-      }, $Substitutors_restore_callouts$67.$$arity = -3);
+          };}, $$70.$$s = self, $$70.$$arity = 1, $$70)).$join($$($nesting, 'LF')));
+      }, $Substitutors_restore_callouts$69.$$arity = -3);
       
-      Opal.def(self, '$extract_inner_passthrough', $Substitutors_extract_inner_passthrough$70 = function $$extract_inner_passthrough(text, pre) {
+      Opal.def(self, '$extract_inner_passthrough', $Substitutors_extract_inner_passthrough$72 = function $$extract_inner_passthrough(text, pre) {
         var $a, $b, self = this, $writer = nil, passthru_key = nil;
         if (self.passthroughs == null) self.passthroughs = nil;
 
@@ -24570,9 +24685,9 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
         } else {
           return "" + (pre) + "`" + (text) + "`"
         }
-      }, $Substitutors_extract_inner_passthrough$70.$$arity = 2);
+      }, $Substitutors_extract_inner_passthrough$72.$$arity = 2);
       
-      Opal.def(self, '$convert_quoted_text', $Substitutors_convert_quoted_text$71 = function $$convert_quoted_text(match, type, scope) {
+      Opal.def(self, '$convert_quoted_text', $Substitutors_convert_quoted_text$73 = function $$convert_quoted_text(match, type, scope) {
         var $a, self = this, attrs = nil, unescaped_attrs = nil, attrlist = nil, id = nil, attributes = nil;
 
         
@@ -24603,9 +24718,9 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
               type = "unquoted"};};
           return $$($nesting, 'Inline').$new(self, "quoted", match['$[]'](2), $hash2(["type", "id", "attributes"], {"type": type, "id": id, "attributes": attributes})).$convert();
         };
-      }, $Substitutors_convert_quoted_text$71.$$arity = 3);
+      }, $Substitutors_convert_quoted_text$73.$$arity = 3);
       
-      Opal.def(self, '$do_replacement', $Substitutors_do_replacement$72 = function $$do_replacement(m, replacement, restore) {
+      Opal.def(self, '$do_replacement', $Substitutors_do_replacement$74 = function $$do_replacement(m, replacement, restore) {
         var self = this, captured = nil, $case = nil;
 
         if ($truthy((captured = m['$[]'](0))['$include?']($$($nesting, 'RS')))) {
@@ -24616,13 +24731,13 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
           else if ("bounding"['$===']($case)) {return $rb_plus($rb_plus(m['$[]'](1), replacement), m['$[]'](2))}
           else {return $rb_plus(m['$[]'](1), replacement)}})()
         }
-      }, $Substitutors_do_replacement$72.$$arity = 3);
+      }, $Substitutors_do_replacement$74.$$arity = 3);
       if ($$($nesting, 'RUBY_ENGINE')['$==']("opal")) {
       } else {
         nil
       };
       
-      Opal.def(self, '$parse_quoted_text_attributes', $Substitutors_parse_quoted_text_attributes$73 = function $$parse_quoted_text_attributes(str) {
+      Opal.def(self, '$parse_quoted_text_attributes', $Substitutors_parse_quoted_text_attributes$75 = function $$parse_quoted_text_attributes(str) {
         var $a, $b, self = this, segments = nil, id = nil, more_roles = nil, roles = nil, attrs = nil, $writer = nil;
 
         
@@ -24666,9 +24781,9 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
         } else {
           return $hash2(["role"], {"role": str})
         };
-      }, $Substitutors_parse_quoted_text_attributes$73.$$arity = 1);
+      }, $Substitutors_parse_quoted_text_attributes$75.$$arity = 1);
       
-      Opal.def(self, '$normalize_text', $Substitutors_normalize_text$74 = function $$normalize_text(text, normalize_whitespace, unescape_closing_square_brackets) {
+      Opal.def(self, '$normalize_text', $Substitutors_normalize_text$76 = function $$normalize_text(text, normalize_whitespace, unescape_closing_square_brackets) {
         var $a, self = this;
 
         
@@ -24689,10 +24804,10 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
             text = text.$gsub($$($nesting, 'ESC_R_SB'), $$($nesting, 'R_SB'))};
         };
         return text;
-      }, $Substitutors_normalize_text$74.$$arity = -2);
+      }, $Substitutors_normalize_text$76.$$arity = -2);
       
-      Opal.def(self, '$split_simple_csv', $Substitutors_split_simple_csv$75 = function $$split_simple_csv(str) {
-        var $$76, $$77, self = this, values = nil, accum = nil, quote_open = nil;
+      Opal.def(self, '$split_simple_csv', $Substitutors_split_simple_csv$77 = function $$split_simple_csv(str) {
+        var $$78, $$79, self = this, values = nil, accum = nil, quote_open = nil;
 
         if ($truthy(str['$empty?']())) {
           return []
@@ -24701,7 +24816,7 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
           values = [];
           accum = "";
           quote_open = nil;
-          $send(str, 'each_char', [], ($$76 = function(c){var self = $$76.$$s || this, $case = nil;
+          $send(str, 'each_char', [], ($$78 = function(c){var self = $$78.$$s || this, $case = nil;
 
           
             
@@ -24717,19 +24832,19 @@ Opal.modules["asciidoctor/substitutors"] = function(Opal) {
               return (accum = "");
             }}
             else if ("\""['$===']($case)) {return (quote_open = quote_open['$!']())}
-            else {return (accum = $rb_plus(accum, c))}})();}, $$76.$$s = self, $$76.$$arity = 1, $$76));
+            else {return (accum = $rb_plus(accum, c))}})();}, $$78.$$s = self, $$78.$$arity = 1, $$78));
           return values['$<<'](accum.$strip());
         } else {
-          return $send(str.$split(","), 'map', [], ($$77 = function(it){var self = $$77.$$s || this;
+          return $send(str.$split(","), 'map', [], ($$79 = function(it){var self = $$79.$$s || this;
 
           
             
             if (it == null) {
               it = nil;
             };
-            return it.$strip();}, $$77.$$s = self, $$77.$$arity = 1, $$77))
+            return it.$strip();}, $$79.$$s = self, $$79.$$arity = 1, $$79))
         }
-      }, $Substitutors_split_simple_csv$75.$$arity = 1);
+      }, $Substitutors_split_simple_csv$77.$$arity = 1);
     })($nesting[0], $nesting)
   })($nesting[0], $nesting)
 };
@@ -24743,7 +24858,7 @@ Opal.modules["asciidoctor/version"] = function(Opal) {
 
     var $nesting = [self].concat($parent_nesting);
 
-    Opal.const_set($nesting[0], 'VERSION', "2.0.10")
+    Opal.const_set($nesting[0], 'VERSION', "2.0.12")
   })($nesting[0], $nesting)
 };
 
@@ -24757,7 +24872,7 @@ Opal.modules["asciidoctor/abstract_node"] = function(Opal) {
   }
   var self = Opal.top, $nesting = [], nil = Opal.nil, $$$ = Opal.const_get_qualified, $$ = Opal.const_get_relative, $breaker = Opal.breaker, $slice = Opal.slice, $module = Opal.module, $klass = Opal.klass, $hash2 = Opal.hash2, $truthy = Opal.truthy, $send = Opal.send;
 
-  Opal.add_stubs(['$include', '$attr_reader', '$attr_accessor', '$==', '$document', '$to_s', '$[]', '$merge', '$raise', '$converter', '$attributes', '$key?', '$[]=', '$-', '$delete', '$tap', '$new', '$each_key', '$end_with?', '$<<', '$slice', '$length', '$update', '$split', '$include?', '$empty?', '$join', '$apply_reftext_subs', '$attr?', '$attr', '$extname?', '$image_uri', '$<', '$safe', '$uriish?', '$encode_spaces_in_uri', '$normalize_web_path', '$generate_data_uri_from_uri', '$generate_data_uri', '$extname', '$normalize_system_path', '$readable?', '$strict_encode64', '$binread', '$warn', '$logger', '$require_library', '$!', '$open_uri', '$content_type', '$read', '$base_dir', '$root?', '$path_resolver', '$system_path', '$web_path', '$===', '$!=', '$prepare_source_string', '$fetch', '$read_asset']);
+  Opal.add_stubs(['$include', '$attr_reader', '$attr_accessor', '$==', '$document', '$to_s', '$[]', '$merge', '$raise', '$converter', '$attributes', '$key?', '$[]=', '$-', '$delete', '$tap', '$new', '$each_key', '$end_with?', '$<<', '$slice', '$length', '$update', '$split', '$include?', '$===', '$join', '$empty?', '$apply_reftext_subs', '$attr?', '$attr', '$extname?', '$image_uri', '$<', '$safe', '$uriish?', '$encode_spaces_in_uri', '$normalize_web_path', '$generate_data_uri_from_uri', '$generate_data_uri', '$extname', '$normalize_system_path', '$readable?', '$strict_encode64', '$binread', '$warn', '$logger', '$require_library', '$!', '$open_uri', '$content_type', '$read', '$base_dir', '$root?', '$path_resolver', '$system_path', '$web_path', '$!=', '$prepare_source_string', '$fetch', '$read_asset']);
   return (function($base, $parent_nesting) {
     var self = $module($base, 'Asciidoctor');
 
@@ -24766,7 +24881,7 @@ Opal.modules["asciidoctor/abstract_node"] = function(Opal) {
     (function($base, $super, $parent_nesting) {
       var self = $klass($base, $super, 'AbstractNode');
 
-      var $nesting = [self].concat($parent_nesting), $AbstractNode_initialize$1, $AbstractNode_block$ques$2, $AbstractNode_inline$ques$3, $AbstractNode_converter$4, $AbstractNode_parent$eq$5, $AbstractNode_attr$6, $AbstractNode_attr$ques$7, $AbstractNode_set_attr$8, $AbstractNode_remove_attr$9, $AbstractNode_option$ques$10, $AbstractNode_set_option$11, $AbstractNode_enabled_options$12, $AbstractNode_update_attributes$15, $AbstractNode_role$16, $AbstractNode_roles$17, $AbstractNode_role$ques$18, $AbstractNode_has_role$ques$19, $AbstractNode_add_role$20, $AbstractNode_remove_role$21, $AbstractNode_reftext$22, $AbstractNode_reftext$ques$23, $AbstractNode_icon_uri$24, $AbstractNode_image_uri$25, $AbstractNode_media_uri$26, $AbstractNode_generate_data_uri$27, $AbstractNode_generate_data_uri_from_uri$28, $AbstractNode_normalize_asset_path$30, $AbstractNode_normalize_system_path$31, $AbstractNode_normalize_web_path$32, $AbstractNode_read_asset$33, $AbstractNode_read_contents$34, $AbstractNode_is_uri$ques$37;
+      var $nesting = [self].concat($parent_nesting), $AbstractNode_initialize$1, $AbstractNode_block$ques$2, $AbstractNode_inline$ques$3, $AbstractNode_converter$4, $AbstractNode_parent$eq$5, $AbstractNode_attr$6, $AbstractNode_attr$ques$7, $AbstractNode_set_attr$8, $AbstractNode_remove_attr$9, $AbstractNode_option$ques$10, $AbstractNode_set_option$11, $AbstractNode_enabled_options$12, $AbstractNode_update_attributes$15, $AbstractNode_role$16, $AbstractNode_roles$17, $AbstractNode_role$ques$18, $AbstractNode_has_role$ques$19, $AbstractNode_role$eq$20, $AbstractNode_add_role$21, $AbstractNode_remove_role$22, $AbstractNode_reftext$23, $AbstractNode_reftext$ques$24, $AbstractNode_icon_uri$25, $AbstractNode_image_uri$26, $AbstractNode_media_uri$27, $AbstractNode_generate_data_uri$28, $AbstractNode_generate_data_uri_from_uri$29, $AbstractNode_normalize_asset_path$31, $AbstractNode_normalize_system_path$32, $AbstractNode_normalize_web_path$33, $AbstractNode_read_asset$34, $AbstractNode_read_contents$35, $AbstractNode_is_uri$ques$38;
 
       self.$$prototype.document = self.$$prototype.attributes = self.$$prototype.parent = nil;
       
@@ -25003,7 +25118,21 @@ Opal.modules["asciidoctor/abstract_node"] = function(Opal) {
         }
       }, $AbstractNode_has_role$ques$19.$$arity = 1);
       
-      Opal.def(self, '$add_role', $AbstractNode_add_role$20 = function $$add_role(name) {
+      Opal.def(self, '$role=', $AbstractNode_role$eq$20 = function(names) {
+        var self = this, $writer = nil;
+
+        
+        $writer = ["role", (function() {if ($truthy($$$('::', 'Array')['$==='](names))) {
+          
+          return names.$join(" ");
+        } else {
+          return names
+        }; return nil; })()];
+        $send(self.attributes, '[]=', Opal.to_a($writer));
+        return $writer[$rb_minus($writer["length"], 1)];
+      }, $AbstractNode_role$eq$20.$$arity = 1);
+      
+      Opal.def(self, '$add_role', $AbstractNode_add_role$21 = function $$add_role(name) {
         var self = this, val = nil, $writer = nil;
 
         if ($truthy((val = self.attributes['$[]']("role")))) {
@@ -25025,9 +25154,9 @@ Opal.modules["asciidoctor/abstract_node"] = function(Opal) {
           $writer[$rb_minus($writer["length"], 1)];;
           return true;
         }
-      }, $AbstractNode_add_role$20.$$arity = 1);
+      }, $AbstractNode_add_role$21.$$arity = 1);
       
-      Opal.def(self, '$remove_role', $AbstractNode_remove_role$21 = function $$remove_role(name) {
+      Opal.def(self, '$remove_role', $AbstractNode_remove_role$22 = function $$remove_role(name) {
         var $a, self = this, val = nil, $writer = nil;
 
         if ($truthy(($truthy($a = (val = self.attributes['$[]']("role"))) ? (val = val.$split()).$delete(name) : $a))) {
@@ -25044,9 +25173,9 @@ Opal.modules["asciidoctor/abstract_node"] = function(Opal) {
         } else {
           return false
         }
-      }, $AbstractNode_remove_role$21.$$arity = 1);
+      }, $AbstractNode_remove_role$22.$$arity = 1);
       
-      Opal.def(self, '$reftext', $AbstractNode_reftext$22 = function $$reftext() {
+      Opal.def(self, '$reftext', $AbstractNode_reftext$23 = function $$reftext() {
         var self = this, val = nil;
 
         if ($truthy((val = self.attributes['$[]']("reftext")))) {
@@ -25055,15 +25184,15 @@ Opal.modules["asciidoctor/abstract_node"] = function(Opal) {
         } else {
           return nil
         }
-      }, $AbstractNode_reftext$22.$$arity = 0);
+      }, $AbstractNode_reftext$23.$$arity = 0);
       
-      Opal.def(self, '$reftext?', $AbstractNode_reftext$ques$23 = function() {
+      Opal.def(self, '$reftext?', $AbstractNode_reftext$ques$24 = function() {
         var self = this;
 
         return self.attributes['$key?']("reftext")
-      }, $AbstractNode_reftext$ques$23.$$arity = 0);
+      }, $AbstractNode_reftext$ques$24.$$arity = 0);
       
-      Opal.def(self, '$icon_uri', $AbstractNode_icon_uri$24 = function $$icon_uri(name) {
+      Opal.def(self, '$icon_uri', $AbstractNode_icon_uri$25 = function $$icon_uri(name) {
         var self = this, icon = nil;
 
         
@@ -25078,9 +25207,9 @@ Opal.modules["asciidoctor/abstract_node"] = function(Opal) {
           icon = "" + (name) + "." + (self.document.$attr("icontype", "png"))
         };
         return self.$image_uri(icon, "iconsdir");
-      }, $AbstractNode_icon_uri$24.$$arity = 1);
+      }, $AbstractNode_icon_uri$25.$$arity = 1);
       
-      Opal.def(self, '$image_uri', $AbstractNode_image_uri$25 = function $$image_uri(target_image, asset_dir_key) {
+      Opal.def(self, '$image_uri', $AbstractNode_image_uri$26 = function $$image_uri(target_image, asset_dir_key) {
         var $a, $b, $c, $d, self = this, doc = nil, images_base = nil;
 
         
@@ -25107,9 +25236,9 @@ Opal.modules["asciidoctor/abstract_node"] = function(Opal) {
             return nil
           }; return nil; })())
         };
-      }, $AbstractNode_image_uri$25.$$arity = -2);
+      }, $AbstractNode_image_uri$26.$$arity = -2);
       
-      Opal.def(self, '$media_uri', $AbstractNode_media_uri$26 = function $$media_uri(target, asset_dir_key) {
+      Opal.def(self, '$media_uri', $AbstractNode_media_uri$27 = function $$media_uri(target, asset_dir_key) {
         var self = this;
 
         
@@ -25122,9 +25251,9 @@ Opal.modules["asciidoctor/abstract_node"] = function(Opal) {
         } else {
           return nil
         }; return nil; })());
-      }, $AbstractNode_media_uri$26.$$arity = -2);
+      }, $AbstractNode_media_uri$27.$$arity = -2);
       
-      Opal.def(self, '$generate_data_uri', $AbstractNode_generate_data_uri$27 = function $$generate_data_uri(target_image, asset_dir_key) {
+      Opal.def(self, '$generate_data_uri', $AbstractNode_generate_data_uri$28 = function $$generate_data_uri(target_image, asset_dir_key) {
         var self = this, ext = nil, mimetype = nil, image_path = nil;
 
         
@@ -25153,10 +25282,10 @@ Opal.modules["asciidoctor/abstract_node"] = function(Opal) {
           self.$logger().$warn("" + "image to embed not found or not readable: " + (image_path));
           return "" + "data:" + (mimetype) + ";base64,";
         };
-      }, $AbstractNode_generate_data_uri$27.$$arity = -2);
+      }, $AbstractNode_generate_data_uri$28.$$arity = -2);
       
-      Opal.def(self, '$generate_data_uri_from_uri', $AbstractNode_generate_data_uri_from_uri$28 = function $$generate_data_uri_from_uri(image_uri, cache_uri) {
-        var $a, $b, $$29, self = this, mimetype = nil, bindata = nil;
+      Opal.def(self, '$generate_data_uri_from_uri', $AbstractNode_generate_data_uri_from_uri$29 = function $$generate_data_uri_from_uri(image_uri, cache_uri) {
+        var $a, $b, $$30, self = this, mimetype = nil, bindata = nil;
 
         
         
@@ -25170,14 +25299,14 @@ Opal.modules["asciidoctor/abstract_node"] = function(Opal) {
         
         try {
           
-          $b = $send($$$('::', 'OpenURI'), 'open_uri', [image_uri, $$($nesting, 'URI_READ_MODE')], ($$29 = function(f){var self = $$29.$$s || this;
+          $b = $send($$$('::', 'OpenURI'), 'open_uri', [image_uri, $$($nesting, 'URI_READ_MODE')], ($$30 = function(f){var self = $$30.$$s || this;
 
           
             
             if (f == null) {
               f = nil;
             };
-            return [f.$content_type(), f.$read()];}, $$29.$$s = self, $$29.$$arity = 1, $$29)), $a = Opal.to_ary($b), (mimetype = ($a[0] == null ? nil : $a[0])), (bindata = ($a[1] == null ? nil : $a[1])), $b;
+            return [f.$content_type(), f.$read()];}, $$30.$$s = self, $$30.$$arity = 1, $$30)), $a = Opal.to_ary($b), (mimetype = ($a[0] == null ? nil : $a[0])), (bindata = ($a[1] == null ? nil : $a[1])), $b;
           return "" + "data:" + (mimetype) + ";base64," + ($$$('::', 'Base64').$strict_encode64(bindata));
         } catch ($err) {
           if (Opal.rescue($err, [$$($nesting, 'StandardError')])) {
@@ -25188,9 +25317,9 @@ Opal.modules["asciidoctor/abstract_node"] = function(Opal) {
             } finally { Opal.pop_exception() }
           } else { throw $err; }
         };;
-      }, $AbstractNode_generate_data_uri_from_uri$28.$$arity = -2);
+      }, $AbstractNode_generate_data_uri_from_uri$29.$$arity = -2);
       
-      Opal.def(self, '$normalize_asset_path', $AbstractNode_normalize_asset_path$30 = function $$normalize_asset_path(asset_ref, asset_name, autocorrect) {
+      Opal.def(self, '$normalize_asset_path', $AbstractNode_normalize_asset_path$31 = function $$normalize_asset_path(asset_ref, asset_name, autocorrect) {
         var self = this;
 
         
@@ -25203,9 +25332,9 @@ Opal.modules["asciidoctor/abstract_node"] = function(Opal) {
           autocorrect = true;
         };
         return self.$normalize_system_path(asset_ref, self.document.$base_dir(), nil, $hash2(["target_name", "recover"], {"target_name": asset_name, "recover": autocorrect}));
-      }, $AbstractNode_normalize_asset_path$30.$$arity = -2);
+      }, $AbstractNode_normalize_asset_path$31.$$arity = -2);
       
-      Opal.def(self, '$normalize_system_path', $AbstractNode_normalize_system_path$31 = function $$normalize_system_path(target, start, jail, opts) {
+      Opal.def(self, '$normalize_system_path', $AbstractNode_normalize_system_path$32 = function $$normalize_system_path(target, start, jail, opts) {
         var self = this, doc = nil;
 
         
@@ -25242,9 +25371,9 @@ Opal.modules["asciidoctor/abstract_node"] = function(Opal) {
           };
         };
         return doc.$path_resolver().$system_path(target, start, jail, opts);
-      }, $AbstractNode_normalize_system_path$31.$$arity = -2);
+      }, $AbstractNode_normalize_system_path$32.$$arity = -2);
       
-      Opal.def(self, '$normalize_web_path', $AbstractNode_normalize_web_path$32 = function $$normalize_web_path(target, start, preserve_uri_target) {
+      Opal.def(self, '$normalize_web_path', $AbstractNode_normalize_web_path$33 = function $$normalize_web_path(target, start, preserve_uri_target) {
         var $a, self = this;
 
         
@@ -25261,9 +25390,9 @@ Opal.modules["asciidoctor/abstract_node"] = function(Opal) {
         } else {
           return self.document.$path_resolver().$web_path(target, start)
         };
-      }, $AbstractNode_normalize_web_path$32.$$arity = -2);
+      }, $AbstractNode_normalize_web_path$33.$$arity = -2);
       
-      Opal.def(self, '$read_asset', $AbstractNode_read_asset$33 = function $$read_asset(path, opts) {
+      Opal.def(self, '$read_asset', $AbstractNode_read_asset$34 = function $$read_asset(path, opts) {
         var $a, self = this;
 
         
@@ -25290,10 +25419,10 @@ Opal.modules["asciidoctor/abstract_node"] = function(Opal) {
         } else {
           return nil
         };
-      }, $AbstractNode_read_asset$33.$$arity = -2);
+      }, $AbstractNode_read_asset$34.$$arity = -2);
       
-      Opal.def(self, '$read_contents', $AbstractNode_read_contents$34 = function $$read_contents(target, opts) {
-        var $a, $b, $c, $$35, $$36, self = this, doc = nil, start = nil;
+      Opal.def(self, '$read_contents', $AbstractNode_read_contents$35 = function $$read_contents(target, opts) {
+        var $a, $b, $c, $$36, $$37, self = this, doc = nil, start = nil, contents = nil;
 
         
         
@@ -25309,51 +25438,48 @@ Opal.modules["asciidoctor/abstract_node"] = function(Opal) {
             
             try {
               if ($truthy(opts['$[]']("normalize"))) {
-                return $$($nesting, 'Helpers').$prepare_source_string($send($$$('::', 'OpenURI'), 'open_uri', [target, $$($nesting, 'URI_READ_MODE')], ($$35 = function(f){var self = $$35.$$s || this;
+                contents = $$($nesting, 'Helpers').$prepare_source_string($send($$$('::', 'OpenURI'), 'open_uri', [target, $$($nesting, 'URI_READ_MODE')], ($$36 = function(f){var self = $$36.$$s || this;
 
                 
                   
                   if (f == null) {
                     f = nil;
                   };
-                  return f.$read();}, $$35.$$s = self, $$35.$$arity = 1, $$35))).$join($$($nesting, 'LF'))
+                  return f.$read();}, $$36.$$s = self, $$36.$$arity = 1, $$36))).$join($$($nesting, 'LF'))
               } else {
-                return $send($$$('::', 'OpenURI'), 'open_uri', [target, $$($nesting, 'URI_READ_MODE')], ($$36 = function(f){var self = $$36.$$s || this;
+                contents = $send($$$('::', 'OpenURI'), 'open_uri', [target, $$($nesting, 'URI_READ_MODE')], ($$37 = function(f){var self = $$37.$$s || this;
 
                 
                   
                   if (f == null) {
                     f = nil;
                   };
-                  return f.$read();}, $$36.$$s = self, $$36.$$arity = 1, $$36))
+                  return f.$read();}, $$37.$$s = self, $$37.$$arity = 1, $$37))
               }
             } catch ($err) {
               if (Opal.rescue($err, [$$($nesting, 'StandardError')])) {
                 try {
-                  
                   if ($truthy(opts.$fetch("warn_on_failure", true))) {
-                    self.$logger().$warn("" + "could not retrieve contents of " + (($truthy($a = opts['$[]']("label")) ? $a : "asset")) + " at URI: " + (target))};
-                  return nil;
+                    self.$logger().$warn("" + "could not retrieve contents of " + (($truthy($a = opts['$[]']("label")) ? $a : "asset")) + " at URI: " + (target))}
                 } finally { Opal.pop_exception() }
               } else { throw $err; }
             };;
-          } else {
-            
-            if ($truthy(opts.$fetch("warn_on_failure", true))) {
-              self.$logger().$warn("" + "cannot retrieve contents of " + (($truthy($a = opts['$[]']("label")) ? $a : "asset")) + " at URI: " + (target) + " (allow-uri-read attribute not enabled)")};
-            return nil;
-          }
+          } else if ($truthy(opts.$fetch("warn_on_failure", true))) {
+            self.$logger().$warn("" + "cannot retrieve contents of " + (($truthy($a = opts['$[]']("label")) ? $a : "asset")) + " at URI: " + (target) + " (allow-uri-read attribute not enabled)")}
         } else {
           
           target = self.$normalize_system_path(target, opts['$[]']("start"), nil, $hash2(["target_name"], {"target_name": ($truthy($a = opts['$[]']("label")) ? $a : "asset")}));
-          return self.$read_asset(target, $hash2(["normalize", "warn_on_failure", "label"], {"normalize": opts['$[]']("normalize"), "warn_on_failure": opts.$fetch("warn_on_failure", true), "label": opts['$[]']("label")}));
+          contents = self.$read_asset(target, $hash2(["normalize", "warn_on_failure", "label"], {"normalize": opts['$[]']("normalize"), "warn_on_failure": opts.$fetch("warn_on_failure", true), "label": opts['$[]']("label")}));
         };
-      }, $AbstractNode_read_contents$34.$$arity = -2);
-      return (Opal.def(self, '$is_uri?', $AbstractNode_is_uri$ques$37 = function(str) {
+        if ($truthy(($truthy($a = ($truthy($b = contents) ? opts['$[]']("warn_if_empty") : $b)) ? contents['$empty?']() : $a))) {
+          self.$logger().$warn("" + "contents of " + (($truthy($a = opts['$[]']("label")) ? $a : "asset")) + " is empty: " + (target))};
+        return contents;
+      }, $AbstractNode_read_contents$35.$$arity = -2);
+      return (Opal.def(self, '$is_uri?', $AbstractNode_is_uri$ques$38 = function(str) {
         var self = this;
 
         return $$($nesting, 'Helpers')['$uriish?'](str)
-      }, $AbstractNode_is_uri$ques$37.$$arity = 1), nil) && 'is_uri?';
+      }, $AbstractNode_is_uri$ques$38.$$arity = 1), nil) && 'is_uri?';
     })($nesting[0], null, $nesting)
   })($nesting[0], $nesting)
 };
@@ -25371,7 +25497,7 @@ Opal.modules["asciidoctor/abstract_block"] = function(Opal) {
   }
   var self = Opal.top, $nesting = [], nil = Opal.nil, $$$ = Opal.const_get_qualified, $$ = Opal.const_get_relative, $breaker = Opal.breaker, $slice = Opal.slice, $module = Opal.module, $klass = Opal.klass, $hash2 = Opal.hash2, $send = Opal.send, $truthy = Opal.truthy;
 
-  Opal.add_stubs(['$attr_reader', '$attr_writer', '$attr_accessor', '$==', '$===', '$level', '$file', '$lineno', '$playback_attributes', '$convert', '$converter', '$join', '$map', '$to_s', '$parent', '$parent=', '$-', '$<<', '$empty?', '$>', '$Integer', '$find_by_internal', '$to_proc', '$context', '$[]', '$items', '$+', '$find_index', '$include?', '$next_adjacent_block', '$blocks', '$select', '$sub_specialchars', '$match?', '$sub_replacements', '$title', '$apply_title_subs', '$delete', '$reftext', '$!', '$sub_placeholder', '$sub_quotes', '$compat_mode', '$attributes', '$chomp', '$increment_and_store_counter', '$index=', '$numbered', '$sectname', '$counter', '$numeral=', '$numeral', '$caption=', '$int_to_roman', '$each', '$assign_numeral', '$reindex_sections', '$protected', '$has_role?', '$raise', '$header?', '$!=', '$flatten', '$head', '$rows', '$merge', '$body', '$foot', '$style', '$inner_document']);
+  Opal.add_stubs(['$attr_reader', '$attr_writer', '$attr_accessor', '$==', '$===', '$level', '$file', '$lineno', '$playback_attributes', '$convert', '$converter', '$join', '$map', '$to_s', '$parent', '$parent=', '$-', '$<<', '$empty?', '$>', '$Integer', '$find_by_internal', '$to_proc', '$context', '$[]', '$items', '$+', '$find_index', '$include?', '$next_adjacent_block', '$blocks', '$select', '$sub_specialchars', '$match?', '$sub_replacements', '$title', '$apply_title_subs', '$delete', '$reftext', '$!', '$nil_or_empty?', '$sub_placeholder', '$sub_quotes', '$compat_mode', '$attributes', '$chomp', '$increment_and_store_counter', '$index=', '$numbered', '$sectname', '$counter', '$numeral=', '$numeral', '$caption=', '$int_to_roman', '$each', '$assign_numeral', '$reindex_sections', '$protected', '$has_role?', '$raise', '$header?', '$!=', '$flatten', '$head', '$rows', '$merge', '$body', '$foot', '$style', '$inner_document']);
   return (function($base, $parent_nesting) {
     var self = $module($base, 'Asciidoctor');
 
@@ -25380,7 +25506,7 @@ Opal.modules["asciidoctor/abstract_block"] = function(Opal) {
     (function($base, $super, $parent_nesting) {
       var self = $klass($base, $super, 'AbstractBlock');
 
-      var $nesting = [self].concat($parent_nesting), $AbstractBlock_initialize$1, $AbstractBlock_block$ques$2, $AbstractBlock_inline$ques$3, $AbstractBlock_file$4, $AbstractBlock_lineno$5, $AbstractBlock_convert$6, $AbstractBlock_content$7, $AbstractBlock_context$eq$9, $AbstractBlock_$lt$lt$10, $AbstractBlock_blocks$ques$11, $AbstractBlock_sections$ques$12, $AbstractBlock_number$13, $AbstractBlock_find_by$14, $AbstractBlock_next_adjacent_block$15, $AbstractBlock_sections$17, $AbstractBlock_alt$19, $AbstractBlock_caption$20, $AbstractBlock_captioned_title$21, $AbstractBlock_list_marker_keyword$22, $AbstractBlock_title$23, $AbstractBlock_title$ques$24, $AbstractBlock_title$eq$25, $AbstractBlock_sub$ques$26, $AbstractBlock_remove_sub$27, $AbstractBlock_xreftext$28, $AbstractBlock_assign_caption$29, $AbstractBlock_assign_numeral$30, $AbstractBlock_reindex_sections$31, $AbstractBlock_find_by_internal$33;
+      var $nesting = [self].concat($parent_nesting), $AbstractBlock_initialize$1, $AbstractBlock_block$ques$2, $AbstractBlock_inline$ques$3, $AbstractBlock_file$4, $AbstractBlock_lineno$5, $AbstractBlock_convert$6, $AbstractBlock_content$7, $AbstractBlock_context$eq$9, $AbstractBlock_$lt$lt$10, $AbstractBlock_blocks$ques$11, $AbstractBlock_sections$ques$12, $AbstractBlock_number$13, $AbstractBlock_number$eq$14, $AbstractBlock_find_by$15, $AbstractBlock_next_adjacent_block$16, $AbstractBlock_sections$18, $AbstractBlock_alt$20, $AbstractBlock_caption$21, $AbstractBlock_captioned_title$22, $AbstractBlock_list_marker_keyword$23, $AbstractBlock_title$24, $AbstractBlock_title$ques$25, $AbstractBlock_title$eq$26, $AbstractBlock_sub$ques$27, $AbstractBlock_remove_sub$28, $AbstractBlock_xreftext$29, $AbstractBlock_assign_caption$30, $AbstractBlock_assign_numeral$31, $AbstractBlock_reindex_sections$32, $AbstractBlock_find_by_internal$34;
 
       self.$$prototype.source_location = self.$$prototype.document = self.$$prototype.attributes = self.$$prototype.blocks = self.$$prototype.next_section_index = self.$$prototype.numeral = self.$$prototype.context = self.$$prototype.parent = self.$$prototype.caption = self.$$prototype.style = self.$$prototype.converted_title = self.$$prototype.title = self.$$prototype.subs = self.$$prototype.next_section_ordinal = self.$$prototype.id = self.$$prototype.header = nil;
       
@@ -25521,13 +25647,19 @@ Opal.modules["asciidoctor/abstract_block"] = function(Opal) {
         }
       }, $AbstractBlock_number$13.$$arity = 0);
       
-      Opal.def(self, '$find_by', $AbstractBlock_find_by$14 = function $$find_by(selector) {
-        var $iter = $AbstractBlock_find_by$14.$$p, block = $iter || nil, self = this, result = nil;
+      Opal.def(self, '$number=', $AbstractBlock_number$eq$14 = function(val) {
+        var self = this;
 
-        if ($iter) $AbstractBlock_find_by$14.$$p = null;
+        return (self.numeral = val.$to_s())
+      }, $AbstractBlock_number$eq$14.$$arity = 1);
+      
+      Opal.def(self, '$find_by', $AbstractBlock_find_by$15 = function $$find_by(selector) {
+        var $iter = $AbstractBlock_find_by$15.$$p, block = $iter || nil, self = this, result = nil;
+
+        if ($iter) $AbstractBlock_find_by$15.$$p = null;
         
         
-        if ($iter) $AbstractBlock_find_by$14.$$p = null;;
+        if ($iter) $AbstractBlock_find_by$15.$$p = null;;
         
         if (selector == null) {
           selector = $hash2([], {});
@@ -25541,16 +25673,16 @@ Opal.modules["asciidoctor/abstract_block"] = function(Opal) {
             } finally { Opal.pop_exception() }
           } else { throw $err; }
         };
-      }, $AbstractBlock_find_by$14.$$arity = -1);
+      }, $AbstractBlock_find_by$15.$$arity = -1);
       Opal.alias(self, "query", "find_by");
       
-      Opal.def(self, '$next_adjacent_block', $AbstractBlock_next_adjacent_block$15 = function $$next_adjacent_block() {
-        var $a, $$16, self = this, p = nil, sib = nil;
+      Opal.def(self, '$next_adjacent_block', $AbstractBlock_next_adjacent_block$16 = function $$next_adjacent_block() {
+        var $a, $$17, self = this, p = nil, sib = nil;
 
         if (self.context['$==']("document")) {
           return nil
         } else if ($truthy((($a = (p = self.parent).$context()['$==']("dlist")) ? self.context['$==']("list_item") : (p = self.parent).$context()['$==']("dlist")))) {
-          if ($truthy((sib = p.$items()['$[]']($rb_plus($send(p.$items(), 'find_index', [], ($$16 = function(terms, desc){var self = $$16.$$s || this, $b;
+          if ($truthy((sib = p.$items()['$[]']($rb_plus($send(p.$items(), 'find_index', [], ($$17 = function(terms, desc){var self = $$17.$$s || this, $b;
 
           
             
@@ -25561,7 +25693,7 @@ Opal.modules["asciidoctor/abstract_block"] = function(Opal) {
             if (desc == null) {
               desc = nil;
             };
-            return ($truthy($b = terms['$include?'](self)) ? $b : desc['$=='](self));}, $$16.$$s = self, $$16.$$arity = 2, $$16)), 1))))) {
+            return ($truthy($b = terms['$include?'](self)) ? $b : desc['$=='](self));}, $$17.$$s = self, $$17.$$arity = 2, $$17)), 1))))) {
             return sib
           } else {
             return p.$next_adjacent_block()
@@ -25571,22 +25703,22 @@ Opal.modules["asciidoctor/abstract_block"] = function(Opal) {
         } else {
           return p.$next_adjacent_block()
         }
-      }, $AbstractBlock_next_adjacent_block$15.$$arity = 0);
+      }, $AbstractBlock_next_adjacent_block$16.$$arity = 0);
       
-      Opal.def(self, '$sections', $AbstractBlock_sections$17 = function $$sections() {
-        var $$18, self = this;
+      Opal.def(self, '$sections', $AbstractBlock_sections$18 = function $$sections() {
+        var $$19, self = this;
 
-        return $send(self.blocks, 'select', [], ($$18 = function(block){var self = $$18.$$s || this;
+        return $send(self.blocks, 'select', [], ($$19 = function(block){var self = $$19.$$s || this;
 
         
           
           if (block == null) {
             block = nil;
           };
-          return block.$context()['$==']("section");}, $$18.$$s = self, $$18.$$arity = 1, $$18))
-      }, $AbstractBlock_sections$17.$$arity = 0);
+          return block.$context()['$==']("section");}, $$19.$$s = self, $$19.$$arity = 1, $$19))
+      }, $AbstractBlock_sections$18.$$arity = 0);
       
-      Opal.def(self, '$alt', $AbstractBlock_alt$19 = function $$alt() {
+      Opal.def(self, '$alt', $AbstractBlock_alt$20 = function $$alt() {
         var self = this, text = nil;
 
         if ($truthy((text = self.attributes['$[]']("alt")))) {
@@ -25605,9 +25737,9 @@ Opal.modules["asciidoctor/abstract_block"] = function(Opal) {
         } else {
           return ""
         }
-      }, $AbstractBlock_alt$19.$$arity = 0);
+      }, $AbstractBlock_alt$20.$$arity = 0);
       
-      Opal.def(self, '$caption', $AbstractBlock_caption$20 = function $$caption() {
+      Opal.def(self, '$caption', $AbstractBlock_caption$21 = function $$caption() {
         var self = this;
 
         if (self.context['$==']("admonition")) {
@@ -25615,15 +25747,15 @@ Opal.modules["asciidoctor/abstract_block"] = function(Opal) {
         } else {
           return self.caption
         }
-      }, $AbstractBlock_caption$20.$$arity = 0);
+      }, $AbstractBlock_caption$21.$$arity = 0);
       
-      Opal.def(self, '$captioned_title', $AbstractBlock_captioned_title$21 = function $$captioned_title() {
+      Opal.def(self, '$captioned_title', $AbstractBlock_captioned_title$22 = function $$captioned_title() {
         var self = this;
 
         return "" + (self.caption) + (self.$title())
-      }, $AbstractBlock_captioned_title$21.$$arity = 0);
+      }, $AbstractBlock_captioned_title$22.$$arity = 0);
       
-      Opal.def(self, '$list_marker_keyword', $AbstractBlock_list_marker_keyword$22 = function $$list_marker_keyword(list_type) {
+      Opal.def(self, '$list_marker_keyword', $AbstractBlock_list_marker_keyword$23 = function $$list_marker_keyword(list_type) {
         var $a, self = this;
 
         
@@ -25632,15 +25764,15 @@ Opal.modules["asciidoctor/abstract_block"] = function(Opal) {
           list_type = nil;
         };
         return $$($nesting, 'ORDERED_LIST_KEYWORDS')['$[]'](($truthy($a = list_type) ? $a : self.style));
-      }, $AbstractBlock_list_marker_keyword$22.$$arity = -1);
+      }, $AbstractBlock_list_marker_keyword$23.$$arity = -1);
       
-      Opal.def(self, '$title', $AbstractBlock_title$23 = function $$title() {
+      Opal.def(self, '$title', $AbstractBlock_title$24 = function $$title() {
         var $a, $b, self = this;
 
         return (self.converted_title = ($truthy($a = self.converted_title) ? $a : ($truthy($b = self.title) ? self.$apply_title_subs(self.title) : $b)))
-      }, $AbstractBlock_title$23.$$arity = 0);
+      }, $AbstractBlock_title$24.$$arity = 0);
       
-      Opal.def(self, '$title?', $AbstractBlock_title$ques$24 = function() {
+      Opal.def(self, '$title?', $AbstractBlock_title$ques$25 = function() {
         var self = this;
 
         if ($truthy(self.title)) {
@@ -25648,31 +25780,31 @@ Opal.modules["asciidoctor/abstract_block"] = function(Opal) {
         } else {
           return false
         }
-      }, $AbstractBlock_title$ques$24.$$arity = 0);
+      }, $AbstractBlock_title$ques$25.$$arity = 0);
       
-      Opal.def(self, '$title=', $AbstractBlock_title$eq$25 = function(val) {
+      Opal.def(self, '$title=', $AbstractBlock_title$eq$26 = function(val) {
         var self = this;
 
         
         self.converted_title = nil;
         return (self.title = val);
-      }, $AbstractBlock_title$eq$25.$$arity = 1);
+      }, $AbstractBlock_title$eq$26.$$arity = 1);
       
-      Opal.def(self, '$sub?', $AbstractBlock_sub$ques$26 = function(name) {
+      Opal.def(self, '$sub?', $AbstractBlock_sub$ques$27 = function(name) {
         var self = this;
 
         return self.subs['$include?'](name)
-      }, $AbstractBlock_sub$ques$26.$$arity = 1);
+      }, $AbstractBlock_sub$ques$27.$$arity = 1);
       
-      Opal.def(self, '$remove_sub', $AbstractBlock_remove_sub$27 = function $$remove_sub(sub) {
+      Opal.def(self, '$remove_sub', $AbstractBlock_remove_sub$28 = function $$remove_sub(sub) {
         var self = this;
 
         
         self.subs.$delete(sub);
         return nil;
-      }, $AbstractBlock_remove_sub$27.$$arity = 1);
+      }, $AbstractBlock_remove_sub$28.$$arity = 1);
       
-      Opal.def(self, '$xreftext', $AbstractBlock_xreftext$28 = function $$xreftext(xrefstyle) {
+      Opal.def(self, '$xreftext', $AbstractBlock_xreftext$29 = function $$xreftext(xrefstyle) {
         var $a, $b, self = this, val = nil, $case = nil, quoted_title = nil, caption_attr_name = nil, prefix = nil;
 
         
@@ -25682,7 +25814,7 @@ Opal.modules["asciidoctor/abstract_block"] = function(Opal) {
         };
         if ($truthy(($truthy($a = (val = self.$reftext())) ? val['$empty?']()['$!']() : $a))) {
           return val
-        } else if ($truthy(($truthy($a = ($truthy($b = xrefstyle) ? self.title : $b)) ? self.caption : $a))) {
+        } else if ($truthy(($truthy($a = ($truthy($b = xrefstyle) ? self.title : $b)) ? self.caption['$nil_or_empty?']()['$!']() : $a))) {
           return (function() {$case = xrefstyle;
           if ("full"['$===']($case)) {
           quoted_title = self.$sub_placeholder(self.$sub_quotes((function() {if ($truthy(self.document.$compat_mode())) {
@@ -25690,12 +25822,12 @@ Opal.modules["asciidoctor/abstract_block"] = function(Opal) {
           } else {
             return "\"`%s`\""
           }; return nil; })()), self.$title());
-          if ($truthy(($truthy($a = ($truthy($b = self.numeral) ? (caption_attr_name = $$($nesting, 'CAPTION_ATTR_NAMES')['$[]'](self.context)) : $b)) ? (prefix = self.document.$attributes()['$[]'](caption_attr_name)) : $a))) {
+          if ($truthy(($truthy($a = ($truthy($b = self.numeral) ? (caption_attr_name = $$($nesting, 'CAPTION_ATTRIBUTE_NAMES')['$[]'](self.context)) : $b)) ? (prefix = self.document.$attributes()['$[]'](caption_attr_name)) : $a))) {
             return "" + (prefix) + " " + (self.numeral) + ", " + (quoted_title)
           } else {
             return "" + (self.caption.$chomp(". ")) + ", " + (quoted_title)
           };}
-          else if ("short"['$===']($case)) {if ($truthy(($truthy($a = ($truthy($b = self.numeral) ? (caption_attr_name = $$($nesting, 'CAPTION_ATTR_NAMES')['$[]'](self.context)) : $b)) ? (prefix = self.document.$attributes()['$[]'](caption_attr_name)) : $a))) {
+          else if ("short"['$===']($case)) {if ($truthy(($truthy($a = ($truthy($b = self.numeral) ? (caption_attr_name = $$($nesting, 'CAPTION_ATTRIBUTE_NAMES')['$[]'](self.context)) : $b)) ? (prefix = self.document.$attributes()['$[]'](caption_attr_name)) : $a))) {
             return "" + (prefix) + " " + (self.numeral)
           } else {
             return self.caption.$chomp(". ")
@@ -25704,9 +25836,9 @@ Opal.modules["asciidoctor/abstract_block"] = function(Opal) {
         } else {
           return self.$title()
         };
-      }, $AbstractBlock_xreftext$28.$$arity = -1);
+      }, $AbstractBlock_xreftext$29.$$arity = -1);
       
-      Opal.def(self, '$assign_caption', $AbstractBlock_assign_caption$29 = function $$assign_caption(value, caption_context) {
+      Opal.def(self, '$assign_caption', $AbstractBlock_assign_caption$30 = function $$assign_caption(value, caption_context) {
         var $a, $b, self = this, attr_name = nil, prefix = nil;
 
         
@@ -25716,16 +25848,16 @@ Opal.modules["asciidoctor/abstract_block"] = function(Opal) {
         };
         if ($truthy(($truthy($a = ($truthy($b = self.caption) ? $b : self.title['$!']())) ? $a : (self.caption = ($truthy($b = value) ? $b : self.document.$attributes()['$[]']("caption")))))) {
           return nil
-        } else if ($truthy(($truthy($a = (attr_name = $$($nesting, 'CAPTION_ATTR_NAMES')['$[]'](caption_context))) ? (prefix = self.document.$attributes()['$[]'](attr_name)) : $a))) {
+        } else if ($truthy(($truthy($a = (attr_name = $$($nesting, 'CAPTION_ATTRIBUTE_NAMES')['$[]'](caption_context))) ? (prefix = self.document.$attributes()['$[]'](attr_name)) : $a))) {
           
           self.caption = "" + (prefix) + " " + ((self.numeral = self.document.$increment_and_store_counter("" + (caption_context) + "-number", self))) + ". ";
           return nil;
         } else {
           return nil
         };
-      }, $AbstractBlock_assign_caption$29.$$arity = -2);
+      }, $AbstractBlock_assign_caption$30.$$arity = -2);
       
-      Opal.def(self, '$assign_numeral', $AbstractBlock_assign_numeral$30 = function $$assign_numeral(section) {
+      Opal.def(self, '$assign_numeral', $AbstractBlock_assign_numeral$31 = function $$assign_numeral(section) {
         var $a, self = this, $writer = nil, like = nil, sectname = nil, caption = nil;
 
         
@@ -25764,15 +25896,15 @@ Opal.modules["asciidoctor/abstract_block"] = function(Opal) {
             self.next_section_ordinal = $rb_plus(self.next_section_ordinal, 1);
           }};
         return nil;
-      }, $AbstractBlock_assign_numeral$30.$$arity = 1);
+      }, $AbstractBlock_assign_numeral$31.$$arity = 1);
       
-      Opal.def(self, '$reindex_sections', $AbstractBlock_reindex_sections$31 = function $$reindex_sections() {
-        var $$32, self = this;
+      Opal.def(self, '$reindex_sections', $AbstractBlock_reindex_sections$32 = function $$reindex_sections() {
+        var $$33, self = this;
 
         
         self.next_section_index = 0;
         self.next_section_ordinal = 1;
-        return $send(self.blocks, 'each', [], ($$32 = function(block){var self = $$32.$$s || this;
+        return $send(self.blocks, 'each', [], ($$33 = function(block){var self = $$33.$$s || this;
 
         
           
@@ -25785,16 +25917,16 @@ Opal.modules["asciidoctor/abstract_block"] = function(Opal) {
             return block.$reindex_sections();
           } else {
             return nil
-          };}, $$32.$$s = self, $$32.$$arity = 1, $$32));
-      }, $AbstractBlock_reindex_sections$31.$$arity = 0);
+          };}, $$33.$$s = self, $$33.$$arity = 1, $$33));
+      }, $AbstractBlock_reindex_sections$32.$$arity = 0);
       self.$protected();
-      return (Opal.def(self, '$find_by_internal', $AbstractBlock_find_by_internal$33 = function $$find_by_internal(selector, result) {
-        var $iter = $AbstractBlock_find_by_internal$33.$$p, block = $iter || nil, $a, $b, $c, $d, $$34, $$35, $$36, $$38, $$40, $$42, self = this, any_context = nil, context_selector = nil, style_selector = nil, role_selector = nil, id_selector = nil, verdict = nil, $case = nil;
+      return (Opal.def(self, '$find_by_internal', $AbstractBlock_find_by_internal$34 = function $$find_by_internal(selector, result) {
+        var $iter = $AbstractBlock_find_by_internal$34.$$p, block = $iter || nil, $a, $b, $c, $d, $$35, $$36, $$37, $$39, $$41, $$43, self = this, any_context = nil, context_selector = nil, style_selector = nil, role_selector = nil, id_selector = nil, verdict = nil, $case = nil;
 
-        if ($iter) $AbstractBlock_find_by_internal$33.$$p = null;
+        if ($iter) $AbstractBlock_find_by_internal$34.$$p = null;
         
         
-        if ($iter) $AbstractBlock_find_by_internal$33.$$p = null;;
+        if ($iter) $AbstractBlock_find_by_internal$34.$$p = null;;
         
         if (selector == null) {
           selector = $hash2([], {});
@@ -25839,7 +25971,7 @@ Opal.modules["asciidoctor/abstract_block"] = function(Opal) {
           
           if ($truthy(($truthy($a = self['$header?']()) ? ($truthy($b = any_context) ? $b : context_selector['$==']("section")) : $a))) {
             $send(self.header, 'find_by_internal', [selector, result], block.$to_proc())};
-          $send(self.blocks, 'each', [], ($$34 = function(b){var self = $$34.$$s || this, $e;
+          $send(self.blocks, 'each', [], ($$35 = function(b){var self = $$35.$$s || this, $e;
 
           
             
@@ -25848,10 +25980,10 @@ Opal.modules["asciidoctor/abstract_block"] = function(Opal) {
             };
             if ($truthy((($e = context_selector['$==']("section")) ? b.$context()['$!=']("section") : context_selector['$==']("section")))) {
               return nil;};
-            return $send(b, 'find_by_internal', [selector, result], block.$to_proc());}, $$34.$$s = self, $$34.$$arity = 1, $$34));
+            return $send(b, 'find_by_internal', [selector, result], block.$to_proc());}, $$35.$$s = self, $$35.$$arity = 1, $$35));
         }}
         else if ("dlist"['$===']($case)) {if ($truthy(($truthy($a = any_context) ? $a : context_selector['$!=']("section")))) {
-          $send(self.blocks.$flatten(), 'each', [], ($$35 = function(b){var self = $$35.$$s || this;
+          $send(self.blocks.$flatten(), 'each', [], ($$36 = function(b){var self = $$36.$$s || this;
 
           
             
@@ -25862,34 +25994,34 @@ Opal.modules["asciidoctor/abstract_block"] = function(Opal) {
               return $send(b, 'find_by_internal', [selector, result], block.$to_proc())
             } else {
               return nil
-            };}, $$35.$$s = self, $$35.$$arity = 1, $$35))}}
+            };}, $$36.$$s = self, $$36.$$arity = 1, $$36))}}
         else if ("table"['$===']($case)) {if ($truthy(selector['$[]']("traverse_documents"))) {
           
-          $send(self.$rows().$head(), 'each', [], ($$36 = function(r){var self = $$36.$$s || this, $$37;
+          $send(self.$rows().$head(), 'each', [], ($$37 = function(r){var self = $$37.$$s || this, $$38;
 
           
             
             if (r == null) {
               r = nil;
             };
-            return $send(r, 'each', [], ($$37 = function(c){var self = $$37.$$s || this;
+            return $send(r, 'each', [], ($$38 = function(c){var self = $$38.$$s || this;
 
             
               
               if (c == null) {
                 c = nil;
               };
-              return $send(c, 'find_by_internal', [selector, result], block.$to_proc());}, $$37.$$s = self, $$37.$$arity = 1, $$37));}, $$36.$$s = self, $$36.$$arity = 1, $$36));
+              return $send(c, 'find_by_internal', [selector, result], block.$to_proc());}, $$38.$$s = self, $$38.$$arity = 1, $$38));}, $$37.$$s = self, $$37.$$arity = 1, $$37));
           if (context_selector['$==']("inner_document")) {
             selector = selector.$merge($hash2(["context"], {"context": "document"}))};
-          $send($rb_plus(self.$rows().$body(), self.$rows().$foot()), 'each', [], ($$38 = function(r){var self = $$38.$$s || this, $$39;
+          $send($rb_plus(self.$rows().$body(), self.$rows().$foot()), 'each', [], ($$39 = function(r){var self = $$39.$$s || this, $$40;
 
           
             
             if (r == null) {
               r = nil;
             };
-            return $send(r, 'each', [], ($$39 = function(c){var self = $$39.$$s || this;
+            return $send(r, 'each', [], ($$40 = function(c){var self = $$40.$$s || this;
 
             
               
@@ -25901,25 +26033,25 @@ Opal.modules["asciidoctor/abstract_block"] = function(Opal) {
                 return $send(c.$inner_document(), 'find_by_internal', [selector, result], block.$to_proc())
               } else {
                 return nil
-              };}, $$39.$$s = self, $$39.$$arity = 1, $$39));}, $$38.$$s = self, $$38.$$arity = 1, $$38));
+              };}, $$40.$$s = self, $$40.$$arity = 1, $$40));}, $$39.$$s = self, $$39.$$arity = 1, $$39));
         } else {
-          $send($rb_plus($rb_plus(self.$rows().$head(), self.$rows().$body()), self.$rows().$foot()), 'each', [], ($$40 = function(r){var self = $$40.$$s || this, $$41;
+          $send($rb_plus($rb_plus(self.$rows().$head(), self.$rows().$body()), self.$rows().$foot()), 'each', [], ($$41 = function(r){var self = $$41.$$s || this, $$42;
 
           
             
             if (r == null) {
               r = nil;
             };
-            return $send(r, 'each', [], ($$41 = function(c){var self = $$41.$$s || this;
+            return $send(r, 'each', [], ($$42 = function(c){var self = $$42.$$s || this;
 
             
               
               if (c == null) {
                 c = nil;
               };
-              return $send(c, 'find_by_internal', [selector, result], block.$to_proc());}, $$41.$$s = self, $$41.$$arity = 1, $$41));}, $$40.$$s = self, $$40.$$arity = 1, $$40))
+              return $send(c, 'find_by_internal', [selector, result], block.$to_proc());}, $$42.$$s = self, $$42.$$arity = 1, $$42));}, $$41.$$s = self, $$41.$$arity = 1, $$41))
         }}
-        else {$send(self.blocks, 'each', [], ($$42 = function(b){var self = $$42.$$s || this, $e;
+        else {$send(self.blocks, 'each', [], ($$43 = function(b){var self = $$43.$$s || this, $e;
 
         
           
@@ -25928,9 +26060,9 @@ Opal.modules["asciidoctor/abstract_block"] = function(Opal) {
           };
           if ($truthy((($e = context_selector['$==']("section")) ? b.$context()['$!=']("section") : context_selector['$==']("section")))) {
             return nil;};
-          return $send(b, 'find_by_internal', [selector, result], block.$to_proc());}, $$42.$$s = self, $$42.$$arity = 1, $$42))};
+          return $send(b, 'find_by_internal', [selector, result], block.$to_proc());}, $$43.$$s = self, $$43.$$arity = 1, $$43))};
         return result;
-      }, $AbstractBlock_find_by_internal$33.$$arity = -1), nil) && 'find_by_internal';
+      }, $AbstractBlock_find_by_internal$34.$$arity = -1), nil) && 'find_by_internal';
     })($nesting[0], $$($nesting, 'AbstractNode'), $nesting)
   })($nesting[0], $nesting)
 };
@@ -25948,7 +26080,7 @@ Opal.modules["asciidoctor/attribute_list"] = function(Opal) {
   }
   var self = Opal.top, $nesting = [], nil = Opal.nil, $$$ = Opal.const_get_qualified, $$ = Opal.const_get_relative, $breaker = Opal.breaker, $slice = Opal.slice, $module = Opal.module, $klass = Opal.klass, $hash = Opal.hash, $hash2 = Opal.hash2, $truthy = Opal.truthy, $send = Opal.send;
 
-  Opal.add_stubs(['$new', '$[]', '$update', '$parse', '$parse_attribute', '$eos?', '$skip_delimiter', '$+', '$rekey', '$each', '$[]=', '$-', '$private', '$skip_blank', '$==', '$peek', '$parse_attribute_value', '$get_byte', '$start_with?', '$scan_name', '$!', '$!=', '$*', '$scan_to_delimiter', '$===', '$include?', '$delete', '$split', '$empty?', '$apply_subs', '$scan_to_quote', '$gsub', '$skip', '$scan']);
+  Opal.add_stubs(['$new', '$[]', '$update', '$parse', '$parse_attribute', '$eos?', '$skip_delimiter', '$+', '$rekey', '$each_with_index', '$[]=', '$-', '$private', '$skip_blank', '$peek', '$===', '$parse_attribute_value', '$get_byte', '$start_with?', '$scan_name', '$end_with?', '$rstrip', '$string', '$==', '$unscan', '$scan_to_delimiter', '$*', '$include?', '$delete', '$each', '$split', '$empty?', '$apply_subs', '$scan_to_quote', '$gsub', '$skip', '$scan']);
   return (function($base, $parent_nesting) {
     var self = $module($base, 'Asciidoctor');
 
@@ -25961,10 +26093,11 @@ Opal.modules["asciidoctor/attribute_list"] = function(Opal) {
 
       self.$$prototype.attributes = self.$$prototype.scanner = self.$$prototype.delimiter = self.$$prototype.block = self.$$prototype.delimiter_skip_pattern = self.$$prototype.delimiter_boundary_pattern = nil;
       
-      Opal.const_set($nesting[0], 'BACKSLASH', "\\");
       Opal.const_set($nesting[0], 'APOS', "'");
-      Opal.const_set($nesting[0], 'BoundaryRxs', $hash("\"", /.*?[^\\](?=")/, $$($nesting, 'APOS'), /.*?[^\\](?=')/, ",", /.*?(?=[ \t]*(,|$))/));
-      Opal.const_set($nesting[0], 'EscapedQuotes', $hash("\"", "\\\"", $$($nesting, 'APOS'), "\\'"));
+      Opal.const_set($nesting[0], 'BACKSLASH', "\\");
+      Opal.const_set($nesting[0], 'QUOT', "\"");
+      Opal.const_set($nesting[0], 'BoundaryRxs', $hash($$($nesting, 'QUOT'), /.*?[^\\](?=")/, $$($nesting, 'APOS'), /.*?[^\\](?=')/, ",", /.*?(?=[ \t]*(,|$))/));
+      Opal.const_set($nesting[0], 'EscapedQuotes', $hash($$($nesting, 'QUOT'), "\\\"", $$($nesting, 'APOS'), "\\'"));
       Opal.const_set($nesting[0], 'NameRx', new RegExp("" + ($$($nesting, 'CG_WORD')) + "[" + ($$($nesting, 'CC_WORD')) + "\\-.]*"));
       Opal.const_set($nesting[0], 'BlankRx', /[ \t]+/);
       Opal.const_set($nesting[0], 'SkipRxs', $hash2([","], {",": /[ \t]*(,|$)/}));
@@ -26028,104 +26161,83 @@ Opal.modules["asciidoctor/attribute_list"] = function(Opal) {
         return $$($nesting, 'AttributeList').$rekey(self.attributes, positional_attrs)
       }, $AttributeList_rekey$4.$$arity = 1);
       Opal.defs(self, '$rekey', $AttributeList_rekey$5 = function $$rekey(attributes, positional_attrs) {
-        var $$6, self = this, index = nil;
+        var $$6, self = this;
 
         
-        index = 0;
-        $send(positional_attrs, 'each', [], ($$6 = function(key){var self = $$6.$$s || this, val = nil, $writer = nil;
+        $send(positional_attrs, 'each_with_index', [], ($$6 = function(key, index){var self = $$6.$$s || this, $a, val = nil, $writer = nil;
 
         
           
           if (key == null) {
             key = nil;
           };
-          index = $rb_plus(index, 1);
-          if ($truthy(key)) {
-            if ($truthy((val = attributes['$[]'](index)))) {
-              
-              $writer = [key, val];
-              $send(attributes, '[]=', Opal.to_a($writer));
-              return $writer[$rb_minus($writer["length"], 1)];
-            } else {
-              return nil
-            }
+          
+          if (index == null) {
+            index = nil;
+          };
+          if ($truthy(($truthy($a = key) ? (val = attributes['$[]']($rb_plus(index, 1))) : $a))) {
+            
+            $writer = [key, val];
+            $send(attributes, '[]=', Opal.to_a($writer));
+            return $writer[$rb_minus($writer["length"], 1)];
           } else {
             return nil
-          };}, $$6.$$s = self, $$6.$$arity = 1, $$6));
+          };}, $$6.$$s = self, $$6.$$arity = 2, $$6));
         return attributes;
       }, $AttributeList_rekey$5.$$arity = 2);
       self.$private();
       
       Opal.def(self, '$parse_attribute', $AttributeList_parse_attribute$7 = function $$parse_attribute(index, positional_attrs) {
-        var $a, $$8, self = this, single_quoted_value = nil, first = nil, name = nil, value = nil, skipped = nil, c = nil, $case = nil, $writer = nil, resolved_name = nil, positional_attr_name = nil;
+        var $a, $b, $$8, self = this, continue$ = nil, $case = nil, name = nil, single_quoted = nil, skipped = nil, c = nil, value = nil, $writer = nil, positional_attr_name = nil;
 
         
-        
-        if (index == null) {
-          index = 0;
-        };
-        
-        if (positional_attrs == null) {
-          positional_attrs = [];
-        };
-        single_quoted_value = false;
+        continue$ = true;
         self.$skip_blank();
-        if ((first = self.scanner.$peek(1))['$==']("\"")) {
-          
-          name = self.$parse_attribute_value(self.scanner.$get_byte());
-          value = nil;
-        } else if (first['$==']($$($nesting, 'APOS'))) {
-          
-          name = self.$parse_attribute_value(self.scanner.$get_byte());
-          value = nil;
-          if ($truthy(name['$start_with?']($$($nesting, 'APOS')))) {
-          } else {
-            single_quoted_value = true
-          };
+        $case = self.scanner.$peek(1);
+        if ($$($nesting, 'QUOT')['$===']($case)) {name = self.$parse_attribute_value(self.scanner.$get_byte())}
+        else if ($$($nesting, 'APOS')['$===']($case)) {
+        name = self.$parse_attribute_value(self.scanner.$get_byte());
+        if ($truthy(name['$start_with?']($$($nesting, 'APOS')))) {
         } else {
+          single_quoted = true
+        };}
+        else {
+        skipped = ($truthy($a = ($truthy($b = (name = self.$scan_name())) ? self.$skip_blank() : $b)) ? $a : 0);
+        if ($truthy(self.scanner['$eos?']())) {
           
-          name = self.$scan_name();
-          skipped = 0;
-          c = nil;
-          if ($truthy(self.scanner['$eos?']())) {
-            if ($truthy(name)) {
-            } else {
-              return false
-            }
+          if ($truthy(($truthy($a = name) ? $a : self.scanner.$string().$rstrip()['$end_with?'](self.delimiter)))) {
           } else {
-            
-            skipped = ($truthy($a = self.$skip_blank()) ? $a : 0);
-            c = self.scanner.$get_byte();
+            return nil
           };
-          if ($truthy(($truthy($a = c['$!']()) ? $a : c['$=='](self.delimiter)))) {
-            value = nil
-          } else if ($truthy(($truthy($a = c['$!=']("=")) ? $a : name['$!']()))) {
-            
-            name = "" + (name) + ($rb_times(" ", skipped)) + (c) + (self.$scan_to_delimiter());
-            value = nil;
-          } else {
+          continue$ = nil;
+        } else if ((c = self.scanner.$get_byte())['$=='](self.delimiter)) {
+          self.scanner.$unscan()
+        } else if ($truthy(name)) {
+          if (c['$==']("=")) {
             
             self.$skip_blank();
-            if ($truthy(self.scanner.$peek(1))) {
-              if ((c = self.scanner.$get_byte())['$==']("\"")) {
-                value = self.$parse_attribute_value(c)
-              } else if (c['$==']($$($nesting, 'APOS'))) {
-                
-                value = self.$parse_attribute_value(c);
-                if ($truthy(value['$start_with?']($$($nesting, 'APOS')))) {
-                } else {
-                  single_quoted_value = true
-                };
-              } else if (c['$=='](self.delimiter)) {
-                value = ""
-              } else {
-                
-                value = "" + (c) + (self.$scan_to_delimiter());
-                if (value['$==']("None")) {
-                  return true};
-              }};
-          };
-        };
+            $case = (c = self.scanner.$get_byte());
+            if ($$($nesting, 'QUOT')['$===']($case)) {value = self.$parse_attribute_value(c)}
+            else if ($$($nesting, 'APOS')['$===']($case)) {
+            value = self.$parse_attribute_value(c);
+            if ($truthy(value['$start_with?']($$($nesting, 'APOS')))) {
+            } else {
+              single_quoted = true
+            };}
+            else if (self.delimiter['$===']($case)) {
+            value = "";
+            self.scanner.$unscan();}
+            else if (nil['$===']($case)) {value = ""}
+            else {
+            value = "" + (c) + (self.$scan_to_delimiter());
+            if (value['$==']("None")) {
+              return true};};
+          } else {
+            name = "" + (name) + ($rb_times(" ", skipped)) + (c) + (self.$scan_to_delimiter())
+          }
+        } else {
+          name = "" + (c) + (self.$scan_to_delimiter())
+        };};
         if ($truthy(value)) {
           $case = name;
           if ("options"['$===']($case) || "opts"['$===']($case)) {if ($truthy(value['$include?'](","))) {
@@ -26155,7 +26267,7 @@ Opal.modules["asciidoctor/attribute_list"] = function(Opal) {
             $send(self.attributes, '[]=', Opal.to_a($writer));
             $writer[$rb_minus($writer["length"], 1)];
           }}
-          else {if ($truthy(($truthy($a = single_quoted_value) ? self.block : $a))) {
+          else {if ($truthy(($truthy($a = single_quoted) ? self.block : $a))) {
             $case = name;
             if ("title"['$===']($case) || "reftext"['$===']($case)) {
             $writer = [name, value];
@@ -26173,44 +26285,40 @@ Opal.modules["asciidoctor/attribute_list"] = function(Opal) {
           }}
         } else {
           
-          resolved_name = (function() {if ($truthy(($truthy($a = single_quoted_value) ? self.block : $a))) {
-            
-            return self.block.$apply_subs(name);
-          } else {
-            return name
-          }; return nil; })();
+          if ($truthy(($truthy($a = single_quoted) ? self.block : $a))) {
+            name = self.block.$apply_subs(name)};
           if ($truthy((positional_attr_name = positional_attrs['$[]'](index)))) {
             
-            $writer = [positional_attr_name, resolved_name];
+            $writer = [positional_attr_name, name];
             $send(self.attributes, '[]=', Opal.to_a($writer));
             $writer[$rb_minus($writer["length"], 1)];};
           
-          $writer = [$rb_plus(index, 1), resolved_name];
+          $writer = [$rb_plus(index, 1), name];
           $send(self.attributes, '[]=', Opal.to_a($writer));
           $writer[$rb_minus($writer["length"], 1)];;
         };
-        return true;
-      }, $AttributeList_parse_attribute$7.$$arity = -1);
+        return continue$;
+      }, $AttributeList_parse_attribute$7.$$arity = 2);
       
       Opal.def(self, '$parse_attribute_value', $AttributeList_parse_attribute_value$9 = function $$parse_attribute_value(quote) {
         var self = this, value = nil;
 
-        
         if (self.scanner.$peek(1)['$=='](quote)) {
           
           self.scanner.$get_byte();
-          return "";};
-        if ($truthy((value = self.$scan_to_quote(quote)))) {
+          return "";
+        } else if ($truthy((value = self.$scan_to_quote(quote)))) {
           
           self.scanner.$get_byte();
           if ($truthy(value['$include?']($$($nesting, 'BACKSLASH')))) {
-            return value.$gsub($$($nesting, 'EscapedQuotes')['$[]'](quote), quote)
+            
+            return value.$gsub($$($nesting, 'EscapedQuotes')['$[]'](quote), quote);
           } else {
             return value
           };
         } else {
           return "" + (quote) + (self.$scan_to_delimiter())
-        };
+        }
       }, $AttributeList_parse_attribute_value$9.$$arity = 1);
       
       Opal.def(self, '$skip_blank', $AttributeList_skip_blank$10 = function $$skip_blank() {
@@ -26554,25 +26662,29 @@ Opal.modules["asciidoctor/converter"] = function(Opal) {
 
         return true
       }, $Converter_handles$ques$3.$$arity = 1);
-      Opal.defs(self, '$derive_backend_traits', $Converter_derive_backend_traits$4 = function $$derive_backend_traits(backend) {
-        var self = this, t_outfilesuffix = nil, t_basebackend = nil, t_filetype = nil;
+      Opal.defs(self, '$derive_backend_traits', $Converter_derive_backend_traits$4 = function $$derive_backend_traits(backend, basebackend) {
+        var $a, self = this, outfilesuffix = nil, filetype = nil;
 
         
+        
+        if (basebackend == null) {
+          basebackend = nil;
+        };
         if ($truthy(backend)) {
         } else {
           return $hash2([], {})
         };
-        if ($truthy((t_outfilesuffix = $$($nesting, 'DEFAULT_EXTENSIONS')['$[]']((t_basebackend = backend.$sub($$($nesting, 'TrailingDigitsRx'), "")))))) {
-          t_filetype = t_outfilesuffix.$slice(1, t_outfilesuffix.$length())
+        if ($truthy((outfilesuffix = $$($nesting, 'DEFAULT_EXTENSIONS')['$[]']((basebackend = ($truthy($a = basebackend) ? $a : backend.$sub($$($nesting, 'TrailingDigitsRx'), ""))))))) {
+          filetype = outfilesuffix.$slice(1, outfilesuffix.$length())
         } else {
-          t_outfilesuffix = "" + "." + ((t_filetype = t_basebackend))
+          outfilesuffix = "" + "." + ((filetype = basebackend))
         };
-        if (t_filetype['$==']("html")) {
-          return $hash2(["basebackend", "filetype", "htmlsyntax", "outfilesuffix"], {"basebackend": t_basebackend, "filetype": t_filetype, "htmlsyntax": "html", "outfilesuffix": t_outfilesuffix})
+        if (filetype['$==']("html")) {
+          return $hash2(["basebackend", "filetype", "htmlsyntax", "outfilesuffix"], {"basebackend": basebackend, "filetype": filetype, "htmlsyntax": "html", "outfilesuffix": outfilesuffix})
         } else {
-          return $hash2(["basebackend", "filetype", "outfilesuffix"], {"basebackend": t_basebackend, "filetype": t_filetype, "outfilesuffix": t_outfilesuffix})
+          return $hash2(["basebackend", "filetype", "outfilesuffix"], {"basebackend": basebackend, "filetype": filetype, "outfilesuffix": outfilesuffix})
         };
-      }, $Converter_derive_backend_traits$4.$$arity = 1);
+      }, $Converter_derive_backend_traits$4.$$arity = -2);
       (function($base, $parent_nesting) {
         var self = $module($base, 'BackendTraits');
 
@@ -26592,7 +26704,7 @@ Opal.modules["asciidoctor/converter"] = function(Opal) {
             
             
             $writer = ["basebackend", value];
-            $send(self.$backend_traits(), '[]=', Opal.to_a($writer));
+            $send(self.$backend_traits(value), '[]=', Opal.to_a($writer));
             return $writer[$rb_minus($writer["length"], 1)];;
           } else {
             return self.$backend_traits()['$[]']("basebackend")
@@ -26686,19 +26798,29 @@ Opal.modules["asciidoctor/converter"] = function(Opal) {
           return (self.backend_traits = ($truthy($a = value) ? $a : $hash2([], {})));
         }, $BackendTraits_init_backend_traits$11.$$arity = -1);
         
-        Opal.def(self, '$backend_traits', $BackendTraits_backend_traits$12 = function $$backend_traits() {
+        Opal.def(self, '$backend_traits', $BackendTraits_backend_traits$12 = function $$backend_traits(basebackend) {
           var $a, self = this;
           if (self.backend_traits == null) self.backend_traits = nil;
           if (self.backend == null) self.backend = nil;
 
-          return (self.backend_traits = ($truthy($a = self.backend_traits) ? $a : $$($nesting, 'Converter').$derive_backend_traits(self.backend)))
-        }, $BackendTraits_backend_traits$12.$$arity = 0);
+          
+          
+          if (basebackend == null) {
+            basebackend = nil;
+          };
+          return (self.backend_traits = ($truthy($a = self.backend_traits) ? $a : $$($nesting, 'Converter').$derive_backend_traits(self.backend, basebackend)));
+        }, $BackendTraits_backend_traits$12.$$arity = -1);
         Opal.alias(self, "backend_info", "backend_traits");
-        Opal.defs(self, '$derive_backend_traits', $BackendTraits_derive_backend_traits$13 = function $$derive_backend_traits(backend) {
+        Opal.defs(self, '$derive_backend_traits', $BackendTraits_derive_backend_traits$13 = function $$derive_backend_traits(backend, basebackend) {
           var self = this;
 
-          return $$($nesting, 'Converter').$derive_backend_traits(backend)
-        }, $BackendTraits_derive_backend_traits$13.$$arity = 1);
+          
+          
+          if (basebackend == null) {
+            basebackend = nil;
+          };
+          return $$($nesting, 'Converter').$derive_backend_traits(backend, basebackend);
+        }, $BackendTraits_derive_backend_traits$13.$$arity = -2);
       })($nesting[0], $nesting);
       (function($base, $parent_nesting) {
         var self = $module($base, 'Config');
@@ -27029,9 +27151,9 @@ Opal.modules["asciidoctor/document"] = function(Opal) {
   function $rb_lt(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs < rhs : lhs['$<'](rhs);
   }
-  var self = Opal.top, $nesting = [], nil = Opal.nil, $$$ = Opal.const_get_qualified, $$ = Opal.const_get_relative, $breaker = Opal.breaker, $slice = Opal.slice, $module = Opal.module, $klass = Opal.klass, $send = Opal.send, $truthy = Opal.truthy, $hash2 = Opal.hash2, $gvars = Opal.gvars, $hash = Opal.hash;
+  var self = Opal.top, $nesting = [], nil = Opal.nil, $$$ = Opal.const_get_qualified, $$ = Opal.const_get_relative, $breaker = Opal.breaker, $slice = Opal.slice, $module = Opal.module, $klass = Opal.klass, $send = Opal.send, $truthy = Opal.truthy, $hash2 = Opal.hash2, $hash = Opal.hash, $gvars = Opal.gvars;
 
-  Opal.add_stubs(['$new', '$attr_reader', '$nil?', '$<<', '$[]', '$[]=', '$-', '$include?', '$strip', '$squeeze', '$gsub', '$empty?', '$!', '$rpartition', '$attr_accessor', '$delete', '$base_dir', '$options', '$merge', '$catalog', '$attributes', '$safe', '$compat_mode', '$outfilesuffix', '$sourcemap', '$path_resolver', '$converter', '$extensions', '$syntax_highlighter', '$each', '$end_with?', '$start_with?', '$slice', '$length', '$chop', '$==', '$downcase', '$extname', '$===', '$value_for_name', '$key?', '$freeze', '$attribute_undefined', '$attribute_missing', '$name_for_value', '$expand_path', '$pwd', '$>=', '$+', '$abs', '$to_i', '$delete_if', '$update_doctype_attributes', '$cursor', '$parse', '$restore_attributes', '$update_backend_attributes', '$fetch', '$fill_datetime_attributes', '$activate', '$create', '$to_proc', '$groups', '$preprocessors?', '$preprocessors', '$process_method', '$tree_processors?', '$tree_processors', '$!=', '$counter', '$nil_or_empty?', '$nextval', '$to_s', '$value', '$save_to', '$register', '$tap', '$xreftext', '$source', '$source_lines', '$doctitle', '$sectname=', '$title=', '$first_section', '$title', '$reftext', '$>', '$<', '$find', '$context', '$assign_numeral', '$clear_playback_attributes', '$save_attributes', '$name', '$negate', '$rewind', '$replace', '$attribute_locked?', '$apply_attribute_value_subs', '$delete?', '$start', '$doctype', '$content_model', '$warn', '$logger', '$content', '$convert', '$postprocessors?', '$postprocessors', '$record', '$write', '$respond_to?', '$chomp', '$class', '$write_alternate_pages', '$map', '$split', '$resolve_docinfo_subs', '$&', '$normalize_system_path', '$read_asset', '$apply_subs', '$docinfo_processors?', '$join', '$concat', '$compact', '$docinfo_processors', '$object_id', '$inspect', '$size', '$private', '$=~', '$resolve_pass_subs', '$apply_header_subs', '$limit_bytesize', '$bytesize', '$valid_encoding?', '$byteslice', '$resolve_subs', '$utc', '$at', '$Integer', '$now', '$index', '$strftime', '$year', '$utc_offset', '$partition', '$create_converter', '$basebackend', '$filetype', '$htmlsyntax', '$derive_backend_traits', '$raise']);
+  Opal.add_stubs(['$new', '$attr_reader', '$nil?', '$<<', '$[]', '$[]=', '$-', '$include?', '$strip', '$squeeze', '$gsub', '$empty?', '$!', '$rpartition', '$attr_accessor', '$delete', '$base_dir', '$options', '$merge', '$catalog', '$attributes', '$safe', '$compat_mode', '$outfilesuffix', '$sourcemap', '$path_resolver', '$converter', '$extensions', '$syntax_highlighter', '$each', '$end_with?', '$start_with?', '$slice', '$length', '$chop', '$==', '$downcase', '$extname', '$===', '$value_for_name', '$key?', '$freeze', '$attribute_undefined', '$attribute_missing', '$update', '$&', '$keys', '$name_for_value', '$expand_path', '$pwd', '$>=', '$+', '$abs', '$to_i', '$delete_if', '$update_doctype_attributes', '$cursor', '$parse', '$restore_attributes', '$update_backend_attributes', '$fetch', '$fill_datetime_attributes', '$activate', '$groups', '$create', '$to_proc', '$preprocessors?', '$preprocessors', '$process_method', '$tree_processors?', '$tree_processors', '$!=', '$counter', '$nil_or_empty?', '$nextval', '$to_s', '$value', '$save_to', '$register', '$tap', '$xreftext', '$source', '$source_lines', '$doctitle', '$sectname=', '$title=', '$first_section', '$title', '$reftext', '$>', '$<', '$find', '$context', '$assign_numeral', '$clear_playback_attributes', '$save_attributes', '$name', '$negate', '$rewind', '$replace', '$attribute_locked?', '$apply_attribute_value_subs', '$delete?', '$start', '$doctype', '$content_model', '$warn', '$logger', '$content', '$convert', '$postprocessors?', '$postprocessors', '$record', '$write', '$respond_to?', '$chomp', '$class', '$write_alternate_pages', '$map', '$split', '$resolve_docinfo_subs', '$normalize_system_path', '$read_asset', '$apply_subs', '$docinfo_processors?', '$join', '$concat', '$compact', '$docinfo_processors', '$object_id', '$inspect', '$size', '$private', '$=~', '$resolve_pass_subs', '$apply_header_subs', '$limit_bytesize', '$bytesize', '$valid_encoding?', '$byteslice', '$resolve_subs', '$utc', '$at', '$Integer', '$now', '$index', '$strftime', '$year', '$utc_offset', '$partition', '$create_converter', '$basebackend', '$filetype', '$htmlsyntax', '$derive_backend_traits', '$raise']);
   return (function($base, $parent_nesting) {
     var self = $module($base, 'Asciidoctor');
 
@@ -27263,13 +27385,13 @@ Opal.modules["asciidoctor/document"] = function(Opal) {
           self.sourcemap = options['$[]']("sourcemap");
           self.timings = options.$delete("timings");
           self.path_resolver = $$($nesting, 'PathResolver').$new();
-          initialize_extensions = (function() {if ($truthy((($b = $$$('::', 'Asciidoctor', 'skip_raise')) && ($a = $$$($b, 'Extensions', 'skip_raise')) ? 'constant' : nil))) {
-            return true
+          initialize_extensions = (function() {if ($truthy(($truthy($a = (($c = $$$('::', 'Asciidoctor', 'skip_raise')) && ($b = $$$($c, 'Extensions', 'skip_raise')) ? 'constant' : nil)) ? $a : options['$key?']("extensions")))) {
+            return $$$($$$('::', 'Asciidoctor'), 'Extensions')
           } else {
             return nil
           }; return nil; })();
           self.extensions = nil;
-          if ($truthy(($truthy($c = options['$key?']("header_footer")) ? options['$key?']("standalone")['$!']() : $c))) {
+          if ($truthy(($truthy($a = options['$key?']("header_footer")) ? options['$key?']("standalone")['$!']() : $a))) {
             
             $writer = ["standalone", options['$[]']("header_footer")];
             $send(options, '[]=', Opal.to_a($writer));
@@ -27283,47 +27405,6 @@ Opal.modules["asciidoctor/document"] = function(Opal) {
         (self.options = options).$freeze();
         attrs = self.attributes;
         
-        $writer = ["sectids", ""];
-        $send(attrs, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        
-        $writer = ["toc-placement", "auto"];
-        $send(attrs, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        if ($truthy(standalone)) {
-          
-          
-          $writer = ["copycss", ""];
-          $send(attrs, '[]=', Opal.to_a($writer));
-          $writer[$rb_minus($writer["length"], 1)];;
-          
-          $writer = ["embedded", nil];
-          $send(attr_overrides, '[]=', Opal.to_a($writer));
-          $writer[$rb_minus($writer["length"], 1)];;
-        } else {
-          
-          
-          $writer = ["notitle", ""];
-          $send(attrs, '[]=', Opal.to_a($writer));
-          $writer[$rb_minus($writer["length"], 1)];;
-          
-          $writer = ["embedded", ""];
-          $send(attr_overrides, '[]=', Opal.to_a($writer));
-          $writer[$rb_minus($writer["length"], 1)];;
-        };
-        
-        $writer = ["stylesheet", ""];
-        $send(attrs, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        
-        $writer = ["webfonts", ""];
-        $send(attrs, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        
-        $writer = ["prewrap", ""];
-        $send(attrs, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        
         $writer = ["attribute-undefined", $$($nesting, 'Compliance').$attribute_undefined()];
         $send(attrs, '[]=', Opal.to_a($writer));
         $writer[$rb_minus($writer["length"], 1)];;
@@ -27331,74 +27412,52 @@ Opal.modules["asciidoctor/document"] = function(Opal) {
         $writer = ["attribute-missing", $$($nesting, 'Compliance').$attribute_missing()];
         $send(attrs, '[]=', Opal.to_a($writer));
         $writer[$rb_minus($writer["length"], 1)];;
-        
-        $writer = ["iconfont-remote", ""];
-        $send(attrs, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        
-        $writer = ["caution-caption", "Caution"];
-        $send(attrs, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        
-        $writer = ["important-caption", "Important"];
-        $send(attrs, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        
-        $writer = ["note-caption", "Note"];
-        $send(attrs, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        
-        $writer = ["tip-caption", "Tip"];
-        $send(attrs, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        
-        $writer = ["warning-caption", "Warning"];
-        $send(attrs, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        
-        $writer = ["example-caption", "Example"];
-        $send(attrs, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        
-        $writer = ["figure-caption", "Figure"];
-        $send(attrs, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        
-        $writer = ["table-caption", "Table"];
-        $send(attrs, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        
-        $writer = ["toc-title", "Table of Contents"];
-        $send(attrs, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        
-        $writer = ["section-refsig", "Section"];
-        $send(attrs, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        
-        $writer = ["part-refsig", "Part"];
-        $send(attrs, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        
-        $writer = ["chapter-refsig", "Chapter"];
-        $send(attrs, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        
-        $writer = ["appendix-caption", (($writer = ["appendix-refsig", "Appendix"]), $send(attrs, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)])];
-        $send(attrs, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        
-        $writer = ["untitled-label", "Untitled"];
-        $send(attrs, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        
-        $writer = ["version-label", "Version"];
-        $send(attrs, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        
-        $writer = ["last-update-label", "Last updated"];
-        $send(attrs, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
+        attrs.$update($$($nesting, 'DEFAULT_ATTRIBUTES'));
+        if ($truthy(standalone)) {
+          
+          
+          $writer = ["embedded", nil];
+          $send(attr_overrides, '[]=', Opal.to_a($writer));
+          $writer[$rb_minus($writer["length"], 1)];;
+          
+          $writer = ["copycss", ""];
+          $send(attrs, '[]=', Opal.to_a($writer));
+          $writer[$rb_minus($writer["length"], 1)];;
+          
+          $writer = ["iconfont-remote", ""];
+          $send(attrs, '[]=', Opal.to_a($writer));
+          $writer[$rb_minus($writer["length"], 1)];;
+          
+          $writer = ["stylesheet", ""];
+          $send(attrs, '[]=', Opal.to_a($writer));
+          $writer[$rb_minus($writer["length"], 1)];;
+          
+          $writer = ["webfonts", ""];
+          $send(attrs, '[]=', Opal.to_a($writer));
+          $writer[$rb_minus($writer["length"], 1)];;
+        } else {
+          
+          
+          $writer = ["embedded", ""];
+          $send(attr_overrides, '[]=', Opal.to_a($writer));
+          $writer[$rb_minus($writer["length"], 1)];;
+          if ($truthy(($truthy($a = attr_overrides['$key?']("showtitle")) ? attr_overrides.$keys()['$&'](["notitle", "showtitle"])['$[]'](-1)['$==']("showtitle") : $a))) {
+            
+            $writer = ["notitle", $hash(nil, "", false, "@", "@", false)['$[]'](attr_overrides['$[]']("showtitle"))];
+            $send(attr_overrides, '[]=', Opal.to_a($writer));
+            $writer[$rb_minus($writer["length"], 1)];
+          } else if ($truthy(attr_overrides['$key?']("notitle"))) {
+            
+            $writer = ["showtitle", $hash(nil, "", false, "@", "@", false)['$[]'](attr_overrides['$[]']("notitle"))];
+            $send(attr_overrides, '[]=', Opal.to_a($writer));
+            $writer[$rb_minus($writer["length"], 1)];
+          } else {
+            
+            $writer = ["notitle", ""];
+            $send(attrs, '[]=', Opal.to_a($writer));
+            $writer[$rb_minus($writer["length"], 1)];
+          };
+        };
         
         $writer = ["asciidoctor", ""];
         $send(attr_overrides, '[]=', Opal.to_a($writer));
@@ -27419,8 +27478,8 @@ Opal.modules["asciidoctor/document"] = function(Opal) {
         $writer = ["safe-mode-level", self.safe];
         $send(attr_overrides, '[]=', Opal.to_a($writer));
         $writer[$rb_minus($writer["length"], 1)];;
-        ($truthy($c = attr_overrides['$[]']("max-include-depth")) ? $c : (($writer = ["max-include-depth", 64]), $send(attr_overrides, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]));
-        ($truthy($c = attr_overrides['$[]']("allow-uri-read")) ? $c : (($writer = ["allow-uri-read", nil]), $send(attr_overrides, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]));
+        ($truthy($a = attr_overrides['$[]']("max-include-depth")) ? $a : (($writer = ["max-include-depth", 64]), $send(attr_overrides, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]));
+        ($truthy($a = attr_overrides['$[]']("allow-uri-read")) ? $a : (($writer = ["allow-uri-read", nil]), $send(attr_overrides, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]));
         
         $writer = ["user-home", $$($nesting, 'USER_HOME')];
         $send(attr_overrides, '[]=', Opal.to_a($writer));
@@ -27454,10 +27513,10 @@ Opal.modules["asciidoctor/document"] = function(Opal) {
           $writer[$rb_minus($writer["length"], 1)];};
         if ($truthy($rb_ge(self.safe, $$$($$($nesting, 'SafeMode'), 'SERVER')))) {
           
-          ($truthy($c = attr_overrides['$[]']("copycss")) ? $c : (($writer = ["copycss", nil]), $send(attr_overrides, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]));
-          ($truthy($c = attr_overrides['$[]']("source-highlighter")) ? $c : (($writer = ["source-highlighter", nil]), $send(attr_overrides, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]));
-          ($truthy($c = attr_overrides['$[]']("backend")) ? $c : (($writer = ["backend", $$($nesting, 'DEFAULT_BACKEND')]), $send(attr_overrides, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]));
-          if ($truthy(($truthy($c = parent_doc['$!']()) ? attr_overrides['$key?']("docfile") : $c))) {
+          ($truthy($a = attr_overrides['$[]']("copycss")) ? $a : (($writer = ["copycss", nil]), $send(attr_overrides, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]));
+          ($truthy($a = attr_overrides['$[]']("source-highlighter")) ? $a : (($writer = ["source-highlighter", nil]), $send(attr_overrides, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]));
+          ($truthy($a = attr_overrides['$[]']("backend")) ? $a : (($writer = ["backend", $$($nesting, 'DEFAULT_BACKEND')]), $send(attr_overrides, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]));
+          if ($truthy(($truthy($a = parent_doc['$!']()) ? attr_overrides['$key?']("docfile") : $a))) {
             
             $writer = ["docfile", attr_overrides['$[]']("docfile")['$[]'](Opal.Range.$new($rb_plus(attr_overrides['$[]']("docdir").$length(), 1), -1, false))];
             $send(attr_overrides, '[]=', Opal.to_a($writer));
@@ -27486,8 +27545,8 @@ Opal.modules["asciidoctor/document"] = function(Opal) {
               $send(attr_overrides, '[]=', Opal.to_a($writer));
               $writer[$rb_minus($writer["length"], 1)];
             };
-            ($truthy($c = attr_overrides['$[]']("icons")) ? $c : (($writer = ["icons", nil]), $send(attr_overrides, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]));};};
-        self.max_attribute_value_size = (function() {if ($truthy((size = ($truthy($c = attr_overrides['$[]']("max-attribute-value-size")) ? $c : (($writer = ["max-attribute-value-size", nil]), $send(attr_overrides, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]))))) {
+            ($truthy($a = attr_overrides['$[]']("icons")) ? $a : (($writer = ["icons", nil]), $send(attr_overrides, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]));};};
+        self.max_attribute_value_size = (function() {if ($truthy((size = ($truthy($a = attr_overrides['$[]']("max-attribute-value-size")) ? $a : (($writer = ["max-attribute-value-size", nil]), $send(attr_overrides, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]))))) {
           return size.$to_i().$abs()
         } else {
           return nil
@@ -27533,23 +27592,26 @@ Opal.modules["asciidoctor/document"] = function(Opal) {
         } else {
           
           self.backend = nil;
-          if ((initial_backend = ($truthy($c = attrs['$[]']("backend")) ? $c : $$($nesting, 'DEFAULT_BACKEND')))['$==']("manpage")) {
+          if ((initial_backend = ($truthy($a = attrs['$[]']("backend")) ? $a : $$($nesting, 'DEFAULT_BACKEND')))['$==']("manpage")) {
             self.doctype = (($writer = ["doctype", (($writer = ["doctype", "manpage"]), $send(attr_overrides, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)])]), $send(attrs, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)])
           } else {
-            self.doctype = ($truthy($c = attrs['$[]']("doctype")) ? $c : (($writer = ["doctype", $$($nesting, 'DEFAULT_DOCTYPE')]), $send(attrs, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]))
+            self.doctype = ($truthy($a = attrs['$[]']("doctype")) ? $a : (($writer = ["doctype", $$($nesting, 'DEFAULT_DOCTYPE')]), $send(attrs, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]))
           };
           self.$update_backend_attributes(initial_backend, true);
-          ($truthy($c = attrs['$[]']("stylesdir")) ? $c : (($writer = ["stylesdir", "."]), $send(attrs, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]));
-          ($truthy($c = attrs['$[]']("iconsdir")) ? $c : (($writer = ["iconsdir", "" + (attrs.$fetch("imagesdir", "./images")) + "/icons"]), $send(attrs, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]));
+          ($truthy($a = attrs['$[]']("stylesdir")) ? $a : (($writer = ["stylesdir", "."]), $send(attrs, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]));
+          ($truthy($a = attrs['$[]']("iconsdir")) ? $a : (($writer = ["iconsdir", "" + (attrs.$fetch("imagesdir", "./images")) + "/icons"]), $send(attrs, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]));
           self.$fill_datetime_attributes(attrs, input_mtime);
           if ($truthy(initialize_extensions)) {
             if ($truthy((ext_registry = options['$[]']("extension_registry")))) {
-              if ($truthy(($truthy($c = $$$($$($nesting, 'Extensions'), 'Registry')['$==='](ext_registry)) ? $c : ($truthy($d = (($g = $$$('::', 'AsciidoctorJ', 'skip_raise')) && ($f = $$$($g, 'Extensions', 'skip_raise')) && ($e = $$$($f, 'ExtensionRegistry', 'skip_raise')) ? 'constant' : nil)) ? $$$($$$($$$('::', 'AsciidoctorJ'), 'Extensions'), 'ExtensionRegistry')['$==='](ext_registry) : $d)))) {
+              if ($truthy(($truthy($a = $$$($$($nesting, 'Extensions'), 'Registry')['$==='](ext_registry)) ? $a : ($truthy($d = (($g = $$$('::', 'AsciidoctorJ', 'skip_raise')) && ($f = $$$($g, 'Extensions', 'skip_raise')) && ($e = $$$($f, 'ExtensionRegistry', 'skip_raise')) ? 'constant' : nil)) ? $$$($$$($$$('::', 'AsciidoctorJ'), 'Extensions'), 'ExtensionRegistry')['$==='](ext_registry) : $d)))) {
                 self.extensions = ext_registry.$activate(self)}
-            } else if ($truthy($$$('::', 'Proc')['$===']((ext_block = options['$[]']("extensions"))))) {
-              self.extensions = $send($$($nesting, 'Extensions'), 'create', [], ext_block.$to_proc()).$activate(self)
-            } else if ($truthy($$($nesting, 'Extensions').$groups()['$empty?']()['$!']())) {
-              self.extensions = $$$($$($nesting, 'Extensions'), 'Registry').$new().$activate(self)}};
+            } else if ($truthy((ext_block = options['$[]']("extensions"))['$nil?']())) {
+              if ($truthy($$($nesting, 'Extensions').$groups()['$empty?']())) {
+              } else {
+                self.extensions = $$$($$($nesting, 'Extensions'), 'Registry').$new().$activate(self)
+              }
+            } else if ($truthy($$$('::', 'Proc')['$==='](ext_block))) {
+              self.extensions = $send($$($nesting, 'Extensions'), 'create', [], ext_block.$to_proc()).$activate(self)}};
           self.reader = $$($nesting, 'PreprocessorReader').$new(self, data, $$$($$($nesting, 'Reader'), 'Cursor').$new(attrs['$[]']("docfile"), self.base_dir), $hash2(["normalize"], {"normalize": true}));
           if ($truthy(self.sourcemap)) {
             return (self.source_location = self.reader.$cursor())
@@ -27918,9 +27980,9 @@ Opal.modules["asciidoctor/document"] = function(Opal) {
       }, $Document_revdate$38.$$arity = 0);
       
       Opal.def(self, '$notitle', $Document_notitle$39 = function $$notitle() {
-        var $a, self = this;
+        var self = this;
 
-        return ($truthy($a = self.attributes['$key?']("showtitle")['$!']()) ? self.attributes['$key?']("notitle") : $a)
+        return self.attributes['$key?']("notitle")
       }, $Document_notitle$39.$$arity = 0);
       
       Opal.def(self, '$noheader', $Document_noheader$40 = function $$noheader() {
@@ -29072,7 +29134,7 @@ Opal.modules["asciidoctor/parser"] = function(Opal) {
   }
   var self = Opal.top, $nesting = [], nil = Opal.nil, $$$ = Opal.const_get_qualified, $$ = Opal.const_get_relative, $breaker = Opal.breaker, $slice = Opal.slice, $module = Opal.module, $klass = Opal.klass, $send = Opal.send, $truthy = Opal.truthy, $hash2 = Opal.hash2, $gvars = Opal.gvars;
 
-  Opal.add_stubs(['$include', '$new', '$proc', '$start_with?', '$match?', '$is_delimited_block?', '$private_class_method', '$parse_document_header', '$[]', '$has_more_lines?', '$next_section', '$assign_numeral', '$<<', '$blocks', '$parse_block_metadata_lines', '$attributes', '$is_next_line_doctitle?', '$finalize_header', '$nil_or_empty?', '$title=', '$-', '$sourcemap', '$cursor', '$parse_section_title', '$id=', '$apply_header_subs', '$[]=', '$source_location=', '$header', '$attribute_locked?', '$id', '$clear', '$delete', '$instance_variable_get', '$parse_header_metadata', '$include?', '$==', '$!', '$register', '$doctype', '$parse_manpage_header', '$=~', '$downcase', '$sub_attributes', '$error', '$logger', '$message_with_context', '$cursor_at_line', '$backend', '$skip_blank_lines', '$save', '$update', '$is_next_line_section?', '$initialize_section', '$join', '$map', '$read_lines_until', '$lstrip', '$title', '$split', '$restore_save', '$discard_save', '$context', '$empty?', '$header?', '$!=', '$attr?', '$attr', '$key?', '$document', '$+', '$level', '$special', '$sectname', '$to_i', '$<', '$>', '$warn', '$next_block', '$blocks?', '$style', '$context=', '$style=', '$parent=', '$size', '$content_model', '$shift', '$unwrap_standalone_preamble', '$merge', '$fetch', '$parse_block_metadata_line', '$extensions', '$block_macros?', '$mark', '$read_line', '$terminator', '$to_s', '$masq', '$to_sym', '$registered_for_block?', '$debug?', '$debug', '$cursor_at_mark', '$strict_verbatim_paragraphs', '$unshift_line', '$markdown_syntax', '$keys', '$chr', '$uniform?', '$length', '$end_with?', '$===', '$parse_attributes', '$attribute_missing', '$tr', '$basename', '$assign_caption', '$registered_for_block_macro?', '$config', '$process_method', '$replace', '$parse_callout_list', '$callouts', '$parse_list', '$parse_description_list', '$underline_style_section_titles', '$is_section_title?', '$peek_line', '$atx_section_title?', '$generate_id', '$level=', '$read_paragraph_lines', '$adjust_indentation!', '$map!', '$slice', '$pop', '$build_block', '$apply_subs', '$chop', '$catalog_inline_anchors', '$rekey', '$index', '$strip', '$parse_table', '$each', '$raise', '$title?', '$update_attributes', '$commit_subs', '$sub?', '$catalog_callouts', '$source', '$remove_sub', '$block_terminates_paragraph', '$to_proc', '$nil?', '$lines', '$parse_blocks', '$parse_list_item', '$items', '$scan', '$gsub', '$count', '$advance', '$dup', '$match', '$callout_ids', '$next_list', '$catalog_inline_anchor', '$source_location', '$marker=', '$catalog_inline_biblio_anchor', '$set_option', '$text=', '$resolve_ordered_list_marker', '$read_lines_for_list_item', '$skip_line_comments', '$unshift_lines', '$fold_first', '$text?', '$is_sibling_list_item?', '$concat', '$find', '$casecmp', '$sectname=', '$special=', '$numbered=', '$numbered', '$lineno', '$peek_lines', '$setext_section_title?', '$abs', '$cursor_at_prev_line', '$process_attribute_entries', '$next_line_empty?', '$process_authors', '$rstrip', '$each_with_index', '$compact', '$squeeze', '$to_a', '$parse_style_attribute', '$process_attribute_entry', '$skip_comment_lines', '$store_attribute', '$sanitize_attribute_name', '$set_attribute', '$save_to', '$delete_attribute', '$ord', '$int_to_roman', '$resolve_list_marker', '$parse_colspecs', '$create_columns', '$format', '$starts_with_delimiter?', '$close_open_cell', '$parse_cellspec', '$delimiter', '$match_delimiter', '$pre_match', '$post_match', '$buffer_has_unclosed_quotes?', '$skip_past_delimiter', '$buffer', '$buffer=', '$skip_past_escaped_delimiter', '$keep_cell_open', '$push_cellspec', '$close_cell', '$cell_open?', '$columns', '$assign_column_widths', '$has_header_option=', '$partition_header_footer', '$upto', '$partition', '$shorthand_property_syntax', '$each_char', '$yield_buffered_attribute', '$any?', '$*', '$each_byte', '$%']);
+  Opal.add_stubs(['$include', '$new', '$proc', '$start_with?', '$match?', '$is_delimited_block?', '$private_class_method', '$parse_document_header', '$[]', '$has_more_lines?', '$next_section', '$assign_numeral', '$<<', '$blocks', '$parse_block_metadata_lines', '$attributes', '$is_next_line_doctitle?', '$finalize_header', '$nil_or_empty?', '$title=', '$-', '$sourcemap', '$cursor', '$parse_section_title', '$id=', '$apply_header_subs', '$[]=', '$source_location=', '$header', '$attribute_locked?', '$id', '$clear', '$delete', '$instance_variable_get', '$parse_header_metadata', '$include?', '$==', '$!', '$register', '$doctype', '$parse_manpage_header', '$=~', '$downcase', '$sub_attributes', '$error', '$logger', '$message_with_context', '$cursor_at_line', '$backend', '$skip_blank_lines', '$save', '$update', '$is_next_line_section?', '$initialize_section', '$join', '$map', '$read_lines_until', '$lstrip', '$title', '$split', '$restore_save', '$discard_save', '$context', '$empty?', '$header?', '$!=', '$attr?', '$attr', '$key?', '$document', '$+', '$level', '$special', '$sectname', '$to_i', '$<', '$>', '$warn', '$next_block', '$blocks?', '$style', '$context=', '$style=', '$parent=', '$size', '$content_model', '$shift', '$unwrap_standalone_preamble', '$source_location', '$merge', '$fetch', '$parse_block_metadata_line', '$extensions', '$block_macros?', '$mark', '$read_line', '$terminator', '$to_s', '$masq', '$to_sym', '$registered_for_block?', '$debug?', '$debug', '$cursor_at_mark', '$strict_verbatim_paragraphs', '$unshift_line', '$markdown_syntax', '$keys', '$chr', '$uniform?', '$length', '$end_with?', '$===', '$parse_attributes', '$attribute_missing', '$tr', '$basename', '$assign_caption', '$registered_for_block_macro?', '$config', '$process_method', '$replace', '$parse_callout_list', '$callouts', '$parse_list', '$parse_description_list', '$underline_style_section_titles', '$is_section_title?', '$peek_line', '$atx_section_title?', '$generate_id', '$level=', '$read_paragraph_lines', '$adjust_indentation!', '$map!', '$slice', '$pop', '$build_block', '$apply_subs', '$chop', '$catalog_inline_anchors', '$rekey', '$index', '$strip', '$parse_table', '$each', '$raise', '$title?', '$update_attributes', '$commit_subs', '$sub?', '$catalog_callouts', '$source', '$remove_sub', '$block_terminates_paragraph', '$to_proc', '$nil?', '$lines', '$parse_blocks', '$parse_list_item', '$items', '$scan', '$gsub', '$count', '$advance', '$dup', '$match', '$callout_ids', '$next_list', '$catalog_inline_anchor', '$marker=', '$catalog_inline_biblio_anchor', '$set_option', '$text=', '$resolve_ordered_list_marker', '$read_lines_for_list_item', '$skip_line_comments', '$unshift_lines', '$fold_first', '$text?', '$is_sibling_list_item?', '$concat', '$find', '$casecmp', '$sectname=', '$special=', '$numbered=', '$numbered', '$lineno', '$peek_lines', '$setext_section_title?', '$abs', '$cursor_at_prev_line', '$process_attribute_entries', '$next_line_empty?', '$process_authors', '$rstrip', '$each_with_index', '$compact', '$squeeze', '$to_a', '$parse_style_attribute', '$process_attribute_entry', '$skip_comment_lines', '$store_attribute', '$sanitize_attribute_name', '$set_attribute', '$save_to', '$delete_attribute', '$ord', '$int_to_roman', '$resolve_list_marker', '$parse_colspecs', '$create_columns', '$has_header_option=', '$format', '$starts_with_delimiter?', '$close_open_cell', '$parse_cellspec', '$delimiter', '$match_delimiter', '$pre_match', '$post_match', '$buffer_has_unclosed_quotes?', '$skip_past_delimiter', '$buffer', '$buffer=', '$skip_past_escaped_delimiter', '$keep_cell_open', '$push_cellspec', '$close_cell', '$cell_open?', '$columns', '$assign_column_widths', '$partition_header_footer', '$upto', '$partition', '$shorthand_property_syntax', '$each_char', '$yield_buffered_attribute', '$any?', '$*', '$each_byte', '$%']);
   return (function($base, $parent_nesting) {
     var self = $module($base, 'Asciidoctor');
 
@@ -29545,6 +29607,11 @@ Opal.modules["asciidoctor/parser"] = function(Opal) {
         } else if ($truthy(preamble)) {
           if ($truthy(preamble['$blocks?']())) {
             if ($truthy(($truthy($a = ($truthy($b = book) ? $b : document.$blocks()['$[]'](1))) ? $a : $$($nesting, 'Compliance').$unwrap_standalone_preamble()['$!']()))) {
+              if ($truthy(document.$sourcemap())) {
+                
+                $writer = [preamble.$blocks()['$[]'](0).$source_location()];
+                $send(preamble, 'source_location=', Opal.to_a($writer));
+                $writer[$rb_minus($writer["length"], 1)];}
             } else {
               
               document.$blocks().$shift();
@@ -30099,7 +30166,13 @@ Opal.modules["asciidoctor/parser"] = function(Opal) {
           block = self.$build_block(block_context, "compound", terminator, parent, reader, attributes);}
           else if ("open"['$===']($case) || "abstract"['$===']($case) || "partintro"['$===']($case)) {block = self.$build_block("open", "compound", terminator, parent, reader, attributes)}
           else if ("literal"['$===']($case)) {block = self.$build_block(block_context, "verbatim", terminator, parent, reader, attributes)}
-          else if ("example"['$===']($case)) {block = self.$build_block(block_context, "compound", terminator, parent, reader, attributes)}
+          else if ("example"['$===']($case)) {
+          if ($truthy(attributes['$[]']("collapsible-option"))) {
+            
+            $writer = ["caption", ""];
+            $send(attributes, '[]=', Opal.to_a($writer));
+            $writer[$rb_minus($writer["length"], 1)];};
+          block = self.$build_block(block_context, "compound", terminator, parent, reader, attributes);}
           else if ("quote"['$===']($case) || "verse"['$===']($case)) {
           $$($nesting, 'AttributeList').$rekey(attributes, [nil, "attribution", "citetitle"]);
           block = self.$build_block(block_context, (function() {if (block_context['$==']("verse")) {
@@ -30167,7 +30240,7 @@ Opal.modules["asciidoctor/parser"] = function(Opal) {
           $writer = [(block_title = attributes.$delete("title"))];
           $send(block, 'title=', Opal.to_a($writer));
           $writer[$rb_minus($writer["length"], 1)];;
-          if ($truthy(($truthy($a = (caption_attr_name = $$($nesting, 'CAPTION_ATTR_NAMES')['$[]'](block.$context()))) ? document.$attributes()['$[]'](caption_attr_name) : $a))) {
+          if ($truthy(($truthy($a = (caption_attr_name = $$($nesting, 'CAPTION_ATTRIBUTE_NAMES')['$[]'](block.$context()))) ? document.$attributes()['$[]'](caption_attr_name) : $a))) {
             block.$assign_caption(attributes.$delete("caption"))};};
         
         $writer = [attributes['$[]']("style")];
@@ -30443,22 +30516,23 @@ Opal.modules["asciidoctor/parser"] = function(Opal) {
 
         
         if ($truthy(($truthy($a = text['$include?']("[[")) ? $a : text['$include?']("or:")))) {
-          $send(text, 'scan', [$$($nesting, 'InlineAnchorScanRx')], ($$23 = function(){var self = $$23.$$s || this, $b, id = nil, reftext = nil, location = nil, offset = nil;
+          $send(text, 'scan', [$$($nesting, 'InlineAnchorScanRx')], ($$23 = function(){var self = $$23.$$s || this, $b, $c, $d, id = nil, reftext = nil, location = nil, offset = nil;
 
           
             if ($truthy((id = (($b = $gvars['~']) === nil ? nil : $b['$[]'](1))))) {
-              if ($truthy((reftext = (($b = $gvars['~']) === nil ? nil : $b['$[]'](2))))) {
-                if ($truthy(($truthy($b = reftext['$include?']($$($nesting, 'ATTR_REF_HEAD'))) ? (reftext = document.$sub_attributes(reftext))['$empty?']() : $b))) {
-                  return nil;}}
+              if ($truthy(($truthy($b = ($truthy($c = (reftext = (($d = $gvars['~']) === nil ? nil : $d['$[]'](2)))) ? reftext['$include?']($$($nesting, 'ATTR_REF_HEAD')) : $c)) ? (reftext = document.$sub_attributes(reftext))['$empty?']() : $b))) {
+                return nil;}
             } else {
               
               id = (($b = $gvars['~']) === nil ? nil : $b['$[]'](3));
               if ($truthy((reftext = (($b = $gvars['~']) === nil ? nil : $b['$[]'](4))))) {
-                
                 if ($truthy(reftext['$include?']("]"))) {
-                  reftext = reftext.$gsub("\\]", "]")};
-                if ($truthy(($truthy($b = reftext['$include?']($$($nesting, 'ATTR_REF_HEAD'))) ? (reftext = document.$sub_attributes(reftext))['$empty?']() : $b))) {
-                  return nil;};};
+                  
+                  reftext = reftext.$gsub("\\]", "]");
+                  if ($truthy(reftext['$include?']($$($nesting, 'ATTR_REF_HEAD')))) {
+                    reftext = document.$sub_attributes(reftext)};
+                } else if ($truthy(($truthy($b = reftext['$include?']($$($nesting, 'ATTR_REF_HEAD'))) ? (reftext = document.$sub_attributes(reftext))['$empty?']() : $b))) {
+                  return nil;}};
             };
             if ($truthy(document.$register("refs", [id, $$($nesting, 'Inline').$new(block, "anchor", reftext, $hash2(["type", "id"], {"type": "ref", "id": id}))]))) {
               return nil
@@ -31624,7 +31698,13 @@ Opal.modules["asciidoctor/parser"] = function(Opal) {
         if ((name = self.$sanitize_attribute_name(name))['$==']("numbered")) {
           name = "sectnums"
         } else if (name['$==']("hardbreaks")) {
-          name = "hardbreaks-option"};
+          name = "hardbreaks-option"
+        } else if (name['$==']("showtitle")) {
+          self.$store_attribute("notitle", (function() {if ($truthy(value)) {
+            return nil
+          } else {
+            return ""
+          }; return nil; })(), doc, attrs)};
         if ($truthy(doc)) {
           if ($truthy(value)) {
             
@@ -31738,7 +31818,7 @@ Opal.modules["asciidoctor/parser"] = function(Opal) {
         }
       }, $Parser_is_sibling_list_item$ques$59.$$arity = 3);
       Opal.defs(self, '$parse_table', $Parser_parse_table$60 = function $$parse_table(table_reader, parent, attributes) {
-        var $a, $b, $c, $d, self = this, table = nil, colspecs = nil, explicit_colspecs = nil, skipped = nil, parser_ctx = nil, format = nil, loop_idx = nil, implicit_header_boundary = nil, implicit_header = nil, line = nil, beyond_first = nil, next_cellspec = nil, m = nil, pre_match = nil, post_match = nil, $case = nil, $writer = nil, cell_text = nil, $logical_op_recvr_tmp_2 = nil;
+        var $a, $b, $c, $d, self = this, table = nil, colspecs = nil, explicit_colspecs = nil, skipped = nil, $writer = nil, implicit_header = nil, parser_ctx = nil, format = nil, loop_idx = nil, implicit_header_boundary = nil, line = nil, beyond_first = nil, next_cellspec = nil, m = nil, pre_match = nil, post_match = nil, $case = nil, cell_text = nil, $logical_op_recvr_tmp_2 = nil;
 
         
         table = $$($nesting, 'Table').$new(parent, attributes);
@@ -31747,12 +31827,20 @@ Opal.modules["asciidoctor/parser"] = function(Opal) {
           table.$create_columns(colspecs);
           explicit_colspecs = true;};
         skipped = ($truthy($a = table_reader.$skip_blank_lines()) ? $a : 0);
+        if ($truthy(attributes['$[]']("header-option"))) {
+          
+          $writer = [true];
+          $send(table, 'has_header_option=', Opal.to_a($writer));
+          $writer[$rb_minus($writer["length"], 1)];
+        } else if ($truthy((($a = skipped['$=='](0)) ? attributes['$[]']("noheader-option")['$!']() : skipped['$=='](0)))) {
+          
+          
+          $writer = ["implicit"];
+          $send(table, 'has_header_option=', Opal.to_a($writer));
+          $writer[$rb_minus($writer["length"], 1)];;
+          implicit_header = true;};
         parser_ctx = $$$($$($nesting, 'Table'), 'ParserContext').$new(table_reader, table, attributes);
         $a = [parser_ctx.$format(), -1, nil], (format = $a[0]), (loop_idx = $a[1]), (implicit_header_boundary = $a[2]), $a;
-        if ($truthy(($truthy($a = ($truthy($b = $rb_gt(skipped, 0)) ? $b : attributes['$[]']("header-option"))) ? $a : attributes['$[]']("noheader-option")))) {
-        } else {
-          implicit_header = true
-        };
         $a = false; while ($a || $truthy((line = table_reader.$read_line()))) {$a = false;
           
           if ($truthy(($truthy($b = (beyond_first = $rb_gt((loop_idx = $rb_plus(loop_idx, 1)), 0))) ? line['$empty?']() : $b))) {
@@ -31776,7 +31864,10 @@ Opal.modules["asciidoctor/parser"] = function(Opal) {
                 if ($truthy(implicit_header_boundary)) {
                   implicit_header_boundary = nil};
               } else if ($truthy(($truthy($b = implicit_header_boundary) ? implicit_header_boundary['$=='](loop_idx) : $b))) {
-                $b = [false, nil], (implicit_header = $b[0]), (implicit_header_boundary = $b[1]), $b};
+                
+                $writer = [(implicit_header = (implicit_header_boundary = nil))];
+                $send(table, 'has_header_option=', Opal.to_a($writer));
+                $writer[$rb_minus($writer["length"], 1)];};
             }};
           if ($truthy(beyond_first)) {
           } else {
@@ -31786,7 +31877,10 @@ Opal.modules["asciidoctor/parser"] = function(Opal) {
               if ($truthy(($truthy($b = table_reader['$has_more_lines?']()) ? table_reader.$peek_line()['$empty?']() : $b))) {
                 implicit_header_boundary = 1
               } else {
-                implicit_header = false
+                
+                $writer = [(implicit_header = nil)];
+                $send(table, 'has_header_option=', Opal.to_a($writer));
+                $writer[$rb_minus($writer["length"], 1)];
               }};
           };
           $b = false; while ($b || $truthy(true)) {$b = false;
@@ -31854,7 +31948,10 @@ Opal.modules["asciidoctor/parser"] = function(Opal) {
               if ("csv"['$===']($case)) {if ($truthy(parser_ctx['$buffer_has_unclosed_quotes?']())) {
                 
                 if ($truthy(($truthy($c = implicit_header_boundary) ? loop_idx['$=='](0) : $c))) {
-                  $c = [false, nil], (implicit_header = $c[0]), (implicit_header_boundary = $c[1]), $c};
+                  
+                  $writer = [(implicit_header = (implicit_header_boundary = nil))];
+                  $send(table, 'has_header_option=', Opal.to_a($writer));
+                  $writer[$rb_minus($writer["length"], 1)];};
                 parser_ctx.$keep_cell_open();
               } else {
                 parser_ctx.$close_cell(true)
@@ -31883,14 +31980,9 @@ Opal.modules["asciidoctor/parser"] = function(Opal) {
         };
         if ($truthy(implicit_header)) {
           
-          
           $writer = [true];
           $send(table, 'has_header_option=', Opal.to_a($writer));
-          $writer[$rb_minus($writer["length"], 1)];;
-          
-          $writer = ["header-option", ""];
-          $send(attributes, '[]=', Opal.to_a($writer));
-          $writer[$rb_minus($writer["length"], 1)];;};
+          $writer[$rb_minus($writer["length"], 1)];};
         table.$partition_header_footer(attributes);
         return table;
       }, $Parser_parse_table$60.$$arity = 3);
@@ -32061,7 +32153,7 @@ Opal.modules["asciidoctor/parser"] = function(Opal) {
         return [spec, rest];
       }, $Parser_parse_cellspec$65.$$arity = -2);
       Opal.defs(self, '$parse_style_attribute', $Parser_parse_style_attribute$66 = function $$parse_style_attribute(attributes, reader) {
-        var $a, $b, $$67, $$68, self = this, raw_style = nil, name = nil, accum = nil, parsed_attrs = nil, parsed_style = nil, $writer = nil, existing_role = nil, opts = nil;
+        var $a, $b, $$67, $$68, self = this, raw_style = nil, name = nil, accum = nil, parsed_attrs = nil, parsed_style = nil, $writer = nil, existing_role = nil;
 
         
         
@@ -32118,7 +32210,7 @@ Opal.modules["asciidoctor/parser"] = function(Opal) {
               $send(attributes, '[]=', Opal.to_a($writer));
               $writer[$rb_minus($writer["length"], 1)];};
             if ($truthy(parsed_attrs['$key?']("option"))) {
-              $send((opts = parsed_attrs['$[]']("option")), 'each', [], ($$68 = function(opt){var self = $$68.$$s || this;
+              $send(parsed_attrs['$[]']("option"), 'each', [], ($$68 = function(opt){var self = $$68.$$s || this;
 
               
                 
@@ -32582,7 +32674,7 @@ Opal.modules["asciidoctor/path_resolver"] = function(Opal) {
       }, $PathResolver_join_path$12.$$arity = -2);
       
       Opal.def(self, '$system_path', $PathResolver_system_path$13 = function $$system_path(target, start, jail, opts) {
-        var $a, $b, $$14, $$15, self = this, target_path = nil, target_segments = nil, _ = nil, jail_segments = nil, jail_root = nil, recheck = nil, start_segments = nil, start_root = nil, resolved_segments = nil, unresolved_segments = nil, warned = nil;
+        var $a, $b, $$14, $$15, self = this, target_path = nil, target_segments = nil, jail_segments = nil, jail_root = nil, recheck = nil, start_segments = nil, start_root = nil, resolved_segments = nil, unresolved_segments = nil, warned = nil;
 
         
         
@@ -32612,7 +32704,7 @@ Opal.modules["asciidoctor/path_resolver"] = function(Opal) {
               if ($truthy(opts.$fetch("recover", true))) {
                 
                 self.$logger().$warn("" + (($truthy($a = opts['$[]']("target_name")) ? $a : "path")) + " is outside of jail; recovering automatically");
-                $b = self.$partition_path(target_path), $a = Opal.to_ary($b), (target_segments = ($a[0] == null ? nil : $a[0])), (_ = ($a[1] == null ? nil : $a[1])), $b;
+                $b = self.$partition_path(target_path), $a = Opal.to_ary($b), (target_segments = ($a[0] == null ? nil : $a[0])), $b;
                 $b = self.$partition_path(jail), $a = Opal.to_ary($b), (jail_segments = ($a[0] == null ? nil : $a[0])), (jail_root = ($a[1] == null ? nil : $a[1])), $b;
                 return self.$join_path($rb_plus(jail_segments, target_segments), jail_root);
               } else {
@@ -32620,7 +32712,7 @@ Opal.modules["asciidoctor/path_resolver"] = function(Opal) {
               }};
             return target_path;
           } else {
-            $b = self.$partition_path(target), $a = Opal.to_ary($b), (target_segments = ($a[0] == null ? nil : $a[0])), (_ = ($a[1] == null ? nil : $a[1])), $b
+            $b = self.$partition_path(target), $a = Opal.to_ary($b), (target_segments = ($a[0] == null ? nil : $a[0])), $b
           }
         } else {
           target_segments = []
@@ -32636,7 +32728,7 @@ Opal.modules["asciidoctor/path_resolver"] = function(Opal) {
             }
           } else {
             
-            $b = self.$partition_path(start), $a = Opal.to_ary($b), (target_segments = ($a[0] == null ? nil : $a[0])), (_ = ($a[1] == null ? nil : $a[1])), $b;
+            $b = self.$partition_path(start), $a = Opal.to_ary($b), (target_segments = ($a[0] == null ? nil : $a[0])), $b;
             start = ($truthy($a = jail) ? $a : self.working_dir);
           }
         } else if ($truthy(start['$nil_or_empty?']())) {
@@ -32670,7 +32762,7 @@ Opal.modules["asciidoctor/path_resolver"] = function(Opal) {
             
             if ($truthy(jail_segments)) {
             } else {
-              $b = self.$partition_path(jail), $a = Opal.to_ary($b), (jail_segments = ($a[0] == null ? nil : $a[0])), (_ = ($a[1] == null ? nil : $a[1])), $b
+              $b = self.$partition_path(jail), $a = Opal.to_ary($b), (jail_segments = ($a[0] == null ? nil : $a[0])), $b
             };
             warned = false;
             $send(unresolved_segments, 'each', [], ($$14 = function(segment){var self = $$14.$$s || this, $c;
@@ -32721,7 +32813,7 @@ Opal.modules["asciidoctor/path_resolver"] = function(Opal) {
             self.$logger().$warn("" + (($truthy($a = opts['$[]']("target_name")) ? $a : "path")) + " is outside of jail; recovering automatically");
             if ($truthy(jail_segments)) {
             } else {
-              $b = self.$partition_path(jail), $a = Opal.to_ary($b), (jail_segments = ($a[0] == null ? nil : $a[0])), (_ = ($a[1] == null ? nil : $a[1])), $b
+              $b = self.$partition_path(jail), $a = Opal.to_ary($b), (jail_segments = ($a[0] == null ? nil : $a[0])), $b
             };
             return self.$join_path($rb_plus(jail_segments, target_segments), jail_root);
           } else {
@@ -32821,7 +32913,7 @@ Opal.modules["asciidoctor/reader"] = function(Opal) {
   }
   var self = Opal.top, $nesting = [], nil = Opal.nil, $$$ = Opal.const_get_qualified, $$ = Opal.const_get_relative, $breaker = Opal.breaker, $slice = Opal.slice, $module = Opal.module, $klass = Opal.klass, $hash2 = Opal.hash2, $truthy = Opal.truthy, $send = Opal.send, $gvars = Opal.gvars, $hash = Opal.hash;
 
-  Opal.add_stubs(['$include', '$attr_reader', '$+', '$attr_accessor', '$!', '$===', '$split', '$file', '$dir', '$dirname', '$path', '$basename', '$lineno', '$prepare_lines', '$drop', '$empty?', '$nil_or_empty?', '$peek_line', '$>', '$slice', '$[]', '$length', '$process_line', '$times', '$shift', '$read_line', '$<<', '$-', '$unshift_all', '$has_more_lines?', '$join', '$read_lines', '$unshift', '$start_with?', '$==', '$*', '$read_lines_until', '$size', '$clear', '$cursor', '$[]=', '$!=', '$fetch', '$cursor_at_mark', '$warn', '$logger', '$message_with_context', '$new', '$tap', '$each', '$instance_variables', '$instance_variable_get', '$instance_variable_set', '$class', '$object_id', '$inspect', '$private', '$prepare_source_array', '$prepare_source_string', '$valid_encoding?', '$to_s', '$raise', '$to_i', '$attributes', '$catalog', '$pop_include', '$parse', '$path=', '$dup', '$end_with?', '$keys', '$rindex', '$rootname', '$key?', '$attr', '$>=', '$nil?', '$extensions?', '$include_processors?', '$extensions', '$include_processors', '$map', '$skip_front_matter!', '$pop', '$adjust_indentation!', '$include?', '$=~', '$preprocess_conditional_directive', '$preprocess_include_directive', '$downcase', '$error', '$none?', '$any?', '$all?', '$strip', '$send', '$resolve_expr_val', '$replace_next_line', '$rstrip', '$sub_attributes', '$attribute_missing', '$info', '$parse_attributes', '$find', '$handles?', '$instance', '$process_method', '$safe', '$resolve_include_path', '$method', '$split_delimited_value', '$partition', '$<', '$/', '$to_a', '$uniq', '$sort', '$call', '$each_line', '$infinite?', '$push_include', '$delete', '$value?', '$create_include_cursor', '$delete_at', '$read', '$uriish?', '$attr?', '$require_library', '$normalize_system_path', '$file?', '$relative_path', '$path_resolver', '$base_dir', '$to_f']);
+  Opal.add_stubs(['$include', '$attr_reader', '$+', '$attr_accessor', '$!', '$===', '$split', '$file', '$dir', '$dirname', '$path', '$basename', '$lineno', '$prepare_lines', '$drop', '$empty?', '$nil_or_empty?', '$peek_line', '$>', '$slice', '$[]', '$length', '$process_line', '$times', '$shift', '$read_line', '$<<', '$-', '$unshift_all', '$has_more_lines?', '$join', '$read_lines', '$unshift', '$start_with?', '$==', '$*', '$read_lines_until', '$size', '$clear', '$cursor', '$[]=', '$!=', '$fetch', '$cursor_at_mark', '$warn', '$logger', '$message_with_context', '$new', '$tap', '$each', '$instance_variables', '$instance_variable_get', '$instance_variable_set', '$class', '$object_id', '$inspect', '$private', '$prepare_source_array', '$prepare_source_string', '$chomp', '$valid_encoding?', '$to_s', '$raise', '$to_i', '$attributes', '$catalog', '$pop_include', '$parse', '$path=', '$dup', '$end_with?', '$keys', '$rindex', '$rootname', '$key?', '$attr', '$>=', '$nil?', '$extensions?', '$include_processors?', '$extensions', '$include_processors', '$map', '$skip_front_matter!', '$pop', '$adjust_indentation!', '$include?', '$=~', '$preprocess_conditional_directive', '$preprocess_include_directive', '$downcase', '$error', '$none?', '$any?', '$all?', '$strip', '$send', '$resolve_expr_val', '$replace_next_line', '$rstrip', '$sub_attributes', '$attribute_missing', '$info', '$parse_attributes', '$find', '$handles?', '$instance', '$process_method', '$safe', '$resolve_include_path', '$method', '$split_delimited_value', '$partition', '$<', '$/', '$to_a', '$uniq', '$sort', '$call', '$each_line', '$infinite?', '$push_include', '$delete', '$value?', '$create_include_cursor', '$delete_at', '$read', '$uriish?', '$attr?', '$require_library', '$normalize_system_path', '$file?', '$relative_path', '$path_resolver', '$base_dir', '$to_f']);
   return (function($base, $parent_nesting) {
     var self = $module($base, 'Asciidoctor');
 
@@ -33417,7 +33509,7 @@ Opal.modules["asciidoctor/reader"] = function(Opal) {
       self.$private();
       
       Opal.def(self, '$prepare_lines', $Reader_prepare_lines$43 = function $$prepare_lines(data, opts) {
-        var self = this;
+        var self = this, normalize = nil, trim_end = nil;
 
         
         
@@ -33425,18 +33517,24 @@ Opal.modules["asciidoctor/reader"] = function(Opal) {
           opts = $hash2([], {});
         };
         try {
-          if ($truthy(opts['$[]']("normalize"))) {
+          if ($truthy((normalize = opts['$[]']("normalize")))) {
+            
+            trim_end = (function() {if (normalize['$==']("chomp")) {
+              return false
+            } else {
+              return true
+            }; return nil; })();
             if ($truthy($$$('::', 'Array')['$==='](data))) {
               
-              return $$($nesting, 'Helpers').$prepare_source_array(data);
+              return $$($nesting, 'Helpers').$prepare_source_array(data, trim_end);
             } else {
               
-              return $$($nesting, 'Helpers').$prepare_source_string(data);
-            }
+              return $$($nesting, 'Helpers').$prepare_source_string(data, trim_end);
+            };
           } else if ($truthy($$$('::', 'Array')['$==='](data))) {
             return data.$drop(0)
           } else if ($truthy(data)) {
-            return data.$split($$($nesting, 'LF'), -1)
+            return data.$chomp().$split($$($nesting, 'LF'), -1)
           } else {
             return []
           }
@@ -33626,7 +33724,7 @@ Opal.modules["asciidoctor/reader"] = function(Opal) {
           } else {
             self.maxdepth = $hash2(["abs", "curr", "rel"], {"abs": self.maxdepth['$[]']("abs"), "curr": self.include_stack.$size(), "rel": 0})
           }};
-        if ($truthy((self.lines = self.$prepare_lines(data, $hash2(["normalize", "condense", "indent"], {"normalize": true, "condense": false, "indent": attributes['$[]']("indent")})))['$empty?']())) {
+        if ($truthy((self.lines = self.$prepare_lines(data, $hash2(["normalize", "condense", "indent"], {"normalize": ($truthy($a = self.process_lines) ? $a : "chomp"), "condense": self.process_lines, "indent": attributes['$[]']("indent")})))['$empty?']())) {
           self.$pop_include()
         } else {
           
@@ -33941,7 +34039,7 @@ Opal.modules["asciidoctor/reader"] = function(Opal) {
       }, $PreprocessorReader_preprocess_conditional_directive$59.$$arity = 4);
       
       Opal.def(self, '$preprocess_include_directive', $PreprocessorReader_preprocess_include_directive$64 = function $$preprocess_include_directive(target, attrlist) {
-        var $a, $b, $$65, $$66, $$67, $$68, $$69, $$70, $$72, $$75, $$76, self = this, doc = nil, expanded_target = nil, attr_missing = nil, ext = nil, parsed_attrs = nil, inc_path = nil, target_type = nil, relpath = nil, reader = nil, read_mode = nil, inc_linenos = nil, inc_tags = nil, tag = nil, inc_lines = nil, inc_offset = nil, inc_lineno = nil, $writer = nil, tag_stack = nil, tags_used = nil, active_tag = nil, select = nil, base_select = nil, wildcard = nil, missing_tags = nil, inc_content = nil;
+        var $a, $b, $$65, $$66, $$67, $$68, $$69, $$70, $$72, $$75, $$76, self = this, doc = nil, expanded_target = nil, attr_missing = nil, ext = nil, parsed_attrs = nil, inc_path = nil, target_type = nil, relpath = nil, reader = nil, read_mode = nil, enc = nil, $writer = nil, read_mode_params = nil, inc_linenos = nil, inc_tags = nil, tag = nil, inc_lines = nil, inc_offset = nil, inc_lineno = nil, tag_stack = nil, tags_used = nil, active_tag = nil, select = nil, base_select = nil, wildcard = nil, missing_tags = nil, inc_content = nil;
 
         
         doc = self.document;
@@ -34010,6 +34108,22 @@ Opal.modules["asciidoctor/reader"] = function(Opal) {
           } else {
             return inc_path
           };
+          if ($truthy($$($nesting, 'RUBY_ENGINE_OPAL'))) {
+          } else if ($truthy(($truthy($a = (enc = parsed_attrs['$[]']("encoding"))) ? (function() { try {
+            return $$$('::', 'Encoding').$find(enc)
+          } catch ($err) {
+            if (Opal.rescue($err, [$$($nesting, 'StandardError')])) {
+              try {
+                return nil
+              } finally { Opal.pop_exception() }
+            } else { throw $err; }
+          }})() : $a))) {
+            
+            
+            $writer = [1, enc];
+            $send((read_mode_params = read_mode.$split(":")), '[]=', Opal.to_a($writer));
+            $writer[$rb_minus($writer["length"], 1)];;
+            read_mode = read_mode_params.$join(":");};
           inc_linenos = (inc_tags = nil);
           if ($truthy(attrlist)) {
             if ($truthy(parsed_attrs['$key?']("lines"))) {
@@ -34050,7 +34164,7 @@ Opal.modules["asciidoctor/reader"] = function(Opal) {
             } else if ($truthy(parsed_attrs['$key?']("tags"))) {
               
               inc_tags = $hash2([], {});
-              $send(self.$split_delimited_value(parsed_attrs['$[]']("tags")), 'each', [], ($$69 = function(tagdef){var self = $$69.$$s || this, $c, $writer = nil;
+              $send(self.$split_delimited_value(parsed_attrs['$[]']("tags")), 'each', [], ($$69 = function(tagdef){var self = $$69.$$s || this, $c;
 
               
                 
@@ -34179,18 +34293,14 @@ Opal.modules["asciidoctor/reader"] = function(Opal) {
                       } else if ($truthy(inc_tags['$key?'](this_tag))) {
                         
                         include_cursor = self.$create_include_cursor(inc_path, expanded_target, inc_lineno);
-                        if ($truthy((idx = $send(tag_stack, 'rindex', [], ($$74 = function(key, _){var self = $$74.$$s || this;
+                        if ($truthy((idx = $send(tag_stack, 'rindex', [], ($$74 = function(key){var self = $$74.$$s || this;
 
                         
                           
                           if (key == null) {
                             key = nil;
                           };
-                          
-                          if (_ == null) {
-                            _ = nil;
-                          };
-                          return key['$=='](this_tag);}, $$74.$$s = self, $$74.$$arity = 2, $$74))))) {
+                          return key['$=='](this_tag);}, $$74.$$s = self, $$74.$$arity = 1, $$74.$$has_trailing_comma_in_args = true, $$74))))) {
                           
                           if (idx['$=='](0)) {
                             tag_stack.$shift()
@@ -34821,7 +34931,7 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
   }
   var self = Opal.top, $nesting = [], nil = Opal.nil, $$$ = Opal.const_get_qualified, $$ = Opal.const_get_relative, $breaker = Opal.breaker, $slice = Opal.slice, $module = Opal.module, $klass = Opal.klass, $hash2 = Opal.hash2, $send = Opal.send, $truthy = Opal.truthy, $gvars = Opal.gvars;
 
-  Opal.add_stubs(['$attr_accessor', '$attr_reader', '$new', '$[]', '$>', '$to_i', '$<', '$==', '$[]=', '$-', '$attributes', '$truncate', '$*', '$/', '$to_f', '$empty?', '$body', '$each', '$<<', '$size', '$+', '$assign_column_widths', '$warn', '$logger', '$update_attributes', '$assign_width', '$round', '$shift', '$style=', '$head=', '$pop', '$foot=', '$parent', '$sourcemap', '$dup', '$header_row?', '$table', '$delete', '$start_with?', '$rstrip', '$slice', '$length', '$advance', '$lstrip', '$strip', '$split', '$include?', '$readlines', '$unshift', '$nil?', '$=~', '$catalog_inline_anchor', '$apply_subs', '$convert', '$map', '$text', '$!=', '$file', '$lineno', '$to_s', '$include', '$to_set', '$mark', '$key?', '$nested?', '$document', '$error', '$message_with_context', '$cursor_at_prev_line', '$nil_or_empty?', '$escape', '$columns', '$match', '$chop', '$end_with?', '$gsub', '$!', '$push_cellspec', '$cell_open?', '$close_cell', '$take_cellspec', '$squeeze', '$upto', '$times', '$cursor_before_mark', '$rowspan', '$activate_rowspan', '$colspan', '$end_of_row?', '$close_row', '$private', '$rows', '$effective_column_visits']);
+  Opal.add_stubs(['$attr_accessor', '$attr_reader', '$new', '$[]', '$>', '$to_i', '$<', '$==', '$[]=', '$-', '$attributes', '$truncate', '$*', '$/', '$to_f', '$empty?', '$body', '$each', '$<<', '$size', '$+', '$assign_column_widths', '$warn', '$logger', '$update_attributes', '$assign_width', '$round', '$map', '$shift', '$reinitialize', '$head=', '$nil?', '$unshift', '$pop', '$foot=', '$parent', '$sourcemap', '$dup', '$header_row?', '$table', '$style', '$merge', '$delete', '$start_with?', '$rstrip', '$slice', '$length', '$advance', '$lstrip', '$strip', '$split', '$include?', '$readlines', '$catalog_inline_anchor', '$=~', '$apply_subs', '$convert', '$text', '$!=', '$file', '$lineno', '$to_s', '$include', '$to_set', '$mark', '$key?', '$nested?', '$document', '$error', '$message_with_context', '$cursor_at_prev_line', '$nil_or_empty?', '$escape', '$columns', '$match', '$chop', '$end_with?', '$gsub', '$!', '$push_cellspec', '$cell_open?', '$close_cell', '$take_cellspec', '$squeeze', '$upto', '$times', '$cursor_before_mark', '$rowspan', '$activate_rowspan', '$colspan', '$end_of_row?', '$close_row', '$private', '$rows', '$effective_column_visits']);
   return (function($base, $parent_nesting) {
     var self = $module($base, 'Asciidoctor');
 
@@ -34891,11 +35001,7 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
         $send(self, Opal.find_super_dispatcher(self, 'initialize', $Table_initialize$4, false), [parent, "table"], null);
         self.rows = $$($nesting, 'Rows').$new();
         self.columns = [];
-        self.has_header_option = (function() {if ($truthy(attributes['$[]']("header-option"))) {
-          return true
-        } else {
-          return false
-        }; return nil; })();
+        self.has_header_option = false;
         if ($truthy((pcwidth = attributes['$[]']("width")))) {
           if ($truthy(($truthy($a = $rb_gt((pcwidth_intval = pcwidth.$to_i()), 100)) ? $a : $rb_lt(pcwidth_intval, 1)))) {
             if ($truthy((($a = pcwidth_intval['$=='](0)) ? ($truthy($b = pcwidth['$==']("0")) ? $b : pcwidth['$==']("0%")) : pcwidth_intval['$=='](0)))) {
@@ -34929,9 +35035,13 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
       }, $Table_initialize$4.$$arity = 2);
       
       Opal.def(self, '$header_row?', $Table_header_row$ques$5 = function() {
-        var $a, self = this;
+        var $a, self = this, val = nil;
 
-        return ($truthy($a = self.has_header_option) ? self.rows.$body()['$empty?']() : $a)
+        if ($truthy(($truthy($a = (val = self.has_header_option)) ? self.rows.$body()['$empty?']() : $a))) {
+          return val
+        } else {
+          return nil
+        }
       }, $Table_header_row$ques$5.$$arity = 0);
       
       Opal.def(self, '$create_columns', $Table_create_columns$6 = function $$create_columns(colspecs) {
@@ -35036,35 +35146,39 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
         return nil;
       }, $Table_assign_column_widths$8.$$arity = -1);
       return (Opal.def(self, '$partition_header_footer', $Table_partition_header_footer$12 = function $$partition_header_footer(attrs) {
-        var $a, $$13, self = this, $writer = nil, num_body_rows = nil, head = nil;
+        var $$13, $$14, $a, self = this, num_body_rows = nil, $writer = nil, body = nil;
 
         
-        
-        $writer = ["rowcount", self.rows.$body().$size()];
-        $send(self.attributes, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        num_body_rows = self.rows.$body().$size();
-        if ($truthy(($truthy($a = $rb_gt(num_body_rows, 0)) ? self.has_header_option : $a))) {
-          
-          head = self.rows.$body().$shift();
-          num_body_rows = $rb_minus(num_body_rows, 1);
-          $send(head, 'each', [], ($$13 = function(c){var self = $$13.$$s || this;
-
-          
+        num_body_rows = (($writer = ["rowcount", (body = self.rows.$body()).$size()]), $send(self.attributes, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]);
+        if ($truthy($rb_gt(num_body_rows, 0))) {
+          if ($truthy(self.has_header_option)) {
             
-            if (c == null) {
-              c = nil;
-            };
-            $writer = [nil];
-            $send(c, 'style=', Opal.to_a($writer));
-            return $writer[$rb_minus($writer["length"], 1)];}, $$13.$$s = self, $$13.$$arity = 1, $$13));
-          
-          $writer = [[head]];
-          $send(self.rows, 'head=', Opal.to_a($writer));
-          $writer[$rb_minus($writer["length"], 1)];;};
+            
+            $writer = [[$send(body.$shift(), 'map', [], ($$13 = function(cell){var self = $$13.$$s || this;
+
+            
+              
+              if (cell == null) {
+                cell = nil;
+              };
+              return cell.$reinitialize(true);}, $$13.$$s = self, $$13.$$arity = 1, $$13))]];
+            $send(self.rows, 'head=', Opal.to_a($writer));
+            $writer[$rb_minus($writer["length"], 1)];;
+            num_body_rows = $rb_minus(num_body_rows, 1);
+          } else if ($truthy(self.has_header_option['$nil?']())) {
+            
+            self.has_header_option = false;
+            body.$unshift($send(body.$shift(), 'map', [], ($$14 = function(cell){var self = $$14.$$s || this;
+
+            
+              
+              if (cell == null) {
+                cell = nil;
+              };
+              return cell.$reinitialize(false);}, $$14.$$s = self, $$14.$$arity = 1, $$14)));}};
         if ($truthy(($truthy($a = $rb_gt(num_body_rows, 0)) ? attrs['$[]']("footer-option") : $a))) {
           
-          $writer = [[self.rows.$body().$pop()]];
+          $writer = [[body.$pop()]];
           $send(self.rows, 'foot=', Opal.to_a($writer));
           $writer[$rb_minus($writer["length"], 1)];};
         return nil;
@@ -35073,22 +35187,22 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
     (function($base, $super, $parent_nesting) {
       var self = $klass($base, $super, 'Column');
 
-      var $nesting = [self].concat($parent_nesting), $Column_initialize$14, $Column_assign_width$15, $Column_block$ques$16, $Column_inline$ques$17;
+      var $nesting = [self].concat($parent_nesting), $Column_initialize$15, $Column_assign_width$16, $Column_block$ques$17, $Column_inline$ques$18;
 
       self.$$prototype.attributes = nil;
       
       self.$attr_accessor("style");
       
-      Opal.def(self, '$initialize', $Column_initialize$14 = function $$initialize(table, index, attributes) {
-        var $a, $iter = $Column_initialize$14.$$p, $yield = $iter || nil, self = this, $writer = nil;
+      Opal.def(self, '$initialize', $Column_initialize$15 = function $$initialize(table, index, attributes) {
+        var $a, $iter = $Column_initialize$15.$$p, $yield = $iter || nil, self = this, $writer = nil;
 
-        if ($iter) $Column_initialize$14.$$p = null;
+        if ($iter) $Column_initialize$15.$$p = null;
         
         
         if (attributes == null) {
           attributes = $hash2([], {});
         };
-        $send(self, Opal.find_super_dispatcher(self, 'initialize', $Column_initialize$14, false), [table, "table_column"], null);
+        $send(self, Opal.find_super_dispatcher(self, 'initialize', $Column_initialize$15, false), [table, "table_column"], null);
         self.style = attributes['$[]']("style");
         
         $writer = ["colnumber", $rb_plus(index, 1)];
@@ -35098,10 +35212,10 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
         ($truthy($a = attributes['$[]']("halign")) ? $a : (($writer = ["halign", "left"]), $send(attributes, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]));
         ($truthy($a = attributes['$[]']("valign")) ? $a : (($writer = ["valign", "top"]), $send(attributes, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]));
         return self.$update_attributes(attributes);
-      }, $Column_initialize$14.$$arity = -3);
+      }, $Column_initialize$15.$$arity = -3);
       Opal.alias(self, "table", "parent");
       
-      Opal.def(self, '$assign_width', $Column_assign_width$15 = function $$assign_width(col_pcwidth, width_base, precision) {
+      Opal.def(self, '$assign_width', $Column_assign_width$16 = function $$assign_width(col_pcwidth, width_base, precision) {
         var self = this, $writer = nil, col_abswidth = nil;
 
         
@@ -35123,25 +35237,25 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
         $writer = ["colpcwidth", col_pcwidth];
         $send(self.attributes, '[]=', Opal.to_a($writer));
         return $writer[$rb_minus($writer["length"], 1)];;
-      }, $Column_assign_width$15.$$arity = 3);
+      }, $Column_assign_width$16.$$arity = 3);
       
-      Opal.def(self, '$block?', $Column_block$ques$16 = function() {
+      Opal.def(self, '$block?', $Column_block$ques$17 = function() {
         var self = this;
 
         return false
-      }, $Column_block$ques$16.$$arity = 0);
-      return (Opal.def(self, '$inline?', $Column_inline$ques$17 = function() {
+      }, $Column_block$ques$17.$$arity = 0);
+      return (Opal.def(self, '$inline?', $Column_inline$ques$18 = function() {
         var self = this;
 
         return false
-      }, $Column_inline$ques$17.$$arity = 0), nil) && 'inline?';
+      }, $Column_inline$ques$18.$$arity = 0), nil) && 'inline?';
     })($$($nesting, 'Table'), $$($nesting, 'AbstractNode'), $nesting);
     (function($base, $super, $parent_nesting) {
       var self = $klass($base, $super, 'Cell');
 
-      var $nesting = [self].concat($parent_nesting), $Cell_initialize$18, $Cell_text$19, $Cell_text$eq$20, $Cell_content$21, $Cell_lines$23, $Cell_source$24, $Cell_file$25, $Cell_lineno$26, $Cell_to_s$27;
+      var $nesting = [self].concat($parent_nesting), $Cell_initialize$19, $Cell_reinitialize$20, $Cell_catalog_inline_anchor$21, $Cell_text$22, $Cell_text$eq$23, $Cell_content$24, $Cell_lines$26, $Cell_source$27, $Cell_file$28, $Cell_lineno$29, $Cell_to_s$30;
 
-      self.$$prototype.document = self.$$prototype.text = self.$$prototype.subs = self.$$prototype.style = self.$$prototype.inner_document = self.$$prototype.source_location = self.$$prototype.colspan = self.$$prototype.rowspan = self.$$prototype.attributes = nil;
+      self.$$prototype.document = self.$$prototype.reinitialize_args = self.$$prototype.attributes = self.$$prototype.cursor = self.$$prototype.text = self.$$prototype.subs = self.$$prototype.style = self.$$prototype.inner_document = self.$$prototype.source_location = self.$$prototype.colspan = self.$$prototype.rowspan = nil;
       
       Opal.const_set($nesting[0], 'DOUBLE_LF', $rb_times($$($nesting, 'LF'), 2));
       self.$attr_accessor("colspan");
@@ -35149,10 +35263,10 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
       Opal.alias(self, "column", "parent");
       self.$attr_reader("inner_document");
       
-      Opal.def(self, '$initialize', $Cell_initialize$18 = function $$initialize(column, cell_text, attributes, opts) {
-        var $a, $b, $iter = $Cell_initialize$18.$$p, $yield = $iter || nil, self = this, in_header_row = nil, cell_style = nil, asciidoc = nil, inner_document_cursor = nil, lines_advanced = nil, literal = nil, normal_psv = nil, parent_doctitle = nil, inner_document_lines = nil, unprocessed_line1 = nil, preprocessed_lines = nil, $writer = nil;
+      Opal.def(self, '$initialize', $Cell_initialize$19 = function $$initialize(column, cell_text, attributes, opts) {
+        var $a, $b, $c, $iter = $Cell_initialize$19.$$p, $yield = $iter || nil, self = this, in_header_row = nil, cell_style = nil, asciidoc = nil, inner_document_cursor = nil, lines_advanced = nil, literal = nil, normal_psv = nil, parent_doctitle = nil, inner_document_lines = nil, unprocessed_line1 = nil, preprocessed_lines = nil, $writer = nil;
 
-        if ($iter) $Cell_initialize$18.$$p = null;
+        if ($iter) $Cell_initialize$19.$$p = null;
         
         
         if (attributes == null) {
@@ -35162,14 +35276,20 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
         if (opts == null) {
           opts = $hash2([], {});
         };
-        $send(self, Opal.find_super_dispatcher(self, 'initialize', $Cell_initialize$18, false), [column, "table_cell"], null);
+        $send(self, Opal.find_super_dispatcher(self, 'initialize', $Cell_initialize$19, false), [column, "table_cell"], null);
+        self.cursor = (self.reinitialize_args = nil);
         if ($truthy(self.document.$sourcemap())) {
           self.source_location = opts['$[]']("cursor").$dup()};
         if ($truthy(column)) {
           
           if ($truthy((in_header_row = column.$table()['$header_row?']()))) {
+            if ($truthy((($a = in_header_row['$==']("implicit")) ? (cell_style = ($truthy($b = column.$style()) ? $b : ($truthy($c = attributes) ? attributes['$[]']("style") : $c))) : in_header_row['$==']("implicit")))) {
+              
+              if ($truthy(($truthy($a = cell_style['$==']("asciidoc")) ? $a : cell_style['$==']("literal")))) {
+                self.reinitialize_args = [column, cell_text, ($truthy($a = attributes) ? attributes.$merge() : $a), opts]};
+              cell_style = nil;}
           } else {
-            cell_style = column.$attributes()['$[]']("style")
+            cell_style = column.$style()
           };
           self.$update_attributes(column.$attributes());};
         if ($truthy(attributes)) {
@@ -35255,34 +35375,77 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
           self.subs = $$($nesting, 'BASIC_SUBS');
         } else {
           
-          if ($truthy(($truthy($a = ($truthy($b = normal_psv) ? cell_text['$start_with?']("[[") : $b)) ? $$($nesting, 'LeadingInlineAnchorRx')['$=~'](cell_text) : $a))) {
-            $$($nesting, 'Parser').$catalog_inline_anchor((($a = $gvars['~']) === nil ? nil : $a['$[]'](1)), (($a = $gvars['~']) === nil ? nil : $a['$[]'](2)), self, opts['$[]']("cursor"), self.document)};
+          if ($truthy(normal_psv)) {
+            if ($truthy(in_header_row)) {
+              self.cursor = opts['$[]']("cursor")
+            } else {
+              self.$catalog_inline_anchor(cell_text, opts['$[]']("cursor"))
+            }};
           self.content_model = "simple";
           self.subs = $$($nesting, 'NORMAL_SUBS');
         };
         self.text = cell_text;
         return (self.style = cell_style);
-      }, $Cell_initialize$18.$$arity = -3);
+      }, $Cell_initialize$19.$$arity = -3);
       
-      Opal.def(self, '$text', $Cell_text$19 = function $$text() {
+      Opal.def(self, '$reinitialize', $Cell_reinitialize$20 = function $$reinitialize(has_header) {
+        var self = this;
+
+        
+        if ($truthy(has_header)) {
+          self.reinitialize_args = nil
+        } else if ($truthy(self.reinitialize_args)) {
+          return $send($$$($$($nesting, 'Table'), 'Cell'), 'new', Opal.to_a(self.reinitialize_args))
+        } else {
+          self.style = self.attributes['$[]']("style")
+        };
+        if ($truthy(self.cursor)) {
+          self.$catalog_inline_anchor()};
+        return self;
+      }, $Cell_reinitialize$20.$$arity = 1);
+      
+      Opal.def(self, '$catalog_inline_anchor', $Cell_catalog_inline_anchor$21 = function $$catalog_inline_anchor(cell_text, cursor) {
+        var $a, self = this;
+
+        
+        
+        if (cell_text == null) {
+          cell_text = self.text;
+        };
+        
+        if (cursor == null) {
+          cursor = nil;
+        };
+        if ($truthy(cursor)) {
+        } else {
+          $a = [self.cursor, nil], (cursor = $a[0]), (self.cursor = $a[1]), $a
+        };
+        if ($truthy(($truthy($a = cell_text['$start_with?']("[[")) ? $$($nesting, 'LeadingInlineAnchorRx')['$=~'](cell_text) : $a))) {
+          return $$($nesting, 'Parser').$catalog_inline_anchor((($a = $gvars['~']) === nil ? nil : $a['$[]'](1)), (($a = $gvars['~']) === nil ? nil : $a['$[]'](2)), self, cursor, self.document)
+        } else {
+          return nil
+        };
+      }, $Cell_catalog_inline_anchor$21.$$arity = -1);
+      
+      Opal.def(self, '$text', $Cell_text$22 = function $$text() {
         var self = this;
 
         return self.$apply_subs(self.text, self.subs)
-      }, $Cell_text$19.$$arity = 0);
+      }, $Cell_text$22.$$arity = 0);
       
-      Opal.def(self, '$text=', $Cell_text$eq$20 = function(val) {
+      Opal.def(self, '$text=', $Cell_text$eq$23 = function(val) {
         var self = this;
 
         return (self.text = val)
-      }, $Cell_text$eq$20.$$arity = 1);
+      }, $Cell_text$eq$23.$$arity = 1);
       
-      Opal.def(self, '$content', $Cell_content$21 = function $$content() {
-        var $$22, $a, self = this, cell_style = nil, subbed_text = nil;
+      Opal.def(self, '$content', $Cell_content$24 = function $$content() {
+        var $$25, $a, self = this, cell_style = nil, subbed_text = nil;
 
         if ((cell_style = self.style)['$==']("asciidoc")) {
           return self.inner_document.$convert()
         } else if ($truthy(self.text['$include?']($$($nesting, 'DOUBLE_LF')))) {
-          return $send(self.$text().$split($$($nesting, 'BlankLineRx')), 'map', [], ($$22 = function(para){var self = $$22.$$s || this, $a;
+          return $send(self.$text().$split($$($nesting, 'BlankLineRx')), 'map', [], ($$25 = function(para){var self = $$25.$$s || this, $a;
 
           
             
@@ -35293,7 +35456,7 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
               return $$($nesting, 'Inline').$new(self.$parent(), "quoted", para, $hash2(["type"], {"type": cell_style})).$convert()
             } else {
               return para
-            };}, $$22.$$s = self, $$22.$$arity = 1, $$22))
+            };}, $$25.$$s = self, $$25.$$arity = 1, $$25))
         } else if ($truthy((subbed_text = self.$text())['$empty?']())) {
           return []
         } else if ($truthy(($truthy($a = cell_style) ? cell_style['$!=']("header") : $a))) {
@@ -35301,46 +35464,46 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
         } else {
           return [subbed_text]
         }
-      }, $Cell_content$21.$$arity = 0);
+      }, $Cell_content$24.$$arity = 0);
       
-      Opal.def(self, '$lines', $Cell_lines$23 = function $$lines() {
+      Opal.def(self, '$lines', $Cell_lines$26 = function $$lines() {
         var self = this;
 
         return self.text.$split($$($nesting, 'LF'))
-      }, $Cell_lines$23.$$arity = 0);
+      }, $Cell_lines$26.$$arity = 0);
       
-      Opal.def(self, '$source', $Cell_source$24 = function $$source() {
+      Opal.def(self, '$source', $Cell_source$27 = function $$source() {
         var self = this;
 
         return self.text
-      }, $Cell_source$24.$$arity = 0);
+      }, $Cell_source$27.$$arity = 0);
       
-      Opal.def(self, '$file', $Cell_file$25 = function $$file() {
+      Opal.def(self, '$file', $Cell_file$28 = function $$file() {
         var $a, self = this;
 
         return ($truthy($a = self.source_location) ? self.source_location.$file() : $a)
-      }, $Cell_file$25.$$arity = 0);
+      }, $Cell_file$28.$$arity = 0);
       
-      Opal.def(self, '$lineno', $Cell_lineno$26 = function $$lineno() {
+      Opal.def(self, '$lineno', $Cell_lineno$29 = function $$lineno() {
         var $a, self = this;
 
         return ($truthy($a = self.source_location) ? self.source_location.$lineno() : $a)
-      }, $Cell_lineno$26.$$arity = 0);
-      return (Opal.def(self, '$to_s', $Cell_to_s$27 = function $$to_s() {
-        var $a, $iter = $Cell_to_s$27.$$p, $yield = $iter || nil, self = this, $zuper = nil, $zuper_i = nil, $zuper_ii = nil;
+      }, $Cell_lineno$29.$$arity = 0);
+      return (Opal.def(self, '$to_s', $Cell_to_s$30 = function $$to_s() {
+        var $a, $iter = $Cell_to_s$30.$$p, $yield = $iter || nil, self = this, $zuper = nil, $zuper_i = nil, $zuper_ii = nil;
 
-        if ($iter) $Cell_to_s$27.$$p = null;
+        if ($iter) $Cell_to_s$30.$$p = null;
         // Prepare super implicit arguments
         for($zuper_i = 0, $zuper_ii = arguments.length, $zuper = new Array($zuper_ii); $zuper_i < $zuper_ii; $zuper_i++) {
           $zuper[$zuper_i] = arguments[$zuper_i];
         }
-        return "" + ($send(self, Opal.find_super_dispatcher(self, 'to_s', $Cell_to_s$27, false), $zuper, $iter).$to_s()) + " - [text: " + (self.text) + ", colspan: " + (($truthy($a = self.colspan) ? $a : 1)) + ", rowspan: " + (($truthy($a = self.rowspan) ? $a : 1)) + ", attributes: " + (self.attributes) + "]"
-      }, $Cell_to_s$27.$$arity = 0), nil) && 'to_s';
+        return "" + ($send(self, Opal.find_super_dispatcher(self, 'to_s', $Cell_to_s$30, false), $zuper, $iter).$to_s()) + " - [text: " + (self.text) + ", colspan: " + (($truthy($a = self.colspan) ? $a : 1)) + ", rowspan: " + (($truthy($a = self.rowspan) ? $a : 1)) + ", attributes: " + (self.attributes) + "]"
+      }, $Cell_to_s$30.$$arity = 0), nil) && 'to_s';
     })($$($nesting, 'Table'), $$($nesting, 'AbstractBlock'), $nesting);
     (function($base, $super, $parent_nesting) {
       var self = $klass($base, $super, 'ParserContext');
 
-      var $nesting = [self].concat($parent_nesting), $ParserContext_initialize$28, $ParserContext_starts_with_delimiter$ques$29, $ParserContext_match_delimiter$30, $ParserContext_skip_past_delimiter$31, $ParserContext_skip_past_escaped_delimiter$32, $ParserContext_buffer_has_unclosed_quotes$ques$33, $ParserContext_take_cellspec$34, $ParserContext_push_cellspec$35, $ParserContext_keep_cell_open$36, $ParserContext_mark_cell_closed$37, $ParserContext_cell_open$ques$38, $ParserContext_cell_closed$ques$39, $ParserContext_close_open_cell$40, $ParserContext_close_cell$41, $ParserContext_close_row$44, $ParserContext_activate_rowspan$45, $ParserContext_end_of_row$ques$47, $ParserContext_effective_column_visits$48, $ParserContext_advance$49;
+      var $nesting = [self].concat($parent_nesting), $ParserContext_initialize$31, $ParserContext_starts_with_delimiter$ques$32, $ParserContext_match_delimiter$33, $ParserContext_skip_past_delimiter$34, $ParserContext_skip_past_escaped_delimiter$35, $ParserContext_buffer_has_unclosed_quotes$ques$36, $ParserContext_take_cellspec$37, $ParserContext_push_cellspec$38, $ParserContext_keep_cell_open$39, $ParserContext_mark_cell_closed$40, $ParserContext_cell_open$ques$41, $ParserContext_cell_closed$ques$42, $ParserContext_close_open_cell$43, $ParserContext_close_cell$44, $ParserContext_close_row$47, $ParserContext_activate_rowspan$48, $ParserContext_end_of_row$ques$50, $ParserContext_effective_column_visits$51, $ParserContext_advance$52;
 
       self.$$prototype.delimiter = self.$$prototype.delimiter_rx = self.$$prototype.buffer = self.$$prototype.cellspecs = self.$$prototype.cell_open = self.$$prototype.format = self.$$prototype.start_cursor_data = self.$$prototype.reader = self.$$prototype.table = self.$$prototype.current_row = self.$$prototype.colcount = self.$$prototype.column_visits = self.$$prototype.active_rowspans = self.$$prototype.linenum = nil;
       
@@ -35354,7 +35517,7 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
       self.$attr_reader("delimiter");
       self.$attr_reader("delimiter_re");
       
-      Opal.def(self, '$initialize', $ParserContext_initialize$28 = function $$initialize(reader, table, attributes) {
+      Opal.def(self, '$initialize', $ParserContext_initialize$31 = function $$initialize(reader, table, attributes) {
         var $a, $b, self = this, xsv = nil, sep = nil;
 
         
@@ -35409,37 +35572,37 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
         self.column_visits = 0;
         self.current_row = [];
         return (self.linenum = -1);
-      }, $ParserContext_initialize$28.$$arity = -3);
+      }, $ParserContext_initialize$31.$$arity = -3);
       
-      Opal.def(self, '$starts_with_delimiter?', $ParserContext_starts_with_delimiter$ques$29 = function(line) {
+      Opal.def(self, '$starts_with_delimiter?', $ParserContext_starts_with_delimiter$ques$32 = function(line) {
         var self = this;
 
         return line['$start_with?'](self.delimiter)
-      }, $ParserContext_starts_with_delimiter$ques$29.$$arity = 1);
+      }, $ParserContext_starts_with_delimiter$ques$32.$$arity = 1);
       
-      Opal.def(self, '$match_delimiter', $ParserContext_match_delimiter$30 = function $$match_delimiter(line) {
+      Opal.def(self, '$match_delimiter', $ParserContext_match_delimiter$33 = function $$match_delimiter(line) {
         var self = this;
 
         return self.delimiter_rx.$match(line)
-      }, $ParserContext_match_delimiter$30.$$arity = 1);
+      }, $ParserContext_match_delimiter$33.$$arity = 1);
       
-      Opal.def(self, '$skip_past_delimiter', $ParserContext_skip_past_delimiter$31 = function $$skip_past_delimiter(pre) {
+      Opal.def(self, '$skip_past_delimiter', $ParserContext_skip_past_delimiter$34 = function $$skip_past_delimiter(pre) {
         var self = this;
 
         
         self.buffer = "" + (self.buffer) + (pre) + (self.delimiter);
         return nil;
-      }, $ParserContext_skip_past_delimiter$31.$$arity = 1);
+      }, $ParserContext_skip_past_delimiter$34.$$arity = 1);
       
-      Opal.def(self, '$skip_past_escaped_delimiter', $ParserContext_skip_past_escaped_delimiter$32 = function $$skip_past_escaped_delimiter(pre) {
+      Opal.def(self, '$skip_past_escaped_delimiter', $ParserContext_skip_past_escaped_delimiter$35 = function $$skip_past_escaped_delimiter(pre) {
         var self = this;
 
         
         self.buffer = "" + (self.buffer) + (pre.$chop()) + (self.delimiter);
         return nil;
-      }, $ParserContext_skip_past_escaped_delimiter$32.$$arity = 1);
+      }, $ParserContext_skip_past_escaped_delimiter$35.$$arity = 1);
       
-      Opal.def(self, '$buffer_has_unclosed_quotes?', $ParserContext_buffer_has_unclosed_quotes$ques$33 = function(append) {
+      Opal.def(self, '$buffer_has_unclosed_quotes?', $ParserContext_buffer_has_unclosed_quotes$ques$36 = function(append) {
         var $a, $b, self = this, record = nil, trailing_quote = nil;
 
         
@@ -35462,15 +35625,15 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
         } else {
           return false
         };
-      }, $ParserContext_buffer_has_unclosed_quotes$ques$33.$$arity = -1);
+      }, $ParserContext_buffer_has_unclosed_quotes$ques$36.$$arity = -1);
       
-      Opal.def(self, '$take_cellspec', $ParserContext_take_cellspec$34 = function $$take_cellspec() {
+      Opal.def(self, '$take_cellspec', $ParserContext_take_cellspec$37 = function $$take_cellspec() {
         var self = this;
 
         return self.cellspecs.$shift()
-      }, $ParserContext_take_cellspec$34.$$arity = 0);
+      }, $ParserContext_take_cellspec$37.$$arity = 0);
       
-      Opal.def(self, '$push_cellspec', $ParserContext_push_cellspec$35 = function $$push_cellspec(cellspec) {
+      Opal.def(self, '$push_cellspec', $ParserContext_push_cellspec$38 = function $$push_cellspec(cellspec) {
         var $a, self = this;
 
         
@@ -35480,37 +35643,37 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
         };
         self.cellspecs['$<<'](($truthy($a = cellspec) ? $a : $hash2([], {})));
         return nil;
-      }, $ParserContext_push_cellspec$35.$$arity = -1);
+      }, $ParserContext_push_cellspec$38.$$arity = -1);
       
-      Opal.def(self, '$keep_cell_open', $ParserContext_keep_cell_open$36 = function $$keep_cell_open() {
+      Opal.def(self, '$keep_cell_open', $ParserContext_keep_cell_open$39 = function $$keep_cell_open() {
         var self = this;
 
         
         self.cell_open = true;
         return nil;
-      }, $ParserContext_keep_cell_open$36.$$arity = 0);
+      }, $ParserContext_keep_cell_open$39.$$arity = 0);
       
-      Opal.def(self, '$mark_cell_closed', $ParserContext_mark_cell_closed$37 = function $$mark_cell_closed() {
+      Opal.def(self, '$mark_cell_closed', $ParserContext_mark_cell_closed$40 = function $$mark_cell_closed() {
         var self = this;
 
         
         self.cell_open = false;
         return nil;
-      }, $ParserContext_mark_cell_closed$37.$$arity = 0);
+      }, $ParserContext_mark_cell_closed$40.$$arity = 0);
       
-      Opal.def(self, '$cell_open?', $ParserContext_cell_open$ques$38 = function() {
+      Opal.def(self, '$cell_open?', $ParserContext_cell_open$ques$41 = function() {
         var self = this;
 
         return self.cell_open
-      }, $ParserContext_cell_open$ques$38.$$arity = 0);
+      }, $ParserContext_cell_open$ques$41.$$arity = 0);
       
-      Opal.def(self, '$cell_closed?', $ParserContext_cell_closed$ques$39 = function() {
+      Opal.def(self, '$cell_closed?', $ParserContext_cell_closed$ques$42 = function() {
         var self = this;
 
         return self.cell_open['$!']()
-      }, $ParserContext_cell_closed$ques$39.$$arity = 0);
+      }, $ParserContext_cell_closed$ques$42.$$arity = 0);
       
-      Opal.def(self, '$close_open_cell', $ParserContext_close_open_cell$40 = function $$close_open_cell(next_cellspec) {
+      Opal.def(self, '$close_open_cell', $ParserContext_close_open_cell$43 = function $$close_open_cell(next_cellspec) {
         var self = this;
 
         
@@ -35523,11 +35686,11 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
           self.$close_cell(true)};
         self.$advance();
         return nil;
-      }, $ParserContext_close_open_cell$40.$$arity = -1);
+      }, $ParserContext_close_open_cell$43.$$arity = -1);
       
-      Opal.def(self, '$close_cell', $ParserContext_close_cell$41 = function $$close_cell(eol) {try {
+      Opal.def(self, '$close_cell', $ParserContext_close_cell$44 = function $$close_cell(eol) {try {
 
-        var $a, $b, $$42, self = this, cell_text = nil, cellspec = nil, repeat = nil;
+        var $a, $b, $$45, self = this, cell_text = nil, cellspec = nil, repeat = nil;
 
         
         
@@ -35565,7 +35728,7 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
               cell_text = cell_text.$squeeze("\"")
             }};
         };
-        $send((1), 'upto', [repeat], ($$42 = function(i){var self = $$42.$$s || this, $c, $d, $$43, $e, column = nil, extra_cols = nil, offset = nil, cell = nil;
+        $send((1), 'upto', [repeat], ($$45 = function(i){var self = $$45.$$s || this, $c, $d, $$46, $e, column = nil, extra_cols = nil, offset = nil, cell = nil;
           if (self.colcount == null) self.colcount = nil;
           if (self.table == null) self.table = nil;
           if (self.current_row == null) self.current_row = nil;
@@ -35584,7 +35747,7 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
             if ($truthy(($truthy($c = ($truthy($d = cellspec) ? cellspec['$key?']("colspan") : $d)) ? $rb_gt((extra_cols = $rb_minus(cellspec['$[]']("colspan").$to_i(), 1)), 0) : $c))) {
               
               offset = self.table.$columns().$size();
-              $send(extra_cols, 'times', [], ($$43 = function(j){var self = $$43.$$s || this;
+              $send(extra_cols, 'times', [], ($$46 = function(j){var self = $$46.$$s || this;
                 if (self.table == null) self.table = nil;
 
               
@@ -35592,7 +35755,7 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
                 if (j == null) {
                   j = nil;
                 };
-                return self.table.$columns()['$<<']($$$($$($nesting, 'Table'), 'Column').$new(self.table, $rb_plus(offset, j)));}, $$43.$$s = self, $$43.$$arity = 1, $$43));};
+                return self.table.$columns()['$<<']($$$($$($nesting, 'Table'), 'Column').$new(self.table, $rb_plus(offset, j)));}, $$46.$$s = self, $$46.$$arity = 1, $$46));};
           } else if ($truthy((column = self.table.$columns()['$[]'](self.current_row.$size())))) {
           } else {
             
@@ -35611,14 +35774,14 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
             return self.$close_row()
           } else {
             return nil
-          };}, $$42.$$s = self, $$42.$$arity = 1, $$42));
+          };}, $$45.$$s = self, $$45.$$arity = 1, $$45));
         self.cell_open = false;
         return nil;
         } catch ($returner) { if ($returner === Opal.returner) { return $returner.$v } throw $returner; }
-      }, $ParserContext_close_cell$41.$$arity = -1);
+      }, $ParserContext_close_cell$44.$$arity = -1);
       self.$private();
       
-      Opal.def(self, '$close_row', $ParserContext_close_row$44 = function $$close_row() {
+      Opal.def(self, '$close_row', $ParserContext_close_row$47 = function $$close_row() {
         var $a, self = this, $writer = nil;
 
         
@@ -35630,13 +35793,13 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
         self.active_rowspans.$shift();
         ($truthy($a = self.active_rowspans['$[]'](0)) ? $a : (($writer = [0, 0]), $send(self.active_rowspans, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]));
         return nil;
-      }, $ParserContext_close_row$44.$$arity = 0);
+      }, $ParserContext_close_row$47.$$arity = 0);
       
-      Opal.def(self, '$activate_rowspan', $ParserContext_activate_rowspan$45 = function $$activate_rowspan(rowspan, colspan) {
-        var $$46, self = this;
+      Opal.def(self, '$activate_rowspan', $ParserContext_activate_rowspan$48 = function $$activate_rowspan(rowspan, colspan) {
+        var $$49, self = this;
 
         
-        $send((1), 'upto', [$rb_minus(rowspan, 1)], ($$46 = function(i){var self = $$46.$$s || this, $a, $writer = nil;
+        $send((1), 'upto', [$rb_minus(rowspan, 1)], ($$49 = function(i){var self = $$49.$$s || this, $a, $writer = nil;
           if (self.active_rowspans == null) self.active_rowspans = nil;
 
         
@@ -35646,26 +35809,26 @@ Opal.modules["asciidoctor/table"] = function(Opal) {
           };
           $writer = [i, $rb_plus(($truthy($a = self.active_rowspans['$[]'](i)) ? $a : 0), colspan)];
           $send(self.active_rowspans, '[]=', Opal.to_a($writer));
-          return $writer[$rb_minus($writer["length"], 1)];}, $$46.$$s = self, $$46.$$arity = 1, $$46));
+          return $writer[$rb_minus($writer["length"], 1)];}, $$49.$$s = self, $$49.$$arity = 1, $$49));
         return nil;
-      }, $ParserContext_activate_rowspan$45.$$arity = 2);
+      }, $ParserContext_activate_rowspan$48.$$arity = 2);
       
-      Opal.def(self, '$end_of_row?', $ParserContext_end_of_row$ques$47 = function() {
+      Opal.def(self, '$end_of_row?', $ParserContext_end_of_row$ques$50 = function() {
         var $a, self = this;
 
         return ($truthy($a = self.colcount['$=='](-1)) ? $a : self.$effective_column_visits()['$=='](self.colcount))
-      }, $ParserContext_end_of_row$ques$47.$$arity = 0);
+      }, $ParserContext_end_of_row$ques$50.$$arity = 0);
       
-      Opal.def(self, '$effective_column_visits', $ParserContext_effective_column_visits$48 = function $$effective_column_visits() {
+      Opal.def(self, '$effective_column_visits', $ParserContext_effective_column_visits$51 = function $$effective_column_visits() {
         var self = this;
 
         return $rb_plus(self.column_visits, self.active_rowspans['$[]'](0))
-      }, $ParserContext_effective_column_visits$48.$$arity = 0);
-      return (Opal.def(self, '$advance', $ParserContext_advance$49 = function $$advance() {
+      }, $ParserContext_effective_column_visits$51.$$arity = 0);
+      return (Opal.def(self, '$advance', $ParserContext_advance$52 = function $$advance() {
         var self = this;
 
         return (self.linenum = $rb_plus(self.linenum, 1))
-      }, $ParserContext_advance$49.$$arity = 0), nil) && 'advance';
+      }, $ParserContext_advance$52.$$arity = 0), nil) && 'advance';
     })($$($nesting, 'Table'), null, $nesting);
   })($nesting[0], $nesting)
 };
@@ -35729,205 +35892,207 @@ Opal.modules["asciidoctor/load"] = function(Opal) {
   }
   var self = Opal.top, $nesting = [], nil = Opal.nil, $$$ = Opal.const_get_qualified, $$ = Opal.const_get_relative, $breaker = Opal.breaker, $slice = Opal.slice, $module = Opal.module, $hash2 = Opal.hash2, $truthy = Opal.truthy, $send = Opal.send;
 
-  Opal.add_stubs(['$module_function', '$merge', '$[]', '$start', '$!=', '$logger', '$logger=', '$-', '$!', '$===', '$dup', '$tap', '$each', '$partition', '$[]=', '$split', '$gsub', '$+', '$respond_to?', '$keys', '$raise', '$join', '$ancestors', '$class', '$mtime', '$absolute_path', '$path', '$dirname', '$basename', '$extname', '$read', '$rewind', '$drop', '$record', '$==', '$new', '$parse', '$exception', '$message', '$set_backtrace', '$backtrace', '$stack_trace', '$stack_trace=', '$open', '$load']);
+  Opal.add_stubs(['$merge', '$[]', '$start', '$!=', '$logger', '$logger=', '$-', '$!', '$===', '$dup', '$tap', '$each', '$partition', '$[]=', '$split', '$gsub', '$+', '$respond_to?', '$keys', '$raise', '$join', '$ancestors', '$class', '$mtime', '$absolute_path', '$path', '$dirname', '$basename', '$extname', '$read', '$rewind', '$drop', '$record', '$==', '$new', '$parse', '$exception', '$message', '$set_backtrace', '$backtrace', '$stack_trace', '$stack_trace=', '$open', '$load']);
   return (function($base, $parent_nesting) {
     var self = $module($base, 'Asciidoctor');
 
-    var $nesting = [self].concat($parent_nesting), $Asciidoctor_load$1, $Asciidoctor_load_file$8;
+    var $nesting = [self].concat($parent_nesting);
 
-    
-    self.$module_function();
-    
-    Opal.def(self, '$load', $Asciidoctor_load$1 = function $$load(input, options) {
-      var $a, $b, $c, $d, $$2, $$4, $$6, self = this, timings = nil, logger = nil, $writer = nil, attrs = nil, input_path = nil, source = nil, doc = nil, ex = nil, context = nil, wrapped_ex = nil;
+    (function(self, $parent_nesting) {
+      var $nesting = [self].concat($parent_nesting), $load$1, $load_file$8;
 
       
       
-      if (options == null) {
-        options = $hash2([], {});
-      };
-      try {
+      Opal.def(self, '$load', $load$1 = function $$load(input, options) {
+        var $a, $b, $c, $d, $$2, $$4, $$6, self = this, timings = nil, logger = nil, $writer = nil, attrs = nil, input_path = nil, source = nil, doc = nil, ex = nil, context = nil, wrapped_ex = nil;
+
         
-        options = options.$merge();
-        if ($truthy((timings = options['$[]']("timings")))) {
-          timings.$start("read")};
-        if ($truthy(($truthy($a = (logger = options['$[]']("logger"))) ? logger['$!=']($$($nesting, 'LoggerManager').$logger()) : $a))) {
-          
-          $writer = [logger];
-          $send($$($nesting, 'LoggerManager'), 'logger=', Opal.to_a($writer));
-          $writer[$rb_minus($writer["length"], 1)];};
-        if ($truthy((attrs = options['$[]']("attributes"))['$!']())) {
-          attrs = $hash2([], {})
-        } else if ($truthy($$$('::', 'Hash')['$==='](attrs))) {
-          attrs = attrs.$merge()
-        } else if ($truthy(($truthy($a = (($d = $$$('::', 'Java', 'skip_raise')) && ($c = $$$($d, 'JavaUtil', 'skip_raise')) && ($b = $$$($c, 'Map', 'skip_raise')) ? 'constant' : nil)) ? $$$($$$($$$('::', 'Java'), 'JavaUtil'), 'Map')['$==='](attrs) : $a))) {
-          attrs = attrs.$dup()
-        } else if ($truthy($$$('::', 'Array')['$==='](attrs))) {
-          attrs = $send($hash2([], {}), 'tap', [], ($$2 = function(accum){var self = $$2.$$s || this, $$3;
-
-          
-            
-            if (accum == null) {
-              accum = nil;
-            };
-            return $send(attrs, 'each', [], ($$3 = function(entry){var self = $$3.$$s || this, $e, $f, k = nil, _ = nil, v = nil;
-
-            
-              
-              if (entry == null) {
-                entry = nil;
-              };
-              $f = entry.$partition("="), $e = Opal.to_ary($f), (k = ($e[0] == null ? nil : $e[0])), (_ = ($e[1] == null ? nil : $e[1])), (v = ($e[2] == null ? nil : $e[2])), $f;
-              
-              $writer = [k, v];
-              $send(accum, '[]=', Opal.to_a($writer));
-              return $writer[$rb_minus($writer["length"], 1)];;}, $$3.$$s = self, $$3.$$arity = 1, $$3));}, $$2.$$s = self, $$2.$$arity = 1, $$2))
-        } else if ($truthy($$$('::', 'String')['$==='](attrs))) {
-          attrs = $send($hash2([], {}), 'tap', [], ($$4 = function(accum){var self = $$4.$$s || this, $$5;
-
-          
-            
-            if (accum == null) {
-              accum = nil;
-            };
-            return $send(attrs.$gsub($$($nesting, 'SpaceDelimiterRx'), $rb_plus("\\1", $$($nesting, 'NULL'))).$gsub($$($nesting, 'EscapedSpaceRx'), "\\1").$split($$($nesting, 'NULL')), 'each', [], ($$5 = function(entry){var self = $$5.$$s || this, $e, $f, k = nil, _ = nil, v = nil;
-
-            
-              
-              if (entry == null) {
-                entry = nil;
-              };
-              $f = entry.$partition("="), $e = Opal.to_ary($f), (k = ($e[0] == null ? nil : $e[0])), (_ = ($e[1] == null ? nil : $e[1])), (v = ($e[2] == null ? nil : $e[2])), $f;
-              
-              $writer = [k, v];
-              $send(accum, '[]=', Opal.to_a($writer));
-              return $writer[$rb_minus($writer["length"], 1)];;}, $$5.$$s = self, $$5.$$arity = 1, $$5));}, $$4.$$s = self, $$4.$$arity = 1, $$4))
-        } else if ($truthy(($truthy($a = attrs['$respond_to?']("keys")) ? attrs['$respond_to?']("[]") : $a))) {
-          attrs = $send($hash2([], {}), 'tap', [], ($$6 = function(accum){var self = $$6.$$s || this, $$7;
-
-          
-            
-            if (accum == null) {
-              accum = nil;
-            };
-            return $send(attrs.$keys(), 'each', [], ($$7 = function(k){var self = $$7.$$s || this;
-
-            
-              
-              if (k == null) {
-                k = nil;
-              };
-              $writer = [k, attrs['$[]'](k)];
-              $send(accum, '[]=', Opal.to_a($writer));
-              return $writer[$rb_minus($writer["length"], 1)];}, $$7.$$s = self, $$7.$$arity = 1, $$7));}, $$6.$$s = self, $$6.$$arity = 1, $$6))
-        } else {
-          self.$raise($$$('::', 'ArgumentError'), "" + "illegal type for attributes option: " + (attrs.$class().$ancestors().$join(" < ")))
+        
+        if (options == null) {
+          options = $hash2([], {});
         };
-        if ($truthy($$$('::', 'File')['$==='](input))) {
+        try {
           
-          
-          $writer = ["input_mtime", input.$mtime()];
-          $send(options, '[]=', Opal.to_a($writer));
-          $writer[$rb_minus($writer["length"], 1)];;
-          
-          $writer = ["docfile", (input_path = $$$('::', 'File').$absolute_path(input.$path()))];
-          $send(attrs, '[]=', Opal.to_a($writer));
-          $writer[$rb_minus($writer["length"], 1)];;
-          
-          $writer = ["docdir", $$$('::', 'File').$dirname(input_path)];
-          $send(attrs, '[]=', Opal.to_a($writer));
-          $writer[$rb_minus($writer["length"], 1)];;
-          
-          $writer = ["docname", $$($nesting, 'Helpers').$basename(input_path, (($writer = ["docfilesuffix", $$($nesting, 'Helpers').$extname(input_path)]), $send(attrs, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]))];
-          $send(attrs, '[]=', Opal.to_a($writer));
-          $writer[$rb_minus($writer["length"], 1)];;
-          source = input.$read();
-        } else if ($truthy(input['$respond_to?']("read"))) {
-          
-          try {
-            input.$rewind()
-          } catch ($err) {
-            if (Opal.rescue($err, [$$($nesting, 'StandardError')])) {
-              try {
-                nil
-              } finally { Opal.pop_exception() }
-            } else { throw $err; }
-          };
-          source = input.$read();
-        } else if ($truthy($$$('::', 'String')['$==='](input))) {
-          source = input
-        } else if ($truthy($$$('::', 'Array')['$==='](input))) {
-          source = input.$drop(0)
-        } else if ($truthy(input)) {
-          self.$raise($$$('::', 'ArgumentError'), "" + "unsupported input type: " + (input.$class()))};
-        if ($truthy(timings)) {
-          
-          timings.$record("read");
-          timings.$start("parse");};
-        
-        $writer = ["attributes", attrs];
-        $send(options, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];;
-        doc = (function() {if (options['$[]']("parse")['$=='](false)) {
-          
-          return $$($nesting, 'Document').$new(source, options);
-        } else {
-          return $$($nesting, 'Document').$new(source, options).$parse()
-        }; return nil; })();
-        if ($truthy(timings)) {
-          timings.$record("parse")};
-        return doc;
-      } catch ($err) {
-        if (Opal.rescue($err, [$$($nesting, 'StandardError')])) {ex = $err;
-          try {
+          options = options.$merge();
+          if ($truthy((timings = options['$[]']("timings")))) {
+            timings.$start("read")};
+          if ($truthy(($truthy($a = (logger = options['$[]']("logger"))) ? logger['$!=']($$($nesting, 'LoggerManager').$logger()) : $a))) {
             
+            $writer = [logger];
+            $send($$($nesting, 'LoggerManager'), 'logger=', Opal.to_a($writer));
+            $writer[$rb_minus($writer["length"], 1)];};
+          if ($truthy((attrs = options['$[]']("attributes"))['$!']())) {
+            attrs = $hash2([], {})
+          } else if ($truthy($$$('::', 'Hash')['$==='](attrs))) {
+            attrs = attrs.$merge()
+          } else if ($truthy(($truthy($a = (($d = $$$('::', 'Java', 'skip_raise')) && ($c = $$$($d, 'JavaUtil', 'skip_raise')) && ($b = $$$($c, 'Map', 'skip_raise')) ? 'constant' : nil)) ? $$$($$$($$$('::', 'Java'), 'JavaUtil'), 'Map')['$==='](attrs) : $a))) {
+            attrs = attrs.$dup()
+          } else if ($truthy($$$('::', 'Array')['$==='](attrs))) {
+            attrs = $send($hash2([], {}), 'tap', [], ($$2 = function(accum){var self = $$2.$$s || this, $$3;
+
+            
+              
+              if (accum == null) {
+                accum = nil;
+              };
+              return $send(attrs, 'each', [], ($$3 = function(entry){var self = $$3.$$s || this, $e, $f, k = nil, _ = nil, v = nil;
+
+              
+                
+                if (entry == null) {
+                  entry = nil;
+                };
+                $f = entry.$partition("="), $e = Opal.to_ary($f), (k = ($e[0] == null ? nil : $e[0])), (_ = ($e[1] == null ? nil : $e[1])), (v = ($e[2] == null ? nil : $e[2])), $f;
+                
+                $writer = [k, v];
+                $send(accum, '[]=', Opal.to_a($writer));
+                return $writer[$rb_minus($writer["length"], 1)];;}, $$3.$$s = self, $$3.$$arity = 1, $$3));}, $$2.$$s = self, $$2.$$arity = 1, $$2))
+          } else if ($truthy($$$('::', 'String')['$==='](attrs))) {
+            attrs = $send($hash2([], {}), 'tap', [], ($$4 = function(accum){var self = $$4.$$s || this, $$5;
+
+            
+              
+              if (accum == null) {
+                accum = nil;
+              };
+              return $send(attrs.$gsub($$($nesting, 'SpaceDelimiterRx'), $rb_plus("\\1", $$($nesting, 'NULL'))).$gsub($$($nesting, 'EscapedSpaceRx'), "\\1").$split($$($nesting, 'NULL')), 'each', [], ($$5 = function(entry){var self = $$5.$$s || this, $e, $f, k = nil, _ = nil, v = nil;
+
+              
+                
+                if (entry == null) {
+                  entry = nil;
+                };
+                $f = entry.$partition("="), $e = Opal.to_ary($f), (k = ($e[0] == null ? nil : $e[0])), (_ = ($e[1] == null ? nil : $e[1])), (v = ($e[2] == null ? nil : $e[2])), $f;
+                
+                $writer = [k, v];
+                $send(accum, '[]=', Opal.to_a($writer));
+                return $writer[$rb_minus($writer["length"], 1)];;}, $$5.$$s = self, $$5.$$arity = 1, $$5));}, $$4.$$s = self, $$4.$$arity = 1, $$4))
+          } else if ($truthy(($truthy($a = attrs['$respond_to?']("keys")) ? attrs['$respond_to?']("[]") : $a))) {
+            attrs = $send($hash2([], {}), 'tap', [], ($$6 = function(accum){var self = $$6.$$s || this, $$7;
+
+            
+              
+              if (accum == null) {
+                accum = nil;
+              };
+              return $send(attrs.$keys(), 'each', [], ($$7 = function(k){var self = $$7.$$s || this;
+
+              
+                
+                if (k == null) {
+                  k = nil;
+                };
+                $writer = [k, attrs['$[]'](k)];
+                $send(accum, '[]=', Opal.to_a($writer));
+                return $writer[$rb_minus($writer["length"], 1)];}, $$7.$$s = self, $$7.$$arity = 1, $$7));}, $$6.$$s = self, $$6.$$arity = 1, $$6))
+          } else {
+            self.$raise($$$('::', 'ArgumentError'), "" + "illegal type for attributes option: " + (attrs.$class().$ancestors().$join(" < ")))
+          };
+          if ($truthy($$$('::', 'File')['$==='](input))) {
+            
+            
+            $writer = ["input_mtime", input.$mtime()];
+            $send(options, '[]=', Opal.to_a($writer));
+            $writer[$rb_minus($writer["length"], 1)];;
+            
+            $writer = ["docfile", (input_path = $$$('::', 'File').$absolute_path(input.$path()))];
+            $send(attrs, '[]=', Opal.to_a($writer));
+            $writer[$rb_minus($writer["length"], 1)];;
+            
+            $writer = ["docdir", $$$('::', 'File').$dirname(input_path)];
+            $send(attrs, '[]=', Opal.to_a($writer));
+            $writer[$rb_minus($writer["length"], 1)];;
+            
+            $writer = ["docname", $$($nesting, 'Helpers').$basename(input_path, (($writer = ["docfilesuffix", $$($nesting, 'Helpers').$extname(input_path)]), $send(attrs, '[]=', Opal.to_a($writer)), $writer[$rb_minus($writer["length"], 1)]))];
+            $send(attrs, '[]=', Opal.to_a($writer));
+            $writer[$rb_minus($writer["length"], 1)];;
+            source = input.$read();
+          } else if ($truthy(input['$respond_to?']("read"))) {
             
             try {
-              
-              context = "" + "asciidoctor: FAILED: " + (($truthy($a = attrs['$[]']("docfile")) ? $a : "<stdin>")) + ": Failed to load AsciiDoc document";
-              if ($truthy(ex['$respond_to?']("exception"))) {
-                
-                wrapped_ex = ex.$exception("" + (context) + " - " + (ex.$message()));
-                wrapped_ex.$set_backtrace(ex.$backtrace());
-                wrapped_ex.stack = ex.stack;
-              } else {
-                
-                wrapped_ex = ex.$class().$new(context, ex);
-                
-                $writer = [ex.$stack_trace()];
-                $send(wrapped_ex, 'stack_trace=', Opal.to_a($writer));
-                $writer[$rb_minus($writer["length"], 1)];;
-              };
+              input.$rewind()
             } catch ($err) {
               if (Opal.rescue($err, [$$($nesting, 'StandardError')])) {
                 try {
-                  wrapped_ex = ex
+                  nil
                 } finally { Opal.pop_exception() }
               } else { throw $err; }
-            };;
-            return self.$raise(wrapped_ex);
-          } finally { Opal.pop_exception() }
-        } else { throw $err; }
-      };
-    }, $Asciidoctor_load$1.$$arity = -2);
-    
-    Opal.def(self, '$load_file', $Asciidoctor_load_file$8 = function $$load_file(filename, options) {
-      var $$9, self = this;
-
-      
-      
-      if (options == null) {
-        options = $hash2([], {});
-      };
-      return $send($$$('::', 'File'), 'open', [filename, $$($nesting, 'FILE_READ_MODE')], ($$9 = function(file){var self = $$9.$$s || this;
-
-      
-        
-        if (file == null) {
-          file = nil;
+            };
+            source = input.$read();
+          } else if ($truthy($$$('::', 'String')['$==='](input))) {
+            source = input
+          } else if ($truthy($$$('::', 'Array')['$==='](input))) {
+            source = input.$drop(0)
+          } else if ($truthy(input)) {
+            self.$raise($$$('::', 'ArgumentError'), "" + "unsupported input type: " + (input.$class()))};
+          if ($truthy(timings)) {
+            
+            timings.$record("read");
+            timings.$start("parse");};
+          
+          $writer = ["attributes", attrs];
+          $send(options, '[]=', Opal.to_a($writer));
+          $writer[$rb_minus($writer["length"], 1)];;
+          doc = (function() {if (options['$[]']("parse")['$=='](false)) {
+            
+            return $$($nesting, 'Document').$new(source, options);
+          } else {
+            return $$($nesting, 'Document').$new(source, options).$parse()
+          }; return nil; })();
+          if ($truthy(timings)) {
+            timings.$record("parse")};
+          return doc;
+        } catch ($err) {
+          if (Opal.rescue($err, [$$($nesting, 'StandardError')])) {ex = $err;
+            try {
+              
+              
+              try {
+                
+                context = "" + "asciidoctor: FAILED: " + (($truthy($a = attrs['$[]']("docfile")) ? $a : "<stdin>")) + ": Failed to load AsciiDoc document";
+                if ($truthy(ex['$respond_to?']("exception"))) {
+                  
+                  wrapped_ex = ex.$exception("" + (context) + " - " + (ex.$message()));
+                  wrapped_ex.$set_backtrace(ex.$backtrace());
+                  wrapped_ex.stack = ex.stack;
+                } else {
+                  
+                  wrapped_ex = ex.$class().$new(context, ex);
+                  
+                  $writer = [ex.$stack_trace()];
+                  $send(wrapped_ex, 'stack_trace=', Opal.to_a($writer));
+                  $writer[$rb_minus($writer["length"], 1)];;
+                };
+              } catch ($err) {
+                if (Opal.rescue($err, [$$($nesting, 'StandardError')])) {
+                  try {
+                    wrapped_ex = ex
+                  } finally { Opal.pop_exception() }
+                } else { throw $err; }
+              };;
+              return self.$raise(wrapped_ex);
+            } finally { Opal.pop_exception() }
+          } else { throw $err; }
         };
-        return self.$load(file, options);}, $$9.$$s = self, $$9.$$arity = 1, $$9));
-    }, $Asciidoctor_load_file$8.$$arity = -2);
+      }, $load$1.$$arity = -2);
+      return (Opal.def(self, '$load_file', $load_file$8 = function $$load_file(filename, options) {
+        var $$9, self = this;
+
+        
+        
+        if (options == null) {
+          options = $hash2([], {});
+        };
+        return $send($$$('::', 'File'), 'open', [filename, $$($nesting, 'FILE_READ_MODE')], ($$9 = function(file){var self = $$9.$$s || this;
+
+        
+          
+          if (file == null) {
+            file = nil;
+          };
+          return self.$load(file, options);}, $$9.$$s = self, $$9.$$arity = 1, $$9));
+      }, $load_file$8.$$arity = -2), nil) && 'load_file';
+    })(Opal.get_singleton_class(self), $nesting)
   })($nesting[0], $nesting)
 };
 
@@ -35944,195 +36109,203 @@ Opal.modules["asciidoctor/convert"] = function(Opal) {
   }
   var self = Opal.top, $nesting = [], nil = Opal.nil, $$$ = Opal.const_get_qualified, $$ = Opal.const_get_relative, $breaker = Opal.breaker, $slice = Opal.slice, $module = Opal.module, $hash2 = Opal.hash2, $truthy = Opal.truthy, $send = Opal.send;
 
-  Opal.add_stubs(['$module_function', '$delete', '$merge', '$===', '$absolute_path', '$path', '$load', '$respond_to?', '$[]=', '$-', '$key?', '$fetch', '$[]', '$dirname', '$expand_path', '$join', '$attributes', '$outfilesuffix', '$==', '$raise', '$pwd', '$>=', '$safe', '$normalize_system_path', '$mkdir_p', '$directory?', '$!', '$convert', '$write', '$<', '$attr?', '$basebackend?', '$attr', '$uriish?', '$include?', '$syntax_highlighter', '$write_stylesheet?', '$write_primary_stylesheet', '$instance', '$empty?', '$!=', '$read_asset', '$file?', '$write_stylesheet', '$open']);
+  Opal.add_stubs(['$delete', '$merge', '$===', '$absolute_path', '$path', '$load', '$respond_to?', '$[]=', '$-', '$key?', '$fetch', '$[]', '$dirname', '$expand_path', '$join', '$attributes', '$outfilesuffix', '$==', '$raise', '$pwd', '$>=', '$safe', '$normalize_system_path', '$mkdir_p', '$directory?', '$!', '$convert', '$write', '$<', '$attr?', '$basebackend?', '$attr', '$uriish?', '$include?', '$syntax_highlighter', '$write_stylesheet?', '$write_primary_stylesheet', '$instance', '$to_s', '$!=', '$read_asset', '$file?', '$write_stylesheet', '$open']);
   return (function($base, $parent_nesting) {
     var self = $module($base, 'Asciidoctor');
 
-    var $nesting = [self].concat($parent_nesting), $Asciidoctor_convert$1, $Asciidoctor_convert_file$2;
+    var $nesting = [self].concat($parent_nesting);
 
-    
-    self.$module_function();
-    
-    Opal.def(self, '$convert', $Asciidoctor_convert$1 = function $$convert(input, options) {
-      var $a, $b, $c, $d, $e, self = this, to_dir = nil, mkdirs = nil, $case = nil, to_file = nil, write_to_target = nil, sibling_path = nil, stream_output = nil, $writer = nil, outdir = nil, doc = nil, outfile = nil, working_dir = nil, jail = nil, output = nil, stylesdir = nil, stylesheet = nil, copy_asciidoctor_stylesheet = nil, copy_user_stylesheet = nil, copy_syntax_hl_stylesheet = nil, syntax_hl = nil, stylesoutdir = nil, stylesheet_src = nil, stylesheet_dest = nil, stylesheet_data = nil;
+    (function(self, $parent_nesting) {
+      var $nesting = [self].concat($parent_nesting), $convert$1, $convert_file$2;
 
       
       
-      if (options == null) {
-        options = $hash2([], {});
-      };
-      (options = options.$merge()).$delete("parse");
-      to_dir = options.$delete("to_dir");
-      mkdirs = options.$delete("mkdirs");
-      $case = (to_file = options.$delete("to_file"));
-      if (true['$===']($case) || nil['$===']($case)) {
-      if ($truthy((write_to_target = to_dir))) {
-      } else if ($truthy($$$('::', 'File')['$==='](input))) {
-        sibling_path = $$$('::', 'File').$absolute_path(input.$path())};
-      to_file = nil;}
-      else if (false['$===']($case)) {to_file = nil}
-      else if ("/dev/null"['$===']($case)) {return self.$load(input, options)}
-      else {if ($truthy((stream_output = to_file['$respond_to?']("write")))) {
-      } else {
+      Opal.def(self, '$convert', $convert$1 = function $$convert(input, options) {
+        var $a, $b, $c, $d, $e, self = this, to_dir = nil, mkdirs = nil, $case = nil, to_file = nil, write_to_target = nil, sibling_path = nil, stream_output = nil, $writer = nil, outdir = nil, doc = nil, outfile = nil, working_dir = nil, jail = nil, output = nil, stylesdir = nil, stylesheet = nil, copy_asciidoctor_stylesheet = nil, copy_user_stylesheet = nil, copy_syntax_hl_stylesheet = nil, syntax_hl = nil, stylesoutdir = nil, stylesheet_src = nil, stylesheet_dest = nil, stylesheet_data = nil, stylesheet_outdir = nil;
+
         
-        $writer = ["to_file", (write_to_target = to_file)];
-        $send(options, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];
-      }};
-      if ($truthy(options['$key?']("standalone"))) {
-      } else if ($truthy(($truthy($a = sibling_path) ? $a : write_to_target))) {
         
-        $writer = ["standalone", options.$fetch("header_footer", true)];
-        $send(options, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];
-      } else if ($truthy(options['$key?']("header_footer"))) {
-        
-        $writer = ["standalone", options['$[]']("header_footer")];
-        $send(options, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];};
-      if ($truthy(sibling_path)) {
-        
-        $writer = ["to_dir", (outdir = $$$('::', 'File').$dirname(sibling_path))];
-        $send(options, '[]=', Opal.to_a($writer));
-        $writer[$rb_minus($writer["length"], 1)];
-      } else if ($truthy(write_to_target)) {
-        if ($truthy(to_dir)) {
-          if ($truthy(to_file)) {
-            
-            $writer = ["to_dir", $$$('::', 'File').$dirname($$$('::', 'File').$expand_path($$$('::', 'File').$join(to_dir, to_file)))];
-            $send(options, '[]=', Opal.to_a($writer));
-            $writer[$rb_minus($writer["length"], 1)];
-          } else {
-            
-            $writer = ["to_dir", $$$('::', 'File').$expand_path(to_dir)];
-            $send(options, '[]=', Opal.to_a($writer));
-            $writer[$rb_minus($writer["length"], 1)];
-          }
-        } else if ($truthy(to_file)) {
-          
-          $writer = ["to_dir", $$$('::', 'File').$dirname($$$('::', 'File').$expand_path(to_file))];
-          $send(options, '[]=', Opal.to_a($writer));
-          $writer[$rb_minus($writer["length"], 1)];}};
-      doc = self.$load(input, options);
-      if ($truthy(sibling_path)) {
-        
-        outfile = $$$('::', 'File').$join(outdir, "" + (doc.$attributes()['$[]']("docname")) + (doc.$outfilesuffix()));
-        if (outfile['$=='](sibling_path)) {
-          self.$raise($$$('::', 'IOError'), "" + "input file and output file cannot be the same: " + (outfile))};
-      } else if ($truthy(write_to_target)) {
-        
-        working_dir = (function() {if ($truthy(options['$key?']("base_dir"))) {
-          
-          return $$$('::', 'File').$expand_path(options['$[]']("base_dir"));
-        } else {
-          return $$$('::', 'Dir').$pwd()
-        }; return nil; })();
-        jail = (function() {if ($truthy($rb_ge(doc.$safe(), $$$($$($nesting, 'SafeMode'), 'SAFE')))) {
-          return working_dir
-        } else {
-          return nil
-        }; return nil; })();
-        if ($truthy(to_dir)) {
-          
-          outdir = doc.$normalize_system_path(to_dir, working_dir, jail, $hash2(["target_name", "recover"], {"target_name": "to_dir", "recover": false}));
-          if ($truthy(to_file)) {
-            
-            outfile = doc.$normalize_system_path(to_file, outdir, nil, $hash2(["target_name", "recover"], {"target_name": "to_dir", "recover": false}));
-            outdir = $$$('::', 'File').$dirname(outfile);
-          } else {
-            outfile = $$$('::', 'File').$join(outdir, "" + (doc.$attributes()['$[]']("docname")) + (doc.$outfilesuffix()))
-          };
-        } else if ($truthy(to_file)) {
-          
-          outfile = doc.$normalize_system_path(to_file, working_dir, jail, $hash2(["target_name", "recover"], {"target_name": "to_dir", "recover": false}));
-          outdir = $$$('::', 'File').$dirname(outfile);};
-        if ($truthy(($truthy($a = $$$('::', 'File')['$==='](input)) ? outfile['$==']($$$('::', 'File').$absolute_path(input.$path())) : $a))) {
-          self.$raise($$$('::', 'IOError'), "" + "input file and output file cannot be the same: " + (outfile))};
-        if ($truthy(mkdirs)) {
-          $$($nesting, 'Helpers').$mkdir_p(outdir)
-        } else if ($truthy($$$('::', 'File')['$directory?'](outdir))) {
-        } else {
-          self.$raise($$$('::', 'IOError'), "" + "target directory does not exist: " + (to_dir) + " (hint: set :mkdirs option)")
+        if (options == null) {
+          options = $hash2([], {});
         };
-      } else {
-        
-        outfile = to_file;
-        outdir = nil;
-      };
-      if ($truthy(($truthy($a = outfile) ? stream_output['$!']() : $a))) {
-        output = doc.$convert($hash2(["outfile", "outdir"], {"outfile": outfile, "outdir": outdir}))
-      } else {
-        output = doc.$convert()
-      };
-      if ($truthy(outfile)) {
-        
-        doc.$write(output, outfile);
-        if ($truthy(($truthy($a = ($truthy($b = ($truthy($c = ($truthy($d = ($truthy($e = stream_output['$!']()) ? $rb_lt(doc.$safe(), $$$($$($nesting, 'SafeMode'), 'SECURE')) : $e)) ? doc['$attr?']("linkcss") : $d)) ? doc['$attr?']("copycss") : $c)) ? doc['$basebackend?']("html") : $b)) ? ($truthy($b = (stylesdir = doc.$attr("stylesdir"))) ? $$($nesting, 'Helpers')['$uriish?'](stylesdir) : $b)['$!']() : $a))) {
+        (options = options.$merge()).$delete("parse");
+        to_dir = options.$delete("to_dir");
+        mkdirs = options.$delete("mkdirs");
+        $case = (to_file = options.$delete("to_file"));
+        if (true['$===']($case) || nil['$===']($case)) {
+        if ($truthy((write_to_target = to_dir))) {
+        } else if ($truthy($$$('::', 'File')['$==='](input))) {
+          sibling_path = $$$('::', 'File').$absolute_path(input.$path())};
+        to_file = nil;}
+        else if (false['$===']($case)) {to_file = nil}
+        else if ("/dev/null"['$===']($case)) {return self.$load(input, options)}
+        else {if ($truthy((stream_output = to_file['$respond_to?']("write")))) {
+        } else {
           
-          if ($truthy((stylesheet = doc.$attr("stylesheet")))) {
-            if ($truthy($$($nesting, 'DEFAULT_STYLESHEET_KEYS')['$include?'](stylesheet))) {
-              copy_asciidoctor_stylesheet = true
-            } else if ($truthy($$($nesting, 'Helpers')['$uriish?'](stylesheet)['$!']())) {
-              copy_user_stylesheet = true}};
-          copy_syntax_hl_stylesheet = ($truthy($a = (syntax_hl = doc.$syntax_highlighter())) ? syntax_hl['$write_stylesheet?'](doc) : $a);
-          if ($truthy(($truthy($a = ($truthy($b = copy_asciidoctor_stylesheet) ? $b : copy_user_stylesheet)) ? $a : copy_syntax_hl_stylesheet))) {
-            
-            stylesoutdir = doc.$normalize_system_path(stylesdir, outdir, (function() {if ($truthy($rb_ge(doc.$safe(), $$$($$($nesting, 'SafeMode'), 'SAFE')))) {
-              return outdir
-            } else {
-              return nil
-            }; return nil; })());
-            if ($truthy(mkdirs)) {
-              $$($nesting, 'Helpers').$mkdir_p(stylesoutdir)
-            } else if ($truthy($$$('::', 'File')['$directory?'](stylesoutdir))) {
-            } else {
-              self.$raise($$$('::', 'IOError'), "" + "target stylesheet directory does not exist: " + (stylesoutdir) + " (hint: set :mkdirs option)")
-            };
-            if ($truthy(copy_asciidoctor_stylesheet)) {
-              $$($nesting, 'Stylesheets').$instance().$write_primary_stylesheet(stylesoutdir)
-            } else if ($truthy(copy_user_stylesheet)) {
+          $writer = ["to_file", (write_to_target = to_file)];
+          $send(options, '[]=', Opal.to_a($writer));
+          $writer[$rb_minus($writer["length"], 1)];
+        }};
+        if ($truthy(options['$key?']("standalone"))) {
+        } else if ($truthy(($truthy($a = sibling_path) ? $a : write_to_target))) {
+          
+          $writer = ["standalone", options.$fetch("header_footer", true)];
+          $send(options, '[]=', Opal.to_a($writer));
+          $writer[$rb_minus($writer["length"], 1)];
+        } else if ($truthy(options['$key?']("header_footer"))) {
+          
+          $writer = ["standalone", options['$[]']("header_footer")];
+          $send(options, '[]=', Opal.to_a($writer));
+          $writer[$rb_minus($writer["length"], 1)];};
+        if ($truthy(sibling_path)) {
+          
+          $writer = ["to_dir", (outdir = $$$('::', 'File').$dirname(sibling_path))];
+          $send(options, '[]=', Opal.to_a($writer));
+          $writer[$rb_minus($writer["length"], 1)];
+        } else if ($truthy(write_to_target)) {
+          if ($truthy(to_dir)) {
+            if ($truthy(to_file)) {
               
-              if ($truthy((stylesheet_src = doc.$attr("copycss"))['$empty?']())) {
-                stylesheet_src = doc.$normalize_system_path(stylesheet)
-              } else {
-                stylesheet_src = doc.$normalize_system_path(stylesheet_src)
-              };
-              stylesheet_dest = doc.$normalize_system_path(stylesheet, stylesoutdir, (function() {if ($truthy($rb_ge(doc.$safe(), $$$($$($nesting, 'SafeMode'), 'SAFE')))) {
+              $writer = ["to_dir", $$$('::', 'File').$dirname($$$('::', 'File').$expand_path(to_file, to_dir))];
+              $send(options, '[]=', Opal.to_a($writer));
+              $writer[$rb_minus($writer["length"], 1)];
+            } else {
+              
+              $writer = ["to_dir", $$$('::', 'File').$expand_path(to_dir)];
+              $send(options, '[]=', Opal.to_a($writer));
+              $writer[$rb_minus($writer["length"], 1)];
+            }
+          } else if ($truthy(to_file)) {
+            
+            $writer = ["to_dir", $$$('::', 'File').$dirname($$$('::', 'File').$expand_path(to_file))];
+            $send(options, '[]=', Opal.to_a($writer));
+            $writer[$rb_minus($writer["length"], 1)];}};
+        doc = self.$load(input, options);
+        if ($truthy(sibling_path)) {
+          
+          outfile = $$$('::', 'File').$join(outdir, "" + (doc.$attributes()['$[]']("docname")) + (doc.$outfilesuffix()));
+          if (outfile['$=='](sibling_path)) {
+            self.$raise($$$('::', 'IOError'), "" + "input file and output file cannot be the same: " + (outfile))};
+        } else if ($truthy(write_to_target)) {
+          
+          working_dir = (function() {if ($truthy(options['$key?']("base_dir"))) {
+            
+            return $$$('::', 'File').$expand_path(options['$[]']("base_dir"));
+          } else {
+            return $$$('::', 'Dir').$pwd()
+          }; return nil; })();
+          jail = (function() {if ($truthy($rb_ge(doc.$safe(), $$$($$($nesting, 'SafeMode'), 'SAFE')))) {
+            return working_dir
+          } else {
+            return nil
+          }; return nil; })();
+          if ($truthy(to_dir)) {
+            
+            outdir = doc.$normalize_system_path(to_dir, working_dir, jail, $hash2(["target_name", "recover"], {"target_name": "to_dir", "recover": false}));
+            if ($truthy(to_file)) {
+              
+              outfile = doc.$normalize_system_path(to_file, outdir, nil, $hash2(["target_name", "recover"], {"target_name": "to_dir", "recover": false}));
+              outdir = $$$('::', 'File').$dirname(outfile);
+            } else {
+              outfile = $$$('::', 'File').$join(outdir, "" + (doc.$attributes()['$[]']("docname")) + (doc.$outfilesuffix()))
+            };
+          } else if ($truthy(to_file)) {
+            
+            outfile = doc.$normalize_system_path(to_file, working_dir, jail, $hash2(["target_name", "recover"], {"target_name": "to_dir", "recover": false}));
+            outdir = $$$('::', 'File').$dirname(outfile);};
+          if ($truthy(($truthy($a = $$$('::', 'File')['$==='](input)) ? outfile['$==']($$$('::', 'File').$absolute_path(input.$path())) : $a))) {
+            self.$raise($$$('::', 'IOError'), "" + "input file and output file cannot be the same: " + (outfile))};
+          if ($truthy(mkdirs)) {
+            $$($nesting, 'Helpers').$mkdir_p(outdir)
+          } else if ($truthy($$$('::', 'File')['$directory?'](outdir))) {
+          } else {
+            self.$raise($$$('::', 'IOError'), "" + "target directory does not exist: " + (to_dir) + " (hint: set :mkdirs option)")
+          };
+        } else {
+          
+          outfile = to_file;
+          outdir = nil;
+        };
+        if ($truthy(($truthy($a = outfile) ? stream_output['$!']() : $a))) {
+          output = doc.$convert($hash2(["outfile", "outdir"], {"outfile": outfile, "outdir": outdir}))
+        } else {
+          output = doc.$convert()
+        };
+        if ($truthy(outfile)) {
+          
+          doc.$write(output, outfile);
+          if ($truthy(($truthy($a = ($truthy($b = ($truthy($c = ($truthy($d = ($truthy($e = stream_output['$!']()) ? $rb_lt(doc.$safe(), $$$($$($nesting, 'SafeMode'), 'SECURE')) : $e)) ? doc['$attr?']("linkcss") : $d)) ? doc['$attr?']("copycss") : $c)) ? doc['$basebackend?']("html") : $b)) ? ($truthy($b = (stylesdir = doc.$attr("stylesdir"))) ? $$($nesting, 'Helpers')['$uriish?'](stylesdir) : $b)['$!']() : $a))) {
+            
+            if ($truthy((stylesheet = doc.$attr("stylesheet")))) {
+              if ($truthy($$($nesting, 'DEFAULT_STYLESHEET_KEYS')['$include?'](stylesheet))) {
+                copy_asciidoctor_stylesheet = true
+              } else if ($truthy($$($nesting, 'Helpers')['$uriish?'](stylesheet)['$!']())) {
+                copy_user_stylesheet = true}};
+            copy_syntax_hl_stylesheet = ($truthy($a = (syntax_hl = doc.$syntax_highlighter())) ? syntax_hl['$write_stylesheet?'](doc) : $a);
+            if ($truthy(($truthy($a = ($truthy($b = copy_asciidoctor_stylesheet) ? $b : copy_user_stylesheet)) ? $a : copy_syntax_hl_stylesheet))) {
+              
+              stylesoutdir = doc.$normalize_system_path(stylesdir, outdir, (function() {if ($truthy($rb_ge(doc.$safe(), $$$($$($nesting, 'SafeMode'), 'SAFE')))) {
                 return outdir
               } else {
                 return nil
               }; return nil; })());
-              if ($truthy(($truthy($a = stylesheet_src['$!='](stylesheet_dest)) ? (stylesheet_data = doc.$read_asset(stylesheet_src, $hash2(["warn_on_failure", "label"], {"warn_on_failure": $$$('::', 'File')['$file?'](stylesheet_dest)['$!'](), "label": "stylesheet"}))) : $a))) {
-                $$$('::', 'File').$write(stylesheet_dest, stylesheet_data, $hash2(["mode"], {"mode": $$($nesting, 'FILE_WRITE_MODE')}))};};
-            if ($truthy(copy_syntax_hl_stylesheet)) {
-              syntax_hl.$write_stylesheet(doc, stylesoutdir)};};};
-        return doc;
-      } else {
-        return output
-      };
-    }, $Asciidoctor_convert$1.$$arity = -2);
-    
-    Opal.def(self, '$convert_file', $Asciidoctor_convert_file$2 = function $$convert_file(filename, options) {
-      var $$3, self = this;
-
-      
-      
-      if (options == null) {
-        options = $hash2([], {});
-      };
-      return $send($$$('::', 'File'), 'open', [filename, $$($nesting, 'FILE_READ_MODE')], ($$3 = function(file){var self = $$3.$$s || this;
-
-      
-        
-        if (file == null) {
-          file = nil;
+              if ($truthy(mkdirs)) {
+                $$($nesting, 'Helpers').$mkdir_p(stylesoutdir)
+              } else if ($truthy($$$('::', 'File')['$directory?'](stylesoutdir))) {
+              } else {
+                self.$raise($$$('::', 'IOError'), "" + "target stylesheet directory does not exist: " + (stylesoutdir) + " (hint: set :mkdirs option)")
+              };
+              if ($truthy(copy_asciidoctor_stylesheet)) {
+                $$($nesting, 'Stylesheets').$instance().$write_primary_stylesheet(stylesoutdir)
+              } else if ($truthy(copy_user_stylesheet)) {
+                
+                if ($truthy(($truthy($a = (stylesheet_src = doc.$attr("copycss"))['$==']("")) ? $a : stylesheet_src['$=='](true)))) {
+                  stylesheet_src = doc.$normalize_system_path(stylesheet)
+                } else {
+                  stylesheet_src = doc.$normalize_system_path(stylesheet_src.$to_s())
+                };
+                stylesheet_dest = doc.$normalize_system_path(stylesheet, stylesoutdir, (function() {if ($truthy($rb_ge(doc.$safe(), $$$($$($nesting, 'SafeMode'), 'SAFE')))) {
+                  return outdir
+                } else {
+                  return nil
+                }; return nil; })());
+                if ($truthy(($truthy($a = stylesheet_src['$!='](stylesheet_dest)) ? (stylesheet_data = doc.$read_asset(stylesheet_src, $hash2(["warn_on_failure", "label"], {"warn_on_failure": $$$('::', 'File')['$file?'](stylesheet_dest)['$!'](), "label": "stylesheet"}))) : $a))) {
+                  
+                  if ($truthy(($truthy($a = (stylesheet_outdir = $$$('::', 'File').$dirname(stylesheet_dest))['$!='](stylesoutdir)) ? $$$('::', 'File')['$directory?'](stylesheet_outdir)['$!']() : $a))) {
+                    if ($truthy(mkdirs)) {
+                      $$($nesting, 'Helpers').$mkdir_p(stylesheet_outdir)
+                    } else {
+                      self.$raise($$$('::', 'IOError'), "" + "target stylesheet directory does not exist: " + (stylesheet_outdir) + " (hint: set :mkdirs option)")
+                    }};
+                  $$$('::', 'File').$write(stylesheet_dest, stylesheet_data, $hash2(["mode"], {"mode": $$($nesting, 'FILE_WRITE_MODE')}));};};
+              if ($truthy(copy_syntax_hl_stylesheet)) {
+                syntax_hl.$write_stylesheet(doc, stylesoutdir)};};};
+          return doc;
+        } else {
+          return output
         };
-        return self.$convert(file, options);}, $$3.$$s = self, $$3.$$arity = 1, $$3));
-    }, $Asciidoctor_convert_file$2.$$arity = -2);
-    Opal.alias(self, "render", "convert");
-    self.$module_function("render");
-    Opal.alias(self, "render_file", "convert_file");
-    self.$module_function("render_file");
+      }, $convert$1.$$arity = -2);
+      
+      Opal.def(self, '$convert_file', $convert_file$2 = function $$convert_file(filename, options) {
+        var $$3, self = this;
+
+        
+        
+        if (options == null) {
+          options = $hash2([], {});
+        };
+        return $send($$$('::', 'File'), 'open', [filename, $$($nesting, 'FILE_READ_MODE')], ($$3 = function(file){var self = $$3.$$s || this;
+
+        
+          
+          if (file == null) {
+            file = nil;
+          };
+          return self.$convert(file, options);}, $$3.$$s = self, $$3.$$arity = 1, $$3));
+      }, $convert_file$2.$$arity = -2);
+      Opal.alias(self, "render", "convert");
+      return Opal.alias(self, "render_file", "convert_file");
+    })(Opal.get_singleton_class(self), $nesting)
   })($nesting[0], $nesting)
 };
 
@@ -36143,7 +36316,7 @@ Opal.modules["asciidoctor/syntax_highlighter/highlightjs"] = function(Opal) {
   }
   var self = Opal.top, $nesting = [], nil = Opal.nil, $$$ = Opal.const_get_qualified, $$ = Opal.const_get_relative, $breaker = Opal.breaker, $slice = Opal.slice, $module = Opal.module, $klass = Opal.klass, $send = Opal.send, $hash2 = Opal.hash2, $truthy = Opal.truthy;
 
-  Opal.add_stubs(['$register_for', '$merge', '$proc', '$[]=', '$-', '$==', '$attr', '$[]', '$attr?', '$join', '$map', '$split', '$lstrip']);
+  Opal.add_stubs(['$register_for', '$merge', '$proc', '$[]=', '$-', '$attr', '$[]', '$==', '$attr?', '$join', '$map', '$split', '$lstrip']);
   return (function($base, $parent_nesting) {
     var self = $module($base, 'Asciidoctor');
 
@@ -36197,25 +36370,29 @@ Opal.modules["asciidoctor/syntax_highlighter/highlightjs"] = function(Opal) {
       Opal.def(self, '$docinfo?', $HighlightJsAdapter_docinfo$ques$4 = function(location) {
         var self = this;
 
-        return location['$==']("footer")
+        return true
       }, $HighlightJsAdapter_docinfo$ques$4.$$arity = 1);
       return (Opal.def(self, '$docinfo', $HighlightJsAdapter_docinfo$5 = function $$docinfo(location, doc, opts) {
         var $$6, self = this, base_url = nil;
 
         
         base_url = doc.$attr("highlightjsdir", "" + (opts['$[]']("cdn_base_url")) + "/highlight.js/" + ($$($nesting, 'HIGHLIGHT_JS_VERSION')));
-        return "" + "<link rel=\"stylesheet\" href=\"" + (base_url) + "/styles/" + (doc.$attr("highlightjs-theme", "github")) + ".min.css\"" + (opts['$[]']("self_closing_tag_slash")) + ">\n" + "<script src=\"" + (base_url) + "/highlight.min.js\"></script>\n" + ((function() {if ($truthy(doc['$attr?']("highlightjs-languages"))) {
-          return $send(doc.$attr("highlightjs-languages").$split(","), 'map', [], ($$6 = function(lang){var self = $$6.$$s || this;
-
-          
-            
-            if (lang == null) {
-              lang = nil;
-            };
-            return "" + "<script src=\"" + (base_url) + "/languages/" + (lang.$lstrip()) + ".min.js\"></script>\n";}, $$6.$$s = self, $$6.$$arity = 1, $$6)).$join()
+        if (location['$==']("head")) {
+          return "" + "<link rel=\"stylesheet\" href=\"" + (base_url) + "/styles/" + (doc.$attr("highlightjs-theme", "github")) + ".min.css\"" + (opts['$[]']("self_closing_tag_slash")) + ">"
         } else {
-          return ""
-        }; return nil; })()) + "<script>hljs.initHighlighting()</script>";
+          return "" + "<script src=\"" + (base_url) + "/highlight.min.js\"></script>\n" + ((function() {if ($truthy(doc['$attr?']("highlightjs-languages"))) {
+            return $send(doc.$attr("highlightjs-languages").$split(","), 'map', [], ($$6 = function(lang){var self = $$6.$$s || this;
+
+            
+              
+              if (lang == null) {
+                lang = nil;
+              };
+              return "" + "<script src=\"" + (base_url) + "/languages/" + (lang.$lstrip()) + ".min.js\"></script>\n";}, $$6.$$s = self, $$6.$$arity = 1, $$6)).$join()
+          } else {
+            return ""
+          }; return nil; })()) + "<script>\n" + "if (!hljs.initHighlighting.called) {\n" + "  hljs.initHighlighting.called = true\n" + "  ;[].slice.call(document.querySelectorAll('pre.highlight > code')).forEach(function (el) { hljs.highlightBlock(el) })\n" + "}\n" + "</script>"
+        };
       }, $HighlightJsAdapter_docinfo$5.$$arity = 3), nil) && 'docinfo';
     })($$($nesting, 'SyntaxHighlighter'), $$$($$($nesting, 'SyntaxHighlighter'), 'Base'), $nesting)
   })($nesting[0], $nesting)
@@ -36228,7 +36405,7 @@ Opal.modules["asciidoctor/syntax_highlighter"] = function(Opal) {
   }
   var self = Opal.top, $nesting = [], nil = Opal.nil, $$$ = Opal.const_get_qualified, $$ = Opal.const_get_relative, $breaker = Opal.breaker, $slice = Opal.slice, $module = Opal.module, $hash2 = Opal.hash2, $truthy = Opal.truthy, $send = Opal.send, $klass = Opal.klass;
 
-  Opal.add_stubs(['$attr_reader', '$raise', '$class', '$private_class_method', '$extend', '$register', '$map', '$to_s', '$each', '$[]=', '$registry', '$-', '$[]', '$for', '$===', '$new', '$name', '$private', '$include', '$==', '$join', '$content']);
+  Opal.add_stubs(['$attr_reader', '$raise', '$class', '$private_class_method', '$extend', '$register', '$map', '$to_s', '$each', '$[]=', '$registry', '$-', '$[]', '$for', '$===', '$new', '$name', '$private', '$include', '$==', '$delete', '$join', '$content']);
   
   (function($base, $parent_nesting) {
     var self = $module($base, 'Asciidoctor');
@@ -36462,7 +36639,7 @@ Opal.modules["asciidoctor/syntax_highlighter"] = function(Opal) {
         
         self.$include($$($nesting, 'SyntaxHighlighter'));
         return (Opal.def(self, '$format', $Base_format$20 = function $$format(node, lang, opts) {
-          var $$21, $$22, self = this, class_attr_val = nil, transform = nil, pre = nil, code = nil;
+          var $$21, $$22, self = this, class_attr_val = nil, transform = nil, pre = nil, code = nil, $writer = nil;
 
           
           class_attr_val = (function() {if ($truthy(opts['$[]']("nowrap"))) {
@@ -36472,13 +36649,16 @@ Opal.modules["asciidoctor/syntax_highlighter"] = function(Opal) {
           }; return nil; })();
           if ($truthy((transform = opts['$[]']("transform")))) {
             
-            pre = $hash2(["class"], {"class": class_attr_val});
-            code = (function() {if ($truthy(lang)) {
+            transform['$[]']((pre = $hash2(["class"], {"class": class_attr_val})), (code = (function() {if ($truthy(lang)) {
               return $hash2(["data-lang"], {"data-lang": lang})
             } else {
               return $hash2([], {})
-            }; return nil; })();
-            transform['$[]'](pre, code);
+            }; return nil; })()));
+            if ($truthy((lang = code.$delete("data-lang")))) {
+              
+              $writer = ["data-lang", lang];
+              $send(code, '[]=', Opal.to_a($writer));
+              $writer[$rb_minus($writer["length"], 1)];};
             return "" + "<pre" + ($send(pre, 'map', [], ($$21 = function(k, v){var self = $$21.$$s || this;
 
             
@@ -36824,7 +37004,7 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
   }
   var self = Opal.top, $nesting = [], nil = Opal.nil, $$$ = Opal.const_get_qualified, $$ = Opal.const_get_relative, $breaker = Opal.breaker, $slice = Opal.slice, $module = Opal.module, $klass = Opal.klass, $send = Opal.send, $hash2 = Opal.hash2, $truthy = Opal.truthy, $gvars = Opal.gvars;
 
-  Opal.add_stubs(['$register_for', '$default=', '$-', '$==', '$[]', '$init_backend_traits', '$node_name', '$convert_inline_quoted', '$convert_paragraph', '$convert_inline_anchor', '$convert_section', '$convert_listing', '$convert_literal', '$convert_ulist', '$convert_olist', '$convert_dlist', '$convert_admonition', '$convert_colist', '$convert_embedded', '$convert_example', '$convert_floating_title', '$convert_image', '$convert_inline_break', '$convert_inline_button', '$convert_inline_callout', '$convert_inline_footnote', '$convert_inline_image', '$convert_inline_indexterm', '$convert_inline_kbd', '$convert_inline_menu', '$convert_open', '$convert_page_break', '$convert_preamble', '$convert_quote', '$convert_sidebar', '$convert_stem', '$convert_table', '$convert_thematic_break', '$convert_verse', '$convert_video', '$convert_document', '$convert_toc', '$convert_pass', '$convert_audio', '$empty?', '$attr', '$attr?', '$<<', '$include?', '$sub_replacements', '$gsub', '$extname', '$slice', '$length', '$doctitle', '$normalize_web_path', '$primary_stylesheet_data', '$instance', '$read_asset', '$normalize_system_path', '$syntax_highlighter', '$docinfo?', '$docinfo', '$id', '$sections?', '$doctype', '$role?', '$role', '$join', '$noheader', '$convert_outline', '$generate_manname_section', '$header?', '$notitle', '$title', '$header', '$each', '$authors', '$>', '$name', '$email', '$sub_macros', '$+', '$downcase', '$concat', '$content', '$footnotes?', '$!', '$footnotes', '$index', '$text', '$nofooter', '$inspect', '$!=', '$to_i', '$attributes', '$document', '$sections', '$level', '$caption', '$captioned_title', '$numbered', '$<=', '$<', '$sectname', '$sectnum', '$title?', '$icon_uri', '$compact', '$media_uri', '$option?', '$append_boolean_attribute', '$style', '$items', '$blocks?', '$===', '$text?', '$chomp', '$safe', '$read_svg_contents', '$alt', '$image_uri', '$encode_attribute_value', '$append_link_constraint_attrs', '$highlight?', '$to_sym', '$[]=', '$format', '$*', '$count', '$start_with?', '$end_with?', '$list_marker_keyword', '$parent', '$warn', '$logger', '$context', '$error', '$new', '$size', '$columns', '$to_h', '$rows', '$colspan', '$rowspan', '$unshift', '$shift', '$pop', '$split', '$nil_or_empty?', '$type', '$catalog', '$xreftext', '$target', '$reftext', '$map', '$chop', '$read_contents', '$sub', '$match', '$private', '$upcase', '$to_s', '$handles?', '$send']);
+  Opal.add_stubs(['$register_for', '$default=', '$-', '$==', '$[]', '$init_backend_traits', '$node_name', '$convert_inline_quoted', '$convert_paragraph', '$convert_inline_anchor', '$convert_section', '$convert_listing', '$convert_literal', '$convert_ulist', '$convert_olist', '$convert_dlist', '$convert_admonition', '$convert_colist', '$convert_embedded', '$convert_example', '$convert_floating_title', '$convert_image', '$convert_inline_break', '$convert_inline_button', '$convert_inline_callout', '$convert_inline_footnote', '$convert_inline_image', '$convert_inline_indexterm', '$convert_inline_kbd', '$convert_inline_menu', '$convert_open', '$convert_page_break', '$convert_preamble', '$convert_quote', '$convert_sidebar', '$convert_stem', '$convert_table', '$convert_thematic_break', '$convert_verse', '$convert_video', '$convert_document', '$convert_toc', '$convert_pass', '$convert_audio', '$empty?', '$attr', '$attr?', '$<<', '$include?', '$sub_replacements', '$gsub', '$extname', '$slice', '$length', '$doctitle', '$normalize_web_path', '$primary_stylesheet_data', '$instance', '$read_contents', '$syntax_highlighter', '$size', '$docinfo', '$id', '$sections?', '$doctype', '$role?', '$role', '$join', '$noheader', '$convert', '$converter', '$generate_manname_section', '$header?', '$notitle', '$title', '$header', '$each', '$authors', '$>', '$name', '$email', '$sub_macros', '$+', '$downcase', '$concat', '$content', '$footnotes?', '$!', '$footnotes', '$index', '$text', '$nofooter', '$docinfo?', '$[]=', '$delete_at', '$inspect', '$!=', '$to_i', '$attributes', '$document', '$sections', '$level', '$caption', '$captioned_title', '$numbered', '$<=', '$<', '$sectname', '$sectnum', '$convert_outline', '$title?', '$icon_uri', '$compact', '$media_uri', '$option?', '$append_boolean_attribute', '$style', '$items', '$blocks?', '$===', '$text?', '$chomp', '$safe', '$read_svg_contents', '$alt', '$image_uri', '$encode_attribute_value', '$append_link_constraint_attrs', '$highlight?', '$to_sym', '$format', '$*', '$count', '$start_with?', '$end_with?', '$list_marker_keyword', '$parent', '$warn', '$logger', '$context', '$error', '$new', '$columns', '$to_h', '$rows', '$colspan', '$rowspan', '$unshift', '$shift', '$pop', '$split', '$nil_or_empty?', '$type', '$catalog', '$xreftext', '$target', '$reftext', '$map', '$chop', '$sub', '$match', '$private', '$upcase', '$to_s', '$handles?', '$send']);
   return (function($base, $parent_nesting) {
     var self = $module($base, 'Asciidoctor');
 
@@ -36835,19 +37015,19 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
 
       var $nesting = [self].concat($parent_nesting), $Html5Converter_initialize$1, $Html5Converter_convert$2, $Html5Converter_convert_document$3, $Html5Converter_convert_embedded$6, $Html5Converter_convert_outline$8, $Html5Converter_convert_section$10, $Html5Converter_convert_admonition$11, $Html5Converter_convert_audio$12, $Html5Converter_convert_colist$13, $Html5Converter_convert_dlist$16, $Html5Converter_convert_example$23, $Html5Converter_convert_floating_title$24, $Html5Converter_convert_image$25, $Html5Converter_convert_listing$26, $Html5Converter_convert_literal$27, $Html5Converter_convert_stem$28, $Html5Converter_convert_olist$30, $Html5Converter_convert_open$32, $Html5Converter_convert_page_break$33, $Html5Converter_convert_paragraph$34, $Html5Converter_convert_preamble$35, $Html5Converter_convert_quote$36, $Html5Converter_convert_thematic_break$37, $Html5Converter_convert_sidebar$38, $Html5Converter_convert_table$39, $Html5Converter_convert_toc$44, $Html5Converter_convert_ulist$45, $Html5Converter_convert_verse$47, $Html5Converter_convert_video$48, $Html5Converter_convert_inline_anchor$49, $Html5Converter_convert_inline_break$50, $Html5Converter_convert_inline_button$51, $Html5Converter_convert_inline_callout$52, $Html5Converter_convert_inline_footnote$53, $Html5Converter_convert_inline_image$54, $Html5Converter_convert_inline_indexterm$57, $Html5Converter_convert_inline_kbd$58, $Html5Converter_convert_inline_menu$59, $Html5Converter_convert_inline_quoted$60, $Html5Converter_read_svg_contents$61, $Html5Converter_append_boolean_attribute$63, $Html5Converter_append_link_constraint_attrs$64, $Html5Converter_encode_attribute_value$65, $Html5Converter_generate_manname_section$66, $Html5Converter_method_missing$67, $writer = nil;
 
-      self.$$prototype.void_element_slash = self.$$prototype.xml_mode = self.$$prototype.refs = nil;
+      self.$$prototype.void_element_slash = self.$$prototype.xml_mode = self.$$prototype.refs = self.$$prototype.resolving_xref = nil;
       
       self.$register_for("html5");
       
       $writer = [["", ""]];
       $send(Opal.const_set($nesting[0], 'QUOTE_TAGS', $hash2(["monospaced", "emphasis", "strong", "double", "single", "mark", "superscript", "subscript", "asciimath", "latexmath"], {"monospaced": ["<code>", "</code>", true], "emphasis": ["<em>", "</em>", true], "strong": ["<strong>", "</strong>", true], "double": ["&#8220;", "&#8221;"], "single": ["&#8216;", "&#8217;"], "mark": ["<mark>", "</mark>", true], "superscript": ["<sup>", "</sup>", true], "subscript": ["<sub>", "</sub>", true], "asciimath": ["\\$", "\\$"], "latexmath": ["\\(", "\\)"]})), 'default=', Opal.to_a($writer));
       $writer[$rb_minus($writer["length"], 1)];;
-      Opal.const_set($nesting[0], 'DropAnchorRx', /<(?:a[^>+]+|\/a)>/);
+      Opal.const_set($nesting[0], 'DropAnchorRx', /<(?:a\b[^>]*|\/a)>/);
       Opal.const_set($nesting[0], 'StemBreakRx', / *\\\n(?:\\?\n)*|\n\n+/);
       if ($$($nesting, 'RUBY_ENGINE')['$==']("opal")) {
         
-        Opal.const_set($nesting[0], 'SvgPreambleRx', new RegExp("" + "^" + ($$($nesting, 'CC_ALL')) + "*?(?=<svg\\b)"));
-        Opal.const_set($nesting[0], 'SvgStartTagRx', /^<svg[^>]*>/);
+        Opal.const_set($nesting[0], 'SvgPreambleRx', new RegExp("" + "^" + ($$($nesting, 'CC_ALL')) + "*?(?=<svg[\\s>])"));
+        Opal.const_set($nesting[0], 'SvgStartTagRx', /^<svg(?:\s[^>]*)?>/);
       } else {
         nil
       };
@@ -36973,7 +37153,7 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
       }, $Html5Converter_convert$2.$$arity = -2);
       
       Opal.def(self, '$convert_document', $Html5Converter_convert_document$3 = function $$convert_document(node) {
-        var $a, $b, $c, $$4, $$5, self = this, br = nil, slash = nil, asset_uri_scheme = nil, cdn_base_url = nil, linkcss = nil, result = nil, lang_attribute = nil, authors = nil, icon_href = nil, icon_type = nil, icon_ext = nil, webfonts = nil, iconfont_stylesheet = nil, syntax_hl = nil, docinfo_content = nil, body_attrs = nil, sectioned = nil, classes = nil, details = nil, idx = nil, eqnums_val = nil, eqnums_opt = nil;
+        var $a, $b, $c, $$4, $$5, self = this, br = nil, slash = nil, asset_uri_scheme = nil, cdn_base_url = nil, linkcss = nil, max_width_attr = nil, result = nil, lang_attribute = nil, authors = nil, icon_href = nil, icon_type = nil, icon_ext = nil, webfonts = nil, iconfont_stylesheet = nil, syntax_hl = nil, syntax_hl_docinfo_head_idx = nil, docinfo_content = nil, id_attr = nil, sectioned = nil, classes = nil, details = nil, idx = nil, $writer = nil, eqnums_val = nil, eqnums_opt = nil;
 
         
         br = "" + "<br" + ((slash = self.void_element_slash)) + ">";
@@ -36983,6 +37163,11 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
         };
         cdn_base_url = "" + (asset_uri_scheme) + "//cdnjs.cloudflare.com/ajax/libs";
         linkcss = node['$attr?']("linkcss");
+        max_width_attr = (function() {if ($truthy(node['$attr?']("max-width"))) {
+          return "" + " style=\"max-width: " + (node.$attr("max-width")) + ";\""
+        } else {
+          return ""
+        }; return nil; })();
         result = ["<!DOCTYPE html>"];
         lang_attribute = (function() {if ($truthy(node['$attr?']("nolang"))) {
           return ""
@@ -37044,7 +37229,7 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
           if ($truthy(linkcss)) {
             result['$<<']("" + "<link rel=\"stylesheet\" href=\"" + (node.$normalize_web_path(node.$attr("stylesheet"), node.$attr("stylesdir", ""))) + "\"" + (slash) + ">")
           } else {
-            result['$<<']("" + "<style>\n" + (node.$read_asset(node.$normalize_system_path(node.$attr("stylesheet"), node.$attr("stylesdir", "")), $hash2(["warn_on_failure", "label"], {"warn_on_failure": true, "label": "stylesheet"}))) + "\n" + "</style>")
+            result['$<<']("" + "<style>\n" + (node.$read_contents(node.$attr("stylesheet"), $hash2(["start", "warn_on_failure", "label"], {"start": node.$attr("stylesdir"), "warn_on_failure": true, "label": "stylesheet"}))) + "\n" + "</style>")
           }};
         if ($truthy(node['$attr?']("icons", "font"))) {
           if ($truthy(node['$attr?']("iconfont-remote"))) {
@@ -37054,17 +37239,17 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
             iconfont_stylesheet = "" + (node.$attr("iconfont-name", "font-awesome")) + ".css";
             result['$<<']("" + "<link rel=\"stylesheet\" href=\"" + (node.$normalize_web_path(iconfont_stylesheet, node.$attr("stylesdir", ""), false)) + "\"" + (slash) + ">");
           }};
-        if ($truthy(($truthy($a = (syntax_hl = node.$syntax_highlighter())) ? syntax_hl['$docinfo?']("head") : $a))) {
-          result['$<<'](syntax_hl.$docinfo("head", node, $hash2(["cdn_base_url", "linkcss", "self_closing_tag_slash"], {"cdn_base_url": cdn_base_url, "linkcss": linkcss, "self_closing_tag_slash": slash})))};
+        if ($truthy((syntax_hl = node.$syntax_highlighter()))) {
+          result['$<<']((syntax_hl_docinfo_head_idx = result.$size()))};
         if ($truthy((docinfo_content = node.$docinfo())['$empty?']())) {
         } else {
           result['$<<'](docinfo_content)
         };
         result['$<<']("</head>");
-        body_attrs = (function() {if ($truthy(node.$id())) {
-          return ["" + "id=\"" + (node.$id()) + "\""]
+        id_attr = (function() {if ($truthy(node.$id())) {
+          return "" + " id=\"" + (node.$id()) + "\""
         } else {
-          return []
+          return ""
         }; return nil; })();
         if ($truthy(($truthy($a = ($truthy($b = ($truthy($c = (sectioned = node['$sections?']())) ? node['$attr?']("toc-class") : $c)) ? node['$attr?']("toc") : $b)) ? node['$attr?']("toc-placement", "auto") : $a))) {
           classes = [node.$doctype(), node.$attr("toc-class"), "" + "toc-" + (node.$attr("toc-position", "header"))]
@@ -37073,10 +37258,7 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
         };
         if ($truthy(node['$role?']())) {
           classes['$<<'](node.$role())};
-        body_attrs['$<<']("" + "class=\"" + (classes.$join(" ")) + "\"");
-        if ($truthy(node['$attr?']("max-width"))) {
-          body_attrs['$<<']("" + "style=\"max-width: " + (node.$attr("max-width")) + ";\"")};
-        result['$<<']("" + "<body " + (body_attrs.$join(" ")) + ">");
+        result['$<<']("" + "<body" + (id_attr) + " class=\"" + (classes.$join(" ")) + "\">");
         if ($truthy((docinfo_content = node.$docinfo("header"))['$empty?']())) {
         } else {
           result['$<<'](docinfo_content)
@@ -37084,12 +37266,12 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
         if ($truthy(node.$noheader())) {
         } else {
           
-          result['$<<']("<div id=\"header\">");
+          result['$<<']("" + "<div id=\"header\"" + (max_width_attr) + ">");
           if (node.$doctype()['$==']("manpage")) {
             
             result['$<<']("" + "<h1>" + (node.$doctitle()) + " Manual Page</h1>");
             if ($truthy(($truthy($a = ($truthy($b = sectioned) ? node['$attr?']("toc") : $b)) ? node['$attr?']("toc-placement", "auto") : $a))) {
-              result['$<<']("" + "<div id=\"toc\" class=\"" + (node.$attr("toc-class", "toc")) + "\">\n" + "<div id=\"toctitle\">" + (node.$attr("toc-title")) + "</div>\n" + (self.$convert_outline(node)) + "\n" + "</div>")};
+              result['$<<']("" + "<div id=\"toc\" class=\"" + (node.$attr("toc-class", "toc")) + "\">\n" + "<div id=\"toctitle\">" + (node.$attr("toc-title")) + "</div>\n" + (node.$converter().$convert(node, "outline")) + "\n" + "</div>")};
             if ($truthy(node['$attr?']("manpurpose"))) {
               result['$<<'](self.$generate_manname_section(node))};
           } else {
@@ -37139,14 +37321,14 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
                 result['$<<']("</div>");
               };};
             if ($truthy(($truthy($a = ($truthy($b = sectioned) ? node['$attr?']("toc") : $b)) ? node['$attr?']("toc-placement", "auto") : $a))) {
-              result['$<<']("" + "<div id=\"toc\" class=\"" + (node.$attr("toc-class", "toc")) + "\">\n" + "<div id=\"toctitle\">" + (node.$attr("toc-title")) + "</div>\n" + (self.$convert_outline(node)) + "\n" + "</div>")};
+              result['$<<']("" + "<div id=\"toc\" class=\"" + (node.$attr("toc-class", "toc")) + "\">\n" + "<div id=\"toctitle\">" + (node.$attr("toc-title")) + "</div>\n" + (node.$converter().$convert(node, "outline")) + "\n" + "</div>")};
           };
           result['$<<']("</div>");
         };
-        result['$<<']("" + "<div id=\"content\">\n" + (node.$content()) + "\n" + "</div>");
+        result['$<<']("" + "<div id=\"content\"" + (max_width_attr) + ">\n" + (node.$content()) + "\n" + "</div>");
         if ($truthy(($truthy($a = node['$footnotes?']()) ? node['$attr?']("nofootnotes")['$!']() : $a))) {
           
-          result['$<<']("" + "<div id=\"footnotes\">\n" + "<hr" + (slash) + ">");
+          result['$<<']("" + "<div id=\"footnotes\"" + (max_width_attr) + ">\n" + "<hr" + (slash) + ">");
           $send(node.$footnotes(), 'each', [], ($$5 = function(footnote){var self = $$5.$$s || this;
 
           
@@ -37159,7 +37341,7 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
         if ($truthy(node.$nofooter())) {
         } else {
           
-          result['$<<']("<div id=\"footer\">");
+          result['$<<']("" + "<div id=\"footer\"" + (max_width_attr) + ">");
           result['$<<']("<div id=\"footer-text\">");
           if ($truthy(node['$attr?']("revnumber"))) {
             result['$<<']("" + (node.$attr("version-label")) + " " + (node.$attr("revnumber")) + (br))};
@@ -37168,15 +37350,25 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
           result['$<<']("</div>");
           result['$<<']("</div>");
         };
-        if ($truthy(($truthy($a = syntax_hl) ? syntax_hl['$docinfo?']("footer") : $a))) {
-          result['$<<'](syntax_hl.$docinfo("footer", node, $hash2(["cdn_base_url", "linkcss", "self_closing_tag_slash"], {"cdn_base_url": cdn_base_url, "linkcss": linkcss, "self_closing_tag_slash": slash})))};
+        if ($truthy(syntax_hl)) {
+          
+          if ($truthy(syntax_hl['$docinfo?']("head"))) {
+            
+            $writer = [syntax_hl_docinfo_head_idx, syntax_hl.$docinfo("head", node, $hash2(["cdn_base_url", "linkcss", "self_closing_tag_slash"], {"cdn_base_url": cdn_base_url, "linkcss": linkcss, "self_closing_tag_slash": slash}))];
+            $send(result, '[]=', Opal.to_a($writer));
+            $writer[$rb_minus($writer["length"], 1)];
+          } else {
+            result.$delete_at(syntax_hl_docinfo_head_idx)
+          };
+          if ($truthy(syntax_hl['$docinfo?']("footer"))) {
+            result['$<<'](syntax_hl.$docinfo("footer", node, $hash2(["cdn_base_url", "linkcss", "self_closing_tag_slash"], {"cdn_base_url": cdn_base_url, "linkcss": linkcss, "self_closing_tag_slash": slash})))};};
         if ($truthy(node['$attr?']("stem"))) {
           
           eqnums_val = node.$attr("eqnums", "none");
           if ($truthy(eqnums_val['$empty?']())) {
             eqnums_val = "AMS"};
           eqnums_opt = "" + " equationNumbers: { autoNumber: \"" + (eqnums_val) + "\" } ";
-          result['$<<']("" + "<script type=\"text/x-mathjax-config\">\n" + "MathJax.Hub.Config({\n" + "  messageStyle: \"none\",\n" + "  tex2jax: {\n" + "    inlineMath: [" + ($$($nesting, 'INLINE_MATH_DELIMITERS')['$[]']("latexmath").$inspect()) + "],\n" + "    displayMath: [" + ($$($nesting, 'BLOCK_MATH_DELIMITERS')['$[]']("latexmath").$inspect()) + "],\n" + "    ignoreClass: \"nostem|nolatexmath\"\n" + "  },\n" + "  asciimath2jax: {\n" + "    delimiters: [" + ($$($nesting, 'BLOCK_MATH_DELIMITERS')['$[]']("asciimath").$inspect()) + "],\n" + "    ignoreClass: \"nostem|noasciimath\"\n" + "  },\n" + "  TeX: {" + (eqnums_opt) + "}\n" + "})\n" + "MathJax.Hub.Register.StartupHook(\"AsciiMath Jax Ready\", function () {\n" + "  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {\n" + "    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains('stemblock')) {\n" + "      data.math.root.display = \"block\"\n" + "    }\n" + "    return data\n" + "  })\n" + "})\n" + "</script>\n" + "<script src=\"" + (cdn_base_url) + "/mathjax/" + ($$($nesting, 'MATHJAX_VERSION')) + "/MathJax.js?config=TeX-MML-AM_HTMLorMML\"></script>");};
+          result['$<<']("" + "<script type=\"text/x-mathjax-config\">\n" + "MathJax.Hub.Config({\n" + "  messageStyle: \"none\",\n" + "  tex2jax: {\n" + "    inlineMath: [" + ($$($nesting, 'INLINE_MATH_DELIMITERS')['$[]']("latexmath").$inspect()) + "],\n" + "    displayMath: [" + ($$($nesting, 'BLOCK_MATH_DELIMITERS')['$[]']("latexmath").$inspect()) + "],\n" + "    ignoreClass: \"nostem|nolatexmath\"\n" + "  },\n" + "  asciimath2jax: {\n" + "    delimiters: [" + ($$($nesting, 'BLOCK_MATH_DELIMITERS')['$[]']("asciimath").$inspect()) + "],\n" + "    ignoreClass: \"nostem|noasciimath\"\n" + "  },\n" + "  TeX: {" + (eqnums_opt) + "}\n" + "})\n" + "MathJax.Hub.Register.StartupHook(\"AsciiMath Jax Ready\", function () {\n" + "  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {\n" + "    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains(\"stemblock\")) {\n" + "      data.math.root.display = \"block\"\n" + "    }\n" + "    return data\n" + "  })\n" + "})\n" + "</script>\n" + "<script src=\"" + (cdn_base_url) + "/mathjax/" + ($$($nesting, 'MATHJAX_VERSION')) + "/MathJax.js?config=TeX-MML-AM_HTMLorMML\"></script>");};
         if ($truthy((docinfo_content = node.$docinfo("footer"))['$empty?']())) {
         } else {
           result['$<<'](docinfo_content)
@@ -37214,7 +37406,7 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
           }; return nil; })();
           result['$<<']("" + "<h1" + (id_attr) + ">" + (node.$header().$title()) + "</h1>");};
         if ($truthy(($truthy($a = ($truthy($b = ($truthy($c = node['$sections?']()) ? node['$attr?']("toc") : $c)) ? (toc_p = node.$attr("toc-placement"))['$!=']("macro") : $b)) ? toc_p['$!=']("preamble") : $a))) {
-          result['$<<']("" + "<div id=\"toc\" class=\"toc\">\n" + "<div id=\"toctitle\">" + (node.$attr("toc-title")) + "</div>\n" + (self.$convert_outline(node)) + "\n" + "</div>")};
+          result['$<<']("" + "<div id=\"toc\" class=\"toc\">\n" + "<div id=\"toctitle\">" + (node.$attr("toc-title")) + "</div>\n" + (node.$converter().$convert(node, "outline")) + "\n" + "</div>")};
         result['$<<'](node.$content());
         if ($truthy(($truthy($a = node['$footnotes?']()) ? node['$attr?']("nofootnotes")['$!']() : $a))) {
           
@@ -37860,10 +38052,10 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
           
           if ($truthy((($a = style['$==']("asciimath")) ? equation['$include?']($$($nesting, 'LF')) : style['$==']("asciimath")))) {
             
-            br = "" + "<br" + (self.void_element_slash) + ">" + ($$($nesting, 'LF'));
+            br = "" + ($$($nesting, 'LF')) + "<br" + (self.void_element_slash) + ">";
             equation = $send(equation, 'gsub', [$$($nesting, 'StemBreakRx')], ($$29 = function(){var self = $$29.$$s || this, $c;
 
-            return "" + (close) + ($rb_times(br, (($c = $gvars['~']) === nil ? nil : $c['$[]'](0)).$count($$($nesting, 'LF')))) + (open)}, $$29.$$s = self, $$29.$$arity = 0, $$29));};
+            return "" + (close) + ($rb_times(br, $rb_minus((($c = $gvars['~']) === nil ? nil : $c['$[]'](0)).$count($$($nesting, 'LF')), 1))) + ($$($nesting, 'LF')) + (open)}, $$29.$$s = self, $$29.$$arity = 0, $$29));};
           if ($truthy(($truthy($a = equation['$start_with?'](open)) ? equation['$end_with?'](close) : $a))) {
           } else {
             equation = "" + (open) + (equation) + (close)
@@ -38025,7 +38217,7 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
 
         
         if ($truthy(($truthy($a = ($truthy($b = (doc = node.$document())['$attr?']("toc-placement", "preamble")) ? doc['$sections?']() : $b)) ? doc['$attr?']("toc") : $a))) {
-          toc = "" + "\n" + "<div id=\"toc\" class=\"" + (doc.$attr("toc-class", "toc")) + "\">\n" + "<div id=\"toctitle\">" + (doc.$attr("toc-title")) + "</div>\n" + (self.$convert_outline(doc)) + "\n" + "</div>"
+          toc = "" + "\n" + "<div id=\"toc\" class=\"" + (doc.$attr("toc-class", "toc")) + "\">\n" + "<div id=\"toctitle\">" + (doc.$attr("toc-title")) + "</div>\n" + (doc.$converter().$convert(doc, "outline")) + "\n" + "</div>"
         } else {
           toc = ""
         };
@@ -38111,7 +38303,7 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
       }, $Html5Converter_convert_sidebar$38.$$arity = 1);
       
       Opal.def(self, '$convert_table', $Html5Converter_convert_table$39 = function $$convert_table(node) {
-        var $a, $$40, $$41, self = this, result = nil, id_attribute = nil, classes = nil, stripes = nil, styles = nil, autowidth = nil, tablewidth = nil, role = nil, class_attribute = nil, style_attribute = nil, slash = nil;
+        var $a, $$40, $$41, self = this, result = nil, id_attribute = nil, frame = nil, classes = nil, stripes = nil, styles = nil, autowidth = nil, tablewidth = nil, role = nil, class_attribute = nil, style_attribute = nil, slash = nil;
 
         
         result = [];
@@ -38120,7 +38312,9 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
         } else {
           return ""
         }; return nil; })();
-        classes = ["tableblock", "" + "frame-" + (node.$attr("frame", "all", "table-frame")), "" + "grid-" + (node.$attr("grid", "all", "table-grid"))];
+        if ((frame = node.$attr("frame", "all", "table-frame"))['$==']("topbot")) {
+          frame = "ends"};
+        classes = ["tableblock", "" + "frame-" + (frame), "" + "grid-" + (node.$attr("grid", "all", "table-grid"))];
         if ($truthy((stripes = node.$attr("stripes", nil, "table-stripes")))) {
           classes['$<<']("" + "stripes-" + (stripes))};
         styles = [];
@@ -38268,7 +38462,7 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
           
           return doc.$attr("toc-class", "toc");
         }; return nil; })();
-        return "" + "<div" + (id_attr) + " class=\"" + (role) + "\">\n" + "<div" + (title_id_attr) + " class=\"title\">" + (title) + "</div>\n" + (self.$convert_outline(doc, $hash2(["toclevels"], {"toclevels": levels}))) + "\n" + "</div>";
+        return "" + "<div" + (id_attr) + " class=\"" + (role) + "\">\n" + "<div" + (title_id_attr) + " class=\"title\">" + (title) + "</div>\n" + (doc.$converter().$convert(doc, "outline", $hash2(["toclevels"], {"toclevels": levels}))) + "\n" + "</div>";
       }, $Html5Converter_convert_toc$44.$$arity = 1);
       
       Opal.def(self, '$convert_ulist', $Html5Converter_convert_ulist$45 = function $$convert_ulist(node) {
@@ -38577,6 +38771,11 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
           return self.$append_boolean_attribute("autoplay", xml);
         } else {
           return ""
+        }; return nil; })()) + ((function() {if ($truthy(node['$option?']("muted"))) {
+          
+          return self.$append_boolean_attribute("muted", xml);
+        } else {
+          return ""
         }; return nil; })()) + ((function() {if ($truthy(node['$option?']("nocontrols"))) {
           return ""
         } else {
@@ -38591,7 +38790,7 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
       }, $Html5Converter_convert_video$48.$$arity = 1);
       
       Opal.def(self, '$convert_inline_anchor', $Html5Converter_convert_inline_anchor$49 = function $$convert_inline_anchor(node) {
-        var $a, self = this, $case = nil, path = nil, attrs = nil, text = nil, refid = nil, ref = nil;
+        var $a, $b, $c, self = this, $case = nil, path = nil, attrs = nil, text = nil, refid = nil, ref = nil, outer = nil;
 
         return (function() {$case = node.$type();
         if ("xref"['$===']($case)) {
@@ -38614,8 +38813,13 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
           } else {
             
             refid = node.$attributes()['$[]']("refid");
-            if ($truthy($$($nesting, 'AbstractNode')['$===']((ref = (self.refs = ($truthy($a = self.refs) ? $a : node.$document().$catalog()['$[]']("refs")))['$[]'](refid))))) {
-              text = ($truthy($a = ref.$xreftext(node.$attr("xrefstyle", nil, true))) ? $a : "" + "[" + (refid) + "]")
+            if ($truthy(($truthy($a = ($truthy($b = $$($nesting, 'AbstractNode')['$===']((ref = (self.refs = ($truthy($c = self.refs) ? $c : node.$document().$catalog()['$[]']("refs")))['$[]'](refid)))) ? (self.resolving_xref = ($truthy($c = self.resolving_xref) ? $c : (outer = true))) : $b)) ? outer : $a))) {
+              
+              if ($truthy((text = ref.$xreftext(node.$attr("xrefstyle", nil, true)))['$!']())) {
+                text = "" + "[" + (refid) + "]"
+              } else if ($truthy(text['$include?']("<a"))) {
+                text = text.$gsub($$($nesting, 'DropAnchorRx'), "")};
+              self.resolving_xref = nil;
             } else {
               text = "" + "[" + (refid) + "]"
             };
@@ -38653,7 +38857,7 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
       }, $Html5Converter_convert_inline_button$51.$$arity = 1);
       
       Opal.def(self, '$convert_inline_callout', $Html5Converter_convert_inline_callout$52 = function $$convert_inline_callout(node) {
-        var self = this, src = nil;
+        var self = this, src = nil, guard = nil;
 
         if ($truthy(node.$document()['$attr?']("icons", "font"))) {
           return "" + "<i class=\"conum\" data-value=\"" + (node.$text()) + "\"></i><b>(" + (node.$text()) + ")</b>"
@@ -38661,8 +38865,10 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
           
           src = node.$icon_uri("" + "callouts/" + (node.$text()));
           return "" + "<img src=\"" + (src) + "\" alt=\"" + (node.$text()) + "\"" + (self.void_element_slash) + ">";
+        } else if ($truthy($$$('::', 'Array')['$===']((guard = node.$attributes()['$[]']("guard"))))) {
+          return "" + "&lt;!--<b class=\"conum\">(" + (node.$text()) + ")</b>--&gt;"
         } else {
-          return "" + (node.$attributes()['$[]']("guard")) + "<b class=\"conum\">(" + (node.$text()) + ")</b>"
+          return "" + (guard) + "<b class=\"conum\">(" + (node.$text()) + ")</b>"
         }
       }, $Html5Converter_convert_inline_callout$52.$$arity = 1);
       
@@ -38840,17 +39046,19 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
       }, $Html5Converter_convert_inline_quoted$60.$$arity = 1);
       
       Opal.def(self, '$read_svg_contents', $Html5Converter_read_svg_contents$61 = function $$read_svg_contents(node, target) {
-        var $$62, self = this, svg = nil, old_start_tag = nil, new_start_tag = nil;
+        var $$62, self = this, svg = nil, old_start_tag = nil, new_start_tag = nil, start_tag_match = nil;
 
         
-        if ($truthy((svg = node.$read_contents(target, $hash2(["start", "normalize", "label"], {"start": node.$document().$attr("imagesdir"), "normalize": true, "label": "SVG"}))))) {
+        if ($truthy((svg = node.$read_contents(target, $hash2(["start", "normalize", "label", "warn_if_empty"], {"start": node.$document().$attr("imagesdir"), "normalize": true, "label": "SVG", "warn_if_empty": true}))))) {
           
+          if ($truthy(svg['$empty?']())) {
+            return nil};
           if ($truthy(svg['$start_with?']("<svg"))) {
           } else {
             svg = svg.$sub($$($nesting, 'SvgPreambleRx'), "")
           };
-          old_start_tag = (new_start_tag = nil);
-          $send(["width", "height"], 'each', [], ($$62 = function(dim){var self = $$62.$$s || this;
+          old_start_tag = (new_start_tag = (start_tag_match = nil));
+          $send(["width", "height"], 'each', [], ($$62 = function(dim){var self = $$62.$$s || this, $a, $b;
 
           
             
@@ -38858,15 +39066,17 @@ Opal.modules["asciidoctor/converter/html5"] = function(Opal) {
               dim = nil;
             };
             if ($truthy(node['$attr?'](dim))) {
-              
-              if ($truthy(new_start_tag)) {
-              } else {
-                new_start_tag = (old_start_tag = svg.$match($$($nesting, 'SvgStartTagRx'))['$[]'](0)).$gsub($$($nesting, 'DimensionAttributeRx'), "")
-              };
-              return (new_start_tag = "" + (new_start_tag.$chop()) + " " + (dim) + "=\"" + (node.$attr(dim)) + "px\">");
             } else {
-              return nil
-            };}, $$62.$$s = self, $$62.$$arity = 1, $$62));
+              return nil;
+            };
+            if ($truthy(new_start_tag)) {
+            } else {
+              
+              if ((start_tag_match = ($truthy($a = start_tag_match) ? $a : ($truthy($b = svg.$match($$($nesting, 'SvgStartTagRx'))) ? $b : "no_match")))['$==']("no_match")) {
+                return nil;};
+              new_start_tag = (old_start_tag = start_tag_match['$[]'](0)).$gsub($$($nesting, 'DimensionAttributeRx'), "");
+            };
+            return (new_start_tag = "" + (new_start_tag.$chop()) + " " + (dim) + "=\"" + (node.$attr(dim)) + "\">");}, $$62.$$s = self, $$62.$$arity = 1, $$62));
           if ($truthy(new_start_tag)) {
             svg = "" + (new_start_tag) + (svg['$[]'](Opal.Range.$new(old_start_tag.$length(), -1, false)))};};
         return svg;
@@ -41114,7 +41324,7 @@ Opal.modules["asciidoctor/js/postscript"] = function(Opal) {
         } else {
           return nil
         };}, $$12.$$s = self, $$12.$$arity = 1, $$12));}, $Asciidoctor$11.$$s = self, $Asciidoctor$11.$$arity = 1, $Asciidoctor$11)));
-    Opal.const_set($nesting[0], 'CAPTION_ATTR_NAMES', $hash2(["example", "figure", "listing", "table"], {"example": "example-caption", "figure": "figure-caption", "listing": "listing-caption", "table": "table-caption"}));
+    Opal.const_set($nesting[0], 'CAPTION_ATTRIBUTE_NAMES', $hash2(["example", "figure", "listing", "table"], {"example": "example-caption", "figure": "figure-caption", "listing": "listing-caption", "table": "table-caption"}));
     Opal.const_set($nesting[0], 'LAYOUT_BREAK_CHARS', $hash2(["'", "<"], {"'": "thematic_break", "<": "page_break"}));
     Opal.const_set($nesting[0], 'MARKDOWN_THEMATIC_BREAK_CHARS', $hash2(["-", "*", "_"], {"-": "thematic_break", "*": "thematic_break", "_": "thematic_break"}));
     Opal.const_set($nesting[0], 'HYBRID_LAYOUT_BREAK_CHARS', $$($nesting, 'LAYOUT_BREAK_CHARS').$merge($$($nesting, 'MARKDOWN_THEMATIC_BREAK_CHARS')));
@@ -41133,8 +41343,9 @@ Opal.modules["asciidoctor/js/postscript"] = function(Opal) {
     $send(Opal.const_set($nesting[0], 'STEM_TYPE_ALIASES', $hash2(["latexmath", "latex", "tex"], {"latexmath": "latexmath", "latex": "latexmath", "tex": "latexmath"})), 'default=', Opal.to_a($writer));
     $writer[$rb_minus($writer["length"], 1)];;
     Opal.const_set($nesting[0], 'FONT_AWESOME_VERSION', "4.7.0");
-    Opal.const_set($nesting[0], 'HIGHLIGHT_JS_VERSION', "9.15.6");
-    Opal.const_set($nesting[0], 'MATHJAX_VERSION', "2.7.5");
+    Opal.const_set($nesting[0], 'HIGHLIGHT_JS_VERSION', "9.18.3");
+    Opal.const_set($nesting[0], 'MATHJAX_VERSION', "2.7.9");
+    Opal.const_set($nesting[0], 'DEFAULT_ATTRIBUTES', $hash2(["appendix-caption", "appendix-refsig", "caution-caption", "chapter-refsig", "example-caption", "figure-caption", "important-caption", "last-update-label", "note-caption", "part-refsig", "prewrap", "sectids", "section-refsig", "table-caption", "tip-caption", "toc-placement", "toc-title", "untitled-label", "version-label", "warning-caption"], {"appendix-caption": "Appendix", "appendix-refsig": "Appendix", "caution-caption": "Caution", "chapter-refsig": "Chapter", "example-caption": "Example", "figure-caption": "Figure", "important-caption": "Important", "last-update-label": "Last updated", "note-caption": "Note", "part-refsig": "Part", "prewrap": "", "sectids": "", "section-refsig": "Section", "table-caption": "Table", "tip-caption": "Tip", "toc-placement": "auto", "toc-title": "Table of Contents", "untitled-label": "Untitled", "version-label": "Version", "warning-caption": "Warning"}));
     Opal.const_set($nesting[0], 'FLEXIBLE_ATTRIBUTES', ["sectnums"]);
     Opal.const_set($nesting[0], 'INTRINSIC_ATTRIBUTES', $hash2(["startsb", "endsb", "vbar", "caret", "asterisk", "tilde", "plus", "backslash", "backtick", "blank", "empty", "sp", "two-colons", "two-semicolons", "nbsp", "deg", "zwsp", "quot", "apos", "lsquo", "rsquo", "ldquo", "rdquo", "wj", "brvbar", "pp", "cpp", "amp", "lt", "gt"], {"startsb": "[", "endsb": "]", "vbar": "|", "caret": "^", "asterisk": "*", "tilde": "~", "plus": "&#43;", "backslash": "\\", "backtick": "`", "blank": "", "empty": "", "sp": " ", "two-colons": "::", "two-semicolons": ";;", "nbsp": "&#160;", "deg": "&#176;", "zwsp": "&#8203;", "quot": "&#34;", "apos": "&#39;", "lsquo": "&#8216;", "rsquo": "&#8217;", "ldquo": "&#8220;", "rdquo": "&#8221;", "wj": "&#8288;", "brvbar": "&#166;", "pp": "&#43;&#43;", "cpp": "C&#43;&#43;", "amp": "&", "lt": "<", "gt": ">"}));
     if ($$($nesting, 'RUBY_ENGINE')['$==']("opal")) {
@@ -41235,10 +41446,23 @@ var toHash = function (object) {
 var fromHash = function (hash) {
   var object = {}
   if (hash) {
-    var data = hash.$$smap
-    for (var key in data) {
-      var value = data[key]
-      object[key] = value === Opal.nil ? undefined : value
+    var stringMap = hash.$$smap
+    for (var stringMapKey in stringMap) {
+      var stringMapValue = stringMap[stringMapKey]
+      object[stringMapKey] = stringMapValue === Opal.nil ? undefined : stringMapValue
+    }
+    var numericMap = hash.$$map
+    if (numericMap) {
+      var positional = []
+      for (var numericMapKey in numericMap) {
+        var entry = numericMap[numericMapKey]
+        var numericMapValue = entry.value
+        var index = entry.key - 1
+        positional[index] = numericMapValue === Opal.nil ? undefined : numericMapValue
+      }
+      if (positional.length > 0) {
+        object.$positional = positional
+      }
     }
   }
   return object
@@ -41544,7 +41768,32 @@ AbstractBlock.prototype.getTitle = function () {
  * @memberof AbstractBlock
  */
 AbstractBlock.prototype.setTitle = function (title) {
+  title = typeof title === 'undefined' ? Opal.nil : title
   return this['$title='](title)
+}
+
+/**
+ * Generate and assign caption to block if not already assigned.
+ *
+ * If the block has a title and a caption prefix is available for this block,
+ * then build a caption from this information, assign it a number and store it
+ * to the caption attribute on the block.
+ *
+ * If a caption has already been assigned to this block, do nothing.
+ *
+ * The parts of a complete caption are: <prefix> <number>. <title>
+ * This partial caption represents the part the precedes the title.
+ *
+ * @param {string} value - the String caption to assign to this block or nil to use document attribute.
+ * @param {string} captionContext - the String context to use when resolving caption-related attributes.
+ * If not provided, the name of the context for this block is used. Only certain contexts allow the caption to be looked up.
+ *
+ * @memberof AbstractBlock
+ */
+AbstractBlock.prototype.assignCaption = function (value, captionContext) {
+  value = typeof value === 'undefined' ? Opal.nil : value
+  captionContext = typeof captionContext === 'undefined' ? null : captionContext
+  this.$assign_caption(value, captionContext)
 }
 
 /**
@@ -41631,7 +41880,7 @@ AbstractBlock.prototype.getCaption = function () {
  * @memberof AbstractBlock
  */
 AbstractBlock.prototype.setCaption = function (caption) {
-  this.caption = caption
+  this.caption = typeof caption === 'undefined' ? Opal.nil : caption
 }
 
 /**
@@ -43052,7 +43301,7 @@ Callouts.prototype.getListIndex = function () {
  * @memberof Callouts
  */
 Callouts.prototype.getCurrentList = function () {
-  const currentList = this.$current_list()
+  var currentList = this.$current_list()
   if (currentList && currentList.length > 0) {
     for (var i = 0; i < currentList.length; i++) {
       if (typeof currentList[i] === 'object' && '$$smap' in currentList[i]) {
@@ -44814,7 +45063,7 @@ Cell.prototype.getColumnPercentageWidth = function () {
  * @memberof Cell
  */
 Cell.prototype.getInnerDocument = function () {
-  const innerDocument = this.inner_document
+  var innerDocument = this.inner_document
   return innerDocument === Opal.nil ? undefined : innerDocument
 }
 
@@ -46455,7 +46704,7 @@ Html5Converter.prototype.convert = function (node, transform, opts) {
 }
 
 
-var ASCIIDOCTOR_JS_VERSION = '2.2.0';
+var ASCIIDOCTOR_JS_VERSION = '2.2.1';
 
   /**
    * Get Asciidoctor.js version number.
