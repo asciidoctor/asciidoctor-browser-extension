@@ -10,6 +10,7 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
     const options = buildAsciidoctorOptions(settings, url)
     const doc = processor.load(source, options)
     if (showTitle(doc)) {
+      doc.removeAttribute('notitle')
       doc.setAttribute('showtitle')
     }
     if (isSourceHighlighterEnabled(doc)) {
