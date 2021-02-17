@@ -29,7 +29,7 @@ const log = async (msg) => {
   try {
     const browser = await puppeteer.launch(opts)
     const page = await browser.newPage()
-    page.exposeFunction('mochaOpts', () => ({ reporter: 'spec' }))
+    await page.exposeFunction('mochaOpts', () => ({ reporter: 'spec' }))
     page.on('console', async (msg) => {
       const args = await log(msg)
       if (args[0] && typeof args[0] === 'string') {
@@ -41,7 +41,7 @@ const log = async (msg) => {
       }
     })
     await page.goto('file://' + path.join(__dirname, 'index.html'), { waitUntil: 'networkidle2' })
-    browser.close()
+    await browser.close()
   } catch (err) {
     console.error('Unable to run tests using Puppeteer', err)
     process.exit(1)
