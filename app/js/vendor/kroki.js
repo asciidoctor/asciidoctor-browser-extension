@@ -16786,10 +16786,12 @@ function simpleEnd(buf) {
  * @author Dan DeFelippi <dan@driverdan.com>
  * @contributor David Ellis <d.f.ellis@ieee.org>
  * @contributor Guillaume Grossetie <ggrossetie@yuzutech.fr>
+ * @contributor David Jencks <djencks@apache.org>
  * @license MIT
  */
 const Url = require('url')
 const fs = require('fs')
+const ospath = require('path')
 
 exports.XMLHttpRequest = function () {
   'use strict'
@@ -16859,6 +16861,9 @@ exports.XMLHttpRequest = function () {
   // Error flag, used when errors occur or abort is called
   let errorFlag = false
 
+  // Binary response (chunk)
+  const responseBinary = []
+
   // Event listeners
   const listeners = {}
 
@@ -16893,6 +16898,8 @@ exports.XMLHttpRequest = function () {
   this.withCredentials = false
   // "text", "arraybuffer", "blob", or "document", depending on your data needs.
   // Note, setting xhr.responseType = '' (or omitting) will default the response to "text".
+  // Omitting, '', or "text" will return a String.
+  // Other values will return an ArrayBuffer.
   this.responseType = ''
 
   /**
@@ -16929,8 +16936,8 @@ exports.XMLHttpRequest = function () {
    * @param method - {string} Connection method (eg GET, POST)
    * @param url - {string} URL for the connection.
    * @param async - {boolean} Asynchronous connection. Default is true.
-   * @param user - {string} Username for basic authentication (optional)
-   * @param password - {string} Password for basic authentication (optional)
+   * @param [user] - {string} Username for basic authentication (optional)
+   * @param [password] - {string} Password for basic authentication (optional)
    */
   this.open = function (method, url, async, user, password) {
     this.abort()
@@ -17084,7 +17091,7 @@ exports.XMLHttpRequest = function () {
       if (settings.async) {
         fs.readFile(url, 'utf8', function (error, data) {
           if (error) {
-            self.handleError(error)
+            self.handleError(error, url)
           } else {
             self.status = 200
             self.responseText = data
@@ -17097,7 +17104,7 @@ exports.XMLHttpRequest = function () {
           this.status = 200
           setState(self.DONE)
         } catch (e) {
-          this.handleError(e)
+          this.handleError(e, url)
         }
       }
 
@@ -17169,7 +17176,7 @@ exports.XMLHttpRequest = function () {
     // Handle async requests
     if (settings.async) {
       // Use the proper protocol
-      var doRequest = ssl ? https.request : http.request
+      const doRequest = ssl ? https.request : http.request
 
       // Request is being sent, set send flag
       sendFlag = true
@@ -17207,38 +17214,64 @@ exports.XMLHttpRequest = function () {
           return
         }
 
-        response.setEncoding('utf8')
+        const encoding = responseType === 'text' ? 'utf8' : 'binary'
+        if (encoding === 'utf8') {
+          response.setEncoding('utf8')
+        }
 
         setState(self.HEADERS_RECEIVED)
         self.status = response.statusCode
 
-        response.on('data', function (chunk) {
-          // Make sure there's some data
-          if (chunk) {
-            self.responseText += chunk
-          }
-          // Don't emit state changes if the connection has been aborted.
-          if (sendFlag) {
-            setState(self.LOADING)
-          }
-        })
+        if (encoding === 'utf8') {
+          response.on('data', function (chunk) {
+            // Make sure there's some data
+            if (chunk) {
+              self.responseText += chunk
+            }
+            // Don't emit state changes if the connection has been aborted.
+            if (sendFlag) {
+              setState(self.LOADING)
+            }
+          })
 
-        response.on('end', function () {
-          if (sendFlag) {
-            // Discard the end event if the connection has been aborted
-            setState(self.DONE)
-            sendFlag = false
-          }
-        })
+          response.on('end', function () {
+            if (sendFlag) {
+              // Discard the end event if the connection has been aborted
+              setState(self.DONE)
+              sendFlag = false
+            }
+          })
+        } else {
+          response.on('data', function (chunk) {
+            // Make sure there's some data
+            if (chunk) {
+              responseBinary.push(chunk)
+            }
+            // Don't emit state changes if the connection has been aborted.
+            if (sendFlag) {
+              setState(self.LOADING)
+            }
+          })
+
+          response.on('end', function () {
+            // buffers are Uint8Array instances
+            self.response = Buffer.concat(responseBinary).buffer
+            if (sendFlag) {
+              // Discard the end event if the connection has been aborted
+              setState(self.DONE)
+              sendFlag = false
+            }
+          })
+        }
 
         response.on('error', function (error) {
-          self.handleError(error)
+          self.handleError(error, url)
         })
       }
 
       // Error handler for the request
       const errorHandler = function errorHandler (error) {
-        self.handleError(error)
+        self.handleError(error, url)
       }
 
       // Create the request
@@ -17254,13 +17287,14 @@ exports.XMLHttpRequest = function () {
       self.dispatchEvent('loadstart')
     } else { // Synchronous
       const encoding = responseType === 'text' ? 'utf8' : 'binary'
-      const output = require('child_process').execSync(`"${process.argv[0]}" "${__dirname}/request.js" \
+      const scriptPath = ospath.join(__dirname, 'request.js')
+      const output = require('child_process').execSync(`"${process.execPath}" "${scriptPath}" \
 --ssl="${ssl}" \
 --encoding="${encoding}" \
 --request-options=${JSON.stringify(JSON.stringify(options))}`, { stdio: ['pipe', 'pipe', 'pipe'], input: data })
       const result = JSON.parse(output.toString('utf8'))
       if (result.error) {
-        self.handleError(result.error)
+        throw translateError(result.error, url)
       } else {
         response = result.data
         self.status = result.data.statusCode
@@ -17277,13 +17311,13 @@ exports.XMLHttpRequest = function () {
   /**
    * Called when an error is encountered to deal with it.
    */
-  this.handleError = function (error) {
+  this.handleError = function (error, url) {
     this.status = 0
-    this.statusText = error
-    this.responseText = error.stack
+    this.statusText = ''
+    this.responseText = ''
     errorFlag = true
     setState(this.DONE)
-    this.dispatchEvent('error')
+    this.dispatchEvent('error', { error: translateError(error, url) })
   }
 
   /**
@@ -17339,13 +17373,13 @@ exports.XMLHttpRequest = function () {
   /**
    * Dispatch any events, including both "on" methods and events attached using addEventListener.
    */
-  this.dispatchEvent = function (event) {
+  this.dispatchEvent = function (event, args) {
     if (typeof self['on' + event] === 'function') {
-      self['on' + event]()
+      self['on' + event](args)
     }
     if (event in listeners) {
       for (let i = 0, len = listeners[event].length; i < len; i++) {
-        listeners[event][i].call(self)
+        listeners[event][i].call(self, args)
       }
     }
   }
@@ -17370,10 +17404,28 @@ exports.XMLHttpRequest = function () {
       }
     }
   }
+
+  const translateError = function (error, url) {
+    if (typeof error === 'object') {
+      if (error.code === 'ENOTFOUND' || error.code === 'EAI_AGAIN') {
+        // XMLHttpRequest throws a DOMException when DNS lookup fails:
+        // code: 19
+        // message: "Failed to execute 'send' on 'XMLHttpRequest': Failed to load 'http://url/'."
+        // name: "NetworkError"
+        // stack: (...)
+        return new Error(`Failed to execute 'send' on 'XMLHttpRequest': Failed to load '${url}'.`)
+      }
+      if (error instanceof Error) {
+        return error
+      }
+      return new Error(JSON.stringify(error))
+    }
+    return new Error(error)
+  }
 }
 
 }).call(this)}).call(this,require('_process'),require("buffer").Buffer,"/node_modules/unxhr/lib")
-},{"_process":26,"buffer":3,"child_process":2,"fs":2,"http":32,"https":6,"url":55}],55:[function(require,module,exports){
+},{"_process":26,"buffer":3,"child_process":2,"fs":2,"http":32,"https":6,"path":25,"url":55}],55:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -18266,7 +18318,7 @@ const processKroki = (processor, parent, attrs, diagramType, diagramText, contex
     diagramText = parent.applySubstitutions(diagramText, parent.$resolve_subs(subs))
   }
   if (diagramType === 'vegalite') {
-    diagramText = require('./preprocess.js').preprocessVegaLite(diagramText, context)
+    diagramText = require('./preprocess.js').preprocessVegaLite(diagramText, context, doc.getBaseDir())
   } else if (diagramType === 'plantuml') {
     const plantUmlInclude = doc.getAttribute('kroki-plantuml-include')
     if (plantUmlInclude) {
@@ -18390,7 +18442,29 @@ module.exports.register = function register (registry, context = {}) {
   if (typeof context.contentCatalog !== 'undefined' && typeof context.contentCatalog.addFile === 'function' && typeof context.file !== 'undefined') {
     context.vfs = require('./antora-adapter.js')(context.file, context.contentCatalog, context.vfs)
   }
-  const names = ['plantuml', 'ditaa', 'graphviz', 'blockdiag', 'seqdiag', 'actdiag', 'nwdiag', 'packetdiag', 'rackdiag', 'c4plantuml', 'erd', 'mermaid', 'nomnoml', 'svgbob', 'umlet', 'vega', 'vegalite', 'wavedrom', 'bytefield', 'bpmn']
+  const names = [
+    'actdiag',
+    'blockdiag',
+    'bpmn',
+    'bytefield',
+    'c4plantuml',
+    'ditaa',
+    'erd',
+    'excalidraw',
+    'graphviz',
+    'mermaid',
+    'nomnoml',
+    'nwdiag',
+    'packetdiag',
+    'plantuml',
+    'rackdiag',
+    'seqdiag',
+    'svgbob',
+    'umlet',
+    'vega',
+    'vegalite',
+    'wavedrom'
+  ]
   if (typeof registry.register === 'function') {
     registry.register(function () {
       for (const name of names) {
@@ -18554,15 +18628,18 @@ module.exports.KrokiClient = class KrokiClient {
 
 }).call(this)}).call(this,require("buffer").Buffer)
 },{"buffer":3,"pako":9}],63:[function(require,module,exports){
+// @ts-check
+// The previous line must be the first non-comment line in the file to enable TypeScript checks:
+// https://www.typescriptlang.org/docs/handbook/intro-to-js-ts.html#ts-check
 const path = require('path')
 
-// @ts-check
 /**
  * @param {string} diagramText
  * @param {any} context
+ * @param {string} baseDir
  * @returns {string}
  */
-module.exports.preprocessVegaLite = function (diagramText, context) {
+module.exports.preprocessVegaLite = function (diagramText, context, baseDir = '') {
   let diagramObject
   try {
     const JSON5 = require('json5')
@@ -18582,15 +18659,16 @@ ${diagramText}
   const vfs = context.vfs
   const read = typeof vfs !== 'undefined' && typeof vfs.read === 'function' ? vfs.read : require('./node-fs.js').read
   const data = diagramObject.data
+  const urlOrPath = data.url
   try {
-    data.values = read(data.url)
+    data.values = read(isLocalAndRelative(urlOrPath) ? path.join(baseDir, urlOrPath) : urlOrPath)
   } catch (e) {
-    if (isRemoteUrl(data.url)) {
+    if (isRemoteUrl(urlOrPath)) {
       // Only warn and do not throw an error, because the data file can perhaps be found by kroki server (https://github.com/yuzutech/kroki/issues/60)
-      console.warn(`Skipping preprocessing of Vega-Lite view specification, because reading the referenced remote file '${data.url}' caused an error:\n${e}`)
+      console.warn(`Skipping preprocessing of Vega-Lite view specification, because reading the remote data file '${urlOrPath}' referenced in the diagram caused an error:\n${e}`)
       return diagramText
     }
-    const message = `Preprocessing of Vega-Lite view specification failed, because reading the referenced local file '${data.url}' caused an error:\n${e}`
+    const message = `Preprocessing of Vega-Lite view specification failed, because reading the local data file '${urlOrPath}' referenced in the diagram caused an error:\n${e}`
     throw addCauseToError(new Error(message), e)
   }
 
@@ -18610,6 +18688,9 @@ ${diagramText}
   // return JSON.stringify(diagramObject, undefined, 2)
   return JSON.stringify(diagramObject)
 }
+
+const plantUmlBlocksRx = /@startuml(?:\r?\n)([\s\S]*?)(?:\r?\n)@enduml/gm
+const plantUmlFirstBlockRx = /@startuml(?:\r?\n)([\s\S]*?)(?:\r?\n)@enduml/m
 
 /**
  * Removes all plantuml tags (@startuml/@enduml) from the diagram
@@ -18802,22 +18883,28 @@ function getPlantUmlTextRegEx (text, regEx) {
 
 /**
  * @param {string} text
- * @param {int} index
+ * @param {number} index
  * @returns {string}
  */
 function getPlantUmlTextFromIndex (text, index) {
-  const regEx = new RegExp('@startuml(?:\\r\\n|\\n)([\\s\\S]*?)(?:\\r\\n|\\n)@enduml', 'gm')
-  let idx = -1
-  let matchedStrings = ''
-  let match = regEx.exec(text)
-  while (match != null && idx < index) {
-    if (++idx === index) {
-      matchedStrings += match[1]
-    } else {
-      match = regEx.exec(text)
-    }
+  // please note that RegExp objects are stateful when they have the global flag set (e.g. /foo/g).
+  // They store a lastIndex from the previous match.
+  // Using exec() multiple times will return the next occurrence.
+  // reset to find the first occurrence
+  let idx = 0
+  plantUmlBlocksRx.lastIndex = 0
+  let match = plantUmlBlocksRx.exec(text)
+  while (match && idx < index) {
+    // find the nth occurrence
+    match = plantUmlBlocksRx.exec(text)
+    idx++
   }
-  return matchedStrings
+  if (match) {
+    // [0] - result matching the complete regular expression
+    // [1] - the first capturing group
+    return match[1]
+  }
+  return ''
 }
 
 /**
@@ -18825,13 +18912,11 @@ function getPlantUmlTextFromIndex (text, index) {
  * @returns {string}
  */
 function getPlantUmlTextOrFirstBlock (text) {
-  const regEx = new RegExp('@startuml(?:\\r\\n|\\n)([\\s\\S]*?)(?:\\r\\n|\\n)@enduml', 'gm')
-  let matchedStrings = text
-  const match = regEx.exec(text)
-  if (match != null) {
-    matchedStrings = match[1]
+  const match = text.match(plantUmlFirstBlockRx)
+  if (match) {
+    return match[1]
   }
-  return matchedStrings
+  return text
 }
 
 /**
@@ -18870,6 +18955,25 @@ function isRemoteUrl (string) {
     return url.protocol !== 'file:'
   } catch (_) {
     return false
+  }
+}
+
+/**
+ * @param {string} string
+ * @returns {boolean}
+ */
+function isLocalAndRelative (string) {
+  if (string.startsWith('/')) {
+    return false
+  }
+
+  try {
+    // eslint-disable-next-line no-new
+    new URL(string)
+    // A URL can not be local AND relative: https://stackoverflow.com/questions/7857416/file-uri-scheme-and-relative-files
+    return false
+  } catch (_) {
+    return true
   }
 }
 
