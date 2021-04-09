@@ -43,7 +43,7 @@
     "mocha": "^8.3.2",
     "node-sass": "5.0.0",
     "puppeteer": "^8.0.0",
-    "sinon": "^10.0.0",
+    "sinon": "^10.0.1",
     "standard": "16.0.3"
   },
   "keywords": [
