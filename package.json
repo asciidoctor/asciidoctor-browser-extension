@@ -39,7 +39,7 @@
     "dirty-chai": "^2.0.1",
     "eslint": "^7.24.0",
     "font-awesome": "4.7.0",
-    "mathjax": "3.0.1",
+    "mathjax": "3.1.4",
     "mocha": "^8.3.2",
     "node-sass": "5.0.0",
     "puppeteer": "^9.0.0",
