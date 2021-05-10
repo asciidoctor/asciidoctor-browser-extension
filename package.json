@@ -41,7 +41,7 @@
     "font-awesome": "4.7.0",
     "mathjax": "3.0.1",
     "mocha": "^8.4.0",
-    "node-sass": "5.0.0",
+    "node-sass": "6.0.0",
     "puppeteer": "^9.1.1",
     "sinon": "^10.0.0",
     "standard": "16.0.3"
