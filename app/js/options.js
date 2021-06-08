@@ -1,4 +1,4 @@
-/* global localStorage, chrome, browser, FileReader */
+/* global localStorage, chrome, browser, FileReader, Event */
 'use strict'
 
 const webExtension = typeof browser === 'undefined' ? chrome : browser
@@ -96,9 +96,8 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
         customThemesOptGroup.appendChild(optionElement)
       }
     }
-   
     selectTheme.value = localStorage.THEME || 'asciidoctor'
-    selectTheme.dispatchEvent(new Event("change"))
+    selectTheme.dispatchEvent(new Event('change'))
 
     // JavaScripts
     const customJavaScriptNames = JSON.parse(localStorage.CUSTOM_JS_NAMES || '[]')
@@ -199,7 +198,7 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
 
   const selectOpt = (parentElement, name) => {
     parentElement.value = name
-    parentElement.dispatchEvent(new Event("change"))
+    parentElement.dispatchEvent(new Event('change'))
   }
 
   const initAutoSave = () => {
@@ -242,27 +241,20 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
       }
     })
   }
-  selectTheme.addEventListener('change', (event)=>{
-    if(selectTheme.selectedOptions){
-
-      if(selectTheme.selectedOptions[0].parentNode.label != 'Default'){
+  selectTheme.addEventListener('change', (event) => {
+    if (selectTheme.selectedOptions) {
+      if (selectTheme.selectedOptions[0].parentNode.label !== 'Default') {
         removeCustomStyleSheet.classList.remove('is-hidden')
-       
+      } else {
+        removeCustomStyleSheet.classList.add('is-hidden')
       }
-       else{
-          removeCustomStyleSheet.classList.add('is-hidden')
-        }
     }
-    
-    
   })
   restoreOptions()
 
   initNotification(addCustomThemeNotification)
   initNotification(addCustomJavaScriptNotification)
   initEnablingLocalFileAlert()
-
-  
 
   const inputCustomThemeElement = document.getElementById('inputCustomTheme')
   inputCustomThemeElement.onchange = () => {
