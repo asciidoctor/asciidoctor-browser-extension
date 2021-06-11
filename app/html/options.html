@@ -142,29 +142,34 @@
         <legend>Additional resources</legend>
         <div class="field">
           <label class="label" for="selectTheme">Theme / Stylesheet</label>
-          <div class="control has-icons-left">
-            <div class="select">
-              <select id="selectTheme" class="form-input">
-                <optgroup label="Default">
-                  <option>asciidoctor</option>
-                  <option>colony</option>
-                  <option>foundation</option>
-                  <option>foundation-lime</option>
-                  <option>foundation-potion</option>
-                  <option>github</option>
-                  <option>golo</option>
-                  <option>iconic</option>
-                  <option>maker</option>
-                  <option>readthedocs</option>
-                  <option>riak</option>
-                  <option>rocket-panda</option>
-                  <option>rubygems</option>
-                </optgroup>
-              </select>
+          <div class="field is-grouped">
+            <div class="control has-icons-left">
+              <div class="select">
+                <select id="selectTheme" class="form-input">
+                  <optgroup label="Default">
+                    <option>asciidoctor</option>
+                    <option>colony</option>
+                    <option>foundation</option>
+                    <option>foundation-lime</option>
+                    <option>foundation-potion</option>
+                    <option>github</option>
+                    <option>golo</option>
+                    <option>iconic</option>
+                    <option>maker</option>
+                    <option>readthedocs</option>
+                    <option>riak</option>
+                    <option>rocket-panda</option>
+                    <option>rubygems</option>
+                  </optgroup>
+                </select>
+              </div>
+              <div class="icon is-small is-left">
+                <i class="fa fa-paint-brush"></i>
+              </div>
             </div>
-            <div class="icon is-small is-left">
-              <i class="fa fa-paint-brush"></i>
-            </div>
+           <p class="control">
+              <a class="button is-danger" id="removeCustomStyleSheet"> Remove </a>
+            </p>
           </div>
           <p class="help">
             The CSS styles to apply to the rendered HTML.

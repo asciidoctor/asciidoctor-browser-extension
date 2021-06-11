@@ -1,4 +1,4 @@
-/* global localStorage, chrome, browser, FileReader */
+/* global localStorage, chrome, browser, FileReader, Event */
 'use strict'
 
 const webExtension = typeof browser === 'undefined' ? chrome : browser
@@ -19,7 +19,7 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
   const addCustomJavaScriptNotification = document.getElementById('addCustomJavaScriptNotification')
   const enablingLocalFileNotification = document.getElementById('enablingLocalFileNotification')
   const openExtensionsPageLink = document.getElementById('openExtensionsPageLink')
-
+  const removeCustomStyleSheet = document.getElementById('removeCustomStyleSheet')
   const showEnablingLocalFileNotification = () => {
     openExtensionsPageLink.onclick = () => webExtension.tabs.create({ url: 'chrome://extensions/?id=' + webExtension.runtime.id })
     initNotification(enablingLocalFileNotification)
@@ -97,6 +97,7 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
       }
     }
     selectTheme.value = localStorage.THEME || 'asciidoctor'
+    selectTheme.dispatchEvent(new Event('change'))
 
     // JavaScripts
     const customJavaScriptNames = JSON.parse(localStorage.CUSTOM_JS_NAMES || '[]')
@@ -197,6 +198,7 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
 
   const selectOpt = (parentElement, name) => {
     parentElement.value = name
+    parentElement.dispatchEvent(new Event('change'))
   }
 
   const initAutoSave = () => {
@@ -239,12 +241,44 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
       }
     })
   }
-
+  selectTheme.addEventListener('change', (event) => {
+    if (selectTheme.selectedOptions) {
+      if (selectTheme.selectedOptions.length === 1 && selectTheme.selectedOptions[0].parentNode.label !== 'Default') {
+        removeCustomStyleSheet.classList.remove('is-hidden')
+      } else {
+        removeCustomStyleSheet.classList.add('is-hidden')
+      }
+    }
+  })
   restoreOptions()
 
   initNotification(addCustomThemeNotification)
   initNotification(addCustomJavaScriptNotification)
   initEnablingLocalFileAlert()
+
+  removeCustomStyleSheet.onclick = () => {
+    if (selectTheme.selectedOptions) {
+      if (selectTheme.selectedOptions.length === 1 && selectTheme.selectedOptions[0].parentNode.label !== 'Default') {
+        const themeName = selectTheme.value
+        const customThemeNames = JSON.parse(localStorage.CUSTOM_THEME_NAMES || '[]')
+        const customThemeFoundIndex = customThemeNames.indexOf(themeName)
+        if (customThemeFoundIndex > -1) {
+          customThemeNames.splice(customThemeFoundIndex, 1)
+          localStorage.CUSTOM_THEME_NAMES = JSON.stringify(customThemeNames)
+        }
+        localStorage.removeItem('CUSTOM_THEME_' + themeName)
+        selectTheme.selectedOptions[0].remove()
+        const customThemeOptGroup = document.getElementById('customThemeOptGroup')
+        if (customThemeOptGroup && !customThemeOptGroup.hasChildNodes()) {
+          customThemeOptGroup.remove()
+        }
+        localStorage.THEME = 'asciidoctor'
+        selectTheme.value = 'asciidoctor'
+        selectTheme.dispatchEvent(new Event('change'))
+        addCustomThemeNotification.classList.add('is-hidden')
+      }
+    }
+  }
 
   const inputCustomThemeElement = document.getElementById('inputCustomTheme')
   inputCustomThemeElement.onchange = () => {
