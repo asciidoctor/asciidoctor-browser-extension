@@ -243,7 +243,7 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
   }
   selectTheme.addEventListener('change', (event) => {
     if (selectTheme.selectedOptions) {
-      if (selectTheme.selectedOptions[0].parentNode.label !== 'Default') {
+      if (selectTheme.selectedOptions.length === 1 && selectTheme.selectedOptions[0].parentNode.label !== 'Default') {
         removeCustomStyleSheet.classList.remove('is-hidden')
       } else {
         removeCustomStyleSheet.classList.add('is-hidden')
@@ -255,6 +255,30 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
   initNotification(addCustomThemeNotification)
   initNotification(addCustomJavaScriptNotification)
   initEnablingLocalFileAlert()
+
+  removeCustomStyleSheet.onclick = () => {
+    if (selectTheme.selectedOptions) {
+      if (selectTheme.selectedOptions.length === 1 && selectTheme.selectedOptions[0].parentNode.label !== 'Default') {
+        const themeName = selectTheme.value
+        const customThemeNames = JSON.parse(localStorage.CUSTOM_THEME_NAMES || '[]')
+        const customThemeFoundIndex = customThemeNames.indexOf(themeName)
+        if (customThemeFoundIndex > -1) {
+          customThemeNames.splice(customThemeFoundIndex, 1)
+          localStorage.CUSTOM_THEME_NAMES = JSON.stringify(customThemeNames)
+        }
+        localStorage.removeItem('CUSTOM_THEME_' + themeName)
+        selectTheme.selectedOptions[0].remove()
+        const customThemeOptGroup = document.getElementById('customThemeOptGroup')
+        if (customThemeOptGroup && !customThemeOptGroup.hasChildNodes()) {
+          customThemeOptGroup.remove()
+        }
+        localStorage.THEME = 'asciidoctor'
+        selectTheme.value = 'asciidoctor'
+        selectTheme.dispatchEvent(new Event('change'))
+        addCustomThemeNotification.classList.add('is-hidden')
+      }
+    }
+  }
 
   const inputCustomThemeElement = document.getElementById('inputCustomTheme')
   inputCustomThemeElement.onchange = () => {
