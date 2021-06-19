@@ -81,3 +81,6 @@ NOTE: The linter will inspect the archive produced by `npm run build`, so make s
 . Connect to the https://addons.opera.com/developer[Opera Add-ons developper dashboard]
 .. Update the package
 .. Publish the new version
+. Connect to the https://partner.microsoft.com/fr-fr/dashboard/microsoftedge/overview[Microsoft Partner Center]
+.. Update the package
+.. Publish the new version
