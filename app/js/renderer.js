@@ -80,7 +80,7 @@ window.MathJax = {
     }))
     Dom.appendOnce(document.head, Dom.createScriptElement({
       id: 'asciidoctor-mathjax-initialization',
-      src: webExtension.extension.getURL('vendor/MathJax-3.0.1/tex-chtml-full.js'),
+      src: webExtension.extension.getURL('vendor/mathjax-3.2.0/tex-chtml-full.js'),
       async: true
     }))
     Dom.removeElement('asciidoctor-mathjax-typesetting')
