@@ -44,7 +44,7 @@
     "node-sass": "6.0.1",
     "puppeteer": "^13.3.2",
     "sinon": "^11.1.2",
-    "standard": "16.0.3"
+    "standard": "16.0.4"
   },
   "keywords": [
     "browser",
