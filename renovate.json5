@@ -7,6 +7,13 @@
     "schedule:monthly",
     ":maintainLockFilesMonthly"
   ],
+  "packageRules": [
+    {
+      // blocked by: mathjax/MathJax#2403 
+      "matchPackagePatterns": ["mathjax"],
+      "enabled": false
+    }
+  ],
   "lockFileMaintenance": {
     "extends": [
       "group:all"
