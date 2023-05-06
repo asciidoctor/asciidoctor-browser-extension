@@ -4,7 +4,7 @@ const puppeteer = require('puppeteer')
 
 // puppeteer options
 const opts = {
-  headless: true,
+  headless: 'new',
   timeout: 10000,
   args: ['--allow-file-access-from-files', '--no-sandbox']
 }

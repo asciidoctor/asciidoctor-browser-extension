@@ -6,7 +6,7 @@ const fs = require('fs')
 const log = require('bestikk-log')
 const bfs = require('bestikk-fs')
 const archiver = require('archiver')
-const sass = require('node-sass')
+const sass = require('sass')
 const csso = require('csso')
 
 function Builder () {
@@ -87,10 +87,7 @@ Builder.prototype.compileSass = function () {
   const source = 'src/sass/options.scss'
   const destination = 'app/css/options.min.css'
   log.transform('compile and minify', source, destination)
-  const result = sass.renderSync({
-    file: source,
-    includePaths: ['node_modules']
-  })
+  const result = sass.compile(source, { loadPaths: ['node_modules'] })
   const minified = csso.minify(result.css)
   fs.writeFileSync(destination, minified.css, 'utf-8')
 }

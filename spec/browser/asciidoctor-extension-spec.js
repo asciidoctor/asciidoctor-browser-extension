@@ -194,6 +194,8 @@ graphviz::${baseDir}/spec/fixtures/hello.dot[]
 
       const response = await Converter.convert(window.location.toString(), source)
       await Renderer.updateHTML(response)
+
+      console.log(document.body.innerText)
       const plantumlDiv = document.body.getElementsByClassName('kroki')
       expect(plantumlDiv.length).to.equal(1)
       const plantumlImg = plantumlDiv[0].getElementsByTagName('img')[0]

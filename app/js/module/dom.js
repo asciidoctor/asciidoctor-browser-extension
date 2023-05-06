@@ -31,6 +31,7 @@ asciidoctor.browser.dom = (document) => {
    * @param stylesheetLinkElementAttributes
    */
   module.replaceStylesheetLinkElement = (parent, stylesheetLinkElementAttributes) => {
+    console.log('document', document)
     const element = document.getElementById(stylesheetLinkElementAttributes.id)
     if (element) {
       if (element.href === stylesheetLinkElementAttributes.href) {

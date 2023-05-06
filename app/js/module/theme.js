@@ -27,7 +27,7 @@ asciidoctor.browser.theme = (webExtension, Settings, Constants) => {
    * @returns {Array}
    */
   module.getDefaultThemeNames = () => {
-    const webAccessibleResources = webExtension.runtime.getManifest().web_accessible_resources
+    const webAccessibleResources = webExtension.runtime.getManifest().web_accessible_resources[0].resources
     const themeRegexp = /^css\/themes\/(.*)\.css$/i
     return webAccessibleResources
       .filter(item => themeRegexp.test(item))

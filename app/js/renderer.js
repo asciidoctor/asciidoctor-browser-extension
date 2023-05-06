@@ -80,7 +80,7 @@ window.MathJax = {
     }))
     Dom.appendOnce(document.head, Dom.createScriptElement({
       id: 'asciidoctor-mathjax-initialization',
-      src: webExtension.extension.getURL('vendor/MathJax-3.0.1/tex-chtml-full.js'),
+      src: webExtension.runtime.getURL('vendor/MathJax-3.0.1/tex-chtml-full.js'),
       async: true
     }))
     Dom.removeElement('asciidoctor-mathjax-typesetting')
@@ -104,7 +104,7 @@ window.MathJax = {
         const highlightTheme = 'github'
         Dom.appendOnce(document.head, Dom.createStylesheetLinkElement({
           id: `asciidoctor-browser-${highlightTheme}-highlight-style`,
-          href: webExtension.extension.getURL(`css/highlight/${highlightTheme}.css`)
+          href: webExtension.runtime.getURL(`css/highlight/${highlightTheme}.css`)
         }))
       })
   }
@@ -136,10 +136,13 @@ window.MathJax = {
   const appendThemeStyle = async (themeName) => {
     const themeNames = Theme.getDefaultThemeNames()
     // Check if the theme is packaged in the extension... if not it's a custom theme
+    console.log('appendThemeStyle', themeName)
+    console.log('href', webExtension.runtime.getURL(`css/themes/${themeName}.css`))
+    console.log('themeNames', themeNames)
     if (themeNames.includes(themeName)) {
       Dom.replaceStylesheetLinkElement(document.head, {
         id: 'asciidoctor-browser-style',
-        href: webExtension.extension.getURL(`css/themes/${themeName}.css`)
+        href: webExtension.runtime.getURL(`css/themes/${themeName}.css`)
       })
     } else {
       const customThemeContent = await Settings.getSetting(Constants.CUSTOM_THEME_PREFIX + themeName)
@@ -292,7 +295,7 @@ window.MathJax = {
   const appendChartistStyle = () => {
     Dom.appendOnce(document.head, Dom.createStylesheetLinkElement({
       id: 'asciidoctor-browser-chartist-style',
-      href: webExtension.extension.getURL('css/chartist.min.css')
+      href: webExtension.runtime.getURL('css/chartist.min.css')
     }))
     Dom.appendOnce(document.head, Dom.createStyleElement({
       id: 'asciidoctor-browser-chartist-default-style',
@@ -306,7 +309,7 @@ window.MathJax = {
   const appendFontAwesomeStyle = () => {
     Dom.appendOnce(document.head, Dom.createStylesheetLinkElement({
       id: 'asciidoctor-browser-font-awesome-style',
-      href: webExtension.extension.getURL('css/font-awesome.min.css')
+      href: webExtension.runtime.getURL('css/font-awesome.min.css')
     }))
   }
 
