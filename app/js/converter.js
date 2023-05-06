@@ -1,4 +1,4 @@
-/* global md5, asciidoctor, XMLHttpRequest, Asciidoctor, AsciidoctorKroki */
+/* global fetch, md5, asciidoctor, Asciidoctor, XMLHttpRequest, AsciidoctorKroki */
 const processor = Asciidoctor({ runtime: { platform: 'browser' } })
 const eqnumValidValues = ['none', 'all', 'ams']
 
@@ -45,67 +45,40 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
   }
 
   module.fetchAndConvert = async (url, initial) => {
-    const request = await module.executeRequest(url)
-    if (module.isHtmlContentType(request)) {
-      // content is not plain-text!
-      return undefined
-    }
-    if (request.status !== 200 && request.status !== 0) {
+    const response = await fetch(url)
+    if (response.status >= 200 && response.status < 400) {
+      const contentType = response.headers.get('Content-Type')
+      if (contentType) {
+        if (contentType.includes('html') || contentType.includes('json')) {
+          // content is not plain-text!
+          return undefined
+        }
+        const source = await response.text()
+        if (await Settings.isExtensionEnabled()) {
+          const md5key = 'md5' + url
+          if (!initial) {
+            const md5sum = await Settings.getSetting(md5key)
+            if (md5sum && md5sum === md5(source)) {
+              // content didn't change!
+              return undefined
+            }
+          }
+          // content has changed...
+          const result = await module.convert(url, source)
+          // Update md5sum
+          const value = {}
+          value[md5key] = md5(source)
+          webExtension.storage.local.set(value)
+          return result
+        }
+        return {
+          text: source
+        }
+      }
+    } else {
       // unsuccessful request!
       return undefined
     }
-    const source = request.responseText
-    if (await Settings.isExtensionEnabled()) {
-      const md5key = 'md5' + url
-      if (!initial) {
-        const md5sum = await Settings.getSetting(md5key)
-        if (md5sum && md5sum === md5(source)) {
-          // content didn't change!
-          return undefined
-        }
-      }
-      // content has changed...
-      const result = await module.convert(url, source)
-      // Update md5sum
-      const value = {}
-      value[md5key] = md5(source)
-      webExtension.storage.local.set(value)
-      return result
-    }
-    return {
-      text: source
-    }
-  }
-
-  module.executeRequest = (url) => new Promise((resolve, reject) => {
-    try {
-      const request = new XMLHttpRequest()
-      if (request.overrideMimeType) {
-        request.overrideMimeType('text/plain;charset=utf-8')
-      }
-      request.onreadystatechange = (event) => {
-        if (request.readyState === XMLHttpRequest.DONE) {
-          resolve(request)
-        }
-      }
-      // disable cache
-      request.open('GET', url, true)
-      request.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
-      request.send(null)
-    } catch (err) {
-      console.error(`Unable to GET ${url}`, err)
-      reject(err)
-    }
-  })
-
-  /**
-   * Is the content type html ?
-   * @param request The request
-   * @return true if the content type is html, false otherwise
-   */
-  module.isHtmlContentType = (request) => {
-    const contentType = request.getResponseHeader('Content-Type')
-    return contentType && (contentType.indexOf('html') > -1)
   }
 
   // REMIND: notitle attribute is automatically set when header_footer equals false.

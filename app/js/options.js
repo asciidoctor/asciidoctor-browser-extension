@@ -58,17 +58,23 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
    * Saves options to localStorage.
    */
   const saveOptions = () => {
-    localStorage.CUSTOM_ATTRIBUTES = inputCustomAttributes.value
-    localStorage.SAFE_MODE = selectSafeMode.value
-    localStorage.LOCAL_POLL_FREQUENCY = selectLocalPollFrequency.value
-    localStorage.REMOTE_POLL_FREQUENCY = selectRemotePollFrequency.value
-    localStorage.ALLOW_TXT_EXTENSION = inputAllowTxtExtension.checked
-    localStorage.ENABLE_KROKI = inputEnableKroki.checked
-    localStorage.KROKI_SERVER_URL = inputKrokiServerURL.value
-    localStorage.THEME = selectTheme.value
-    localStorage.JS = selectJavaScript.value
-    localStorage.JS_LOAD = inputLoadJavaScript.find((element) => element.checked).value
-    webExtension.runtime.getBackgroundPage((page) => page.refreshOptions())
+    chrome.runtime.sendMessage({
+      action: 'refresh-options',
+      options: {
+        customAttributes: inputCustomAttributes.value,
+        safeMode: selectSafeMode.value,
+        localPollFrequency: selectLocalPollFrequency.value,
+        remotePollFrequency: selectRemotePollFrequency.value,
+        allowTxtExtension: inputAllowTxtExtension.checked,
+        enableKroki: inputEnableKroki.checked,
+        krokiServerUrl: inputKrokiServerURL.value,
+        theme: selectTheme.value,
+        javascript: selectJavaScript.value,
+        javascriptLoad: inputLoadJavaScript.find((element) => element.checked).value
+      }
+    }, () => {
+      console.log('callback!')
+    })
   }
 
   /**
@@ -241,7 +247,7 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
       }
     })
   }
-  selectTheme.addEventListener('change', (event) => {
+  selectTheme.addEventListener('change', () => {
     if (selectTheme.selectedOptions) {
       if (selectTheme.selectedOptions.length === 1 && selectTheme.selectedOptions[0].parentNode.label !== 'Default') {
         removeCustomStyleSheet.classList.remove('is-hidden')

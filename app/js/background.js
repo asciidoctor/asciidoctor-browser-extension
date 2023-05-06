@@ -4,14 +4,42 @@ const Settings = asciidoctor.browser.settings(webExtension, Constants)
 const Converter = asciidoctor.browser.converter(webExtension, Constants, Settings)
 
 // exports
-const { refreshOptions, enableDisableRender } = ((webExtension) => {
+;(async (webExtension) => {
   const matchesTabUrl = webExtension.runtime.getManifest().content_scripts[0].matches
   const renderSelectionMenuItemId = 'renderSelectionMenuItem'
 
   let injectTabId
   let injectText
 
-  const module = {}
+  const enableDisableRender = async function (enabled) {
+    // Save the status of the extension
+    webExtension.storage.local.set({ ENABLE_RENDER: enabled })
+
+    // Update the extension icon
+    const iconPrefix = enabled ? 'enabled' : 'disabled'
+    const iconPath = {
+      16: `/img/${iconPrefix}-16.png`,
+      32: `/img/${iconPrefix}-32.png`
+    }
+    if (typeof webExtension.action.setIcon === 'function') {
+      webExtension.action.setIcon({ path: iconPath })
+    } else if (typeof webExtension.action.setTitle === 'function') {
+      webExtension.action.setTitle({ title: `Asciidoctor.js Preview (${enabled ? '✔' : '✘'})` })
+    } else {
+      // eslint-disable-next-line no-console
+      console.log(`Asciidoctor.js Preview (${enabled ? 'enabled' : 'disabled'})`)
+    }
+
+    // Reload the active tab in the current windows that matches
+    findActiveTab((activeTab) => {
+      if (enabled) {
+        // opposite action, the extension was enabled, so we disable!
+        disableExtension(activeTab)
+      } else {
+        notifyTab(activeTab, 'extension-enabled')
+      }
+    })
+  }
 
   webExtension.runtime.onInstalled.addListener(() => {
     if (webExtension.contextMenus) {
@@ -38,7 +66,7 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
             } else if (selectedTextPerFrame.length > 0 && typeof selectedTextPerFrame[0] === 'string') {
               injectText = selectedTextPerFrame[0]
               webExtension.tabs.create({
-                url: webExtension.extension.getURL('html/inject.html'),
+                url: webExtension.runtime.getURL('html/inject.html'),
                 active: true
               }, (tab) => {
                 injectTabId = tab.id
@@ -67,6 +95,37 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
         .then(result => sendResponse(result))
         .catch((error) => sendResponse({ error: getErrorInfo(error) }))
       return true
+    } else if (request.action === 'refresh-options') {
+      webExtension.storage.local.set({
+        CUSTOM_ATTRIBUTES: localStorage.CUSTOM_ATTRIBUTES,
+        SAFE_MODE: localStorage.SAFE_MODE,
+        ALLOW_TXT_EXTENSION: localStorage.ALLOW_TXT_EXTENSION,
+        ENABLE_KROKI: localStorage.ENABLE_KROKI,
+        KROKI_SERVER_URL: localStorage.KROKI_SERVER_URL,
+        THEME: localStorage.THEME,
+        JS: localStorage.JS,
+        JS_LOAD: localStorage.JS_LOAD,
+        LOCAL_POLL_FREQUENCY: localStorage.LOCAL_POLL_FREQUENCY,
+        REMOTE_POLL_FREQUENCY: localStorage.REMOTE_POLL_FREQUENCY
+      })
+      const customThemeNames = JSON.parse(localStorage.CUSTOM_THEME_NAMES || '[]')
+      if (customThemeNames.length > 0) {
+        customThemeNames.forEach((themeName) => {
+          const themeNameKey = 'CUSTOM_THEME_' + themeName
+          const themeObj = {}
+          themeObj[themeNameKey] = localStorage[themeNameKey]
+          webExtension.storage.local.set(themeObj)
+        })
+      }
+      const customJavaScriptNames = JSON.parse(localStorage.CUSTOM_JS_NAMES || '[]')
+      if (customJavaScriptNames.length > 0) {
+        customJavaScriptNames.forEach((javaScriptName) => {
+          const javaScriptNameKey = 'CUSTOM_JS_' + javaScriptName
+          const javaScriptObj = {}
+          javaScriptObj[javaScriptNameKey] = localStorage[javaScriptNameKey]
+          webExtension.storage.local.set(javaScriptObj)
+        })
+      }
     }
     // send an empty response to avoid the pesky error "The message port closed before a response was received"
     sendResponse({})
@@ -112,80 +171,11 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
     }
   }
 
-  let enableRender = true
+  webExtension.action.onClicked.addListener(async () => {
+    const { enableRender } = await webExtension.storage.local.get(['ENABLE_RENDER'])
+    await enableDisableRender(!enableRender)
+  })
 
-  module.enableDisableRender = () => {
-    // Save the status of the extension
-    webExtension.storage.local.set({ ENABLE_RENDER: enableRender })
-
-    // Update the extension icon
-    const iconPrefix = enableRender ? 'enabled' : 'disabled'
-    const iconPath = {
-      16: `img/${iconPrefix}-16.png`,
-      32: `img/${iconPrefix}-32.png`
-    }
-    if (typeof webExtension.browserAction.setIcon === 'function') {
-      webExtension.browserAction.setIcon({ path: iconPath })
-    } else if (typeof webExtension.browserAction.setTitle === 'function') {
-      webExtension.browserAction.setTitle({ title: `Asciidoctor.js Preview (${enableRender ? '✔' : '✘'})` })
-    } else {
-      // eslint-disable-next-line no-console
-      console.log(`Asciidoctor.js Preview (${enableRender ? 'enabled' : 'disabled'})`)
-    }
-
-    // Reload the active tab in the current windows that matches
-    findActiveTab((activeTab) => {
-      if (enableRender) {
-        // opposite action, the extension was enabled, so we disable!
-        disableExtension(activeTab)
-      } else {
-        notifyTab(activeTab, 'extension-enabled')
-      }
-    })
-
-    // Switch the flag
-    enableRender = !enableRender
-  }
-
-  module.refreshOptions = () => {
-    webExtension.storage.local.set({
-      CUSTOM_ATTRIBUTES: localStorage.CUSTOM_ATTRIBUTES,
-      SAFE_MODE: localStorage.SAFE_MODE,
-      ALLOW_TXT_EXTENSION: localStorage.ALLOW_TXT_EXTENSION,
-      ENABLE_KROKI: localStorage.ENABLE_KROKI,
-      KROKI_SERVER_URL: localStorage.KROKI_SERVER_URL,
-      THEME: localStorage.THEME,
-      JS: localStorage.JS,
-      JS_LOAD: localStorage.JS_LOAD,
-      LOCAL_POLL_FREQUENCY: localStorage.LOCAL_POLL_FREQUENCY,
-      REMOTE_POLL_FREQUENCY: localStorage.REMOTE_POLL_FREQUENCY
-    })
-    const customThemeNames = JSON.parse(localStorage.CUSTOM_THEME_NAMES || '[]')
-    if (customThemeNames.length > 0) {
-      customThemeNames.forEach((themeName) => {
-        const themeNameKey = 'CUSTOM_THEME_' + themeName
-        const themeObj = {}
-        themeObj[themeNameKey] = localStorage[themeNameKey]
-        webExtension.storage.local.set(themeObj)
-      })
-    }
-    const customJavaScriptNames = JSON.parse(localStorage.CUSTOM_JS_NAMES || '[]')
-    if (customJavaScriptNames.length > 0) {
-      customJavaScriptNames.forEach((javaScriptName) => {
-        const javaScriptNameKey = 'CUSTOM_JS_' + javaScriptName
-        const javaScriptObj = {}
-        javaScriptObj[javaScriptNameKey] = localStorage[javaScriptNameKey]
-        webExtension.storage.local.set(javaScriptObj)
-      })
-    }
-  }
-
-  webExtension.browserAction.onClicked.addListener(module.enableDisableRender)
-
-  return module
+  const { enableRender } = await webExtension.storage.local.get(['ENABLE_RENDER'])
+  await enableDisableRender(enableRender)
 })(webExtension)
-
-enableDisableRender()
-
-// eslint-disable-next-line no-unused-vars
-window.refreshOptions = refreshOptions
