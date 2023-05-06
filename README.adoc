@@ -21,10 +21,10 @@ endif::[]
 
 This project uses https://github.com/asciidoctor/asciidoctor.js[Asciidoctor.js] to preview AsciiDoc as HTML inside Chrome (or Chromium), Firefox and Opera!
 
-image:https://raw.githubusercontent.com/asciidoctor/asciidoctor-browser-extension/main/promotional/chromewebstore-badge-wborder-496x150.png[link={uri-chrome-webstore},height="58px"]
-image:https://blog.mozilla.org/addons/files/2020/04/get-the-addon-fx-apr-2020.svg[link={uri-mozilla-addon},height="58px"]
-image:https://dev.opera.com/extensions/branding-guidelines/addons_206x58_en@2x.png[link={uri-opera-addon},width=206px]
-image:https://raw.githubusercontent.com/asciidoctor/asciidoctor-browser-extension/main/promotional/edgewebstore-badge.png[link={uri-edge-webstore},height="58px"]
+image:https://raw.githubusercontent.com/asciidoctor/asciidoctor-browser-extension/main/promotional/chromewebstore-badge-wborder-496x150.png[link={uri-chrome-webstore},height="64px",width="212px"]
+image:https://blog.mozilla.org/addons/files/2020/04/get-the-addon-fx-apr-2020.svg[link={uri-mozilla-addon},height="64px",width="184px"]
+image:https://dev.opera.com/extensions/branding-guidelines/addons_206x58_en@2x.png[link={uri-opera-addon},height="64px",width="227px"]
+image:https://raw.githubusercontent.com/asciidoctor/asciidoctor-browser-extension/main/promotional/edgewebstore-badge.png[link={uri-edge-webstore},height="64px",width="177px"]
 
 *Project health:* image:https://github.com/asciidoctor/asciidoctor-browser-extension/workflows/CI/badge.svg[Build Status, link="https://github.com/asciidoctor/asciidoctor-browser-extension/actions?query=workflow%3ACI"]
 
