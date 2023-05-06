@@ -299,5 +299,12 @@
   },
   "background": {
     "service_worker": "js/service.js"
+  },
+  "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCYbmhcajWA1Q9dXPvxH6E0388krVjGxmuVhv5P9DBGuFIejPYd140fecuhxMAduj3e6esWGAqapc5EO4YVYLttG6wCIZn2VX7XJOMKcibnoBvlmK6eU3CK049D/kD1Q6N63OEplSl3rgi2EnuwD+SrqLdcGmKOeJHQkgjJc7uZyQIDAQAB",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "asciidoctorjs-live-preview@asciidoctor.org",
+      "strict_min_version": "80.0"
+    }
   }
 }

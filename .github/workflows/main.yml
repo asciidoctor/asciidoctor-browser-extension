@@ -34,7 +34,8 @@ jobs:
       - name: Lint, build and test
         run: |
           npm run build
-          npm run lint:firefox
+          # Firefox does not support background.service_worker
+          #npm run lint:firefox
           npm t
   build-windows:
     runs-on: windows-latest
