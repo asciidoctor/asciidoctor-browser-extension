@@ -91,6 +91,7 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
       // disable cache
       request.open('GET', url, true)
       request.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+      request.setRequestHeader('Accept', 'text/plain, */*')
       request.send(null)
     } catch (err) {
       console.error(`Unable to GET ${url}`, err)
