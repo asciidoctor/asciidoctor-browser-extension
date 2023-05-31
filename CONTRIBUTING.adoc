@@ -1,6 +1,13 @@
-= Hacking
+= Contributing
 :uri-nodejs: http://nodejs.org
 :uri-nvm: https://github.com/creationix/nvm
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
 
 This guide will give you all the necessary information you need to become a successful code contributor!
 
@@ -28,30 +35,34 @@ This command will produce a zip file that can be load in Chrome: [.path]_dist/as
 . Run tests
 +
  $ npm run test
++
+--
+*Testing notes*
 
-[IMPORTANT]
-====
-The tests suite is run against an Headless instance of Chromium.
+The tests suite is run against an Headless instance of Chromium::
 When you installed the development dependencies, https://github.com/GoogleChrome/puppeteer[Puppeteer] had automatically installed Chromium for your platform.
 So you shouldn't need to manually install Chromium or Chrome in order to run the tests suite.
 
-It's not recommended, but if your are running the tests suite as `root`, you will see the following error in the console:
-
-```
+It is not recommended to run the test suite as `root`::
+If you're as `root`, you'll see the following error in the console:
++
+....
 INFO [launcher]: Starting browser ChromeHeadless
 ERROR [launcher]: Cannot start ChromeHeadless
 	ERROR:zygote_host_impl_linux.cc(89)] Running as root without --no-sandbox is not supported. See https://crbug.com/638180.
-```
-
+....
++
 To workaround this issue you can run the following command instead:
 
  $ npm run test:nosandbox
-
++
 It will launch a Chromium instance with the `--no-sandbox` argument.
 ====
+--
 
-This project is using a code linter to enforce code consistency. 
-To make sure that the code you have contributed, follow the code rules, execute the following command:
+. Check your code against the code rules.
+  This project is using a code linter to enforce code consistency. 
+  To make sure that the code you have contributed follows the code rules, execute the following command:
 
  $ npm run lint:code
 
@@ -65,6 +76,7 @@ You can run the linter with `npm`:
 NOTE: The linter will inspect the archive produced by `npm run build`, so make sure the file `dist/asciidoctor-browser-extension.zip` is present before running this command.
 
 == Release
+Follow these steps to make a release.
 
 . Build and run the tests
 . Make sure that everything is working fine by loading the extension as an "unpack extension"
@@ -72,13 +84,13 @@ NOTE: The linter will inspect the archive produced by `npm run build`, so make s
 . Update the version in `app/manifest.json`
 . Commit the changes
 . Tag the version
-. Connect to the https://chrome.google.com/webstore/developer/dashboard[Chrome Web Store developper dashboard]
+. Connect to the https://chrome.google.com/webstore/developer/dashboard[Chrome Web Store developer dashboard]
 .. Update the package
 .. Publish the new version
-. Connect to the https://addons.mozilla.org/fr/developers/addons[Firefox Add-ons developper dashboard]
+. Connect to the https://addons.mozilla.org/fr/developers/addons[Firefox Add-ons developer dashboard]
 .. Update the package
 .. Publish the new version
-. Connect to the https://addons.opera.com/developer[Opera Add-ons developper dashboard]
+. Connect to the https://addons.opera.com/developer[Opera Add-ons developer dashboard]
 .. Update the package
 .. Publish the new version
 . Connect to the https://partner.microsoft.com/fr-fr/dashboard/microsoftedge/overview[Microsoft Partner Center]

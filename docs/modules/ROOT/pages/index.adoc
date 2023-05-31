@@ -1,0 +1,10 @@
+= {project-name} Documentation
+:navtitle: Introduction
+:description: A brief introduction to the Asciidoctor Browser Extension.
+Enjoy AsciiDoc everywhere your browser goes with the {project-name}.
+
+The {project-name} uses xref:asciidoctor.js::index.adoc[Asciidoctor.js]
+to preview xref:asciidoc::index.adoc[AsciiDoc] files (.ad, .adoc, .asc, .asciidoc, and optionally .txt)
+as HTML inside Chrome, Brave, Firefox, Opera, Microsoft Edge and other Chromium-based browsers.
+
+TIP: You can learn more about AsciiDoc and use an interactive editor at https://asciidoc.org

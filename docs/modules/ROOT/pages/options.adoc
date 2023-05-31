@@ -1,0 +1,115 @@
+= Extension Options
+
+The {project-name} uses an option dialog to configure custom attributes, different themes, security settings, the Kroki diagram generator and more.
+
+== Open the options on Chrome
+
+To open the options dialog on {chromium-browser-list}, you can use either of these methods:
+
+Via the Extension icon::
+When the {project-name} icon (colored or gray) is visible on the extension toolbar, right-click menu:Extension icon[Options]
+
+Via the `chrome://extensions` page::
+. Type `chrome://extensions` into the address bar and press kbd:[Enter]
+. Type `asciidoctor` into the extension search bar then when the {project-name} block is visible, click its btn:[Details] button
+. Click the *Extension options* link
+
+== Open the options on Firefox
+
+On Firefox, you can use either of these methods:
+
+Via the Extension icon::
+.. Right click menu:Extension icon[Manage extension]
+.. Click the *Options* tab
+
+Via the hamburger menu::
+.. Select menu:Hamburger menu[Addons and themes]
+.. Click *Extensions*
+.. Choose the Asciidoctor.js Live Preview extension
+.. Click the *Options* tab
+
+== Options
+
+The options and their default settings are listed below:
+
+[%autowidth,cols="3*a",stripes=none]
+|====
+|Name |Description |Default value
+
+|
+[#custom-attributes]
+xref:custom-attributes.adoc[Custom{nbsp}attributes]
+|A string of space-separated __key__=__value__ attribute pairs (e.g., `toc=left`), that are appended to the header of each AsciiDoc page viewed by the browser.
+http://asciidoctor.org/docs/user-manual/#attributes[Learn more] about attributes.
+|_Empty_
+
+3+h|Asciidoctor options:
+|
+[#save-mode]
+Safe mode
+|Controls features related to security.
+http://asciidoctor.org/docs/user-manual/#running-asciidoctor-securely[Learn more] about these values.
+|Safe
+
+3+h|
+[#files-extension]
+Files extension:
+|Preview files with `txt` extension
+|By default, the extension will render ad, adoc, asc and asciidoc files.
+Useful when viewing raw text files with AsciiDoc content from hosted git providers or your local machine.
+|Unchecked
+
+3+h|
+[#poll-for-changes]
+Poll for changes (automatic reload):
+|To files loaded from URLs
+|How often viewed URLs are polled for changes.
+URLs use the http or https protocol.
+|2 seconds
+
+|To local files
+|How often file URLs are polled for changes.
+Local files use the file protocol (or no protocol).
+|2 seconds
+
+3+h|
+[#diagrams-extension]
+xref:diagrams-extension.adoc[Diagrams extension] (Images from text):
+
+|Enable the diagrams{nbsp}extension
+|The diagrams extension is sending the text diagrams to an instance of Kroki to display them as images in the preview. 
+Kroki is a free open-source project.
+
+IMPORTANT: When you enable the diagrams extension without changing the default *server URL*, you agree to the diagrams extension sending your diagrams to the free public cloud instance https://kroki.io for conversion.
+|Disabled
+
+|Server URL
+|By default, the diagram extensions sends your diagrams to the free public cloud instance https://kroki.io, but you can install Kroki on your own infrastructure.
+Once you've installed Kroki, make sure to update the server URL to point to your instance.
+
+|`https://kroki.io`
+
+3+h|
+[#theme-stylesheet]
+xref:theme-stylesheet.adoc[]:
+
+|Theme/Stylesheet
+|The CSS styles to apply to the rendered HTML.
+|Default
+
+|Add a stylesheet
+|File name of CSS styles to apply to the rendered HTML.
+|_Empty_
+
+3+h|
+[#javascript]
+xref:javascript.adoc[]:
+
+|Javascript dropdown
+|Add a custom JavaScript to the rendered HTML.
+|None
+
+|Load the Javascript...
+|Before or after the document has loaded.
+|Before
+|====

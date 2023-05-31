@@ -1,0 +1,134 @@
+= Features
+:url-asciidoctor-sc-image: https://cdn.jsdelivr.net/gh/asciidoctor/asciidoctor/screenshot.png
+
+The main feature is viewing AsciiDoc as HTML5 directly in the browser.
+Other features cover where those AsciiDoc files are located, and how they are rendered.
+
+You can exercise these features in the  <<try-it-yourself>> section of this page.
+
+[#example]
+== View AsciiDoc as HTML5
+
+The screen capture below shows raw AsciiDoc on the left, and rendered HTML5 on the right.
+
+If the extension is inactive, you'll see the raw AsciiDoc.
+If it is active, you'll see the rendered HTML5.
+
+Reproduce this example yourself by following the instructions further below in <<try-it-yourself>>.
+
+image::{url-asciidoctor-sc-image}["Screen capture of two screens, showing raw AsciiDoc and rendered as HTML5"]
+
+== Auto reload
+
+If the content of the page is changed, the rendered view is automatically refreshed.
+
+This means that if you edit the viewed AsciiDoc and save, the rendered view will change.
+
+See xref:options.adoc#poll-for-changes[Poll for Changes] on the options page.
+
+== Insert AsciiDoc attributes
+
+Insert a set of attributes to each page viewed.
+
+This can make your every day use of AsciiDoc for notes, fast and effective.
+
+See xref:custom-attributes.adoc[].
+
+== Change the presentation style
+
+AsciiDoc separates content from presentation.
+
+Change the stylesheet or CSS that is used to render HTML5 from the AsciiDoc.
+For example, you may prefer a darker or a more compact presentation style.
+See xref:options.adoc[].
+
+== View AsciiDoc files from different locations
+
+The extension allows you to view AsciiDoc files and optionally (`.txt`) files that are:
+
+* Local to your browser (`file://`)
+* Remote (`https://`)
++
+This includes hosted Git platforms
++
+TIP: *Raw Mode*: To view AsciiDoc files using the {project-name} and not the native AsciiDoc rendering if offered, use the provider's *raw* viewing mode for the file.
+
+== Exploit diagrams as text
+
+AsciiDoc already allows you to write expressive books, articles, text and documentation and if documenting code to keep it next to your code.
+
+With diagrams as text, you can do the same with diagrams. 
+There are many types of diagrams that can be generated this way from the very simple, to the data-science style of diagrams.
+
+When the xref:diagrams-extension.adoc[] is specifically enabled via the xref:options.adoc[], the {project-name} converts diagrams from text to image using a local or remote Kroki diagrams server, and shows them as if they were local or remote image files in the HTML.
+
+Learn more on the xref:diagrams-extension.adoc[] page.
+
+== Tolerates simple markdown
+
+AsciiDoc tolerates simple markdown markup.
+
+This may save you time:
+
+* Writing simple notes
+* Converting files from markdown to AsciiDoc gradually.
+
+Learn more at:
+
+* Asciidoc - xref:asciidoc::asciidoc-vs-markdown[Compare AsciiDoc to Markdown]
+* Asciidoctor - xref:asciidoctor:migrate:markdown[Migrate from Markdown to Asciidoctor]
+
+[#try-it-yourself]
+== Try it yourself
+
+To reproduce the example shown in <<example>>, do the following:
+
+. Install the {project-name} using the xref:install.adoc[] page
+. Copy and paste the AsciiDoc text below to a file called `try-features.adoc`
++
+.try-features.adoc
+[,asciidoc]
+-----
+= AsciiDoc is Writing Zen
+Doc Writer <doc.writer@example.com>
+:icons: font
+
+_Zen_ in the *art* of writing `plain text` with
+https://asciidoc.org[AsciiDoc]
+
+[TIP]
+Use https://asciidoctor.org[Asciidoctor] for the best AsciiDoc experience.footnote:[Not to mention the best looking output!]
+Then icon:messages[role=aqua] about it!
+
+== Sample section
+
+[square]
+* item 1
+* item 2
+
+[,ruby]
+----
+puts "Hello, World!"
+----
+-----
+
+. Open `try-features.adoc` in your browser. You may either:
+
+* Open it by pressing kbd:[Control,O]
+* Drag and drop `try-features.adoc` onto your browser
+* Double-click `try-features.adoc`
++
+NOTE: For double-click to work, you may need to change your computer settings to associate `.adoc` with your web browser.
+
+. Try different features with the following:
+
+.. Toggle the {project-name} activation by clicking its extension icon in the browser bar.
++
+You'll see the AsciiDoc behind the rendered HTML page.
+.. Change the xref:options.adoc#theme-stylesheet[Theme/Stylesheet] and reload.
+.. Edit the AsciiDoc file and save.
+.. Add `toc=left` to xref:custom-attributes.adoc[].
+
+. Next steps
++
+After the above, you may like to try the exercise in the xref:diagrams-extension.adoc[].

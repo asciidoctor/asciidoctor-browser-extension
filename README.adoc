@@ -1,102 +1,101 @@
 = Asciidoctor Browser Extension
 Guillaume Grossetie
-
+// Settings
+:table-frame: none
+:table-grid: none
+:table-stripes: none
+:experimental:
+:figure-caption!:
+:example-caption!:
+// GitHub specific settings
 ifndef::env-github[:icons: font]
 ifdef::env-github[]
-:outfilesuffix: .adoc
 :caution-caption: :fire:
 :important-caption: :exclamation:
-:note-caption: :paperclip:
+:note-caption: :information_source:
 :tip-caption: :bulb:
 :warning-caption: :warning:
 endif::[]
+:chromium-browser-list: Chrome, Edge, Chromium, Brave or Opera
+:project-name: Asciidoctor Browser Extension
+:url-asciidoc: https://asciidoc.org
+:url-asciidoctor-js-repo: https://github.com/asciidoctor/asciidoctor.js
+:url-project-repo: https://github.com/asciidoctor/asciidoctor-browser-extension
+:url-license: https://github.com/asciidoctor/asciidoctor-chrome-extension/blob/main/LICENSE
+// Webstores
+:url-chrome-webstore: https://chrome.google.com/webstore/detail/asciidoctorjs-live-previe/iaalpfgpbocpdfblpnhhgllgbdbchmia
+:url-mozilla-addon: https://addons.mozilla.org/firefox/addon/asciidoctorjs-live-preview
+:url-opera-addon: https://addons.opera.com/extensions/details/asciidoctorjs-live-preview
+:url-edge-webstore: https://microsoftedge.microsoft.com/addons/detail/asciidoctorjs-live-previ/pefkelkanablhjdekgdahplkccnbdggd
+// Graphics
+:url-chrome-webstore-image: https://raw.githubusercontent.com/asciidoctor/asciidoctor-browser-extension/main/promotional/chromewebstore-badge-wborder-496x150.png
+:url-mozilla-addon-image: https://blog.mozilla.org/addons/files/2020/04/get-the-addon-fx-apr-2020.svg
+:url-opera-addon-image: https://dev.opera.com/extensions/branding-guidelines/addons_206x58_en@2x.png
+:url-edge-webstore-image: https://raw.githubusercontent.com/asciidoctor/asciidoctor-browser-extension/main/promotional/edgewebstore-badge.png
 
-:uri-license: https://github.com/asciidoctor/asciidoctor-chrome-extension/blob/main/LICENSE
-:uri-hacking: https://github.com/asciidoctor/asciidoctor-chrome-extension/blob/main/hacking.adoc
-:uri-changelog: https://github.com/asciidoctor/asciidoctor-chrome-extension/blob/main/changelog.adoc
-:uri-chrome-webstore: https://chrome.google.com/webstore/detail/asciidoctorjs-live-previe/iaalpfgpbocpdfblpnhhgllgbdbchmia
-:uri-mozilla-addon: https://addons.mozilla.org/firefox/addon/asciidoctorjs-live-preview
-:uri-opera-addon: https://addons.opera.com/extensions/details/asciidoctorjs-live-preview
-:uri-edge-webstore: https://microsoftedge.microsoft.com/addons/detail/asciidoctorjs-live-previ/pefkelkanablhjdekgdahplkccnbdggd
+Enjoy AsciiDoc everywhere your browser goes with the {project-name}.
 
-This project uses https://github.com/asciidoctor/asciidoctor.js[Asciidoctor.js] to preview AsciiDoc as HTML inside Chrome (or Chromium), Firefox and Opera!
-
-image:https://raw.githubusercontent.com/asciidoctor/asciidoctor-browser-extension/main/promotional/chromewebstore-badge-wborder-496x150.png[link={uri-chrome-webstore},height="64px",width="212px"]
-image:https://blog.mozilla.org/addons/files/2020/04/get-the-addon-fx-apr-2020.svg[link={uri-mozilla-addon},height="64px",width="184px"]
-image:https://dev.opera.com/extensions/branding-guidelines/addons_206x58_en@2x.png[link={uri-opera-addon},height="64px",width="227px"]
-image:https://raw.githubusercontent.com/asciidoctor/asciidoctor-browser-extension/main/promotional/edgewebstore-badge.png[link={uri-edge-webstore},height="64px",width="177px"]
+The {project-name} uses {url-asciidoctor-js-repo}[Asciidoctor.js] 
+to preview {url-asciidoc}[AsciiDoc] files (.ad, .adoc, .asc, .asciidoc, and optionally .txt)
+as HTML inside Chrome, Brave, Firefox, Opera, Microsoft Edge and other Chromium browsers.
 
 *Project health:* image:https://github.com/asciidoctor/asciidoctor-browser-extension/workflows/CI/badge.svg[Build Status, link="https://github.com/asciidoctor/asciidoctor-browser-extension/actions?query=workflow%3ACI"]
 
-== Usage
+== Install
 
-=== Chrome, Chromium, Brave or Opera
+. Install the Extension on your browser using the image links below.
++
+[%autowidth,cols=4*a]
+|===
+|[caption=]
+.Chrome
+image::{url-chrome-webstore-image}["Image link to the extension in the Chrome webstore.",212,64,link={url-chrome-webstore}]
 
- 1. Install the extension from the {uri-chrome-webstore}[Chrome Web Store] or the {uri-opera-addon}[Opera Add-ons website]
- 2. Check `Allow access to file URLs` in `chrome://extensions`
- 3. Open local or remote .ad, .adoc, .asc, .asciidoc files in your browser
- 4. Enjoy!
+|[caption=]
+.Firefox
+image::{url-mozilla-addon-image}[Image link to the extension in the Firefox webstore,184,64,link={url-mozilla-addon}]
 
-=== Firefox
+|[caption=]
+.Opera
+image::{url-opera-addon-image}[Image link to the extension in the Opera webstore,227,64,link={url-opera-addon}]
 
- 1. Install the extension from the {uri-mozilla-addon}[Firefox Add-ons website]
- 2. Open local or remote .ad, .adoc, .asc, .asciidoc files in Firefox
- 3. Enjoy!
+|[caption=]
+.Edge
+image::{url-edge-webstore-image}[Image link to the extension in the Microsoft Edge webstore,177,64,link={url-edge-webstore}]
+|===
++
+TIP: You can also search your browser's Web Store for the Asciidoctor.js Live Preview extension.
 
-[WARNING]
-====
-On Firefox, pages viewed directly from GitHub may not render properly.
-This is result of a https://bugzilla.mozilla.org/show_bug.cgi?id=1267027[Firefox bug] carrying over the Content Security Policies (CSP).
-The restrictive CSP sent by GitHub are applied to the content inserted by the WebExtension.
+. To preview local files on {chromium-browser-list} browsers,
+you need to grant filesystem access to the extension:
++
+--
+.. Type the URL `chrome://extensions` into the address bar and press kbd:[Enter]
+.. Type `asciidoctor` into the extension search bar then when the {project-name} block is visible, click its btn:[Details] button 
+.. Check `Allow access to file URLs`
++
+NOTE: If the plugin does not view a local file, check the above setting.
+--
 
-In addition, the extension does not automatically trigger in Firefox when navigating to a `file://` from a link.
-Instead, you have to enter the `file://` URL directly into the address bar of the browser.
-If you do navigate to a `file://` URL from a link, simply highlight the address bar and press "Enter" to force the extension to load. There's an open issue in the https://bugzilla.mozilla.org/show_bug.cgi?id=1266960[Firefox bug tracker] to fix this limitation.
-====
+. You have now installed the extension, and can open local or remote *.adoc*, *.ad*, *.asc*, *.asciidoc* files in your browser
++
+Enjoy!
 
-== Installation
+== Next steps
 
-Loading your local copy of the extension on Chrome (or Chromium), Firefox or Opera is super easy!
-
-=== Chrome, Chromium, Brave or Opera
-
- 1. Check `Developer mode` in `chrome://extensions`
- 2. Click `Load unpacked extension...` and select the extension `app` directory
- 3. That's all
-
-To see your changes, click the `Reload (Ctrl+R)` link in `chrome://extensions`.
-If you want to create a `Pack extension` just make a `zip` file of the extension `app` directory.
-
-=== Firefox
-
- 1. Click on the `Load Temporary Add-on` in `about:debugging`
- 2. Select the manifest file in the `app` directory
- 3. That's all
-
-To see your changes, click the `Reload` link in `about:debugging`.
-
-== Options
-
-The extension can be configured via an options page.
-
-To open the options page, in Chrome, Brave or Opera, right-click the extension icon and choose Options on the menu.
-You can also go to `chrome://extensions` and click the Options link.
-
-In Firefox, go to `about:addons` and click the More link or the Preferences button.
-
-The options page let you add custom Asciidoctor attributes or change the theme of the AsciiDoc HTML output.
+If you want to learn more and explore the capabilities of the Extension, please read the https://docs.asciidoctor.org/browser-extension[User Manual].
 
 == Contributing
 
-See the <<hacking#, hacking>> file.
+See the xref:CONTRIBUTING.adoc[] file.
 
 == Changelog
 
-See the <<changelog#, changelog>> file.
+See the xref:changelog.adoc[] file.
 
 == Copyright
 
-Copyright (C) 2013-2020 Guillaume Grossetie.
+Copyright (C) 2013-{docyear} Guillaume Grossetie.
 Free use of this software is granted under the terms of the MIT License.
 
-See the {uri-license}[LICENSE] file for details.
+See the {url-license}[LICENSE] file for details.

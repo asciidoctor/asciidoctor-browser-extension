@@ -1,0 +1,11 @@
+= Additional Resources - Load the JavaScript
+:navtitle: Load the JavaScript
+
+Choose when JavaScript is loaded into the HTML5 page, either before or after the document has been rendered.
+
+There is a single choice between the following:
+
+* After the document is loaded (Default)
+* Before the document is loaded
+
+The purpose of the JavaScript and the type or size of the AsciiDoc document being rendered may affect your decision.

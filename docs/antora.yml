@@ -1,0 +1,20 @@
+name: browser-extension
+title: Browser Extension
+version: '3.0'
+prerelease: true
+asciidoc:
+  attributes:
+    xrefstyle: short@
+    table-caption: false
+    release-line: '3.0.x'
+    experimental: ''
+    project-name: Asciidoctor Browser Extension
+    chromium-browser-list: Chrome, Edge, Chromium-based, Brave or Opera
+    url-project-repo: https://github.com/asciidoctor/asciidoctor-browser-extension
+    url-project-issues: https://github.com/asciidoctor/asciidoctor-browser-extension/issues
+    url-chrome-webstore: https://chrome.google.com/webstore/detail/asciidoctorjs-live-previe/iaalpfgpbocpdfblpnhhgllgbdbchmia
+    url-mozilla-addon: https://addons.mozilla.org/firefox/addon/asciidoctorjs-live-preview
+    url-opera-addon: https://addons.opera.com/extensions/details/asciidoctorjs-live-preview
+    url-edge-webstore: https://microsoftedge.microsoft.com/addons/detail/asciidoctorjs-live-previ/pefkelkanablhjdekgdahplkccnbdggd
+nav:
+- modules/ROOT/nav.adoc
