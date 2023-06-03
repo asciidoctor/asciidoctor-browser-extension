@@ -2,6 +2,10 @@
 
 == Unreleased
 
+== 2.7.1 (2023-06-03)
+
+* Add `accept` header when fetching AsciiDoc content (mainly to workaround an issue on github.com)
+* Update dependencies
 
 == 2.7.0 (2021-02-17)
 
