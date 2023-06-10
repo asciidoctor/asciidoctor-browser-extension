@@ -248,6 +248,9 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
           exists: (_) => {
             return false
           },
+          dirname: (_) => {
+            // no-op
+          },
           add: (_) => {
             // no-op
           }

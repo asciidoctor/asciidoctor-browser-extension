@@ -1,13 +1,6 @@
 /* eslint-env node, es6 */
-const path = require('path')
+const path = require('node:path')
 const puppeteer = require('puppeteer')
-
-// puppeteer options
-const opts = {
-  headless: true,
-  timeout: 10000,
-  args: ['--allow-file-access-from-files', '--no-sandbox']
-}
 
 const log = async (msg) => {
   const args = []
@@ -27,7 +20,11 @@ const log = async (msg) => {
 
 (async function () {
   try {
-    const browser = await puppeteer.launch(opts)
+    const browser = await puppeteer.launch({
+      headless: 'new',
+      timeout: 10000,
+      args: ['--allow-file-access-from-files', '--no-sandbox']
+    })
     const page = await browser.newPage()
     await page.exposeFunction('mochaOpts', () => ({ reporter: 'spec' }))
     page.on('console', async (msg) => {

@@ -10,7 +10,7 @@
   mocha.setup({
     ui: 'bdd',
     checkLeaks: false,
-    reporter: reporter
+    reporter
   })
 
   const expect = chai.expect

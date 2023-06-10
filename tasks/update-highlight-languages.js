@@ -1,7 +1,5 @@
-const fs = require('fs')
-const https = require('https')
-const util = require('util')
-const writeFile = util.promisify(fs.writeFile)
+const fs = require('node:fs/promises')
+const https = require('node:https')
 
 const HIGHLIGHT_JS_VERSION = '9.15.6'
 const CDN_BASE_URL = `https://cdnjs.cloudflare.com/ajax/libs/highlight.js/${HIGHLIGHT_JS_VERSION}`
@@ -193,6 +191,10 @@ const LANGUAGES = [
   'yaml',
   'zephir'
 ]
+/**
+ * @param url
+ * @returns {Promise<string>}
+ */
 const get = (url) =>
   new Promise((resolve, reject) => {
     https.get(url, (res) => {
@@ -215,14 +217,14 @@ const get = (url) =>
   try {
     const content = await get(`${CDN_BASE_URL}/highlight.min.js`)
     const highlightFile = 'app/js/vendor/highlight.js/highlight.min.js'
-    await writeFile(highlightFile, content, 'utf8')
+    await fs.writeFile(highlightFile, content, 'utf8')
     console.log(`wrote ${highlightFile}`)
     for (const lang of LANGUAGES) {
       const fileName = `${lang}.min.js`
       const url = `${CDN_BASE_URL}/languages/${fileName}`
       const data = await get(url)
       const dest = `${DEST_DIRECTORY}/${fileName}`
-      await writeFile(dest, data, 'utf8')
+      await fs.writeFile(dest, data, 'utf8')
       console.log(`wrote ${dest}`)
     }
   } catch (e) {
