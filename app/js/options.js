@@ -182,7 +182,7 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
       classes = ['notification', 'is-small', 'is-warning']
       message = `Existing ${type} <b>${name}</b> has been replaced!`
     }
-    return { classes: classes, message: message }
+    return { classes, message }
   }
 
   const showNotification = (element, notification) => {

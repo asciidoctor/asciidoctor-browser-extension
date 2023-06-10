@@ -143,7 +143,7 @@ asciidoctor.browser.settings = (webExtension, Constants) => {
     } else {
       name = 'Edge'
     }
-    return { name: name }
+    return { name }
   }
 
   return module

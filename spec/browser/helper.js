@@ -54,9 +54,9 @@ function reset () {
 
 // eslint-disable-next-line no-unused-vars
 const helper = {
-  configureParameters: configureParameters,
-  reset: reset,
-  configureManifest: configureManifest,
-  createXMLHttpRequestMock: createXMLHttpRequestMock,
-  plainTextDocument: plainTextDocument
+  configureParameters,
+  reset,
+  configureManifest,
+  createXMLHttpRequestMock,
+  plainTextDocument
 }

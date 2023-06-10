@@ -97,7 +97,7 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
   }
 
   const notifyTab = (tab, status) => {
-    webExtension.tabs.sendMessage(tab.id, { status: status })
+    webExtension.tabs.sendMessage(tab.id, { status })
   }
 
   const findActiveTab = (callback) => {

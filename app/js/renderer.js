@@ -280,7 +280,7 @@ window.MathJax = {
         }, {})).map(value => value.split(','))
       const data = {
         labels: node.dataset.chartLabels.split(','),
-        series: series
+        series
       }
       Chartist[node.dataset.chartType](node, data, options)
     })
