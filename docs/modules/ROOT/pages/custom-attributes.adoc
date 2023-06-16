@@ -1,14 +1,20 @@
-= Custom Attributes
+= Option: Custom attributes string
+:navtitle: Custom attributes string
 
-Custom Attributes are a string of space-separated `_attribute_=_value_` pairs added to the header of each AsciiDoc page viewed by the extension before it is rendered.
+The extension option *Custom attributes string* is a space-separated list of attribute settings.
 
-Custom Attributes allow you to use the features of AsciiDoc in documents without having to write them each time, or include a separate file of attribute settings.
+You may use the above string, and other methods to set attributes that affect the document preview.
+For all methods and when they are applied, visit the xref:features.adoc#set-attributes[Set attributes] section on the Features page.
 
-For example, to position the Table Of Content (TOC) to the left of the main content column, you can set `toc=left` in the "Custom attributes" field.
+== Use
+
+The *Custom attributes string* option allows you to use the features of AsciiDoc in documents without having to write them each time, or include a separate file of attribute settings.
+
+For example, to use the GUI macros for every AsciiDoc you preview with the extension, you can set  `experimental` in the *Custom attributes string*.
 
 [,txt]
 ----
-toc=left
+experimental
 ----
 
 == AsciiDoc Attributes
@@ -32,9 +38,27 @@ The following table shows examples of setting attributes in AsciiDoc with their 
 
 |===
 
+NOTE: Setting an attribute in the string is not a guarantee that it will take effect.
+See the xref:features.adoc#se
+
 == Use cases
 
 Use cases for using Custom attributes.
+
+* For example, to position the Table Of Content (TOC) to the left of the main content column, you can set `toc=left` in the *Custom attributes string*.
++
+[,txt]
+----
+toc=left
+----
+
+* Then for example, you may want to see the TOC with more levels, and so add `toclevels=4` to the *Custom attributes string*.
++
+[,txt]
+----
+toc=left toclevels=4
+----
+
 
 === Minimal effort writing
 

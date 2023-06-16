@@ -1,5 +1,6 @@
 = Features
 :url-asciidoctor-sc-image: https://cdn.jsdelivr.net/gh/asciidoctor/asciidoctor/screenshot.png
+:source-language: asciidoc
 
 The main feature is viewing AsciiDoc as HTML5 directly in the browser.
 Other features cover where those AsciiDoc files are located, and how they are rendered.
@@ -26,97 +27,134 @@ This means that if you edit the viewed AsciiDoc and save, the rendered view will
 
 See xref:options.adoc#poll-for-changes[Poll for Changes] on the options page.
 
-== Insert AsciiDoc attributes
+[#set-asciidoc-attributes]
+== Use AsciiDoc attributes
 
-Insert a set of attributes to each page viewed.
+After the extension applies its own Built-in attributes to document, you can set AsciiDoc attributes that affect the preview in the following order by the:
 
-This can make your every day use of AsciiDoc for notes, fast and effective.
+* extension option xref:custom-attributes.adoc[Custom attributes string]
+* <<url-query-parameters>>
+* document including any attribute settings included from other documents
 
-See xref:custom-attributes.adoc[].
+This makes Extension very adaptable for your every day, fast and effective use of AsciiDoc.
 
-== Change the presentation style
+[#url-query-parameters]
+== URL query parameters
 
-AsciiDoc separates content from presentation.
+You may provide attributes settings to the extension via the URL that you use to view the AsciiDoc.
 
-Change the stylesheet or CSS that is used to render HTML5 from the AsciiDoc.
+*Use one parameter*
+
+For example: To condense a table of contents to one level its current setting, add `?toclevels=1` to the end of the URL
+
+.URL query parameters
+[,url,subs=+quotes]
+----
+https://example.com/page.adoc**?toclevels=1**
+----
+
+*Add a second parameter*
+
+To add a second parameter, add an ampersand (`&`) to the end of the last, followed by the next attribute setting.
+
+For example: To send a first and last name to the document via the URL, you might add `?first=Irma&last=Writer` to the end of the URL:
+
+.URL query parameters
+[,url,subs=+quotes]
+----
+https://example.com/page.adoc**?first=Irma&last=Write**
+----
+
+Then, with a document that shows those attributes like the following:
+
+[indent=0]
+----
+include::attachment$ex-hello-query.adoc[indent=1]
+----
+
+You will get the following result:
+
+[indent=0]
+====
+[discrete]
+= Hello Irma Writer!
+
+Query parameters example
+====
+
+== Change Themes and Stylesheets
+
+Change the stylesheet, CSS, or both, that are used to render HTML5 from the AsciiDoc.
 For example, you may prefer a darker or a more compact presentation style.
-See xref:options.adoc[].
 
-== View AsciiDoc files from different locations
+The Theme/Stylesheet can be changed for:
 
-The extension allows you to view AsciiDoc files and optionally (`.txt`) files that are:
+* all files previewed via the extension xref:theme-stylesheet.adoc[]
+* for the current file by adding URL query parameter `?stylesheet=_stylesheet name_` to the end of the URL.
+See xref:theme-stylesheet.adoc[]
 
-* Local to your browser (`file://`)
-* Remote (`https://`)
+== View AsciiDocs locally and remote
+
+files from different locations
+
+The extension allows you to view AsciiDoc files from your local file system and from the web:
+
+* Local URLs start with `file://`
+* Remote URLs start with `https://`
 +
 This includes hosted Git platforms
 +
 TIP: *Raw Mode*: To view AsciiDoc files using the {project-name} and not the native AsciiDoc rendering if offered, use the provider's *raw* viewing mode for the file.
 
+See also: <<url-query-parameters>>
+
 == Exploit diagrams as text
 
 AsciiDoc already allows you to write expressive books, articles, text and documentation and if documenting code to keep it next to your code.
 
+image::three-step-process.svg[]
+
 With diagrams as text, you can do the same with diagrams. 
 There are many types of diagrams that can be generated this way from the very simple, to the data-science style of diagrams.
 
-When the xref:diagrams-extension.adoc[] is specifically enabled via the xref:options.adoc[], the {project-name} converts diagrams from text to image using a local or remote Kroki diagrams server, and shows them as if they were local or remote image files in the HTML.
+When the xref:diagrams-extension.adoc[] is specifically enabled via the xref:options.adoc[], the {project-name} converts diagrams from text to image using a local or remote Kroki diagram server, and shows them as if they were local or remote image files in the HTML.
 
 Learn more on the xref:diagrams-extension.adoc[] page.
 
-== Tolerates simple markdown
+== Markdown friendly
 
-AsciiDoc tolerates simple markdown markup.
+AsciiDoc accommodates simple markdown in your AsciiDoc document.
 
 This may save you time:
 
 * Writing simple notes
 * Converting files from markdown to AsciiDoc gradually.
 
-Learn more at:
+Learn more about these two text markup formats at:
 
-* Asciidoc - xref:asciidoc::asciidoc-vs-markdown[Compare AsciiDoc to Markdown]
-* Asciidoctor - xref:asciidoctor:migrate:markdown[Migrate from Markdown to Asciidoctor]
+* xref:asciidoc::asciidoc-vs-markdown.adoc[Compare AsciiDoc to Markdown] via AsciiDoc (the language)
+* xref:asciidoctor:migrate:markdown.adoc[Migrate from Markdown to Asciidoctor] via Asciidoctor (the generator)
 
 [#try-it-yourself]
 == Try it yourself
 
 To reproduce the example shown in <<example>>, do the following:
 
+:exfile: ex-writing-zen.adoc
+
 . Install the {project-name} using the xref:install.adoc[] page
-. Copy and paste the AsciiDoc text below to a file called `try-features.adoc`
+. Create `{exfile}` from the text below or xref:attachment${exfile}[download] it.
 +
-.try-features.adoc
-[,asciidoc]
+.ex-writing-zen.adoc
 -----
-= AsciiDoc is Writing Zen
-Doc Writer <doc.writer@example.com>
-:icons: font
-
-_Zen_ in the *art* of writing `plain text` with
-https://asciidoc.org[AsciiDoc]
-
-[TIP]
-Use https://asciidoctor.org[Asciidoctor] for the best AsciiDoc experience.footnote:[Not to mention the best looking output!]
-Then icon:messages[role=aqua] about it!
-
-== Sample section
-
-[square]
-* item 1
-* item 2
-
-[,ruby]
-----
-puts "Hello, World!"
-----
+include::attachment${exfile}[]
 -----
 
-. Open `try-features.adoc` in your browser. You may either:
+. Open `{exfile}` in your browser. You may either:
 
 * Open it by pressing kbd:[Control,O]
-* Drag and drop `try-features.adoc` onto your browser
-* Double-click `try-features.adoc`
+* Drag and drop `{exfile}` onto your browser
+* Double-click `{exfile}`
 +
 NOTE: For double-click to work, you may need to change your computer settings to associate `.adoc` with your web browser.
 
@@ -126,8 +164,11 @@ NOTE: For double-click to work, you may need to change your computer settings to
 +
 You'll see the AsciiDoc behind the rendered HTML page.
 .. Change the xref:options.adoc#theme-stylesheet[Theme/Stylesheet] and reload.
+.. Change the Theme/Stylesheet using a query parameter.
+Add `stylesheet=github` to the end of the URL.
 .. Edit the AsciiDoc file and save.
-.. Add `toc=left` to xref:custom-attributes.adoc[].
+Observe it update.
+.. Add `toc=left` to xref:custom-attributes.adoc[], and reload.
 
 . Next steps
 +

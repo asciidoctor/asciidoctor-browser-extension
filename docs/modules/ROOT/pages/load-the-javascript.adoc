@@ -1,9 +1,9 @@
-= Additional Resources - Load the JavaScript
+= Option: Load the JavaScript
 :navtitle: Load the JavaScript
 
-Choose when JavaScript is loaded into the HTML5 page, either before or after the document has been rendered.
+The extension option under Additional Resources, *Load the JavaScript* allow you to choose when JavaScript is loaded into the HTML5 page, either before or after the document has been rendered.
 
-There is a single choice between the following:
+There is a single choice of:
 
 * After the document is loaded (Default)
 * Before the document is loaded

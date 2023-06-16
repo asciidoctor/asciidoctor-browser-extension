@@ -1,13 +1,13 @@
-= Additional Resources - Theme/Stylesheet
+= Option: Theme/Stylesheet
 :navtitle: Theme/Stylesheet
 
-Change the look of the HTML5 content by changing the stylesheet used.
+The extension option under Additional Resources, *Theme/Stylesheet* allows you to change the look of the HTML5 content by changing the stylesheet used.
 
 You can:
 
 * [x] Select a Theme/Stylesheet
 * [x] Add a custom Theme/Stylesheet
-* [x] Remove a custom Theme/Stylesheet
+* [x] Remove a previously added custom Theme/Stylesheet
 
 [#theme-stylesheet]
 == Theme/Stylesheet
