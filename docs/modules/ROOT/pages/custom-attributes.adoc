@@ -4,7 +4,7 @@ Custom Attributes are a string of space-separated `_attribute_=_value_` pairs ad
 
 Custom Attributes allow you to use the features of AsciiDoc in documents without having to write them each time, or include a separate file of attribute settings.
 
-For example, to add a left hand TOC to each page viewed, add the following Custom Attribute:
+For example, to position the Table Of Content (TOC) to the left of the main content column, you can set `toc=left` in the "Custom attributes" field.
 
 [,txt]
 ----

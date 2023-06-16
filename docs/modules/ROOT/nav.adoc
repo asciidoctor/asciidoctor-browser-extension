@@ -1,5 +1,5 @@
-* xref::install.adoc[Install]
-* xref:features.adoc[Features]
+* xref::install.adoc[]
+* xref:features.adoc[]
 * xref:options.adoc[]
 ** xref:custom-attributes.adoc[]
 ** xref:diagrams-extension.adoc[]
