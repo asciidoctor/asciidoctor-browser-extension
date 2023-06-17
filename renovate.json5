@@ -10,11 +10,6 @@
   ],
   "packageRules": [
     {
-      // blocked by: mathjax/MathJax#2403 
-      "matchPackagePatterns": ["mathjax"],
-      "enabled": false
-    },
-    {
       // TypeError: source.charCodeAt is not a function in css-tree/cjs/parser/create.cjs:145
       "matchPackagePatterns": ["csso"],
       "enabled": false
