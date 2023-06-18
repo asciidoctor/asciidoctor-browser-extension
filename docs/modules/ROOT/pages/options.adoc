@@ -99,11 +99,11 @@ xref:theme-stylesheet.adoc[id=theme-stylesheet]
 3+h|
 xref:javascript.adoc[id=javascript]
 
-|Javascript dropdown
+|JavaScript dropdown
 |Add a custom JavaScript to the rendered HTML.
 |None
 
-|Load the Javascript...
+|Load the JavaScript...
 |Before or after the document has loaded.
 |Before
 |====
