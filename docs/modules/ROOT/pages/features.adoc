@@ -62,7 +62,7 @@ For example: To send a first and last name to the document via the URL, you migh
 .URL query parameters
 [,url,subs=+quotes]
 ----
-https://example.com/page.adoc**?first=Irma&last=Write**
+https://example.com/page.adoc**?first=Irma&last=Writer**
 ----
 
 Then, with a document that shows those attributes like the following:
