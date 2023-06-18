@@ -37,13 +37,12 @@ The options and their default settings are listed below:
 |Name |Description |Default value
 
 |
-[#custom-attributes]
-xref:custom-attributes.adoc[Custom{nbsp}attributes]
+xref:custom-attributes.adoc[Custom{nbsp}attributes,id=custom-attributes]
 |A string of space-separated __key__=__value__ attribute pairs (e.g., `toc=left`), that are appended to the header of each AsciiDoc page viewed by the browser.
 http://asciidoctor.org/docs/user-manual/#attributes[Learn more] about attributes.
 |_Empty_
 
-3+h|Asciidoctor options:
+3+h|Asciidoctor options
 |
 [#save-mode]
 Safe mode
@@ -52,16 +51,14 @@ http://asciidoctor.org/docs/user-manual/#running-asciidoctor-securely[Learn more
 |Safe
 
 3+h|
-[#files-extension]
-Files extension:
+[[files-extension]]Files extension
 |Preview files with `txt` extension
 |By default, the extension will render ad, adoc, asc and asciidoc files.
 Useful when viewing raw text files with AsciiDoc content from hosted git providers or your local machine.
 |Unchecked
 
 3+h|
-[#poll-for-changes]
-Poll for changes (automatic reload):
+[[poll-for-changes]]Poll for changes (automatic reload)
 |To files loaded from URLs
 |How often viewed URLs are polled for changes.
 URLs use the http or https protocol.
@@ -73,8 +70,7 @@ Local files use the file protocol (or no protocol).
 |2 seconds
 
 3+h|
-[#diagrams-extension]
-xref:diagrams-extension.adoc[Diagrams extension] (Images from text):
+xref:diagrams-extension.adoc[Diagrams extension,id=diagrams-extension] (Images from text)
 
 |Enable the diagrams{nbsp}extension
 |The diagrams extension is sending the text diagrams to an instance of Kroki to display them as images in the preview. 
@@ -90,8 +86,7 @@ Once you've installed Kroki, make sure to update the server URL to point to your
 |`https://kroki.io`
 
 3+h|
-[#theme-stylesheet]
-xref:theme-stylesheet.adoc[]:
+xref:theme-stylesheet.adoc[id=theme-stylesheet]
 
 |Theme/Stylesheet
 |The CSS styles to apply to the rendered HTML.
@@ -102,8 +97,7 @@ xref:theme-stylesheet.adoc[]:
 |_Empty_
 
 3+h|
-[#javascript]
-xref:javascript.adoc[]:
+xref:javascript.adoc[id=javascript]
 
 |Javascript dropdown
 |Add a custom JavaScript to the rendered HTML.

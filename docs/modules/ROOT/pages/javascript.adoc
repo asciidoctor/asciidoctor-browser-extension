@@ -11,7 +11,7 @@ The *JavaScript* option lets you:
 * [x] Add a JavaScript
 * [x] Remove a previously added JavaScript
 
-[#select-javascript]
+[[select-javascript]]
 == Select JavaScript
 
 Select dropdown btn:[JavaScript] to choose a previously added JavaScript routine to load to the rendered HTML.

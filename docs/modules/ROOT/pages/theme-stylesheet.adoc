@@ -9,7 +9,7 @@ You can:
 * [x] Add a custom Theme/Stylesheet
 * [x] Remove a previously added custom Theme/Stylesheet
 
-[#theme-stylesheet]
+[[theme-stylesheet]]
 == Theme/Stylesheet
 
 Select the dropdown btn:[Theme/Stylesheet] to choose which predefined stylesheet will be used to change the appearance of the HTML rendered from the AsciiDoc.
