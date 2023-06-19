@@ -41,11 +41,20 @@ This makes Extension very adaptable for your every day, fast and effective use o
 [#url-query-parameters]
 == URL query parameters
 
-You may provide attributes settings to the extension via the URL that you use to view the AsciiDoc.
+You may use URL query parameters to change how the extension previews AsciiDoc. You can set:
 
-*Use one parameter*
+* attribute values with `?attribute=<value>`
+* stylesheet used with `?stylesheet=<stylesheet name>` 
 
-For example: To condense a table of contents to one level its current setting, add `?toclevels=1` to the end of the URL
+*Where to put the query parameters*
+
+Query parameters are indicated by the first (`?`) in the URL and are terminated by the character (`#`) or the end of the URL.
+
+TIP: If setting attributes or the stylesheet via the URL is not working, check that the Query Parameters are before any (`#`) character in the URL.
+
+*Add the first query parameter (`?`)*
+
+For example: To condense a table of contents to one level its current setting, add `?toclevels=1` to URL, after the document name, and before any (`#`) character.
 
 .URL query parameters
 [,url,subs=+quotes]
@@ -53,26 +62,41 @@ For example: To condense a table of contents to one level its current setting, a
 https://example.com/page.adoc**?toclevels=1**
 ----
 
-*Add a second parameter*
+*Add a second and more parameters (`&`)*
 
-To add a second parameter, add an ampersand (`&`) to the end of the last, followed by the next attribute setting.
+To add one more parameter, add an ampersand (`&`) to the end of the last query parameter, followed by the next attribute setting.
 
-For example: To send a first and last name to the document via the URL, you might add `?first=Irma&last=Writer` to the end of the URL:
+It will look like this:
+
+URL query parameters
+[,url,subs=+quotes]
+----
+https://example.com/page.adoc**?toclevels=1&stylesheet=maker**
+----
+*Example*
+
+You have a document `ex-query.adoc` that uses two attributes `\{first}` and `\{last}` to say "Hello \{first} \{last}!" in the document title.
+
+.ex-query.adoc
+[subs="-attributes",indent=0]
+----
+= Hello {first} {last}!
+
+Query parameters example
+----
+
+TIP: Download the above document from xref:attachment$ex-query.adoc[ex-query.adoc]
+
+Then, to send a first and last name to the document via the URL, you would add `?first=Irma&last=Writer` to the URL directly after the `ex-query.adoc` and before any (`#`) character.
 
 .URL query parameters
 [,url,subs=+quotes]
 ----
-https://example.com/page.adoc**?first=Irma&last=Writer**
+file:///C:/Users/User/Documents/ex-query.adoc**?first=Irma&last=Writer**
 ----
 
-Then, with a document that shows those attributes like the following:
 
-[indent=0]
-----
-include::attachment$ex-hello-query.adoc[indent=1]
-----
-
-You will get the following result:
+You should see the following result:
 
 [indent=0]
 ====
@@ -90,12 +114,12 @@ For example, you may prefer a darker or a more compact presentation style.
 The Theme/Stylesheet can be changed for:
 
 * all files previewed via the extension xref:theme-stylesheet.adoc[]
-* for the current file by adding URL query parameter `?stylesheet=_stylesheet name_` to the end of the URL.
-See xref:theme-stylesheet.adoc[]
+
+* the current file with <<url-query-parameters>>.
 
 == View AsciiDocs locally and remote
 
-files from different locations
+View AsciiDoc files from different locations.
 
 The extension allows you to view AsciiDoc files from your local file system and from the web:
 
@@ -106,12 +130,16 @@ This includes hosted Git platforms
 +
 TIP: *Raw Mode*: To view AsciiDoc files using the {project-name} and not the native AsciiDoc rendering if offered, use the provider's *raw* viewing mode for the file.
 
-See also: <<url-query-parameters>>
+Local or remote, your settings in the following are applied:
+
+* xref:options.adoc[]
+* <<url-query-parameters>>
 
 == Exploit diagrams as text
 
 AsciiDoc already allows you to write expressive books, articles, text and documentation and if documenting code to keep it next to your code.
 
+.Three step process diagram
 image::three-step-process.svg[]
 
 With diagrams as text, you can do the same with diagrams. 
