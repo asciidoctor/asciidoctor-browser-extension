@@ -27,7 +27,7 @@ This means that if you edit the viewed AsciiDoc and save, the rendered view will
 
 See xref:options.adoc#poll-for-changes[Poll for Changes] on the options page.
 
-[#set-asciidoc-attributes]
+[[set-asciidoc-attributes]]
 == Use AsciiDoc attributes
 
 After the extension applies its own Built-in attributes to document, you can set AsciiDoc attributes that affect the preview in the following order by the:

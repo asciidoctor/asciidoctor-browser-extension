@@ -18,25 +18,19 @@ If you have loaded a custom Theme/Stylesheet, it will be shown in the list under
 
 You can choose from the following predefined stylesheets
 
-.Predefined stylesheet list
-[%autowidth]
-|===
-|Stylesheet |Notes
-
-|asciidoctor |Default
-|colony |
-|foundation |
-|foundation-lime |
-|foundation-potion |
-|github |
-|golo |
-|iconic |
-|maker |
-|readthedocs |
-|riak |
-|rocket-panda |
-|rubygems |
-|===
+* asciidoctor (default)
+* colony
+* foundation
+* foundation-lime
+* foundation-potion
+* github
+* golo
+* iconic
+* maker
+* readthedocs
+* riak
+* rocket-panda
+* rubygems
 
 == Add a stylesheet
 

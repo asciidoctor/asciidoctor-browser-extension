@@ -4,7 +4,7 @@
 The extension option *Custom attributes string* is a space-separated list of attribute settings.
 
 You may use the above string, and other methods to set attributes that affect the document preview.
-For all methods and when they are applied, visit the xref:features.adoc#set-attributes[Set attributes] section on the Features page.
+For all methods and when they are applied, visit the xref:features.adoc#set-asciidoc-attributes[Set attributes] section on the Features page.
 
 == Use
 
@@ -38,8 +38,8 @@ The following table shows examples of setting attributes in AsciiDoc with their 
 
 |===
 
-NOTE: Setting an attribute in the string is not a guarantee that it will take effect.
-See the xref:features.adoc#se
+NOTE: Setting an attribute in the string is not a guarantee that it will take effect, as it may be incompatible with the browser view, or be overruled by another setting of that option.
+See the xref:features.adoc#set-asciidoc-attributes[Set AsciiDoc attributes]
 
 == Use cases
 
