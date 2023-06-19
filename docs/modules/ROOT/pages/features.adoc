@@ -163,7 +163,7 @@ NOTE: For double-click to work, you may need to change your computer settings to
 .. Toggle the {project-name} activation by clicking its extension icon in the browser bar.
 +
 You'll see the AsciiDoc behind the rendered HTML page.
-.. Change the xref:options.adoc#theme-stylesheet[Theme/Stylesheet] and reload.
+.. Change the xref:theme-stylesheet.adoc[] and reload.
 .. Change the Theme/Stylesheet using a query parameter.
 Add `stylesheet=github` to the end of the URL.
 .. Edit the AsciiDoc file and save.
