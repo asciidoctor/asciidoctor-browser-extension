@@ -37,7 +37,7 @@ The options and their default settings are listed below:
 |Name |Description |Default value
 
 |
-xref:custom-attributes.adoc[Custom{nbsp}attributes,id=custom-attributes]
+xref:custom-attributes-option.adoc[Custom{nbsp}attributes,id=custom-attributes]
 |A string of space-separated __key__=__value__ attribute pairs (e.g., `toc=left`), that are appended to the header of each AsciiDoc page viewed by the browser.
 http://asciidoctor.org/docs/user-manual/#attributes[Learn more] about attributes.
 |_Empty_
@@ -70,7 +70,7 @@ Local files use the file protocol (or no protocol).
 |2 seconds
 
 3+h|
-xref:diagrams-extension.adoc[Diagrams extension,id=diagrams-extension] (Images from text)
+xref:diagrams-extension-option.adoc[Diagrams extension,id=diagrams-extension] (Images from text)
 
 |Enable the diagrams{nbsp}extension
 |The diagrams extension is sending the text diagrams to an instance of Kroki to display them as images in the preview. 
@@ -86,7 +86,7 @@ Once you've installed Kroki, make sure to update the server URL to point to your
 |`https://kroki.io`
 
 3+h|
-xref:theme-stylesheet.adoc[id=theme-stylesheet]
+xref:theme-stylesheet-option.adoc[id=theme-stylesheet]
 
 |Theme/Stylesheet
 |The CSS styles to apply to the rendered HTML.
@@ -97,7 +97,7 @@ xref:theme-stylesheet.adoc[id=theme-stylesheet]
 |_Empty_
 
 3+h|
-xref:javascript.adoc[id=javascript]
+xref:javascript-option.adoc[id=javascript]
 
 |JavaScript dropdown
 |Add a custom JavaScript to the rendered HTML.

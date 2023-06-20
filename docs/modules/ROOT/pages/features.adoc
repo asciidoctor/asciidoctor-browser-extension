@@ -32,7 +32,7 @@ See xref:options.adoc#poll-for-changes[Poll for Changes] on the options page.
 
 After the extension applies its own Built-in attributes to document, you can set AsciiDoc attributes that affect the preview in the following order by the:
 
-* extension option xref:custom-attributes.adoc[Custom attributes string]
+* extension option xref:custom-attributes-option.adoc[Custom attributes string]
 * <<url-query-parameters>>
 * document including any attribute settings included from other documents
 
@@ -113,7 +113,7 @@ For example, you may prefer a darker or a more compact presentation style.
 
 The Theme/Stylesheet can be changed for:
 
-* all files previewed via the extension xref:theme-stylesheet.adoc[]
+* all files previewed via the extension xref:theme-stylesheet-option.adoc[]
 
 * the current file with <<url-query-parameters>>.
 
@@ -145,9 +145,9 @@ image::three-step-process.svg[]
 With diagrams as text, you can do the same with diagrams. 
 There are many types of diagrams that can be generated this way from the very simple, to the data-science style of diagrams.
 
-When the xref:diagrams-extension.adoc[] is specifically enabled via the xref:options.adoc[], the {project-name} converts diagrams from text to image using a local or remote Kroki diagram server, and shows them as if they were local or remote image files in the HTML.
+When the xref:diagrams-extension-option.adoc[] is specifically enabled via the xref:options.adoc[], the {project-name} converts diagrams from text to image using a local or remote Kroki diagram server, and shows them as if they were local or remote image files in the HTML.
 
-Learn more on the xref:diagrams-extension.adoc[] page.
+Learn more on the xref:diagrams-extension-option.adoc[] page.
 
 == Markdown friendly
 
@@ -191,13 +191,70 @@ NOTE: For double-click to work, you may need to change your computer settings to
 .. Toggle the {project-name} activation by clicking its extension icon in the browser bar.
 +
 You'll see the AsciiDoc behind the rendered HTML page.
-.. Change the xref:theme-stylesheet.adoc[] and reload.
+.. Change the xref:theme-stylesheet-option.adoc[] and reload.
 .. Change the Theme/Stylesheet using a query parameter.
 Add `stylesheet=github` to the end of the URL.
 .. Edit the AsciiDoc file and save.
 Observe it update.
-.. Add `toc=left` to xref:custom-attributes.adoc[], and reload.
+.. Add `toc=left` to xref:custom-attributes-option.adoc[], and reload.
 
 . Next steps
 +
-After the above, you may like to try the exercise in the xref:diagrams-extension.adoc[].
+After the above, you may like to try the exercise in the xref:diagrams-extension-option.adoc[].
+
+== Use cases
+
+Use cases for using Custom attributes.
+
+* For example, to position the Table Of Content (TOC) to the left of the main content column, you can set `toc=left` in the *Custom attributes string*.
++
+[,txt]
+----
+toc=left
+----
+
+* Then for example, you may want to see the TOC with more levels, and so add `toclevels=4` to the *Custom attributes string*.
++
+[,txt]
+----
+toc=left toclevels=4
+----
+
+
+=== Minimal effort writing
+
+Set the most common AsciiDoc attributes used when writing AsciiDoc documents:
+
+.Custom attributes
+[,txt,opts="pre-wrap"]
+----
+toc=left toclevels=7 icons=font experimental source-highlighter=highlight.js
+----
+
+.Equivalent AsciiDoc
+[,asciidoc]
+----
+:toc: left <.>
+:toclevels: 7 <.>
+:icons: font <.>
+:experimental: <.>
+:source-highlighter: highlight.js <.>
+----
+<.> A left hand TOC
+<.> TOC shows the maximum of 7 levels if present
+<.> Use Font Awesome for icons and admonition icons
+<.> Enable GUI macros +
+`\btn:[button]` for btn:[button] +
+`\kbd:[control-A]` for kbd:[control-A] and +
+`\menu:Menu[Item,...]` for select menu:Menu[Item,...]
+<.> Syntax highlighting with `highlight.js`
+
+=== Review AsciiDocs without a TOC
+
+Use a TOC to help make reviewing longer AsciiDoc documents easier that don't have a TOC without changing the file.
+
+.Custom attributes
+[,txt,opts="pre-wrap"]
+----
+toc=left toclevels=7
+----
