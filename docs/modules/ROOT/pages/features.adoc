@@ -30,13 +30,15 @@ See xref:options.adoc#poll-for-changes[Poll for Changes] on the options page.
 [[set-asciidoc-attributes]]
 == Use AsciiDoc attributes
 
-After the extension applies its own Built-in attributes to document, you can set AsciiDoc attributes that affect the preview in the following order by the:
+You can set AsciiDoc attributes in the {project-name} to control how your AsciiDoc document is rendered to HTML, without affecting the original document.
 
-* extension option xref:custom-attributes-option.adoc[Custom attributes string]
-* <<url-query-parameters>>
-* document including any attribute settings included from other documents
+The final view is determined by attributes and settings in the:
 
-This makes Extension very adaptable for your every day, fast and effective use of AsciiDoc.
+* Document, including any attributes included from other documents
+* Extension option xref:custom-attributes-option.adoc[Custom attributes string]
+* <<url-query-parameters>> to the {project-name}
+
+The attribute settings are applied in the above order of precedence, with Query paramaters being applied last.
 
 [#url-query-parameters]
 == URL query parameters
@@ -204,44 +206,128 @@ After the above, you may like to try the exercise in the xref:diagrams-extension
 
 == Use cases
 
-Use cases for using Custom attributes.
+Use cases for typical situations you may encounter.
 
-* For example, to position the Table Of Content (TOC) to the left of the main content column, you can set `toc=left` in the *Custom attributes string*.
-+
-[,txt]
-----
-toc=left
-----
+[[uc-add-toc]]
+=== Add a TOC
 
-* Then for example, you may want to see the TOC with more levels, and so add `toclevels=4` to the *Custom attributes string*.
-+
-[,txt]
-----
-toc=left toclevels=4
-----
+Add a TOC to a document written without one, so that it's easier to navigate and use.
+
+****
+Sometimes documents are written without TOCs for good reason - they may be part of a larger system, or automatically generated.
+What ever the reason, you can add one using the {project-name}.
+****
+
+*Problem: A document is not written with a TOC*
+
+It's long. It's hard to navigate.
+
+*Solution: Use {project-name} to add a TOC*
+
+Add the `toc` setting depending on your need below:
+
+* For all documents viewed, use a xref:custom-attributes-option.adoc[common attribute]:
+
+ toc=left
+
+* For the current document, use a <<url-query-parameters,query parameter>>:
+
+ ?toc=left
+
+* If editing the document, use this AsciiDoc in the header:
+
+ :toc: left
+
+[NOTE]
+====
+To remove a TOC that's already there use `toc` followed by an exclamation mark (`!`).
+
+* Custom attribute: `toc!` 
+* Query parameter: `?toc!`
+====
+
+
+[[uc-simplify-toc]]
+=== Simplify the TOC
+
+Reduce the TOC heading levels for a simplified view of the document.
+
+****
+Some documents have so many headings and sections that there is too much detail, even in the TOC.
+While that may be OK for the final purpose, for your purpose you want to change your view of it.
+****
+
+*Problem: The number of section levels and headings are many*
+
+A simple view of the TOC is needed to understand the document.
+
+*Solution: Use the viewer to reduce the TOC heading levels*
+
+Attribute `toclevels` controls the section levels that are included in the TOC, from 1 to 7.
+Add the `toclevels` setting depending on your need below:
+
+* For all documents viewed, use a xref:custom-attributes-option.adoc[common attribute]:
+
+ toclevels=1
+
+* For the current document, use a <<url-query-parameters,query parameter>>:
+
+ ?toclevels=1
+
+* If editing the document, use this AsciiDoc in the header:
+
+ :toclevels: 1
+
+TIP: To see more detail in the TOC, increase the `toclevels` value.
+
+=== Add a simplified TOC
+
+To combine the use cases of <<uc-add-toc>> and <<uc-simplify-toc>> you can set both `toc` and `toclevels` at the same time:
+
+* For all documents viewed, set these as xref:custom-attributes-option.adoc[common attributes]:
+
+ toc=left toclevels=1
+
+* For the current document, use these <<url-query-parameters,query parameters>>:
+
+ ?toc=left&toclevels=1
+
+* If editing the document, use this AsciiDoc in the header:
+
+ :toc: left
+ :toclevels: 1
 
 
 === Minimal effort writing
 
-Set the most common AsciiDoc attributes used when writing AsciiDoc documents:
+Create and write an AsciiDoc quickly using the {project-name} to apply your most commonly used settings.
 
-.Custom attributes
-[,txt,opts="pre-wrap"]
-----
-toc=left toclevels=7 icons=font experimental source-highlighter=highlight.js
-----
+****
+When taking notes, you just want to write and not add for example settings for the TOC, nice admonition icons and other items.
+****
 
-.Equivalent AsciiDoc
+*Objective: Just write, leaving other settings until later if at all*
+
+Use the features of {project-name} to save time.
+
+*Solution: Put commonly used attributes into the xref:custom-attributes-option.adoc[]*
+
+For all documents viewed, set this xref:custom-attributes-option.adoc[custom attributes option string]:
+
+ toc=left icons=font experimental source-highlighter=highlight.js
+
+The above Custom attributes options string set the equivalent AsciiDoc attributes below:
+
+.AsciiDoc header
 [,asciidoc]
 ----
+= <title>
 :toc: left <.>
-:toclevels: 7 <.>
 :icons: font <.>
 :experimental: <.>
 :source-highlighter: highlight.js <.>
 ----
 <.> A left hand TOC
-<.> TOC shows the maximum of 7 levels if present
 <.> Use Font Awesome for icons and admonition icons
 <.> Enable GUI macros +
 `\btn:[button]` for btn:[button] +
@@ -249,12 +335,4 @@ toc=left toclevels=7 icons=font experimental source-highlighter=highlight.js
 `\menu:Menu[Item,...]` for select menu:Menu[Item,...]
 <.> Syntax highlighting with `highlight.js`
 
-=== Review AsciiDocs without a TOC
-
-Use a TOC to help make reviewing longer AsciiDoc documents easier that don't have a TOC without changing the file.
-
-.Custom attributes
-[,txt,opts="pre-wrap"]
-----
-toc=left toclevels=7
-----
+Congratulations, you can now have a collection of AsciiDoc notes with minimal effort, and view them with the {project-name}.

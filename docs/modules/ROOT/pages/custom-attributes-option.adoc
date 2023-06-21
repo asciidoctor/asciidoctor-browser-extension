@@ -1,12 +1,7 @@
 = Option: Custom attributes string
 :navtitle: Custom attributes string
 
-The extension option *Custom attributes string* is a space-separated list of attribute settings.
-
-You may use the above string, and other methods to set attributes that affect the document preview.
-For all methods and when they are applied, visit the xref:features.adoc#set-asciidoc-attributes[Set attributes] section on the Features page.
-
-== Use
+The extension option *Custom attributes string* on the extension configuration dialog box, is a space-separated list of attribute settings that the {project-name} applies to all documents when rendering them to HTML.
 
 The *Custom attributes string* option allows you to use the features of AsciiDoc in documents without having to write them each time, or include a separate file of attribute settings.
 
@@ -17,11 +12,7 @@ For example, to use the GUI macros for every AsciiDoc you preview with the exten
 experimental
 ----
 
-== AsciiDoc Attributes
-
-To learn more about AsciiDoc attributes, visit the
-xref:asciidoc:attributes:document-attributes.adoc[]
-page of the AsciiDoc manual.
+You can also use xref:features.adoc#url-query-parameters[URL query parameters] to set attributes.
 
 == Setting attribute values
 
@@ -33,67 +24,22 @@ The following table shows examples of setting attributes in AsciiDoc with their 
 |Action |AsciiDoc |Custom Attributes example
 
 |Set without a value |`:sectnums:` |`sectnums` 
+||`:experimental:` |`experimental` 
 |Set to a value |`:toc: left` |`toc=left` 
+|  |`:toclevels: 1` |`toclevels=1` 
 |Unset |`:sectnums!:` |`sectnums!`
 
 |===
 
 NOTE: Setting an attribute in the string is not a guarantee that it will take effect, as it may be incompatible with the browser view, or be overruled by another setting of that option.
-See the xref:features.adoc#set-asciidoc-attributes[Set AsciiDoc attributes]
+See section xref:features.adoc#set-asciidoc-attributes[Set AsciiDoc attributes] on the features page.
 
 == Use cases
 
-Use cases for using Custom attributes.
+For more ideas and use cases for setting attributes, see section xref:features.adoc#use-cases[Use cases] on the features page.
 
-* For example, to position the Table Of Content (TOC) to the left of the main content column, you can set `toc=left` in the *Custom attributes string*.
-+
-[,txt]
-----
-toc=left
-----
+== AsciiDoc Attributes
 
-* Then for example, you may want to see the TOC with more levels, and so add `toclevels=4` to the *Custom attributes string*.
-+
-[,txt]
-----
-toc=left toclevels=4
-----
-
-
-=== Minimal effort writing
-
-Set the most common AsciiDoc attributes used when writing AsciiDoc documents:
-
-.Custom attributes
-[,txt,opts="pre-wrap"]
-----
-toc=left toclevels=7 icons=font experimental source-highlighter=highlight.js
-----
-
-.Equivalent AsciiDoc
-[,asciidoc]
-----
-:toc: left <.>
-:toclevels: 7 <.>
-:icons: font <.>
-:experimental: <.>
-:source-highlighter: highlight.js <.>
-----
-<.> A left hand TOC
-<.> TOC shows the maximum of 7 levels if present
-<.> Use Font Awesome for icons and admonition icons
-<.> Enable GUI macros +
-`\btn:[button]` for btn:[button] +
-`\kbd:[control-A]` for kbd:[control-A] and +
-`\menu:Menu[Item,...]` for select menu:Menu[Item,...]
-<.> Syntax highlighting with `highlight.js`
-
-=== Review AsciiDocs without a TOC
-
-Use a TOC to help make reviewing longer AsciiDoc documents easier that don't have a TOC without changing the file.
-
-.Custom attributes
-[,txt,opts="pre-wrap"]
-----
-toc=left toclevels=7
-----
+To learn more about AsciiDoc attributes, visit the
+xref:asciidoc:attributes:document-attributes.adoc[]
+page of the AsciiDoc manual.
