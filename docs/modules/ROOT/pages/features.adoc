@@ -135,7 +135,7 @@ NOTE: Your settings are applied on both local and remote files.
 * xref:options.adoc[]
 * <<url-query-parameters>>
 
-== Exploit diagrams as text
+== Make use of diagrams as text
 
 AsciiDoc already allows you to write expressive books, articles, text and documentation and if documenting code to keep it next to your code.
 
