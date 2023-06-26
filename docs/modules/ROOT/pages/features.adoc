@@ -45,18 +45,18 @@ The attribute settings are applied in the above order of precedence, with Query 
 
 You may use URL query parameters to change how the extension previews AsciiDoc. You can set:
 
-* attribute values with `?attribute=<value>`
+* attribute values with `?<attribute-name>=<value>`
 * stylesheet used with `?stylesheet=<stylesheet name>` 
 
 *Where to put the query parameters*
 
-Query parameters are indicated by the first (`?`) in the URL and are terminated by the character (`#`) or the end of the URL.
+Query parameters are indicated by the first `?` character in the URL and are terminated by the character `#` or the end of the URL.
 
-TIP: If setting attributes or the stylesheet via the URL is not working, check that the Query Parameters are before any (`#`) character in the URL.
+TIP: If setting attributes or the stylesheet via the URL is not working, check that the query parameters are before any `#` character in the URL.
 
 *Add the first query parameter (`?`)*
 
-For example: To condense a table of contents to one level its current setting, add `?toclevels=1` to URL, after the document name, and before any (`#`) character.
+For example, to reduce the depth of section levels that are displayed in the table of contents to one, add `?toclevels=1` to the URL (after the document name, and before any `#` character):
 
 .URL query parameters
 [,url,subs=+quotes]
@@ -64,7 +64,7 @@ For example: To condense a table of contents to one level its current setting, a
 https://example.com/page.adoc**?toclevels=1**
 ----
 
-*Add a second and more parameters (`&`)*
+*Add a second or more parameters (`&`)*
 
 To add one more parameter, add an ampersand (`&`) to the end of the last query parameter, followed by the next attribute setting.
 
@@ -89,7 +89,7 @@ Query parameters example
 
 TIP: Download the above document from xref:attachment$ex-query.adoc[ex-query.adoc]
 
-Then, to send a first and last name to the document via the URL, you would add `?first=Irma&last=Writer` to the URL directly after the `ex-query.adoc` and before any (`#`) character.
+Then, to send a first and last name to the document via the URL, you would add `?first=Irma&last=Writer` to the URL directly after the `ex-query.adoc` and before any `#` character.
 
 .URL query parameters
 [,url,subs=+quotes]
@@ -119,20 +119,18 @@ The Theme/Stylesheet can be changed for:
 
 * the current file with <<url-query-parameters>>.
 
-== View AsciiDocs locally and remote
+== View AsciiDoc files locally and remote
 
 View AsciiDoc files from different locations.
 
-The extension allows you to view AsciiDoc files from your local file system and from the web:
+The extension allows you to view AsciiDoc files from your local file system and from the Web:
 
 * Local URLs start with `file://`
-* Remote URLs start with `https://`
+* Remote URLs start with `https://` (this includes developer platforms such as GitHub or GitLab)
 +
-This includes hosted Git platforms
-+
-TIP: *Raw Mode*: To view AsciiDoc files using the {project-name} and not the native AsciiDoc rendering if offered, use the provider's *raw* viewing mode for the file.
+TIP: Use _Raw Mode_ to view AsciiDoc files using the {project-name} and not native rendering provided by developer platforms.
 
-Local or remote, your settings in the following are applied:
+NOTE: Your settings are applied on both local and remote files.
 
 * xref:options.adoc[]
 * <<url-query-parameters>>
@@ -145,9 +143,9 @@ AsciiDoc already allows you to write expressive books, articles, text and docume
 image::three-step-process.svg[]
 
 With diagrams as text, you can do the same with diagrams. 
-There are many types of diagrams that can be generated this way from the very simple, to the data-science style of diagrams.
+There are many types of diagrams that can be generated this way from basic block diagrams to complex technical architecture diagrams including data-science visualizations, entity relationships, and more.
 
-When the xref:diagrams-extension-option.adoc[] is specifically enabled via the xref:options.adoc[], the {project-name} converts diagrams from text to image using a local or remote Kroki diagram server, and shows them as if they were local or remote image files in the HTML.
+When the xref:diagrams-extension-option.adoc[] is enabled via the xref:options.adoc[], the {project-name} converts diagrams from text to image using a local or remote Kroki diagram server, and shows them as if they were local or remote image files in the HTML.
 
 Learn more on the xref:diagrams-extension-option.adoc[] page.
 
@@ -158,7 +156,7 @@ AsciiDoc accommodates simple markdown in your AsciiDoc document.
 This may save you time:
 
 * Writing simple notes
-* Converting files from markdown to AsciiDoc gradually.
+* Converting files from Markdown to AsciiDoc gradually.
 
 Learn more about these two text markup formats at:
 
