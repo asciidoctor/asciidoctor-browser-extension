@@ -137,7 +137,7 @@ NOTE: Your settings are applied on both local and remote files.
 
 == Make use of diagrams as text
 
-AsciiDoc already allows you to write expressive books, articles, text and documentation and if documenting code to keep it next to your code.
+Using diagrams as text within AsciiDoc allows you to create visual diagrams using plain text, providing a cohesive and unified approach to content creation.
 
 .Three-step process diagram
 image::three-step-process.svg[]
