@@ -41,6 +41,8 @@ as HTML inside Chrome, Brave, Firefox, Opera, Microsoft Edge and other Chromium 
 
 *Project health:* image:https://github.com/asciidoctor/asciidoctor-browser-extension/workflows/CI/badge.svg[Build Status, link="https://github.com/asciidoctor/asciidoctor-browser-extension/actions?query=workflow%3ACI"]
 
+image::docs/modules/ROOT/images/hero.webp[]
+
 == Install
 
 . Install the Extension on your browser using the image links below.
