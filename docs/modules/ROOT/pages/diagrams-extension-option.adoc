@@ -1,0 +1,142 @@
+= Option: Diagrams extension
+:navtitle: Diagrams extension
+:keywords: kroki,diagrams like code,diagrams
+
+With the extension option *Diagrams extension* you can embed diagrams in your AsciiDoc files as text based descriptions using the https://kroki.io[Kroki.io] online service.
+
+The Kroki server (default or custom) converts the text to its corresponding image.
+You do not need any other software installed on your machine or browser.
+
+On this page you will find:
+
+* [x] how to configure the extension option *Diagrams extension*
+* [x] an example
+* [x] a try-it-yourself example.
+
+To learn more about diagrams from text based descriptions and "diagrams like code", visit https://kroki.io.
+
+== Diagrams extension options
+
+There are two options for the diagrams extension:
+
+* Enable the diagrams extension
+* The Server URL
+
+=== Enable the diagrams extension
+
+Enable or disable the diagrams extension with this option.
+
+When enabled, the diagrams extension is sending the text diagrams to an instance of Kroki to display them as images in the preview. 
+Kroki is a free open-source project.
+
+IMPORTANT: When you enable the diagrams extension without changing the default *server URL*, you agree to the diagrams extension sending your diagrams to the free public cloud instance https://kroki.io for conversion.
+
+=== Server URL
+
+The *Server URL* defines the URL of a Kroki diagram server.
+
+By default, the diagrams extension sends your diagrams to the free public cloud instance https://kroki.io, but you can install Kroki on your own infrastructure.
+Once you've installed Kroki, make sure to update the server URL to point to your instance.
+
+Learn more about installing Kroki at https://kroki.io
+
+== Benefits
+
+The diagrams extension allows you to take further advantage of the "docs like code" approach for faster and more effective manually created diagrams from text.
+
+Diagrams from text in general enables further documentation automation.
+
+=== Benefits of the diagrams extension
+
+* Manage diagram assets related to the document, with the documents
+* Manage change quickly, as the diagram can be updated by editing text
+* Accept changes faster, as for many small diagrams, the change is evident in the text and does not require the rendered image to be present
+* More expressive documents, as writers are able to make quick diagrams to convey concepts that would otherwise take too much time
+* Less storage volume, as the images are only present in the final output
+* Faster git operations, as it is not managing large numbers of image artifacts that increase the size of the repository
+
+=== Benefits of installing Kroki
+
+The benefits of running Kroki locally, or installing it on your own infrastructure are:
+
+* Diagram conversion traffic remains inside your organization
+* Depending on the diagram generator used, you may standardise diagram themes for consistency across your organization without changing source diagrams
+
+Learn more about installing Kroki at https://kroki.io
+
+== Example diagram
+
+Below is a three-step process diagram using the GraphViz dot language.
+
+.Three-step process
+image::three-step-process.svg[]
+
+The AsciiDoc and embedded diagram text to produce the above diagram is below.
+
+[,asciidoc]
+----
+[graphviz]
+....
+digraph { rankdir=LR a -> b -> c}
+....
+----
+
+For more information about embedding diagrams as text and GraphViz diagrams, visit https://kroki.io and https://graphviz.org.
+
+== Try it yourself
+
+Below is an example diagram showing communication between the Diagrams extension and the Kroki.io server set by the *Server URL* in xref:options.adoc[].
+
+You'll create the AsciiDoc file that both holds and displays the diagram when viewed with the {project-name}.
+
+The diagram below uses the PlantUML diagram generator.
+To learn more about embedding diagrams, other diagram languages and PlantUML, visit https://kroki.io and https://plantuml.com.
+
+.Diagrams extension sequence
+image::diagrams-extension-sequence.svg[]
+
+To create the above diagram after installing the {project-name}, do the following:
+
+. Create a file "diagram-extension-example.adoc" with the following contents:
++
+.diagram-extension-example.adoc
+[,asciidoc]
+----
+= Diagrams extension example with Kroki.io
+
+The sequence diagram is below:
+
+[plantuml]
+....
+@startuml
+entity "Local or remote file" as file
+box Browser #white
+participant Browser as browser
+participant "Asciidoctor\nBrowser Extension" as extension
+box "Kroki Server" #white
+participant "Kroki Gateway" as kroki
+participant "Diagram generator" as generator
+end box
+file -> browser : AsciiDoc
+browser -> extension : AsciiDoc
+activate extension
+extension -> kroki : encoded diagram text
+kroki -> generator : diagram text
+kroki <- generator : image
+extension <- kroki : image
+browser <- extension : HTML5
+deactivate extension
+@enduml
+....
+----
+
+. Enable the Diagrams extension with the default *Server URL* from the extension options.
+For help enabling and disabling the Diagrams extension, see the xref:options.adoc[] page.
+
+. Open or reload the above file in the browser to see the diagram.
+
+. Modify the diagram text in the AsciiDoc and reload the page to see your updated diagram.
+
+. Disable the Diagrams extension.
++
+IMPORTANT: Disable the Diagrams extension to stop communication with the *Server URL*.

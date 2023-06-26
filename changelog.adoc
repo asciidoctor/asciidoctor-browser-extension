@@ -236,7 +236,7 @@ emoji:heart[lg]
  * Better print styles
  * Font Awesome 4.1
  * MathJax support
- * Allow custom Javascript and Stylesheet
+ * Allow custom Javacript and Stylesheet
 
 == 0.4.0
 

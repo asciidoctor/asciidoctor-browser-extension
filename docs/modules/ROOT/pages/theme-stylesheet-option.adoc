@@ -1,0 +1,50 @@
+= Option: Theme/Stylesheet
+:navtitle: Theme/Stylesheet
+
+The extension option under Additional Resources, *Theme/Stylesheet* allows you to change the look of the HTML5 content by changing the stylesheet used.
+
+You can:
+
+* [x] Select a Theme/Stylesheet
+* [x] Add a custom Theme/Stylesheet
+* [x] Remove a previously added custom Theme/Stylesheet
+
+[[theme-stylesheet]]
+== Theme/Stylesheet
+
+Select the dropdown btn:[Theme/Stylesheet] to choose which predefined stylesheet will be used to change the appearance of the HTML rendered from the AsciiDoc.
+
+If you have loaded a custom Theme/Stylesheet, it will be shown in the list under *Custom*.
+
+You can choose from the following predefined stylesheets
+
+* asciidoctor (default)
+* colony
+* foundation
+* foundation-lime
+* foundation-potion
+* github
+* golo
+* iconic
+* maker
+* readthedocs
+* riak
+* rocket-panda
+* rubygems
+
+== Add a stylesheet
+
+Select button btn:[Add a stylesheet] to add a customized Asciidoctor CSS stylesheet to the predefined list of stylesheets.
+
+After successfully adding a stylesheet, a notification appears in the options, and the stylesheet is now in the selectable list.
+To use your added stylesheet, select it in <<theme-stylesheet>>.
+
+NOTE: Removing the notification does not affect operation.
+
+== Remove a stylesheet
+
+To remove custom stylesheet added to the stylesheet list:
+
+. Select the custom stylesheet in <<theme-stylesheet>>
+
+. Click the colored button btn:[Remove] that appears

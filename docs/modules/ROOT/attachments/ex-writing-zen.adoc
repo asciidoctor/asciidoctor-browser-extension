@@ -1,0 +1,23 @@
+= AsciiDoc is Writing Zen
+Doc Writer <doc.writer@example.com>
+:icons: font
+
+_Zen_ in the *art* of writing `plain text` with
+https://asciidoc.org[AsciiDoc]
+
+TIP: Use https://asciidoctor.org[Asciidoctor] for the best AsciiDoc experience.footnote:[Not to mention the best looking output!]
+Then icon:comments[role=aqua] about it!
+
+== Sample section
+
+. item
+** point
+** point
++
+NOTE: Auto numbered, auto indented
+. item
+
+[,ruby]
+----
+puts "Hello, World!"
+----

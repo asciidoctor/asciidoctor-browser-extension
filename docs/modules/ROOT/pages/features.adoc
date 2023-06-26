@@ -1,0 +1,337 @@
+= Features
+:url-asciidoctor-sc-image: https://cdn.jsdelivr.net/gh/asciidoctor/asciidoctor/screenshot.png
+:source-language: asciidoc
+
+The main feature is viewing AsciiDoc as HTML5 directly in the browser.
+Other features cover where those AsciiDoc files are located, and how they are rendered.
+
+You can exercise these features in the  <<try-it-yourself>> section of this page.
+
+[#example]
+== View AsciiDoc as HTML5
+
+The screen capture below shows raw AsciiDoc on the left, and rendered HTML5 on the right.
+
+If the extension is inactive, you'll see the raw AsciiDoc.
+If it is active, you'll see the rendered HTML5.
+
+Reproduce this example yourself by following the instructions further below in <<try-it-yourself>>.
+
+image::{url-asciidoctor-sc-image}["Screen capture of two screens, showing raw AsciiDoc and rendered as HTML5"]
+
+== Auto reload
+
+If the content of the page is changed, the rendered view is automatically refreshed.
+
+This means that if you edit the viewed AsciiDoc and save, the rendered view will change.
+
+See xref:options.adoc#poll-for-changes[Poll for Changes] on the options page.
+
+[[set-asciidoc-attributes]]
+== Use AsciiDoc attributes
+
+You can set AsciiDoc attributes in the {project-name} to control how your AsciiDoc document is rendered to HTML, without affecting the original document.
+
+The final view is determined by attributes and settings in the:
+
+* Document, including any attributes included from other documents
+* Extension option xref:custom-attributes-option.adoc[Custom attributes string]
+* <<url-query-parameters>> to the {project-name}
+
+The attribute settings are applied in the above order of precedence, with Query parameters being applied last.
+
+[#url-query-parameters]
+== URL query parameters
+
+You may use URL query parameters to change how the extension previews AsciiDoc. You can set:
+
+* attribute values with `?<attribute-name>=<value>`
+* stylesheet used with `?stylesheet=<stylesheet name>` 
+
+*Where to put the query parameters*
+
+Query parameters are indicated by the first `?` character in the URL and are terminated by the character `#` or the end of the URL.
+
+TIP: If setting attributes or the stylesheet via the URL is not working, check that the query parameters are before any `#` character in the URL.
+
+*Add the first query parameter (`?`)*
+
+For example, to reduce the depth of section levels that are displayed in the table of contents to one, add `?toclevels=1` to the URL (after the document name, and before any `#` character):
+
+.URL query parameters
+[,url,subs=+quotes]
+----
+https://example.com/page.adoc**?toclevels=1**
+----
+
+*Add a second or more parameters (`&`)*
+
+To add one more parameter, add an ampersand (`&`) to the end of the last query parameter, followed by the next attribute setting.
+
+It will look like this:
+
+URL query parameters
+[,url,subs=+quotes]
+----
+https://example.com/page.adoc**?toclevels=1&stylesheet=maker**
+----
+*Example*
+
+You have a document `ex-query.adoc` that uses two attributes `\{first}` and `\{last}` to say "Hello \{first} \{last}!" in the document title.
+
+.ex-query.adoc
+[subs="-attributes",indent=0]
+----
+= Hello {first} {last}!
+
+Query parameters example
+----
+
+TIP: Download the above document from xref:attachment$ex-query.adoc[ex-query.adoc]
+
+Then, to send a first and last name to the document via the URL, you would add `?first=Irma&last=Writer` to the URL directly after the `ex-query.adoc` and before any `#` character.
+
+.URL query parameters
+[,url,subs=+quotes]
+----
+file:///C:/Users/User/Documents/ex-query.adoc**?first=Irma&last=Writer**
+----
+
+
+You should see the following result:
+
+[indent=0]
+====
+[discrete]
+= Hello Irma Writer!
+
+Query parameters example
+====
+
+== Change Themes and Stylesheets
+
+Change the stylesheet, CSS, or both, that are used to render HTML5 from the AsciiDoc.
+For example, you may prefer a darker or a more compact presentation style.
+
+The Theme/Stylesheet can be changed for:
+
+* all files previewed via the extension xref:theme-stylesheet-option.adoc[]
+
+* the current file with <<url-query-parameters>>.
+
+== View AsciiDoc files locally and remote
+
+View AsciiDoc files from different locations.
+
+The extension allows you to view AsciiDoc files from your local file system and from the Web:
+
+* Local URLs start with `file://`
+* Remote URLs start with `https://` (this includes developer platforms such as GitHub or GitLab)
++
+TIP: Use _Raw Mode_ to view AsciiDoc files using the {project-name} and not native rendering provided by developer platforms.
+
+NOTE: Your settings are applied on both local and remote files.
+
+* xref:options.adoc[]
+* <<url-query-parameters>>
+
+== Make use of diagrams as text
+
+Using diagrams as text within AsciiDoc allows you to create visual diagrams using plain text, providing a cohesive and unified approach to content creation.
+
+.Three-step process diagram
+image::three-step-process.svg[]
+
+With diagrams as text, you can do the same with diagrams. 
+There are many types of diagrams that can be generated this way from basic block diagrams to complex technical architecture diagrams including data-science visualizations, entity relationships, and more.
+
+When the xref:diagrams-extension-option.adoc[] is enabled via the xref:options.adoc[], the {project-name} converts diagrams from text to image using a local or remote Kroki diagram server, and shows them as if they were local or remote image files in the HTML.
+
+Learn more on the xref:diagrams-extension-option.adoc[] page.
+
+== Markdown friendly
+
+AsciiDoc accommodates simple markdown in your AsciiDoc document.
+
+This may save you time:
+
+* Writing simple notes
+* Converting files from Markdown to AsciiDoc gradually.
+
+Learn more about these two text markup formats at:
+
+* xref:asciidoc::asciidoc-vs-markdown.adoc[Compare AsciiDoc to Markdown] via AsciiDoc (the language)
+* xref:asciidoctor:migrate:markdown.adoc[Migrate from Markdown to Asciidoctor] via Asciidoctor (the generator)
+
+[#try-it-yourself]
+== Try it yourself
+
+To reproduce the example shown in <<example>>, do the following:
+
+:exfile: ex-writing-zen.adoc
+
+. Install the {project-name} using the xref:install.adoc[] page
+. Create `{exfile}` from the text below or xref:attachment${exfile}[download] it.
++
+.ex-writing-zen.adoc
+-----
+include::attachment${exfile}[]
+-----
+
+. Open `{exfile}` in your browser. You may either:
+
+* Open it by pressing kbd:[Control,O]
+* Drag and drop `{exfile}` onto your browser
+* Double-click `{exfile}`
++
+NOTE: For double-click to work, you may need to change your computer settings to associate `.adoc` with your web browser.
+
+. Try different features with the following:
+
+.. Toggle the {project-name} activation by clicking its extension icon in the browser bar.
++
+You'll see the AsciiDoc behind the rendered HTML page.
+.. Change the xref:theme-stylesheet-option.adoc[] and reload.
+.. Change the Theme/Stylesheet using a query parameter.
+Add `stylesheet=github` to the end of the URL.
+.. Edit the AsciiDoc file and save.
+Observe it update.
+.. Add `toc=left` to xref:custom-attributes-option.adoc[], and reload.
+
+. Next steps
++
+After the above, you may like to try the exercise in the xref:diagrams-extension-option.adoc[].
+
+[#use-cases]
+== Use cases
+
+Use cases for typical situations you may encounter.
+
+[#uc-add-toc]
+=== Add a TOC
+
+Add a TOC to a document written without one, so that it's easier to navigate and use.
+
+****
+Sometimes documents are written without TOCs for good reason - they may be part of a larger system, or automatically generated.
+What ever the reason, you can add one using the {project-name}.
+****
+
+*Problem: A document is not written with a TOC*
+
+It's long. It's hard to navigate.
+
+*Solution: Use {project-name} to add a TOC*
+
+Add the `toc` setting depending on your need below:
+
+* For all documents viewed, use a xref:custom-attributes-option.adoc[common attribute]:
+
+ toc=left
+
+* For the current document, use a <<url-query-parameters,query parameter>>:
+
+ ?toc=left
+
+* If editing the document, use this AsciiDoc in the header:
+
+ :toc: left
+
+[NOTE]
+====
+To remove a TOC that's already there use `toc` followed by an exclamation mark (`!`).
+
+* Custom attribute: `toc!` 
+* Query parameter: `?toc!`
+====
+
+
+[[uc-simplify-toc]]
+=== Simplify the TOC
+
+Reduce the TOC heading levels for a simplified view of the document.
+
+****
+Some documents have so many headings and sections that there is too much detail, even in the TOC.
+While that may be OK for the final purpose, for your purpose you want to change your view of it.
+****
+
+*Problem: The number of section levels and headings are many*
+
+A simple view of the TOC is needed to understand the document.
+
+*Solution: Use the viewer to reduce the TOC heading levels*
+
+Attribute `toclevels` controls the section levels that are included in the TOC, from 1 to 7.
+Add the `toclevels` setting depending on your need below:
+
+* For all documents viewed, use a xref:custom-attributes-option.adoc[common attribute]:
+
+ toclevels=1
+
+* For the current document, use a <<url-query-parameters,query parameter>>:
+
+ ?toclevels=1
+
+* If editing the document, use this AsciiDoc in the header:
+
+ :toclevels: 1
+
+TIP: To see more detail in the TOC, increase the `toclevels` value.
+
+=== Add a simplified TOC
+
+To combine the use cases of <<uc-add-toc>> and <<uc-simplify-toc>> you can set both `toc` and `toclevels` at the same time:
+
+* For all documents viewed, set these as xref:custom-attributes-option.adoc[common attributes]:
+
+ toc=left toclevels=1
+
+* For the current document, use these <<url-query-parameters,query parameters>>:
+
+ ?toc=left&toclevels=1
+
+* If editing the document, use this AsciiDoc in the header:
+
+ :toc: left
+ :toclevels: 1
+
+
+=== Minimal effort writing
+
+Create and write an AsciiDoc quickly using the {project-name} to apply your most commonly used settings.
+
+****
+When taking notes, you just want to write and not add for example settings for the TOC, nice admonition icons and other items.
+****
+
+*Objective: Just write, leaving other settings until later if at all*
+
+Use the features of {project-name} to save time.
+
+*Solution: Put commonly used attributes into the xref:custom-attributes-option.adoc[]*
+
+For all documents viewed, set this xref:custom-attributes-option.adoc[custom attributes option string]:
+
+ toc=left icons=font experimental source-highlighter=highlight.js
+
+The above Custom attributes options string set the equivalent AsciiDoc attributes below:
+
+.AsciiDoc header
+[,asciidoc]
+----
+= <title>
+:toc: left <.>
+:icons: font <.>
+:experimental: <.>
+:source-highlighter: highlight.js <.>
+----
+<.> A left hand TOC
+<.> Use Font Awesome for icons and admonition icons
+<.> Enable GUI macros +
+`\btn:[button]` for btn:[button] +
+`\kbd:[control-A]` for kbd:[control-A] and +
+`\menu:Menu[Item,...]` for select menu:Menu[Item,...]
+<.> Syntax highlighting with `highlight.js`
+
+Congratulations, you can now have a collection of AsciiDoc notes with minimal effort, and view them with the {project-name}.

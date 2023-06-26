@@ -1,0 +1,24 @@
+= Option: JavaScript
+:navtitle: JavaScript
+
+The extension option under Additional Resources, *JavaScript* allows adding a custom JavaScript routine to the viewed HTML.
+
+You may decide to add JavaScript routines to enhance the AsciiDoc experience for readers, writers, or both.
+
+The *JavaScript* option lets you:
+
+* [x] Select JavaScript
+* [x] Add a JavaScript
+* [x] Remove a previously added JavaScript
+
+[[select-javascript]]
+== Select JavaScript
+
+Select dropdown btn:[JavaScript] to choose a previously added JavaScript routine to load to the rendered HTML.
+See <<add-a-javascript>>
+
+[#add-a-javascript]
+== Add a JavaScript
+
+Click the button btn:[Add a JavaScript] to add a JavaScript to the Extension.
+After adding your JavaScript routine see <<select-javascript>>

@@ -1,0 +1,45 @@
+= Option: Custom attributes string
+:navtitle: Custom attributes string
+
+The extension option *Custom attributes string* on the extension configuration dialog box, is a space-separated list of attribute settings that the {project-name} applies to all documents when rendering them to HTML.
+
+The *Custom attributes string* option allows you to use the features of AsciiDoc in documents without having to write them each time, or include a separate file of attribute settings.
+
+For example, to use the GUI macros for every AsciiDoc you preview with the extension, you can set  `experimental` in the *Custom attributes string*.
+
+[,txt]
+----
+experimental
+----
+
+You can also use xref:features.adoc#url-query-parameters[URL query parameters] to set attributes.
+
+== Setting attribute values
+
+Attributes can be set with and without a value, and unset.
+The following table shows examples of setting attributes in AsciiDoc with their Custom Attribute equivalents.
+
+[cols="3*a"]
+|===
+|Action |AsciiDoc |Custom Attributes example
+
+|Set without a value |`:sectnums:` |`sectnums` 
+||`:experimental:` |`experimental` 
+|Set to a value |`:toc: left` |`toc=left` 
+|  |`:toclevels: 1` |`toclevels=1` 
+|Unset |`:sectnums!:` |`sectnums!`
+
+|===
+
+NOTE: Setting an attribute in the string is not a guarantee that it will take effect, as it may be incompatible with the browser view, or be overruled by another setting of that option.
+See section xref:features.adoc#set-asciidoc-attributes[Set AsciiDoc attributes] on the features page.
+
+== Use cases
+
+For more ideas and use cases for setting attributes, see section xref:features.adoc#use-cases[Use cases] on the features page.
+
+== AsciiDoc Attributes
+
+To learn more about AsciiDoc attributes, visit the
+xref:asciidoc:attributes:document-attributes.adoc[]
+page of the AsciiDoc manual.

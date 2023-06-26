@@ -1,0 +1,20 @@
+= Known Firefox issues
+
+These are the known Firefox issues.
+
+Pages viewed directly from GitHub may not render properly: ::
+This is result of an open Firefox bug carrying over the Content Security Policies (CSP).
+The restrictive CSP sent by GitHub are applied to the content inserted by the plugin.
++
+Firefox bug tracker https://bugzilla.mozilla.org/show_bug.cgi?id=1267027[bugzilla.mozilla.org#1267027].
+Last updated 2023-04-07 as at 2023-04-31.
+
+The extension does not automatically view the page (trigger) when navigating to a `file://` from a link: ::
++
+You have to enter the `file://` URL directly into the address bar of the browser.
++
+If you do navigate to a `file://` URL from a link, click in the address bar and press "Enter" to force the extension to load.
+Caused by an open Firefox bug to fix this limitation.
++
+Firefox bug tracker https://bugzilla.mozilla.org/show_bug.cgi?id=1266960[bugzilla.mozilla.org#1266960].
+Last updated 2023-02-22 as at 2023-04-31].

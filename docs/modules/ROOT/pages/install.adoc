@@ -1,0 +1,69 @@
+= Install
+
+You can install the extension from your browser's Web Store or a local copy of the extension.
+
+== Install from Web Store
+
+. Install the Extension on your browser using the image links below.
++
+[%autowidth,cols=2*a,grid=none]
+|===
+|[caption=]
+.Chrome
+image::chrome-webstore-badge.png["Image link to the Chrome, Chromium or Brave Web Store",212,64,link={url-chrome-webstore}]
+
+|[caption=]
+.Firefox
+image::firefox-webstore-badge.svg[Image link to the Firefox Web Store,184,64,link={url-mozilla-addon}]
+
+|[caption=]
+.Opera
+image::opera-webstore-badge.png[Image link to the Opera Web Store,227,64,link={url-opera-addon}]
+
+|[caption=]
+.Edge
+image::edge-webstore-badge.png[Image link to the Microsoft Edge Web Store,177,64,link={url-edge-webstore}]
+|===
++
+TIP: You can also search your browser's Web Store for the Asciidoctor.js Live Preview extension.
+
+. To preview local files on {chromium-browser-list} browsers,
+you need to grant filesystem access to the extension:
++
+--
+.. Type the URL `chrome://extensions` into the address bar and press kbd:[Enter]
+.. Type `asciidoctor` into the extension search bar then when the {project-name} block is visible, click its btn:[Details] button. 
+.. Check `Allow access to file URLs`
++
+NOTE: If the plugin does not view a local file, check the above setting.
+--
+
+. You have now installed the extension, and can open local or remote *.adoc*, *.ad*, *.asc*, *.asciidoc* files in your browser
++
+Enjoy!
+
+NOTE: There are known issues with Firefox. See xref:firefox-known-issues.adoc[].
+
+== Local installations
+
+Local installations are for users and developers when:
+
+* Your machine does not have access to the internet or extension stores
+* You are testing an unreleased (locally built) version
+
+Load your local copy of the extension to your browser using the appropriate section below.
+
+=== {chromium-browser-list}
+
+1. Open the `chrome://extensions` page and enable the *Developer mode* option
+2. Click button btn:[Load unpacked] and select the extension `app` directory of the unpacked extension files
+
+To see your changes, click the *Reload*  (kbd:[Ctrl+R]) link in `chrome://extensions` page.
+If you want to create a `Pack extension` then make a zip file of the extension `app` directory.
+
+=== Firefox
+
+1. Click the button btn:[Load Temporary Add-on] on the `about:debugging` page
+2. Select the manifest file in the `app` directory
+
+To see your changes, click the *Reload* link in `about:debugging` page.
