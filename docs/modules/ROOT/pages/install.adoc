@@ -6,7 +6,7 @@ You can install the extension from your browser's Web Store or a local copy of t
 
 . Install the Extension on your browser using the image links below.
 +
-[%autowidth,cols=2*a]
+[%autowidth,cols=2*a,grid=none]
 |===
 |[caption=]
 .Chrome
