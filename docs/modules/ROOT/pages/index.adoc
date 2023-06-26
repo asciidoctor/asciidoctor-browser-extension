@@ -12,4 +12,7 @@ With the {project-name} and simple AsciiDoc markup you can save time and effort 
 
 The {project-name} is a both a viewer and previewer, depending upon your contexts (plural) of using it: from using the {project-name} as the only way to render and view collections of AsciiDoc files, to more complex environments.
 
+
+image::browsers-animated.webp[]
+
 TIP: You can learn more about AsciiDoc and use an interactive editor at https://asciidoc.org
