@@ -11,7 +11,7 @@ On this page you will find:
 
 * [x] how to configure the extension option *Diagrams extension*
 * [x] an example
-* [x] an try-it-yourself example.
+* [x] a try-it-yourself example.
 
 To learn more about diagrams from text based descriptions and "diagrams like code", visit https://kroki.io.
 
@@ -35,7 +35,7 @@ IMPORTANT: When you enable the diagrams extension without changing the default *
 
 The *Server URL* defines the URL of a Kroki diagram server.
 
-By default, the diagrams extension sends your diagrams to the free public cloud instance https://kroki.io but you can install Kroki on your own infrastructure.
+By default, the diagrams extension sends your diagrams to the free public cloud instance https://kroki.io, but you can install Kroki on your own infrastructure.
 Once you've installed Kroki, make sure to update the server URL to point to your instance.
 
 Learn more about installing Kroki at https://kroki.io
@@ -66,9 +66,9 @@ Learn more about installing Kroki at https://kroki.io
 
 == Example diagram
 
-Below is a three step process diagram using the GraphViz dot language.
+Below is a three-step process diagram using the GraphViz dot language.
 
-.Three step process
+.Three-step process
 image::three-step-process.svg[]
 
 The AsciiDoc and embedded diagram text to produce the above diagram is below.
@@ -137,6 +137,6 @@ For help enabling and disabling the Diagrams extension, see the xref:options.ado
 
 . Modify the diagram text in the AsciiDoc and reload the page to see your updated diagram.
 
-. Disable the diagrams extension.
+. Disable the Diagrams extension.
 +
-IMPORTANT: Disable the diagrams extension to stop communication with the *Server URL*.
+IMPORTANT: Disable the Diagrams extension to stop communication with the *Server URL*.

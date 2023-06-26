@@ -38,7 +38,7 @@ The final view is determined by attributes and settings in the:
 * Extension option xref:custom-attributes-option.adoc[Custom attributes string]
 * <<url-query-parameters>> to the {project-name}
 
-The attribute settings are applied in the above order of precedence, with Query paramaters being applied last.
+The attribute settings are applied in the above order of precedence, with Query parameters being applied last.
 
 [#url-query-parameters]
 == URL query parameters
@@ -141,7 +141,7 @@ Local or remote, your settings in the following are applied:
 
 AsciiDoc already allows you to write expressive books, articles, text and documentation and if documenting code to keep it next to your code.
 
-.Three step process diagram
+.Three-step process diagram
 image::three-step-process.svg[]
 
 With diagrams as text, you can do the same with diagrams. 
@@ -204,11 +204,12 @@ Observe it update.
 +
 After the above, you may like to try the exercise in the xref:diagrams-extension-option.adoc[].
 
+[#use-cases]
 == Use cases
 
 Use cases for typical situations you may encounter.
 
-[[uc-add-toc]]
+[#uc-add-toc]
 === Add a TOC
 
 Add a TOC to a document written without one, so that it's easier to navigate and use.
