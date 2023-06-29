@@ -1,12 +1,10 @@
 name: browser-extension
 title: Browser Extension
-version: '3.0'
-prerelease: true
+version: ~
 asciidoc:
   attributes:
     xrefstyle: short@
     table-caption: false
-    release-line: '3.0.x'
     experimental: ''
     project-name: Asciidoctor Browser Extension
     chromium-browser-list: Chrome, Edge, Chromium-based, Brave or Opera
