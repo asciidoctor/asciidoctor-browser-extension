@@ -25,7 +25,7 @@ If the content of the page is changed, the rendered view is automatically refres
 
 This means that if you edit the viewed AsciiDoc and save, the rendered view will change.
 
-video::attachment$live-preview.mp4[]
+video::live-preview.mp4[]
 
 See xref:options.adoc#poll-for-changes[Poll for Changes] on the options page.
 
@@ -78,7 +78,7 @@ URL query parameters
 https://example.com/page.adoc**?toclevels=1&stylesheet=maker**
 ----
 
-video::attachment$live-preview.mp4[]
+video::live-preview.mp4[]
 
 *Example*
 
