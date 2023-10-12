@@ -32,7 +32,7 @@ Via the hamburger menu::
 
 The options and their default settings are listed below:
 
-[%autowidth,cols="3*a",stripes=none]
+[cols="25%a;55%a;20%a",stripes=none]
 |====
 |Name |Description |Default value
 
