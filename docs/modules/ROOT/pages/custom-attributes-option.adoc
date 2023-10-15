@@ -36,7 +36,7 @@ See section xref:features.adoc#set-asciidoc-attributes[Set AsciiDoc attributes] 
 
 == Use cases
 
-For more ideas and use cases for setting attributes, see section xref:features.adoc#use-cases[Use cases] on the features page.
+For more ideas and use cases for setting attributes, see the xref:use-cases.adoc[] page.
 
 == AsciiDoc Attributes
 

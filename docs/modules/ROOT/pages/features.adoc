@@ -5,7 +5,7 @@
 The main feature is viewing AsciiDoc as HTML5 directly in the browser.
 Other features cover where those AsciiDoc files are located, and how they are rendered.
 
-You can exercise these features in the  <<try-it-yourself>> section of this page.
+You can exercise these features by using the xref:quickstart.adoc[] page.
 
 [#example]
 == View AsciiDoc as HTML5
@@ -15,7 +15,7 @@ The screen capture below shows raw AsciiDoc on the left, and rendered HTML5 on t
 If the extension is inactive, you'll see the raw AsciiDoc.
 If it is active, you'll see the rendered HTML5.
 
-Reproduce this example yourself by following the instructions further below in <<try-it-yourself>>.
+Reproduce this example yourself by following the instructions in the xref:quickstart.adoc[] page.
 
 image::{url-asciidoctor-sc-image}["Screen capture of two screens, showing raw AsciiDoc and rendered as HTML5"]
 
@@ -166,176 +166,3 @@ Learn more about these two text markup formats at:
 
 * xref:asciidoc::asciidoc-vs-markdown.adoc[Compare AsciiDoc to Markdown] via AsciiDoc (the language)
 * xref:asciidoctor:migrate:markdown.adoc[Migrate from Markdown to Asciidoctor] via Asciidoctor (the generator)
-
-[#try-it-yourself]
-== Try it yourself
-
-To reproduce the example shown in <<example>>, do the following:
-
-:exfile: ex-writing-zen.adoc
-
-. Install the {project-name} using the xref:install.adoc[] page
-. Create `{exfile}` from the text below or xref:attachment${exfile}[download] it.
-+
-.ex-writing-zen.adoc
------
-include::attachment${exfile}[]
------
-
-. Open `{exfile}` in your browser. You may either:
-
-* Open it by pressing kbd:[Control,O]
-* Drag and drop `{exfile}` onto your browser
-* Double-click `{exfile}`
-+
-NOTE: For double-click to work, you may need to change your computer settings to associate `.adoc` with your web browser.
-
-. Try different features with the following:
-
-.. Toggle the {project-name} activation by clicking its extension icon in the browser bar.
-+
-You'll see the AsciiDoc behind the rendered HTML page.
-.. Change the xref:theme-stylesheet-option.adoc[] and reload.
-.. Change the Theme/Stylesheet using a query parameter.
-Add `stylesheet=github` to the end of the URL.
-.. Edit the AsciiDoc file and save.
-Observe it update.
-.. Add `toc=left` to xref:custom-attributes-option.adoc[], and reload.
-
-. Next steps
-+
-After the above, you may like to try the exercise in the xref:diagrams-extension-option.adoc[].
-
-[#use-cases]
-== Use cases
-
-Use cases for typical situations you may encounter.
-
-[#uc-add-toc]
-=== Add a TOC
-
-Add a TOC to a document written without one, so that it's easier to navigate and use.
-
-****
-Sometimes documents are written without TOCs for good reason - they may be part of a larger system, or automatically generated.
-What ever the reason, you can add one using the {project-name}.
-****
-
-*Problem: A document is not written with a TOC*
-
-It's long. It's hard to navigate.
-
-*Solution: Use {project-name} to add a TOC*
-
-Add the `toc` setting depending on your need below:
-
-* For all documents viewed, use a xref:custom-attributes-option.adoc[common attribute]:
-
- toc=left
-
-* For the current document, use a <<url-query-parameters,query parameter>>:
-
- ?toc=left
-
-* If editing the document, use this AsciiDoc in the header:
-
- :toc: left
-
-[NOTE]
-====
-To remove a TOC that's already there use `toc` followed by an exclamation mark (`!`).
-
-* Custom attribute: `toc!` 
-* Query parameter: `?toc!`
-====
-
-
-[[uc-simplify-toc]]
-=== Simplify the TOC
-
-Reduce the TOC heading levels for a simplified view of the document.
-
-****
-Some documents have so many headings and sections that there is too much detail, even in the TOC.
-While that may be OK for the final purpose, for your purpose you want to change your view of it.
-****
-
-*Problem: The number of section levels and headings are many*
-
-A simple view of the TOC is needed to understand the document.
-
-*Solution: Use the viewer to reduce the TOC heading levels*
-
-Attribute `toclevels` controls the section levels that are included in the TOC, from 1 to 7.
-Add the `toclevels` setting depending on your need below:
-
-* For all documents viewed, use a xref:custom-attributes-option.adoc[common attribute]:
-
- toclevels=1
-
-* For the current document, use a <<url-query-parameters,query parameter>>:
-
- ?toclevels=1
-
-* If editing the document, use this AsciiDoc in the header:
-
- :toclevels: 1
-
-TIP: To see more detail in the TOC, increase the `toclevels` value.
-
-=== Add a simplified TOC
-
-To combine the use cases of <<uc-add-toc>> and <<uc-simplify-toc>> you can set both `toc` and `toclevels` at the same time:
-
-* For all documents viewed, set these as xref:custom-attributes-option.adoc[common attributes]:
-
- toc=left toclevels=1
-
-* For the current document, use these <<url-query-parameters,query parameters>>:
-
- ?toc=left&toclevels=1
-
-* If editing the document, use this AsciiDoc in the header:
-
- :toc: left
- :toclevels: 1
-
-
-=== Minimal effort writing
-
-Create and write an AsciiDoc quickly using the {project-name} to apply your most commonly used settings.
-
-****
-When taking notes, you just want to write and not add for example settings for the TOC, nice admonition icons and other items.
-****
-
-*Objective: Just write, leaving other settings until later if at all*
-
-Use the features of {project-name} to save time.
-
-*Solution: Put commonly used attributes into the xref:custom-attributes-option.adoc[]*
-
-For all documents viewed, set this xref:custom-attributes-option.adoc[custom attributes option string]:
-
- toc=left icons=font experimental source-highlighter=highlight.js
-
-The above Custom attributes options string set the equivalent AsciiDoc attributes below:
-
-.AsciiDoc header
-[,asciidoc]
-----
-= <title>
-:toc: left <.>
-:icons: font <.>
-:experimental: <.>
-:source-highlighter: highlight.js <.>
-----
-<.> A left hand TOC
-<.> Use Font Awesome for icons and admonition icons
-<.> Enable GUI macros +
-`\btn:[button]` for btn:[button] +
-`\kbd:[control-A]` for kbd:[control-A] and +
-`\menu:Menu[Item,...]` for select menu:Menu[Item,...]
-<.> Syntax highlighting with `highlight.js`
-
-Congratulations, you can now have a collection of AsciiDoc notes with minimal effort, and view them with the {project-name}.

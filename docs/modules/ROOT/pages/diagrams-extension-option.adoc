@@ -2,25 +2,29 @@
 :navtitle: Diagrams extension
 :keywords: kroki,diagrams like code,diagrams
 
+On this page you will learn:
+
+* [x] about the diagrams extension
+* [x] about Kroki
+* [x] how to configure the extension option *Diagrams extension*
+* [x] a simple example
+
+For a more complex example, see the xref::diagrams-extension-quickstart.adoc[] page.
+
+== Use Kroki via the diagrams extension
+
 With the extension option *Diagrams extension* you can embed diagrams in your AsciiDoc files as text based descriptions using the https://kroki.io[Kroki.io] online service.
 
-The Kroki server (default or custom) converts the text to its corresponding image.
-You do not need any other software installed on your machine or browser.
-
-On this page you will find:
-
-* [x] how to configure the extension option *Diagrams extension*
-* [x] an example
-* [x] a try-it-yourself example.
+The Kroki server (default or custom) converts the text to its corresponding image with no extra software installed on your machine or browser.
 
 To learn more about diagrams from text based descriptions and "diagrams like code", visit https://kroki.io.
 
 == Diagrams extension options
 
-There are two options for the diagrams extension:
+The two options of the diagrams extension are:
 
-* Enable the diagrams extension
-* The Server URL
+* Enabled or disabled
+* Kroki Server URL
 
 === Enable the diagrams extension
 
@@ -60,7 +64,16 @@ Diagrams from text in general enables further documentation automation.
 The benefits of running Kroki locally, or installing it on your own infrastructure are:
 
 * Diagram conversion traffic remains inside your organization
+
 * Depending on the diagram generator used, you may standardise diagram themes for consistency across your organization without changing source diagrams
+
+=== Security, diagrams and Kroki
+
+Using Kroki via the diagrams extension removes the need to install and maintain diagramming software on individual machines, centralising their deployment to a central Kroki server.
+
+To satisfy security policies, organizations may choose to deploy a Kroki service within their own network.
+
+=== Learn more Kroki
 
 Learn more about installing Kroki at https://kroki.io
 
@@ -83,60 +96,6 @@ digraph { rankdir=LR a -> b -> c}
 
 For more information about embedding diagrams as text and GraphViz diagrams, visit https://kroki.io and https://graphviz.org.
 
-== Try it yourself
+== Quickstart
 
-Below is an example diagram showing communication between the Diagrams extension and the Kroki.io server set by the *Server URL* in xref:options.adoc[].
-
-You'll create the AsciiDoc file that both holds and displays the diagram when viewed with the {project-name}.
-
-The diagram below uses the PlantUML diagram generator.
-To learn more about embedding diagrams, other diagram languages and PlantUML, visit https://kroki.io and https://plantuml.com.
-
-.Diagrams extension sequence
-image::diagrams-extension-sequence.svg[]
-
-To create the above diagram after installing the {project-name}, do the following:
-
-. Create a file "diagram-extension-example.adoc" with the following contents:
-+
-.diagram-extension-example.adoc
-[,asciidoc]
-----
-= Diagrams extension example with Kroki.io
-
-The sequence diagram is below:
-
-[plantuml]
-....
-@startuml
-entity "Local or remote file" as file
-box Browser #white
-participant Browser as browser
-participant "Asciidoctor\nBrowser Extension" as extension
-box "Kroki Server" #white
-participant "Kroki Gateway" as kroki
-participant "Diagram generator" as generator
-end box
-file -> browser : AsciiDoc
-browser -> extension : AsciiDoc
-activate extension
-extension -> kroki : encoded diagram text
-kroki -> generator : diagram text
-kroki <- generator : image
-extension <- kroki : image
-browser <- extension : HTML5
-deactivate extension
-@enduml
-....
-----
-
-. Enable the Diagrams extension with the default *Server URL* from the extension options.
-For help enabling and disabling the Diagrams extension, see the xref:options.adoc[] page.
-
-. Open or reload the above file in the browser to see the diagram.
-
-. Modify the diagram text in the AsciiDoc and reload the page to see your updated diagram.
-
-. Disable the Diagrams extension.
-+
-IMPORTANT: Disable the Diagrams extension to stop communication with the *Server URL*.
+To try it your yourself, visit the xref::diagrams-extension-quickstart.adoc[] page.

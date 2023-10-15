@@ -1,4 +1,5 @@
 * xref:install.adoc[]
+* xref:quickstart.adoc[]
 * xref:features.adoc[]
 * xref:options.adoc[]
 ** xref:custom-attributes-option.adoc[]
@@ -6,4 +7,6 @@
 ** xref:theme-stylesheet-option.adoc[]
 ** xref:javascript-option.adoc[]
 ** xref:load-the-javascript-option.adoc[]
+* xref:diagrams-extension-quickstart.adoc[]
+* xref:use-cases.adoc[]
 * xref:firefox-known-issues.adoc[Known issues]
