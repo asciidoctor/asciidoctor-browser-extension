@@ -1,0 +1,133 @@
+[#use-cases]
+= Use cases
+
+Use cases for typical situations you may encounter.
+
+[#uc-add-toc]
+== Add a TOC
+
+Add a TOC to a document written without one, so that it's easier to navigate and use.
+
+****
+Sometimes documents are written without TOCs for good reason - they may be part of a larger system, or automatically generated.
+What ever the reason, you can add one using the {project-name}.
+****
+
+*Problem: A document is not written with a TOC*
+
+It's long. It's hard to navigate.
+
+*Solution: Use {project-name} to add a TOC*
+
+Add the `toc` setting depending on your need below:
+
+* For all documents viewed, use a xref:custom-attributes-option.adoc[common attribute]:
+
+ toc=left
+
+* For the current document, use a xref:features.adoc#url-query-parameters[query parameters]:
+
+ ?toc=left
+
+* If editing the document, use this AsciiDoc in the header:
+
+ :toc: left
+
+[NOTE]
+====
+To remove a TOC that's already there use `toc` followed by an exclamation mark (`!`).
+
+* Custom attribute: `toc!`
+* Query parameter: `?toc!`
+====
+
+
+[[uc-simplify-toc]]
+== Simplify the TOC
+
+Reduce the TOC heading levels for a simplified view of the document.
+
+****
+Some documents have so many headings and sections that there is too much detail, even in the TOC.
+While that may be OK for the final purpose, for your purpose you want to change your view of it.
+****
+
+*Problem: The number of section levels and headings are many*
+
+A simple view of the TOC is needed to understand the document.
+
+*Solution: Use the viewer to reduce the TOC heading levels*
+
+Attribute `toclevels` controls the section levels that are included in the TOC, from 1 to 7.
+Add the `toclevels` setting depending on your need below:
+
+* For all documents viewed, use a xref:custom-attributes-option.adoc[common attribute]:
+
+ toclevels=1
+
+* For the current document, use a xref:features.adoc#url-query-parameters[query parameters]:
+
+ ?toclevels=1
+
+* If editing the document, use this AsciiDoc in the header:
+
+ :toclevels: 1
+
+TIP: To see more detail in the TOC, increase the `toclevels` value.
+
+== Add a simplified TOC
+
+To combine the use cases of <<uc-add-toc>> and <<uc-simplify-toc>> you can set both `toc` and `toclevels` at the same time:
+
+* For all documents viewed, set these as xref:custom-attributes-option.adoc[common attributes]:
+
+ toc=left toclevels=1
+
+* For the current document, use these xref:features.adoc#url-query-parameters[query parameters]:
+
+ ?toc=left&toclevels=1
+
+* If editing the document, use this AsciiDoc in the header:
+
+ :toc: left
+ :toclevels: 1
+
+
+== Minimal effort writing
+
+Create and write an AsciiDoc quickly using the {project-name} to apply your most commonly used settings.
+
+****
+When taking notes, you just want to write and not add for example settings for the TOC, nice admonition icons and other items.
+****
+
+*Objective: Just write, leaving other settings until later if at all*
+
+Use the features of {project-name} to save time.
+
+*Solution: Put commonly used attributes into the xref:custom-attributes-option.adoc[]*
+
+For all documents viewed, set this xref:custom-attributes-option.adoc[custom attributes option string]:
+
+ toc=left icons=font experimental source-highlighter=highlight.js
+
+The above Custom attributes options string set the equivalent AsciiDoc attributes below:
+
+.AsciiDoc header
+[,asciidoc]
+----
+= <title>
+:toc: left <.>
+:icons: font <.>
+:experimental: <.>
+:source-highlighter: highlight.js <.>
+----
+<.> A left hand TOC
+<.> Use Font Awesome for icons and admonition icons
+<.> Enable GUI macros +
+`\btn:[button]` for btn:[button] +
+`\kbd:[control-A]` for kbd:[control-A] and +
+`\menu:Menu[Item,...]` for select menu:Menu[Item,...]
+<.> Syntax highlighting with `highlight.js`
+
+Congratulations, you can now have a collection of AsciiDoc notes with minimal effort, and view them with the {project-name}.

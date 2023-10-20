@@ -1,0 +1,37 @@
+= Quickstart
+
+To reproduce the example shown in xref:features.adoc#example[View AsciiDoc as HTML5] on the features page, do the following:
+
+:exfile: ex-writing-zen.adoc
+
+. Install the {project-name} using the xref:install.adoc[] page
+. Create `{exfile}` from the text below or xref:attachment${exfile}[download] it.
++
+.ex-writing-zen.adoc
+-----
+include::attachment${exfile}[]
+-----
+
+. Open `{exfile}` in your browser. You may either:
+
+* Open it by pressing kbd:[Control,O]
+* Drag and drop `{exfile}` onto your browser
+* Double-click `{exfile}`
++
+NOTE: For double-click to work, you may need to change your computer settings to associate `.adoc` with your web browser.
+
+. Try different features with the following:
+
+.. Toggle the {project-name} activation by clicking its extension icon in the browser bar.
++
+You'll see the AsciiDoc behind the rendered HTML page.
+.. Change the xref:theme-stylesheet-option.adoc[] and reload.
+.. Change the Theme/Stylesheet using a query parameter.
+Add `stylesheet=github` to the end of the URL.
+.. Edit the AsciiDoc file and save.
+Observe it update.
+.. Add `toc=left` to xref:custom-attributes-option.adoc[], and reload.
+
+. Next steps
++
+After the above, you may like to try the exercise in the xref:diagrams-extension-option.adoc[].

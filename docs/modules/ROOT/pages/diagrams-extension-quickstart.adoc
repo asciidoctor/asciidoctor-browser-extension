@@ -1,0 +1,64 @@
+= Diagrams extension quickstart
+
+In this quick start you'll:
+
+* [x] create an AsciiDoc file that both holds and displays a diagram when viewed with the {project-name}
+* [x] configure the extension to use Kroki
+* [x] view the converted diagram
+* [x] stop the extension using Kroki
+
+Below is an example diagram showing communication between the Diagrams extension and the Kroki.io server set by the *Server URL* in xref:options.adoc[].
+
+.Diagrams extension sequence
+image::diagrams-extension-sequence.svg[]
+
+The diagram above uses the PlantUML diagram generator via Kroki.
+To learn more about embedding diagrams, other diagram languages and PlantUML, visit https://kroki.io and https://plantuml.com.
+
+== Steps
+
+To create the above diagram after installing the {project-name}, do the following:
+
+. Create a file "diagram-extension-example.adoc" with the following contents:
++
+.diagram-extension-example.adoc
+[,asciidoc]
+----
+= Diagrams extension example with Kroki.io
+
+The sequence diagram is below:
+
+[plantuml]
+....
+@startuml
+entity "Local or remote file" as file
+box Browser #white
+participant Browser as browser
+participant "Asciidoctor\nBrowser Extension" as extension
+box "Kroki Server" #white
+participant "Kroki Gateway" as kroki
+participant "Diagram generator" as generator
+end box
+file -> browser : AsciiDoc
+browser -> extension : AsciiDoc
+activate extension
+extension -> kroki : encoded diagram text
+kroki -> generator : diagram text
+kroki <- generator : image
+extension <- kroki : image
+browser <- extension : HTML5
+deactivate extension
+@enduml
+....
+----
+
+. Enable the Diagrams extension with the default *Server URL* from the extension options.
+For help enabling and disabling the Diagrams extension, see the xref:options.adoc[] page.
+
+. Open or reload the above file in the browser to see the diagram.
+
+. Modify the diagram text in the AsciiDoc and reload the page to see your updated diagram.
+
+. Disable the Diagrams extension.
++
+IMPORTANT: Disable the Diagrams extension to stop communication with the *Server URL*.

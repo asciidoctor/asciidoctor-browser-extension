@@ -2,6 +2,8 @@
 
 == Unreleased
 
+* Docs: reorganize use-cases to separate page, try-it-yourself to a quickstart page, diagrams try-it-yourself to a diagrams quickstart page (#652) (#654)
+
 == 2.7.1 (2023-06-03)
 
 * Add `accept` header when fetching AsciiDoc content (mainly to workaround an issue on github.com)
