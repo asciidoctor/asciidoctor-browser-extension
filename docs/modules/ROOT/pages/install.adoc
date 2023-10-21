@@ -2,7 +2,7 @@
 
 You can install the extension from your browser's Web Store or a local copy of the extension.
 
-== Install from Web Store
+== Install from a web store
 
 . Install the Extension on your browser using the image links below.
 +

@@ -1,4 +1,4 @@
-= Option: Custom attributes string
+= Option: Custom Attributes String
 :navtitle: Custom attributes string
 
 The extension option *Custom attributes string* on the extension configuration dialog box, is a space-separated list of attribute settings that the {project-name} applies to all documents when rendering them to HTML.
@@ -38,7 +38,7 @@ See section xref:features.adoc#set-asciidoc-attributes[Set AsciiDoc attributes] 
 
 For more ideas and use cases for setting attributes, see the xref:use-cases.adoc[] page.
 
-== AsciiDoc Attributes
+== AsciiDoc attributes
 
 To learn more about AsciiDoc attributes, visit the
 xref:asciidoc:attributes:document-attributes.adoc[]

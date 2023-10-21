@@ -1,4 +1,4 @@
-= Known Firefox issues
+= Known Firefox Issues
 
 These are the known Firefox issues.
 
