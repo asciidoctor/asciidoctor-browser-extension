@@ -1,4 +1,4 @@
-= Diagrams extension quickstart
+= Diagrams Extension Quickstart
 
 In this quick start you'll:
 
@@ -24,7 +24,7 @@ To create the above diagram after installing the {project-name}, do the followin
 .diagram-extension-example.adoc
 [,asciidoc]
 ----
-= Diagrams extension example with Kroki.io
+= Diagrams Extension Example with Kroki.io
 
 The sequence diagram is below:
 

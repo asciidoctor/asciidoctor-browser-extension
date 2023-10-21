@@ -1,4 +1,4 @@
-= Option: Diagrams extension
+= Option: Diagrams Extension
 :navtitle: Diagrams extension
 :keywords: kroki,diagrams like code,diagrams
 

@@ -1,10 +1,10 @@
 [#use-cases]
-= Use cases
+= Use Cases
 
 Use cases for typical situations you may encounter.
 
 [#uc-add-toc]
-== Add a TOC
+== Add a table of contents (TOC)
 
 Add a TOC to a document written without one, so that it's easier to navigate and use.
 
@@ -43,7 +43,7 @@ To remove a TOC that's already there use `toc` followed by an exclamation mark (
 
 
 [[uc-simplify-toc]]
-== Simplify the TOC
+== Simplify a table of contents
 
 Reduce the TOC heading levels for a simplified view of the document.
 
@@ -75,7 +75,7 @@ Add the `toclevels` setting depending on your need below:
 
 TIP: To see more detail in the TOC, increase the `toclevels` value.
 
-== Add a simplified TOC
+== Add a simplified table of contents
 
 To combine the use cases of <<uc-add-toc>> and <<uc-simplify-toc>> you can set both `toc` and `toclevels` at the same time:
 
@@ -93,7 +93,7 @@ To combine the use cases of <<uc-add-toc>> and <<uc-simplify-toc>> you can set b
  :toclevels: 1
 
 
-== Minimal effort writing
+== Writing with minimal effort
 
 Create and write an AsciiDoc quickly using the {project-name} to apply your most commonly used settings.
 

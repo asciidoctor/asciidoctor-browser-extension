@@ -112,7 +112,7 @@ You should see the following result:
 Query parameters example
 ====
 
-== Change Themes and Stylesheets
+== Change themes and stylesheets
 
 Change the stylesheet, CSS, or both, that are used to render HTML5 from the AsciiDoc.
 For example, you may prefer a darker or a more compact presentation style.
