@@ -1,6 +1,7 @@
 = Features
 :url-asciidoctor-sc-image: https://cdn.jsdelivr.net/gh/asciidoctor/asciidoctor/screenshot.png
 :source-language: asciidoc
+:page-toclevels: 1
 
 The main feature is viewing AsciiDoc as HTML5 directly in the browser.
 Other features cover where those AsciiDoc files are located, and how they are rendered.
