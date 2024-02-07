@@ -29,7 +29,7 @@ video::live-preview.mp4[]
 
 See xref:options.adoc#poll-for-changes[Poll for Changes] on the options page.
 
-[[set-asciidoc-attributes]]
+[#set-asciidoc-attributes]
 == Use AsciiDoc attributes
 
 You can set AsciiDoc attributes in the {project-name} to control how your AsciiDoc document is rendered to HTML, without affecting the original document.
@@ -50,42 +50,42 @@ You may use URL query parameters to change how the extension previews AsciiDoc. 
 * attribute values with `?<attribute-name>=<value>`
 * stylesheet used with `?stylesheet=<stylesheet name>` 
 
-*Where to put the query parameters*
+=== Where to put the query parameters
 
 Query parameters are indicated by the first `?` character in the URL and are terminated by the character `#` or the end of the URL.
 
 TIP: If setting attributes or the stylesheet via the URL is not working, check that the query parameters are before any `#` character in the URL.
 
-*Add the first query parameter (`?`)*
+=== Add the first query parameter (`?`)
 
 For example, to reduce the depth of section levels that are displayed in the table of contents to one, add `?toclevels=1` to the URL (after the document name, and before any `#` character):
 
 .URL query parameters
-[,url,subs=+quotes]
+[subs=+quotes]
 ----
 https://example.com/page.adoc**?toclevels=1**
 ----
 
-*Add a second or more parameters (`&`)*
+=== Add more query parameters (`&`)
 
 To add one more parameter, add an ampersand (`&`) to the end of the last query parameter, followed by the next attribute setting.
 
 It will look like this:
 
-URL query parameters
-[,url,subs=+quotes]
+.URL query parameters
+[subs=+quotes]
 ----
 https://example.com/page.adoc**?toclevels=1&stylesheet=maker**
 ----
 
 video::live-preview.mp4[]
 
-*Example*
+=== Query parameters example
 
 You have a document `ex-query.adoc` that uses two attributes `\{first}` and `\{last}` to say "Hello \{first} \{last}!" in the document title.
 
 .ex-query.adoc
-[subs="-attributes",indent=0]
+[,asciidoc]
 ----
 = Hello {first} {last}!
 
@@ -97,14 +97,13 @@ TIP: Download the above document from xref:attachment$ex-query.adoc[ex-query.ado
 Then, to send a first and last name to the document via the URL, you would add `?first=Irma&last=Writer` to the URL directly after the `ex-query.adoc` and before any `#` character.
 
 .URL query parameters
-[,url,subs=+quotes]
+[subs=+quotes]
 ----
 file:///C:/Users/User/Documents/ex-query.adoc**?first=Irma&last=Writer**
 ----
 
 You should see the following result:
 
-[indent=0]
 ====
 [discrete]
 = Hello Irma Writer!
@@ -155,9 +154,8 @@ Learn more on the xref:diagrams-extension-option.adoc[] page.
 
 == Markdown friendly
 
-AsciiDoc accommodates simple markdown in your AsciiDoc document.
-
-This may save you time:
+AsciiDoc is similar enough to Markdown that often you can write simple Markdown in your AsciiDoc document and it will just work.
+This may save you time in the following situations:
 
 * Writing simple notes
 * Converting files from Markdown to AsciiDoc gradually.
