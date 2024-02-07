@@ -18,16 +18,26 @@ You can also use xref:features.adoc#url-query-parameters[URL query parameters] t
 Attributes can be set with and without a value, and unset.
 The following table shows examples of setting attributes in AsciiDoc with their Custom Attribute equivalents.
 
-[cols="3*a"]
 |===
-|Action |AsciiDoc |Custom Attributes example
+|Action |In AsciiDoc |In custom attributes
 
-|Set without a value |`:sectnums:` |`sectnums` 
-||`:experimental:` |`experimental` 
-|Set to a value |`:toc: left` |`toc=left` 
-|  |`:toclevels: 1` |`toclevels=1` 
-|Unset |`:sectnums!:` |`sectnums!`
+.2+s|Set without a value
+|`:sectnums:`
+|`sectnums` 
 
+|`:experimental:`
+|`experimental` 
+
+.2+s|Set to a value
+|`:toc: left`
+|`toc=left` 
+
+|`:toclevels: 1`
+|`toclevels=1` 
+
+s|Unset
+|`:sectnums!:`
+|`sectnums!`
 |===
 
 NOTE: Setting an attribute in the string is not a guarantee that it will take effect, as it may be incompatible with the browser view, or be overruled by another setting of that option.
@@ -39,6 +49,4 @@ For more ideas and use cases for setting attributes, see the xref:use-cases.adoc
 
 == AsciiDoc attributes
 
-To learn more about AsciiDoc attributes, visit the
-xref:asciidoc:attributes:document-attributes.adoc[]
-page of the AsciiDoc manual.
+To learn more about AsciiDoc attributes, visit the xref:asciidoc:attributes:document-attributes.adoc[] page of the AsciiDoc manual.
