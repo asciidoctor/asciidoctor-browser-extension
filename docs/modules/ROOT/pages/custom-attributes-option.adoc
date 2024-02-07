@@ -5,9 +5,8 @@ The extension option *Custom attributes string* on the extension configuration d
 
 The *Custom attributes string* option allows you to use the features of AsciiDoc in documents without having to write them each time, or include a separate file of attribute settings.
 
-For example, to use the GUI macros for every AsciiDoc you preview with the extension, you can set  `experimental` in the *Custom attributes string*.
+For example, to use the GUI macros for every AsciiDoc you preview with the extension, you can set `experimental` in the *Custom attributes string*.
 
-[,txt]
 ----
 experimental
 ----
