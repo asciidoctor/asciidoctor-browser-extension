@@ -26,24 +26,24 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@asciidoctor/core": "2.2.6",
-    "addons-linter": "6.7.0",
-    "archiver": "5.3.1",
-    "asciidoctor-kroki": "0.17.0",
+    "@asciidoctor/core": "2.2.7",
+    "addons-linter": "6.24.0",
+    "archiver": "7.0.1",
+    "asciidoctor-kroki": "0.18.1",
     "bestikk-fs": "1.0.0",
     "bestikk-log": "0.1.0",
-    "bulma": "0.9.4",
-    "chai": "4.3.7",
-    "chartist": "0.11.4",
+    "bulma": "1.0.0",
+    "chai": "5.1.0",
+    "chartist": "1.3.0",
     "csso": "5.0.5",
     "dirty-chai": "2.0.1",
-    "eslint": "8.42.0",
+    "eslint": "8.57.0",
     "font-awesome": "4.7.0",
-    "mathjax": "3.0.1",
-    "mocha": "10.2.0",
-    "puppeteer": "20.5.0",
-    "sass": "1.63.3",
-    "sinon": "15.1.0",
+    "mathjax": "3.2.2",
+    "mocha": "10.4.0",
+    "puppeteer": "22.6.1",
+    "sass": "1.72.0",
+    "sinon": "17.0.1",
     "standard": "17.1.0"
   },
   "keywords": [
@@ -56,6 +56,6 @@
     "asciidoctor"
   ],
   "volta": {
-    "node": "18.16.0"
+    "node": "18.20.0"
   }
 }
