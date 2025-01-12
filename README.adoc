@@ -30,7 +30,7 @@ endif::[]
 // Graphics
 :url-chrome-webstore-image: https://raw.githubusercontent.com/asciidoctor/asciidoctor-browser-extension/main/promotional/chromewebstore-badge-wborder-496x150.png
 :url-mozilla-addon-image: https://blog.mozilla.org/addons/files/2020/04/get-the-addon-fx-apr-2020.svg
-:url-opera-addon-image: https://dev.opera.com/extensions/branding-guidelines/addons_206x58_en@2x.png
+:url-opera-addon-image: https://web.archive.org/web/20230121030317if_/https://dev.opera.com/extensions/branding-guidelines/addons_206x58_en@2x.png
 :url-edge-webstore-image: https://raw.githubusercontent.com/asciidoctor/asciidoctor-browser-extension/main/promotional/edgewebstore-badge.png
 
 Enjoy AsciiDoc everywhere your browser goes with the {project-name}.
@@ -39,7 +39,7 @@ The {project-name} uses {url-asciidoctor-js-repo}[Asciidoctor.js]
 to preview {url-asciidoc}[AsciiDoc] files (.ad, .adoc, .asc, .asciidoc, and optionally .txt)
 as HTML inside Chrome, Brave, Firefox, Opera, Microsoft Edge and other Chromium browsers.
 
-*Project health:* image:https://github.com/asciidoctor/asciidoctor-browser-extension/workflows/CI/badge.svg[Build Status, link="https://github.com/asciidoctor/asciidoctor-browser-extension/actions?query=workflow%3ACI"]
+*Project health:* image:https://github.com/asciidoctor/asciidoctor-browser-extension/actions/workflows/main.yml/badge.svg[Build Status, link="https://github.com/asciidoctor/asciidoctor-browser-extension/actions/workflows/main.yml"]
 
 image::docs/modules/ROOT/images/hero.webp[]
 
