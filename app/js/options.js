@@ -68,7 +68,36 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
     localStorage.THEME = selectTheme.value
     localStorage.JS = selectJavaScript.value
     localStorage.JS_LOAD = inputLoadJavaScript.find((element) => element.checked).value
-    webExtension.runtime.getBackgroundPage((page) => page.refreshOptions())
+    webExtension.storage.local.set({
+      CUSTOM_ATTRIBUTES: localStorage.CUSTOM_ATTRIBUTES,
+      SAFE_MODE: localStorage.SAFE_MODE,
+      ALLOW_TXT_EXTENSION: localStorage.ALLOW_TXT_EXTENSION,
+      ENABLE_KROKI: localStorage.ENABLE_KROKI,
+      KROKI_SERVER_URL: localStorage.KROKI_SERVER_URL,
+      THEME: localStorage.THEME,
+      JS: localStorage.JS,
+      JS_LOAD: localStorage.JS_LOAD,
+      LOCAL_POLL_FREQUENCY: localStorage.LOCAL_POLL_FREQUENCY,
+      REMOTE_POLL_FREQUENCY: localStorage.REMOTE_POLL_FREQUENCY
+    })
+    const customThemeNames = JSON.parse(localStorage.CUSTOM_THEME_NAMES || '[]')
+    if (customThemeNames.length > 0) {
+      customThemeNames.forEach((themeName) => {
+        const themeNameKey = 'CUSTOM_THEME_' + themeName
+        const themeObj = {}
+        themeObj[themeNameKey] = localStorage[themeNameKey]
+        webExtension.storage.local.set(themeObj)
+      })
+    }
+    const customJavaScriptNames = JSON.parse(localStorage.CUSTOM_JS_NAMES || '[]')
+    if (customJavaScriptNames.length > 0) {
+      customJavaScriptNames.forEach((javaScriptName) => {
+        const javaScriptNameKey = 'CUSTOM_JS_' + javaScriptName
+        const javaScriptObj = {}
+        javaScriptObj[javaScriptNameKey] = localStorage[javaScriptNameKey]
+        webExtension.storage.local.set(javaScriptObj)
+      })
+    }
   }
 
   /**
@@ -241,7 +270,7 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
       }
     })
   }
-  selectTheme.addEventListener('change', (event) => {
+  selectTheme.addEventListener('change', () => {
     if (selectTheme.selectedOptions) {
       if (selectTheme.selectedOptions.length === 1 && selectTheme.selectedOptions[0].parentNode.label !== 'Default') {
         removeCustomStyleSheet.classList.remove('is-hidden')

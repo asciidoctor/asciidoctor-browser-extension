@@ -138,40 +138,6 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
     return result
   }
 
-  const httpGet = (uri, encoding = 'utf8') => {
-    let data = ''
-    let status = -1
-    try {
-      const xhr = new XMLHttpRequest()
-      xhr.open('GET', uri, false)
-      if (encoding === 'binary') {
-        xhr.responseType = 'arraybuffer'
-      }
-      xhr.addEventListener('load', function () {
-        status = this.status
-        if (status === 200 || status === 0) {
-          if (encoding === 'binary') {
-            const arrayBuffer = xhr.response
-            const byteArray = new Uint8Array(arrayBuffer)
-            for (let i = 0; i < byteArray.byteLength; i++) {
-              data += String.fromCharCode(byteArray[i])
-            }
-          } else {
-            data = this.responseText
-          }
-        }
-      })
-      xhr.send()
-    } catch (e) {
-      throw new Error(`Error reading file: ${uri}; reason: ${e.message}`)
-    }
-    // assume that no data means it doesn't exist
-    if (status === 404 || !data) {
-      throw new Error(`No such file: ${uri}`)
-    }
-    return data
-  }
-
   /**
    * Build Asciidoctor options from settings
    */
@@ -223,15 +189,9 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
     if (settings.krokiEnabled) {
       AsciidoctorKroki.register(registry, {
         vfs: {
-          read: (path, encoding = 'utf8') => {
-            let absolutePath
-            if (path.startsWith('file://') || path.startsWith('http://') || path.startsWith('https://')) {
-              // absolute path
-              absolutePath = path
-            } else {
-              absolutePath = pwd + '/' + path
-            }
-            return httpGet(absolutePath, encoding)
+          read: (path) => {
+            console.warn(`Cannot read file: ${path}. Manifest V3 relies on service workers and cannot use synchronous XMLHttpRequest.`)
+            return ''
           },
           exists: (_) => {
             return false
