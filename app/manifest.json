@@ -2,7 +2,7 @@
   "name": "Asciidoctor.js Live Preview",
   "version": "2.7.1",
   "author": "Guillaume Grossetie",
-  "manifest_version": 2,
+  "manifest_version": 3,
   "description": "Render AsciiDoc (.ad, .adoc, .asc, .asciidoc) as HTML inside your browser!",
   "options_ui": {
     "page": "html/options.html"
@@ -252,46 +252,58 @@
     }
   ],
   "web_accessible_resources": [
-    "css/themes/asciidoctor.css",
-    "css/themes/colony.css",
-    "css/themes/foundation.css",
-    "css/themes/foundation-lime.css",
-    "css/themes/foundation-potion.css",
-    "css/themes/github.css",
-    "css/themes/golo.css",
-    "css/themes/iconic.css",
-    "css/themes/maker.css",
-    "css/themes/readthedocs.css",
-    "css/themes/riak.css",
-    "css/themes/rocket-panda.css",
-    "css/themes/rubygems.css",
-    "css/highlight/github.css",
-    "css/font-awesome.min.css",
-    "css/chartist.min.css",
-    "img/themes/github/*.png",
-    "img/themes/golo/*.png",
-    "img/themes/maker/*.png",
-    "img/themes/riak/*.png",
-    "img/themes/riak/*.jpg",
-    "js/vendor/kroki.js",
-    "js/vendor/asciidoctor-chart-block-macro.js",
-    "js/vendor/asciidoctor-emoji-inline-macro.js",
-    "js/vendor/asciidoctor.js",
-    "js/vendor/md5.js",
-    "js/loader.js",
-    "js/converter.js",
-    "js/renderer.js",
-    "js/asciidocify.js",
-    "js/vendor/chartist.min.js",
-    "fonts/fontawesome-webfont.woff2",
-    "fonts/fontawesome-webfont.woff",
-    "fonts/fontawesome-webfont.ttf",
-    "vendor/MathJax-3.0.1/*"
+    {
+      "resources": [
+        "css/themes/asciidoctor.css",
+        "css/themes/colony.css",
+        "css/themes/foundation.css",
+        "css/themes/foundation-lime.css",
+        "css/themes/foundation-potion.css",
+        "css/themes/github.css",
+        "css/themes/golo.css",
+        "css/themes/iconic.css",
+        "css/themes/maker.css",
+        "css/themes/readthedocs.css",
+        "css/themes/riak.css",
+        "css/themes/rocket-panda.css",
+        "css/themes/rubygems.css",
+        "css/highlight/github.css",
+        "css/font-awesome.min.css",
+        "css/chartist.min.css",
+        "img/themes/github/*.png",
+        "img/themes/golo/*.png",
+        "img/themes/maker/*.png",
+        "img/themes/riak/*.png",
+        "img/themes/riak/*.jpg",
+        "js/vendor/kroki.js",
+        "js/vendor/asciidoctor-chart-block-macro.js",
+        "js/vendor/asciidoctor-emoji-inline-macro.js",
+        "js/vendor/asciidoctor.js",
+        "js/vendor/md5.js",
+        "js/loader.js",
+        "js/converter.js",
+        "js/renderer.js",
+        "js/asciidocify.js",
+        "js/vendor/chartist.min.js",
+        "fonts/fontawesome-webfont.woff2",
+        "fonts/fontawesome-webfont.woff",
+        "fonts/fontawesome-webfont.ttf",
+        "vendor/MathJax-3.0.1/*"
+      ],
+      "matches": [
+        "*://*/*",
+        "file://*/*"
+      ],
+      "extension_ids": ["aggmbnookbjdiihahjjbgdlaoafabmpi"]
+    }
   ],
   "permissions": [
     "storage",
     "tabs",
     "activeTab",
+    "contextMenus"
+  ],
+  "host_permissions": [
     "*://*/*.ad",
     "*://*/*.ad?*",
     "*://*/*.ad.*",
@@ -306,24 +318,12 @@
     "*://*/*.asciidoc.*",
     "*://*/*.txt",
     "*://*/*.txt?*",
-    "*://*/*.txt.*",
-    "contextMenus"
+    "*://*/*.txt.*"
   ],
-  "browser_action": {
+  "action": {
     "default_title": "Asciidoctor.js Preview"
   },
   "background": {
-    "scripts": [
-      "js/vendor/md5.js",
-      "js/vendor/asciidoctor.js",
-      "js/vendor/kroki.js",
-      "js/module/namespace.js",
-      "js/module/settings.js",
-      "js/converter.js",
-      "js/background.js",
-      "js/vendor/asciidoctor-chart-block-macro.js",
-      "js/vendor/asciidoctor-emoji-inline-macro.js"
-    ],
-    "persistent": false
+    "service_worker": "js/index.js"
   }
 }

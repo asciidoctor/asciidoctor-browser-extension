@@ -124,6 +124,7 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
       16: `img/${iconPrefix}-16.png`,
       32: `img/${iconPrefix}-32.png`
     }
+    /*
     if (typeof webExtension.browserAction.setIcon === 'function') {
       webExtension.browserAction.setIcon({ path: iconPath })
     } else if (typeof webExtension.browserAction.setTitle === 'function') {
@@ -131,7 +132,7 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
     } else {
       // eslint-disable-next-line no-console
       console.log(`Asciidoctor.js Preview (${enableRender ? 'enabled' : 'disabled'})`)
-    }
+    }*/
 
     // Reload the active tab in the current windows that matches
     findActiveTab((activeTab) => {
@@ -180,7 +181,7 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
     }
   }
 
-  webExtension.browserAction.onClicked.addListener(module.enableDisableRender)
+  // webExtension.browserAction.onClicked.addListener(module.enableDisableRender)
 
   return module
 })(webExtension)
@@ -188,4 +189,4 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
 enableDisableRender()
 
 // eslint-disable-next-line no-unused-vars
-window.refreshOptions = refreshOptions
+// window.refreshOptions = refreshOptions
