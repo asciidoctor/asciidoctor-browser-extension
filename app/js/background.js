@@ -117,22 +117,19 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
   module.enableDisableRender = () => {
     // Save the status of the extension
     webExtension.storage.local.set({ ENABLE_RENDER: enableRender })
-
     // Update the extension icon
-    const iconPrefix = enableRender ? 'enabled' : 'disabled'
-    const iconPath = {
-      16: `img/${iconPrefix}-16.png`,
-      32: `img/${iconPrefix}-32.png`
-    }
-    /*
-    if (typeof webExtension.browserAction.setIcon === 'function') {
-      webExtension.browserAction.setIcon({ path: iconPath })
-    } else if (typeof webExtension.browserAction.setTitle === 'function') {
-      webExtension.browserAction.setTitle({ title: `Asciidoctor.js Preview (${enableRender ? '✔' : '✘'})` })
+    webExtension.action.setBadgeText({
+      text: (enableRender ? '' : 'off')
+    })
+    webExtension.action.setBadgeBackgroundColor({
+      color: '#2f2f2f'
+    })
+    if (typeof webExtension.action.setTitle === 'function') {
+      webExtension.action.setTitle({ title: `Asciidoctor.js Preview (${enableRender ? '✔' : '✘'})` })
     } else {
       // eslint-disable-next-line no-console
       console.log(`Asciidoctor.js Preview (${enableRender ? 'enabled' : 'disabled'})`)
-    }*/
+    }
 
     // Reload the active tab in the current windows that matches
     findActiveTab((activeTab) => {
@@ -181,7 +178,7 @@ const { refreshOptions, enableDisableRender } = ((webExtension) => {
     }
   }
 
-  // webExtension.browserAction.onClicked.addListener(module.enableDisableRender)
+  webExtension.action.onClicked.addListener(module.enableDisableRender)
 
   return module
 })(webExtension)
