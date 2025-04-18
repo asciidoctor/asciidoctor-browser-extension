@@ -28,7 +28,8 @@ asciidoctor.browser.theme = (webExtension, Settings, Constants) => {
    */
   module.getDefaultThemeNames = () => {
     const webAccessibleResources = webExtension.runtime.getManifest().web_accessible_resources[0].resources
-    const themeRegexp = /^css\/themes\/(.*)\.css$/i
+    console.log('webAccessibleResources', webAccessibleResources)
+    const themeRegexp = /^\/?css\/themes\/(.*)\.css$/i
     return webAccessibleResources
       .filter(item => themeRegexp.test(item))
       .map(item => item.replace(themeRegexp, '$1'))

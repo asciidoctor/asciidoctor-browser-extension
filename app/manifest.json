@@ -1,6 +1,11 @@
 {
   "name": "Asciidoctor.js Live Preview",
   "version": "2.7.1",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "asciidoctor-firefox-addon@asciidoctor.org"
+    }
+  },
   "author": "Guillaume Grossetie",
   "manifest_version": 3,
   "description": "Render AsciiDoc (.ad, .adoc, .asc, .asciidoc) as HTML inside your browser!",
@@ -298,7 +303,10 @@
         "*://*/*",
         "file://*/*"
       ],
-      "extension_ids": ["aggmbnookbjdiihahjjbgdlaoafabmpi"]
+      "extension_ids": [
+        "asciidoctor-firefox-addon@asciidoctor.org",
+        "*"
+      ]
     }
   ],
   "permissions": [
@@ -328,6 +336,17 @@
     "default_title": "Asciidoctor.js Preview"
   },
   "background": {
-    "service_worker": "js/index.js"
+    "service_worker": "js/index.js",
+    "scripts": [
+      "js/vendor/md5.js",
+      "js/vendor/asciidoctor.js",
+      "js/vendor/kroki.js",
+      "js/module/namespace.js",
+      "js/module/settings.js",
+      "js/converter.js",
+      "js/background.js",
+      "js/vendor/asciidoctor-chart-block-macro.js",
+      "js/vendor/asciidoctor-emoji-inline-macro.js"
+    ]
   }
 }
