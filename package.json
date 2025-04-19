@@ -27,7 +27,7 @@
   "license": "MIT",
   "devDependencies": {
     "@asciidoctor/core": "2.2.6",
-    "addons-linter": "6.7.0",
+    "addons-linter": "7.11.0",
     "archiver": "5.3.1",
     "asciidoctor-kroki": "0.17.0",
     "bestikk-fs": "1.0.0",
@@ -41,7 +41,7 @@
     "font-awesome": "4.7.0",
     "mathjax": "3.0.1",
     "mocha": "10.2.0",
-    "puppeteer": "20.5.0",
+    "puppeteer": "24.6.1",
     "sass": "1.63.3",
     "sinon": "15.1.0",
     "standard": "17.1.0"
@@ -56,6 +56,6 @@
     "asciidoctor"
   ],
   "volta": {
-    "node": "18.16.0"
+    "node": "22.14.0"
   }
 }

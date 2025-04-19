@@ -53,13 +53,18 @@ processor.Extensions.register(function () {
 
     self.process(function (parent, target, attrs) {
       const filePath = parent.normalizeAssetPath(target, 'target')
-      const fileContent = parent.readAsset(filePath, { warn_on_failure: true, normalize: true })
-      const lines = fileContent.split('\n')
-      const labels = lines[0].split(',')
-      lines.shift()
-      const data = lines.map(line => line.split(','))
-      const html = asciidoctor.browser.extensions.Chart.process(data, labels, attrs)
-      return self.createBlock(parent, 'pass', html, attrs, {})
+      try {
+        const fileContent = parent.readAsset(filePath, { warn_on_failure: true, normalize: true })
+        const lines = fileContent.split('\n')
+        const labels = lines[0].split(',')
+        lines.shift()
+        const data = lines.map(line => line.split(','))
+        const html = asciidoctor.browser.extensions.Chart.process(data, labels, attrs)
+        return self.createBlock(parent, 'pass', html, attrs, {})
+      } catch (e) {
+        console.warn(`Cannot read file: ${filePath}. Manifest V3 relies on service workers and cannot use synchronous XMLHttpRequest.`)
+        return self.createBlock(parent, 'pass', `Unsupported directive - chart::${target}[]`, attrs, {})
+      }
     })
   })
 

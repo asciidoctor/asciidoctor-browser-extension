@@ -1,4 +1,4 @@
-/* global md5, asciidoctor, XMLHttpRequest, Asciidoctor, AsciidoctorKroki */
+/* global md5, asciidoctor, fetch, Asciidoctor, AsciidoctorKroki */
 const processor = Asciidoctor({ runtime: { platform: 'browser' } })
 const eqnumValidValues = ['none', 'all', 'ams']
 
@@ -45,16 +45,16 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
   }
 
   module.fetchAndConvert = async (url, initial) => {
-    const request = await module.executeRequest(url)
-    if (module.isHtmlContentType(request)) {
+    const response = await module.executeRequest(url)
+    if (module.isHtmlContentType(response)) {
       // content is not plain-text!
       return undefined
     }
-    if (request.status !== 200 && request.status !== 0) {
+    if (response.status !== 200 && response.status !== 0) {
       // unsuccessful request!
       return undefined
     }
-    const source = request.responseText
+    const source = await response.text()
     if (await Settings.isExtensionEnabled()) {
       const md5key = 'md5' + url
       if (!initial) {
@@ -77,35 +77,23 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
     }
   }
 
-  module.executeRequest = (url) => new Promise((resolve, reject) => {
-    try {
-      const request = new XMLHttpRequest()
-      if (request.overrideMimeType) {
-        request.overrideMimeType('text/plain;charset=utf-8')
+  module.executeRequest = async (url) => {
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        Accept: 'text/plain, */*'
       }
-      request.onreadystatechange = (event) => {
-        if (request.readyState === XMLHttpRequest.DONE) {
-          resolve(request)
-        }
-      }
-      // disable cache
-      request.open('GET', url, true)
-      request.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
-      request.setRequestHeader('Accept', 'text/plain, */*')
-      request.send(null)
-    } catch (err) {
-      console.error(`Unable to GET ${url}`, err)
-      reject(err)
-    }
-  })
+    })
+  }
 
   /**
    * Is the content type html ?
-   * @param request The request
+   * @param response The response
    * @return true if the content type is html, false otherwise
    */
-  module.isHtmlContentType = (request) => {
-    const contentType = request.getResponseHeader('Content-Type')
+  module.isHtmlContentType = (response) => {
+    const contentType = response.headers.get('content-type')
     return contentType && (contentType.indexOf('html') > -1)
   }
 
@@ -148,40 +136,6 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
       }
     })
     return result
-  }
-
-  const httpGet = (uri, encoding = 'utf8') => {
-    let data = ''
-    let status = -1
-    try {
-      const xhr = new XMLHttpRequest()
-      xhr.open('GET', uri, false)
-      if (encoding === 'binary') {
-        xhr.responseType = 'arraybuffer'
-      }
-      xhr.addEventListener('load', function () {
-        status = this.status
-        if (status === 200 || status === 0) {
-          if (encoding === 'binary') {
-            const arrayBuffer = xhr.response
-            const byteArray = new Uint8Array(arrayBuffer)
-            for (let i = 0; i < byteArray.byteLength; i++) {
-              data += String.fromCharCode(byteArray[i])
-            }
-          } else {
-            data = this.responseText
-          }
-        }
-      })
-      xhr.send()
-    } catch (e) {
-      throw new Error(`Error reading file: ${uri}; reason: ${e.message}`)
-    }
-    // assume that no data means it doesn't exist
-    if (status === 404 || !data) {
-      throw new Error(`No such file: ${uri}`)
-    }
-    return data
   }
 
   /**
@@ -235,15 +189,9 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
     if (settings.krokiEnabled) {
       AsciidoctorKroki.register(registry, {
         vfs: {
-          read: (path, encoding = 'utf8') => {
-            let absolutePath
-            if (path.startsWith('file://') || path.startsWith('http://') || path.startsWith('https://')) {
-              // absolute path
-              absolutePath = path
-            } else {
-              absolutePath = pwd + '/' + path
-            }
-            return httpGet(absolutePath, encoding)
+          read: (path) => {
+            console.warn(`Cannot read file: ${path}. Manifest V3 relies on service workers and cannot use synchronous XMLHttpRequest.`)
+            return ''
           },
           exists: (_) => {
             return false

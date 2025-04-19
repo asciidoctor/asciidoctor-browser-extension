@@ -72,7 +72,7 @@ asciidoctor.browser.loader = (webExtension, document, location, XMLHttpRequest, 
         if (Converter.isHtmlContentType(request)) {
           return
         }
-        textContent = request.responseText
+        textContent = await request.text()
       }
       let response = {}
       try {
@@ -138,7 +138,7 @@ asciidoctor.browser.loader = (webExtension, document, location, XMLHttpRequest, 
       const browserInfo = Settings.getBrowserInfo()
       if (browserInfo.name === 'Firefox') {
         const request = await Converter.executeRequest(location.href)
-        reloadContent(request.responseText)
+        reloadContent(await request.text())
       } else {
         try {
           webExtension.runtime.sendMessage({ action: 'fetch-convert' }, function (response) {
