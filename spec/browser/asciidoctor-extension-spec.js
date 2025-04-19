@@ -52,7 +52,7 @@
       await Renderer.updateHTML(response)
       // the custom script must be present in <head>
       expect(Array.from(document.head.children).find(element => element.id === 'asciidoctor-browser-custom-js').innerText).to.equal('document.body.appendChild(document.createElement(\'strong\'));')
-      // the <b> element created by the custom JavaScript will be removed by the rendering phase (because the script run before)
+      // the rendering phase will remove the <b> element created by the custom JavaScript (because the script runs before)
       expect(Array.from(document.body.children).find(element => element.tagName.toLowerCase() === 'strong')).to.be.undefined()
       // the first element in the body must be the content
       expect(document.body.children[0].id).to.equal('content')
@@ -179,7 +179,8 @@ Bob -> Alice : hello
       expect(plantumlImg.getAttribute('src')).to.equal('http://localhost:1234/plantuml/svg/eNpzyk9S0LVTcMzJTE5VsFLISM3JyQcAPHcGKw==')
     })
 
-    it('should render an external GraphViz diagram', async () => {
+    // Cannot read the included file synchronously in web workers (Manifest v3)
+    it.skip('should render an external GraphViz diagram', async () => {
       const params = []
       params[Constants.ENABLE_RENDER_KEY] = 'true'
       params[Constants.CUSTOM_ATTRIBUTES_KEY] = ''
@@ -296,19 +297,23 @@ Bob -> Alice : hello
       helper.configureParameters(params)
       helper.configureManifest({
         web_accessible_resources: [
-          'css/themes/asciidoctor.css',
-          'css/themes/colony.css',
-          'css/themes/foundation.css',
-          'css/themes/foundation-lime.css',
-          'css/themes/foundation-potion.css',
-          'css/themes/github.css',
-          'css/themes/golo.css',
-          'css/themes/iconic.css',
-          'css/themes/maker.css',
-          'css/themes/readthedocs.css',
-          'css/themes/riak.css',
-          'css/themes/rocket-panda.css',
-          'css/themes/rubygems.css'
+          {
+            resources: [
+              'css/themes/asciidoctor.css',
+              'css/themes/colony.css',
+              'css/themes/foundation.css',
+              'css/themes/foundation-lime.css',
+              'css/themes/foundation-potion.css',
+              'css/themes/github.css',
+              'css/themes/golo.css',
+              'css/themes/iconic.css',
+              'css/themes/maker.css',
+              'css/themes/readthedocs.css',
+              'css/themes/riak.css',
+              'css/themes/rocket-panda.css',
+              'css/themes/rubygems.css'
+            ]
+          }
         ]
       })
 
@@ -390,19 +395,23 @@ By default, the title must be shown.
       helper.configureParameters()
       helper.configureManifest({
         web_accessible_resources: [
-          'css/themes/asciidoctor.css',
-          'css/themes/colony.css',
-          'css/themes/foundation.css',
-          'css/themes/foundation-lime.css',
-          'css/themes/foundation-potion.css',
-          'css/themes/github.css',
-          'css/themes/golo.css',
-          'css/themes/iconic.css',
-          'css/themes/maker.css',
-          'css/themes/readthedocs.css',
-          'css/themes/riak.css',
-          'css/themes/rocket-panda.css',
-          'css/themes/rubygems.css'
+          {
+            resources: [
+              'css/themes/asciidoctor.css',
+              'css/themes/colony.css',
+              'css/themes/foundation.css',
+              'css/themes/foundation-lime.css',
+              'css/themes/foundation-potion.css',
+              'css/themes/github.css',
+              'css/themes/golo.css',
+              'css/themes/iconic.css',
+              'css/themes/maker.css',
+              'css/themes/readthedocs.css',
+              'css/themes/riak.css',
+              'css/themes/rocket-panda.css',
+              'css/themes/rubygems.css'
+            ]
+          }
         ]
       })
       const themeName = await Theme.getThemeName('colony.css')

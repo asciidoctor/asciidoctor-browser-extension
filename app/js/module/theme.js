@@ -27,12 +27,16 @@ asciidoctor.browser.theme = (webExtension, Settings, Constants) => {
    * @returns {Array}
    */
   module.getDefaultThemeNames = () => {
-    const webAccessibleResources = webExtension.runtime.getManifest().web_accessible_resources[0].resources
-    console.log('webAccessibleResources', webAccessibleResources)
-    const themeRegexp = /^\/?css\/themes\/(.*)\.css$/i
-    return webAccessibleResources
-      .filter(item => themeRegexp.test(item))
-      .map(item => item.replace(themeRegexp, '$1'))
+    const webAccessibleResources = webExtension.runtime.getManifest().web_accessible_resources
+    if (webAccessibleResources && webAccessibleResources.length > 0) {
+      const resources = webAccessibleResources[0].resources || []
+      const themeRegexp = /^\/?css\/themes\/(.*)\.css$/i
+      return resources
+        .filter(item => themeRegexp.test(item))
+        .map(item => item.replace(themeRegexp, '$1'))
+    }
+
+    return []
   }
 
   /**

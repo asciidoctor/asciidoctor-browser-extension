@@ -9,10 +9,8 @@ const browser = {
       }
     }
   },
-  extension: {
-    getURL: path => path
-  },
   runtime: {
+    getURL: path => path,
     getManifest: () => ({ web_accessible_resources: [] }),
     onMessage: {
       addListener: () => {
