@@ -84,7 +84,7 @@ Follow these steps to make a release.
 . Update the version in `app/manifest.json`
 . Commit the changes
 . Tag the version
-. Connect to the https://chrome.google.com/webstore/developer/dashboard[Chrome Web Store developer dashboard]
+. Connect to the https://chrome.google.com/webstore/devconsole/[Chrome Web Store developer dashboard]
 .. Update the package
 .. Publish the new version
 . Connect to the https://addons.mozilla.org/fr/developers/addons[Firefox Add-ons developer dashboard]
