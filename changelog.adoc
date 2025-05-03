@@ -1,8 +1,10 @@
 = Changelog
 
-== Unreleased
+== 3.0.0 (2025-05-03)
 
-* Docs: reorganize use-cases to separate page, try-it-yourself to a quickstart page, diagrams try-it-yourself to a diagrams quickstart page (#652) (#654)
+* Migrate to manigest v3 -- `include` won't work anymore!
+* Migrate documentation to Antora: https://docs.asciidoctor.org/browser-extension/
+* Reorganize use-cases to separate page, try-it-yourself to a quickstart page, diagrams try-it-yourself to a diagrams quickstart page (#652) (#654)
 
 == 2.7.1 (2023-06-03)
 

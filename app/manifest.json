@@ -1,6 +1,6 @@
 {
   "name": "Asciidoctor.js Live Preview",
-  "version": "2.7.1",
+  "version": "3.0.0",
   "browser_specific_settings": {
     "gecko": {
       "id": "asciidoctor-firefox-addon@asciidoctor.org"
