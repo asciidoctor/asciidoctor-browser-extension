@@ -295,8 +295,6 @@
         "js/asciidocify.js",
         "js/vendor/chartist.min.js",
         "fonts/fontawesome-webfont.woff2",
-        "fonts/fontawesome-webfont.woff",
-        "fonts/fontawesome-webfont.ttf",
         "vendor/MathJax-3.0.1/*"
       ],
       "matches": [
