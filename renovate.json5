@@ -1,24 +1,32 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "dependencyDashboard": true,
-  "separateMajorMinor": false,
-  "extends": [
-    ":preserveSemverRanges",
-    "group:all",
-    "schedule:monthly",
-    ":maintainLockFilesMonthly"
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  dependencyDashboard: true,
+  separateMajorMinor: true,
+  extends: [
+    ':preserveSemverRanges',
   ],
-  "packageRules": [
+  packageRules: [
     {
       // TypeError: source.charCodeAt is not a function in css-tree/cjs/parser/create.cjs:145
-      "matchPackagePatterns": ["csso"],
+      "matchPackagePatterns": [
+        "csso"
+      ],
       "enabled": false
-    }
+    },
+    {
+      matchManagers: [
+        'github-actions',
+      ],
+      groupName: 'GitHub Actions',
+    },
+    {
+      matchManagers: [
+        'npm',
+      ],
+      groupName: 'Node dependencies',
+    },
   ],
-  "lockFileMaintenance": {
-    "extends": [
-      "group:all"
-    ],
-    "commitMessageAction": "Update"
-  }
+  lockFileMaintenance: {
+    enabled: true,
+  },
 }
