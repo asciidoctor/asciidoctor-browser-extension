@@ -294,16 +294,17 @@
         "js/renderer.js",
         "js/asciidocify.js",
         "js/vendor/chartist.min.js",
+        "js/mathjax/config.js",
+        "js/mathjax/typeset.js",
         "fonts/fontawesome-webfont.woff2",
-        "vendor/MathJax-3.0.1/*"
+        "vendor/MathJax-3.2.2/*"
       ],
       "matches": [
         "*://*/*",
         "file://*/*"
       ],
       "extension_ids": [
-        "asciidoctor-firefox-addon@asciidoctor.org",
-        "*"
+        "eaipbfaoeebofnjdmpkkadmhhimnalbh"
       ]
     }
   ],
@@ -334,17 +335,6 @@
     "default_title": "Asciidoctor.js Preview"
   },
   "background": {
-    "service_worker": "js/index.js",
-    "scripts": [
-      "js/vendor/md5.js",
-      "js/vendor/asciidoctor.js",
-      "js/vendor/kroki.js",
-      "js/module/namespace.js",
-      "js/module/settings.js",
-      "js/converter.js",
-      "js/background.js",
-      "js/vendor/asciidoctor-chart-block-macro.js",
-      "js/vendor/asciidoctor-emoji-inline-macro.js"
-    ]
+    "service_worker": "js/index.js"
   }
 }
