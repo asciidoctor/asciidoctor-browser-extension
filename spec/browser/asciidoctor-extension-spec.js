@@ -544,7 +544,7 @@ stem:[\\sin(x^2)]`
 
       const response = await Converter.convert(window.location.toString(), source)
       await Renderer.updateHTML(response)
-      expect(document.getElementById('asciidoctor-mathjax-config').innerText).to.includes('tags: "ams"')
+      expect(document.getElementById('asciidoctor-mathjax-config').dataset.eqnumsValue).to.includes('ams')
     })
 
     it('should disable equation numbering when eqnums is missing', async () => {
@@ -561,7 +561,7 @@ stem:[\\sin(x^2)]`
 
       const response = await Converter.convert(window.location.toString(), source)
       await Renderer.updateHTML(response)
-      expect(document.getElementById('asciidoctor-mathjax-config').innerText).to.includes('tags: "none"')
+      expect(document.getElementById('asciidoctor-mathjax-config').dataset.eqnumsValue).to.includes('none')
     })
 
     it('should configure AMS-style equation numbering when eqnums contains an invalid value', async () => {
@@ -579,7 +579,7 @@ stem:[\\sin(x^2)]`
 
       const response = await Converter.convert(window.location.toString(), source)
       await Renderer.updateHTML(response)
-      expect(document.getElementById('asciidoctor-mathjax-config').innerText).to.includes('tags: "ams"')
+      expect(document.getElementById('asciidoctor-mathjax-config').dataset.eqnumsValue).to.includes('ams')
     })
 
     it('should enable equation numbering when eqnums is all', async () => {
@@ -597,7 +597,7 @@ stem:[\\sin(x^2)]`
 
       const response = await Converter.convert(window.location.toString(), source)
       await Renderer.updateHTML(response)
-      expect(document.getElementById('asciidoctor-mathjax-config').innerText).to.includes('tags: "all"')
+      expect(document.getElementById('asciidoctor-mathjax-config').dataset.eqnumsValue).to.includes('all')
     })
 
     it('should disable equation numbering when eqnums is none', async () => {
@@ -615,7 +615,7 @@ stem:[\\sin(x^2)]`
 
       const response = await Converter.convert(window.location.toString(), source)
       await Renderer.updateHTML(response)
-      expect(document.getElementById('asciidoctor-mathjax-config').innerText).to.includes('tags: "none"')
+      expect(document.getElementById('asciidoctor-mathjax-config').dataset.eqnumsValue).to.includes('none')
     })
   })
 
