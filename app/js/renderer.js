@@ -50,45 +50,24 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
    * Append MathJax script
    */
   const initializeMathJax = (eqnumsValue) => {
-    const content = `function adjustDisplay(math, doc) {
-  let node = math.start.node.parentNode
-  if (node && (node = node.parentNode) && node.classList.contains('stemblock')) {
-    math.root.attributes.set('display', 'block')
-  }
-}
-window.MathJax = {
-  tex: {
-    inlineMath: [['\\\\(', '\\\\)']],
-    displayMath: [['\\\\[', '\\\\]']],
-    processEscapes: false,
-    tags: "${eqnumsValue}"
-  },
-  options: {
-    ignoreHtmlClass: 'nostem|noasciimath',
-    renderActions: {
-      adjustDisplay: [25, (doc) => {for (math of doc.math) {adjustDisplay(math, doc)}}, adjustDisplay]
-    }
-  },
-  asciimath: {
-    delimiters: [['\\\\$', '\\\\$']]
-  },
-  loader: {load: ['input/asciimath', 'output/chtml', 'ui/menu']}
-};`
     Dom.appendOnce(document.head, Dom.createScriptElement({
       id: 'asciidoctor-mathjax-config',
-      innerHTML: content
+      dataset: {
+        eqnumsValue
+      },
+      src: webExtension.runtime.getURL('js/mathjax/config.js')
     }))
     Dom.appendOnce(document.head, Dom.createScriptElement({
       id: 'asciidoctor-mathjax-initialization',
-      src: webExtension.runtime.getURL('vendor/MathJax-3.0.1/tex-chtml-full.js'),
+      src: webExtension.runtime.getURL('vendor/MathJax-3.2.2/tex-chtml-full.js'),
       async: true
     }))
     Dom.removeElement('asciidoctor-mathjax-typesetting')
+    /*
     document.head.appendChild(Dom.createScriptElement({
       id: 'asciidoctor-mathjax-typesetting',
-      innerHTML: 'if (MathJax && typeof MathJax.typesetPromise === \'function\') { MathJax.typesetPromise() }',
-      async: true
-    }))
+      src: webExtension.runtime.getURL('js/mathjax/typeset.js')
+    })) */
   }
 
   /**

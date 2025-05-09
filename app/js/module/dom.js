@@ -100,7 +100,13 @@ asciidoctor.browser.dom = (document) => {
   module.createScriptElement = (attributes) => {
     const scriptElement = document.createElement('script')
     scriptElement.type = 'text/javascript'
-    return Object.assign(scriptElement, attributes)
+    const { dataset, ...attrs } = attributes
+    if (dataset) {
+      for (const [key, value] of Object.entries(dataset)) {
+        scriptElement.dataset[key] = value
+      }
+    }
+    return Object.assign(scriptElement, attrs)
   }
 
   /**
