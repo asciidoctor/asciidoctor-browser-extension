@@ -49,18 +49,71 @@ Builder.prototype.clean = function () {
   bfs.mkdirsSync('dist')
 }
 
+Builder.prototype.generateFirefoxManifest = function () {
+  const manifestPath = ospath.join(__dirname, '..', 'app', 'manifest.json')
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
+  manifest.web_accessible_resources[0].extension_ids = [
+    'asciidoctor-firefox-addon@asciidoctor.org',
+    '*'
+  ]
+  delete manifest.background.service_worker
+  manifest.background.scripts = [
+    'js/vendor/md5.js',
+    'js/vendor/asciidoctor.js',
+    'js/vendor/kroki.js',
+    'js/module/namespace.js',
+    'js/module/settings.js',
+    'js/converter.js',
+    'js/background.js',
+    'js/vendor/asciidoctor-chart-block-macro.js',
+    'js/vendor/asciidoctor-emoji-inline-macro.js'
+  ]
+  fs.writeFileSync(ospath.join(__dirname, '..', 'dist', 'manifest-firefox.json'), JSON.stringify(manifest, null, 2))
+}
+
 Builder.prototype.compress = function () {
   log.task('compress')
   const manifestPath = ospath.join(__dirname, '..', 'app', 'manifest.json')
   const version = require(manifestPath).version
-  const outputPath = `dist/asciidoctor-browser-extension-${version}.zip`
+  // firefox
+  firefoxArchive(version)
+
+  // chrome
+  chromeArchive(version)
+}
+
+function chromeArchive (version) {
+  const archive = createArchive(`dist/asciidoctor-browser-extension-${version}.zip`)
+  archive.file('LICENSE')
+  archive.file('README.adoc')
+  archive.file('changelog.adoc')
+  archive.directory('app/', false)
+  archive.finalize()
+}
+
+function firefoxArchive (version) {
+  const archive = createArchive(`dist/asciidoctor-browser-extension-firefox-${version}.zip`)
+  archive.file('LICENSE')
+  archive.file('README.adoc')
+  archive.file('changelog.adoc')
+  archive.directory('app/css', 'css')
+  archive.directory('app/fonts', 'fonts')
+  archive.directory('app/html', 'html')
+  archive.directory('app/img', 'img')
+  archive.directory('app/js', 'js')
+  archive.directory('app/vendor', 'vendor')
+  archive.file('dist/manifest-firefox.json', {
+    name: 'manifest.json'
+  })
+  archive.finalize()
+}
+
+function createArchive (outputPath) {
   const output = fs.createWriteStream(outputPath)
   const archive = archiver('zip', { zlib: { level: 9 } })
-
   output.on('close', function () {
     log.debug(outputPath + ' ' + archive.pointer() + ' total bytes written')
   })
-
   archive.on('warning', function (err) {
     if (err.code === 'ENOENT') {
       log.warn('archiver warning: ' + err)
@@ -68,18 +121,11 @@ Builder.prototype.compress = function () {
       throw err
     }
   })
-
   archive.on('error', function (err) {
     throw err
   })
-
   archive.pipe(output)
-
-  archive.file('LICENSE')
-  archive.file('README.adoc')
-  archive.file('changelog.adoc')
-  archive.directory('app/', false)
-  archive.finalize()
+  return archive
 }
 
 Builder.prototype.compileSass = function () {
@@ -112,5 +158,6 @@ Builder.prototype.dist = function () {
   this.replaceImagesURL()
   this.removeSourceMapReferences()
   this.compileSass()
+  this.generateFirefoxManifest()
   this.compress()
 }
