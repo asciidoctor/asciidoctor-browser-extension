@@ -26,5 +26,5 @@ window.MathJax = {
   asciimath: {
     delimiters: [['\\$', '\\$']]
   },
-  loader: { load: ['input/asciimath', 'output/chtml', 'ui/menu'] }
+  loader: { load: ['input/asciimath', 'input/tex-full', 'output/chtml'] }
 }
