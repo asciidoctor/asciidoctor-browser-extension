@@ -59,7 +59,7 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
     }))
     Dom.appendOnce(document.head, Dom.createScriptElement({
       id: 'asciidoctor-mathjax-initialization',
-      src: webExtension.runtime.getURL('vendor/MathJax-3.2.2/tex-chtml-full.js'),
+      src: webExtension.runtime.getURL('vendor/MathJax-3.2.2/startup.js'),
       async: true
     }))
     Dom.removeElement('asciidoctor-mathjax-typesetting')
