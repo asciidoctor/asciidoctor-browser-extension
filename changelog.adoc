@@ -2,7 +2,9 @@
 
 == Unreleased
 
-
+* Require Node.js 24 or greater
+* Convert build tasks to ES modules (use `fetch` instead of `https`, top-level `await`, `import.meta.dirname`)
+* Replace ESLint and Standard with Biome for linting and formatting
 
 == 3.0.0 (2025-05-03)
 
