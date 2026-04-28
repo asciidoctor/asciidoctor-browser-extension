@@ -9,15 +9,17 @@ asciidoctor.browser.theme = (webExtension, Settings, Constants) => {
    * @returns {Promise<String>}
    */
   module.getThemeName = (stylesheetAttribute) => {
-    if (typeof stylesheetAttribute !== 'undefined' && stylesheetAttribute !== '') {
+    if (
+      typeof stylesheetAttribute !== 'undefined' &&
+      stylesheetAttribute !== ''
+    ) {
       const themeName = stylesheetAttribute.replace(/\.css$/, '')
-      return hasTheme(themeName)
-        .then((result) => {
-          if (result) {
-            return Promise.resolve(themeName)
-          }
-          return getThemeNameFromSettings()
-        })
+      return hasTheme(themeName).then((result) => {
+        if (result) {
+          return Promise.resolve(themeName)
+        }
+        return getThemeNameFromSettings()
+      })
     }
     return getThemeNameFromSettings()
   }
@@ -27,13 +29,14 @@ asciidoctor.browser.theme = (webExtension, Settings, Constants) => {
    * @returns {Array}
    */
   module.getDefaultThemeNames = () => {
-    const webAccessibleResources = webExtension.runtime.getManifest().web_accessible_resources
+    const webAccessibleResources =
+      webExtension.runtime.getManifest().web_accessible_resources
     if (webAccessibleResources && webAccessibleResources.length > 0) {
       const resources = webAccessibleResources[0].resources || []
       const themeRegexp = /^\/?css\/themes\/(.*)\.css$/i
       return resources
-        .filter(item => themeRegexp.test(item))
-        .map(item => item.replace(themeRegexp, '$1'))
+        .filter((item) => themeRegexp.test(item))
+        .map((item) => item.replace(themeRegexp, '$1'))
     }
 
     return []
@@ -51,8 +54,9 @@ asciidoctor.browser.theme = (webExtension, Settings, Constants) => {
         resolve(true)
         return
       }
-      Settings.getSetting(Constants.CUSTOM_THEME_PREFIX + themeName)
-        .then((customThemeContent) => resolve(!!customThemeContent))
+      Settings.getSetting(Constants.CUSTOM_THEME_PREFIX + themeName).then(
+        (customThemeContent) => resolve(!!customThemeContent),
+      )
     })
   }
 

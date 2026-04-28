@@ -1,6 +1,11 @@
-function adjustDisplay (math, doc) {
+function adjustDisplay(math, _doc) {
   let node = math.start.node.parentNode
-  if (node && (node = node.parentNode) && node.classList.contains('stemblock')) {
+  if (
+    node &&
+    // biome-ignore lint/suspicious/noAssignInExpressions: intentional traversal pattern
+    (node = node.parentNode) &&
+    node.classList.contains('stemblock')
+  ) {
     math.root.attributes.set('display', 'block')
   }
 }
@@ -11,20 +16,24 @@ window.MathJax = {
     inlineMath: [['\\(', '\\)']],
     displayMath: [['\\[', '\\]']],
     processEscapes: false,
-    tags: config.eqnumsValue
+    tags: config.eqnumsValue,
   },
   options: {
     ignoreHtmlClass: 'nostem|noasciimath',
     renderActions: {
-      adjustDisplay: [25, (doc) => {
-        for (const math of doc.math) {
-          adjustDisplay(math, doc)
-        }
-      }, adjustDisplay]
-    }
+      adjustDisplay: [
+        25,
+        (doc) => {
+          for (const math of doc.math) {
+            adjustDisplay(math, doc)
+          }
+        },
+        adjustDisplay,
+      ],
+    },
   },
   asciimath: {
-    delimiters: [['\\$', '\\$']]
+    delimiters: [['\\$', '\\$']],
   },
-  loader: { load: ['input/asciimath', 'input/tex-full', 'output/chtml'] }
+  loader: { load: ['input/asciimath', 'input/tex-full', 'output/chtml'] },
 }

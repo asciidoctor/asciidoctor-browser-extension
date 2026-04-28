@@ -188,7 +188,7 @@ const LANGUAGES = [
   'xml',
   'xquery',
   'yaml',
-  'zephir'
+  'zephir',
 ]
 
 const get = async (url) => {

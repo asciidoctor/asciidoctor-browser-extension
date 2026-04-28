@@ -2,7 +2,7 @@
 const processor = Asciidoctor({ runtime: { platform: 'browser' } })
 const eqnumValidValues = ['none', 'all', 'ams']
 
-asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
+asciidoctor.browser.converter = (webExtension, _Constants, Settings) => {
   const module = {}
 
   module.convert = async (url, source) => {
@@ -39,8 +39,8 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
         isFontIcons: doc.getAttribute('icons') === 'font',
         maxWidth: doc.getAttribute('max-width'),
         eqnumsValue,
-        stylesheet: doc.getAttribute('stylesheet')
-      }
+        stylesheet: doc.getAttribute('stylesheet'),
+      },
     }
   }
 
@@ -56,7 +56,7 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
     }
     const source = await response.text()
     if (await Settings.isExtensionEnabled()) {
-      const md5key = 'md5' + url
+      const md5key = `md5${url}`
       if (!initial) {
         const md5sum = await Settings.getSetting(md5key)
         if (md5sum && md5sum === md5(source)) {
@@ -73,7 +73,7 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
       return result
     }
     return {
-      text: source
+      text: source,
     }
   }
 
@@ -82,8 +82,8 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
       method: 'GET',
       headers: {
         'Cache-Control': 'no-cache, no-store, must-revalidate',
-        Accept: 'text/plain, */*'
-      }
+        Accept: 'text/plain, */*',
+      },
     })
   }
 
@@ -94,7 +94,7 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
    */
   module.isHtmlContentType = (response) => {
     const contentType = response.headers.get('content-type')
-    return contentType && (contentType.indexOf('html') > -1)
+    return contentType && contentType.indexOf('html') > -1
   }
 
   // REMIND: notitle attribute is automatically set when header_footer equals false.
@@ -105,7 +105,8 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
    * @param doc
    * @returns {boolean}
    */
-  const isSourceHighlighterEnabled = (doc) => doc.isAttribute('source-highlighter')
+  const isSourceHighlighterEnabled = (doc) =>
+    doc.isAttribute('source-highlighter')
 
   /**
    * Is the :stem: attribute defined ?
@@ -153,7 +154,8 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
       'env=browser',
       'env-browser',
       'data-uri!',
-      `kroki-server-url=${settings.krokiServerUrl}@`]
+      `kroki-server-url=${settings.krokiServerUrl}@`,
+    ]
     const href = new URL(url).href
     const fileName = href.split('/').pop()
     attributes.push(`docfile=${href}`)
@@ -162,7 +164,8 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
     const fileNameExtensionPair = fileName.split('.')
 
     if (fileNameExtensionPair.length > 1) {
-      let fileExtension = fileNameExtensionPair[fileNameExtensionPair.length - 1]
+      let fileExtension =
+        fileNameExtensionPair[fileNameExtensionPair.length - 1]
       // Remove query parameters
       fileExtension = fileExtension.split('?')[0]
       // Remove fragment identifier
@@ -190,7 +193,9 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
       AsciidoctorKroki.register(registry, {
         vfs: {
           read: (path) => {
-            console.warn(`Cannot read file: ${path}. Manifest V3 relies on service workers and cannot use synchronous XMLHttpRequest.`)
+            console.warn(
+              `Cannot read file: ${path}. Manifest V3 relies on service workers and cannot use synchronous XMLHttpRequest.`,
+            )
             return ''
           },
           exists: (_) => {
@@ -201,15 +206,15 @@ asciidoctor.browser.converter = (webExtension, Constants, Settings) => {
           },
           add: (_) => {
             // no-op
-          }
-        }
+          },
+        },
       })
     }
     return {
       safe: safeMode,
       extension_registry: registry,
       backend: 'html5', // Force backend to html5
-      attributes: attributes.join(' ') // Pass attributes as String
+      attributes: attributes.join(' '), // Pass attributes as String
     }
   }
 

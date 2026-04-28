@@ -1,6 +1,6 @@
 /* global it, describe, afterEach, beforeEach, mocha, chai, mochaOpts, asciidoctor, browser, helper, sinon */
 // bootstrap
-(async () => {
+;(async () => {
   let reporter
   if (typeof mochaOpts === 'function') {
     reporter = await mochaOpts().reporter
@@ -10,7 +10,7 @@
   mocha.setup({
     ui: 'bdd',
     checkLeaks: false,
-    reporter
+    reporter,
   })
 
   const expect = chai.expect
@@ -25,9 +25,23 @@
   const Dom = asciidoctor.browser.dom(document)
   const Settings = asciidoctor.browser.settings(browser, Constants)
   const Theme = asciidoctor.browser.theme(browser, Settings, Constants)
-  const Renderer = asciidoctor.browser.renderer(browser, document, Constants, Settings, Dom, Theme)
+  const Renderer = asciidoctor.browser.renderer(
+    browser,
+    document,
+    Constants,
+    Settings,
+    Dom,
+    Theme,
+  )
   const Converter = asciidoctor.browser.converter(browser, Constants, Settings)
-  const Loader = asciidoctor.browser.loader(browser, document, document.location, window.XMLHttpRequest, Settings, Renderer)
+  const Loader = asciidoctor.browser.loader(
+    browser,
+    document,
+    document.location,
+    window.XMLHttpRequest,
+    Settings,
+    Renderer,
+  )
 
   describe('Custom script', () => {
     afterEach(() => {
@@ -41,19 +55,31 @@
       params[Constants.SAFE_MODE_KEY] = 'safe'
       params[Constants.JS_KEY] = 'bar'
       params[Constants.JS_LOAD_KEY] = 'before'
-      params[Constants.CUSTOM_JS_PREFIX + 'bar'] = 'document.body.appendChild(document.createElement(\'strong\'));'
+      params[`${Constants.CUSTOM_JS_PREFIX}bar`] =
+        "document.body.appendChild(document.createElement('strong'));"
       helper.configureParameters(params)
 
       const contentElement = document.getElementById('content')
       if (contentElement) {
         contentElement.remove()
       }
-      const response = await Converter.convert(window.location.toString(), '= Hello world')
+      const response = await Converter.convert(
+        window.location.toString(),
+        '= Hello world',
+      )
       await Renderer.updateHTML(response)
       // the custom script must be present in <head>
-      expect(Array.from(document.head.children).find(element => element.id === 'asciidoctor-browser-custom-js').innerText).to.equal('document.body.appendChild(document.createElement(\'strong\'));')
+      expect(
+        Array.from(document.head.children).find(
+          (element) => element.id === 'asciidoctor-browser-custom-js',
+        ).innerText,
+      ).to.equal("document.body.appendChild(document.createElement('strong'));")
       // the rendering phase will remove the <b> element created by the custom JavaScript (because the script runs before)
-      expect(Array.from(document.body.children).find(element => element.tagName.toLowerCase() === 'strong')).to.be.undefined()
+      expect(
+        Array.from(document.body.children).find(
+          (element) => element.tagName.toLowerCase() === 'strong',
+        ),
+      ).to.be.undefined()
       // the first element in the body must be the content
       expect(document.body.children[0].id).to.equal('content')
     })
@@ -65,15 +91,27 @@
       params[Constants.SAFE_MODE_KEY] = 'safe'
       params[Constants.JS_KEY] = 'foo'
       params[Constants.JS_LOAD_KEY] = 'after'
-      params[Constants.CUSTOM_JS_PREFIX + 'foo'] = 'document.body.appendChild(document.createElement(\'i\'));'
+      params[`${Constants.CUSTOM_JS_PREFIX}foo`] =
+        "document.body.appendChild(document.createElement('i'));"
       helper.configureParameters(params)
 
-      const response = await Converter.convert(window.location.toString(), '= Hello world')
+      const response = await Converter.convert(
+        window.location.toString(),
+        '= Hello world',
+      )
       await Renderer.updateHTML(response)
 
-      expect(Array.from(document.head.children).find(element => element.id === 'asciidoctor-browser-custom-js').innerText).to.equal('document.body.appendChild(document.createElement(\'i\'));')
+      expect(
+        Array.from(document.head.children).find(
+          (element) => element.id === 'asciidoctor-browser-custom-js',
+        ).innerText,
+      ).to.equal("document.body.appendChild(document.createElement('i'));")
       // the <i> element created by the custom JavaScript must be present (because the script run after the rendering phase)
-      expect(Array.from(document.body.children).filter(element => element.tagName.toLowerCase() === 'i').length).to.equal(1)
+      expect(
+        Array.from(document.body.children).filter(
+          (element) => element.tagName.toLowerCase() === 'i',
+        ).length,
+      ).to.equal(1)
       // the first element in the body must be the content
       expect(document.body.children[0].id).to.equal('content')
     })
@@ -101,9 +139,14 @@
 console.log('Hello world')
 ----`
 
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
-      expect(document.getElementById('code').querySelectorAll('code > span').length).to.equal(2)
+      expect(
+        document.getElementById('code').querySelectorAll('code > span').length,
+      ).to.equal(2)
     })
 
     it('should not append highlight.js if source highlighter is disabled', async () => {
@@ -122,9 +165,14 @@ console.log('Hello world')
 console.log('Hello world')
 ----`
 
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
-      expect(document.getElementById('code').querySelectorAll('code > span').length).to.equal(0)
+      expect(
+        document.getElementById('code').querySelectorAll('code > span').length,
+      ).to.equal(0)
     })
   })
 
@@ -148,12 +196,17 @@ console.log('Hello world')
 Bob -> Alice : hello
 ----
 `
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
       const plantumlDiv = document.body.getElementsByClassName('kroki')
       expect(plantumlDiv.length).to.equal(1)
       const plantumlImg = plantumlDiv[0].getElementsByTagName('img')[0]
-      expect(plantumlImg.getAttribute('src')).to.equal('https://kroki.io/plantuml/svg/eNpzyk9S0LVTcMzJTE5VsFLISM3JyQcAPHcGKw==')
+      expect(plantumlImg.getAttribute('src')).to.equal(
+        'https://kroki.io/plantuml/svg/eNpzyk9S0LVTcMzJTE5VsFLISM3JyQcAPHcGKw==',
+      )
     })
 
     it('should use a custom server URL', async () => {
@@ -171,12 +224,17 @@ Bob -> Alice : hello
 Bob -> Alice : hello
 ----
 `
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
       const plantumlDiv = document.body.getElementsByClassName('kroki')
       expect(plantumlDiv.length).to.equal(1)
       const plantumlImg = plantumlDiv[0].getElementsByTagName('img')[0]
-      expect(plantumlImg.getAttribute('src')).to.equal('http://localhost:1234/plantuml/svg/eNpzyk9S0LVTcMzJTE5VsFLISM3JyQcAPHcGKw==')
+      expect(plantumlImg.getAttribute('src')).to.equal(
+        'http://localhost:1234/plantuml/svg/eNpzyk9S0LVTcMzJTE5VsFLISM3JyQcAPHcGKw==',
+      )
     })
 
     // Cannot read the included file synchronously in web workers (Manifest v3)
@@ -193,13 +251,18 @@ Bob -> Alice : hello
 graphviz::${baseDir}/spec/fixtures/hello.dot[]
 `
 
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
       const plantumlDiv = document.body.getElementsByClassName('kroki')
       expect(plantumlDiv.length).to.equal(1)
       const plantumlImg = plantumlDiv[0].getElementsByTagName('img')[0]
       // Since Windows is using CRLF the deflate + base64 won't be exactly the same :(
-      expect(plantumlImg.getAttribute('src')).to.match(/^https:\/\/kroki\.io\/graphviz\/svg\/eNpLyU/)
+      expect(plantumlImg.getAttribute('src')).to.match(
+        /^https:\/\/kroki\.io\/graphviz\/svg\/eNpLyU/,
+      )
     })
 
     it('should not render a diagram if the extension is disabled', async () => {
@@ -218,7 +281,10 @@ Bob -> Alice : hello
 ----
 `
 
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
       const plantumlDiv = document.body.getElementsByClassName('kroki')
       expect(plantumlDiv.length).to.equal(0)
@@ -237,50 +303,77 @@ Bob -> Alice : hello
     })
 
     it('should set docname correct', async () => {
-      const decodeURI = document.location.href.split('/')
-      const fileName = decodeURI[decodeURI.length - 1].split('.')[0]
-      const response = await Converter.convert(document.location.toString(), '= {docname}')
-      expect(response.html).to.equal('<h1>' + fileName + '</h1>\n')
+      const urlParts = document.location.href.split('/')
+      const fileName = urlParts[urlParts.length - 1].split('.')[0]
+      const response = await Converter.convert(
+        document.location.toString(),
+        '= {docname}',
+      )
+      expect(response.html).to.equal(`<h1>${fileName}</h1>\n`)
     })
 
     it('should set outfilesuffix correct', async () => {
-      const response = await Converter.convert(document.location.toString(), '= {outfilesuffix}')
+      const response = await Converter.convert(
+        document.location.toString(),
+        '= {outfilesuffix}',
+      )
       expect(response.html).to.equal('<h1>.adoc</h1>\n')
     })
 
     it('should resolve inter-document cross reference', async () => {
-      const response = await Converter.convert(document.location.toString(), 'Refer to <<document-b.adoc#section-b,Section B>> for more information.')
-      expect(response.html).to.equal('<div class="paragraph">\n<p>Refer to <a href="document-b.adoc#section-b">Section B</a> for more information.</p>\n</div>')
+      const response = await Converter.convert(
+        document.location.toString(),
+        'Refer to <<document-b.adoc#section-b,Section B>> for more information.',
+      )
+      expect(response.html).to.equal(
+        '<div class="paragraph">\n<p>Refer to <a href="document-b.adoc#section-b">Section B</a> for more information.</p>\n</div>',
+      )
     })
 
     it('should set docfilesuffix correct', async () => {
-      const decodeURI = document.location.href.split('/')
-      const expected = decodeURI[decodeURI.length - 1].split('.')[1]
-      const response = await Converter.convert(document.location.toString(), '= {docfilesuffix}')
+      const urlParts = document.location.href.split('/')
+      const expected = urlParts[urlParts.length - 1].split('.')[1]
+      const response = await Converter.convert(
+        document.location.toString(),
+        '= {docfilesuffix}',
+      )
       expect(response.html).to.equal(`<h1>.${expected}</h1>
 `)
     })
 
     it('should set docfile correct', async () => {
       const expected = document.location.href
-      const response = await Converter.convert(window.location.toString(), '= {docfile}')
-      expect(response.html).to.equal(`<h1><a href="${expected}" class="bare">${expected}</a></h1>
+      const response = await Converter.convert(
+        window.location.toString(),
+        '= {docfile}',
+      )
+      expect(
+        response.html,
+      ).to.equal(`<h1><a href="${expected}" class="bare">${expected}</a></h1>
 `)
     })
   })
 
   describe('Decode entities', () => {
     it('should decode entities', () => {
-      expect(Dom.decodeEntities('Hansel et Gretel')).to.equal('Hansel et Gretel')
+      expect(Dom.decodeEntities('Hansel et Gretel')).to.equal(
+        'Hansel et Gretel',
+      )
       expect(Dom.decodeEntities('Hansel & Gretel')).to.equal('Hansel & Gretel')
-      expect(Dom.decodeEntities('Hansel &amp; Gretel')).to.equal('Hansel & Gretel')
-      expect(Dom.decodeEntities('Hansel&#x20&amp;&#x20Gretel')).to.equal('Hansel & Gretel')
+      expect(Dom.decodeEntities('Hansel &amp; Gretel')).to.equal(
+        'Hansel & Gretel',
+      )
+      expect(Dom.decodeEntities('Hansel&#x20&amp;&#x20Gretel')).to.equal(
+        'Hansel & Gretel',
+      )
     })
   })
 
   describe('Escape characters', () => {
     it('should escape characters', () => {
-      expect(Dom.escape('<script>alert();</script>')).to.equal('&lt;script&gt;alert();&lt;/script&gt;')
+      expect(Dom.escape('<script>alert();</script>')).to.equal(
+        '&lt;script&gt;alert();&lt;/script&gt;',
+      )
     })
   })
 
@@ -311,23 +404,43 @@ Bob -> Alice : hello
               'css/themes/readthedocs.css',
               'css/themes/riak.css',
               'css/themes/rocket-panda.css',
-              'css/themes/rubygems.css'
-            ]
-          }
-        ]
+              'css/themes/rubygems.css',
+            ],
+          },
+        ],
       })
 
-      const response = await Converter.convert(window.location.toString(), '= Hello world')
+      const response = await Converter.convert(
+        window.location.toString(),
+        '= Hello world',
+      )
       await Renderer.updateHTML(response)
       // Chartist must be present
-      expect(document.getElementById('asciidoctor-browser-chartist-style').getAttribute('href')).to.equal('css/chartist.min.css')
-      expect(document.getElementById('asciidoctor-browser-chartist-default-style').innerText).not.to.equal('')
+      expect(
+        document
+          .getElementById('asciidoctor-browser-chartist-style')
+          .getAttribute('href'),
+      ).to.equal('css/chartist.min.css')
+      expect(
+        document.getElementById('asciidoctor-browser-chartist-default-style')
+          .innerText,
+      ).not.to.equal('')
       // Default Asciidoctor stylesheet must be present
-      expect(document.getElementById('asciidoctor-browser-style').getAttribute('href')).to.equal('css/themes/asciidoctor.css')
+      expect(
+        document
+          .getElementById('asciidoctor-browser-style')
+          .getAttribute('href'),
+      ).to.equal('css/themes/asciidoctor.css')
       // Font Awesome must be present
-      expect(document.getElementById('asciidoctor-browser-font-awesome-style').getAttribute('href')).to.equal('css/font-awesome.min.css')
+      expect(
+        document
+          .getElementById('asciidoctor-browser-font-awesome-style')
+          .getAttribute('href'),
+      ).to.equal('css/font-awesome.min.css')
       // Content must be converted
-      expect(document.getElementById('content').innerHTML).to.contain('<h1>Hello world</h1>')
+      expect(document.getElementById('content').innerHTML).to.contain(
+        '<h1>Hello world</h1>',
+      )
     })
 
     it('should hide the document title when noheader attribute is defined', async () => {
@@ -342,7 +455,10 @@ Bob -> Alice : hello
 
 When the noheader attribute is defined, the title must not be shown.
 `
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
       // the document title element <h1> must not be shown
       expect(Array.from(document.getElementsByTagName('h1')).length).to.equal(0)
@@ -359,10 +475,15 @@ When the noheader attribute is defined, the title must not be shown.
 
 By default, the title must be shown.
 `
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
       // the document title element <h1> must be shown
-      expect(Array.from(document.getElementsByTagName('h1'))[0].innerText).to.equal('Hello world')
+      expect(
+        Array.from(document.getElementsByTagName('h1'))[0].innerText,
+      ).to.equal('Hello world')
     })
   })
 
@@ -385,7 +506,7 @@ By default, the title must be shown.
 
     it('should get the custom stylesheet when exists', async () => {
       const params = []
-      params[Constants.CUSTOM_THEME_PREFIX + 'foo'] = 'h1 { color: red; }'
+      params[`${Constants.CUSTOM_THEME_PREFIX}foo`] = 'h1 { color: red; }'
       helper.configureParameters(params)
       const themeName = await Theme.getThemeName('foo')
       expect(themeName).to.equal('foo')
@@ -409,10 +530,10 @@ By default, the title must be shown.
               'css/themes/readthedocs.css',
               'css/themes/riak.css',
               'css/themes/rocket-panda.css',
-              'css/themes/rubygems.css'
-            ]
-          }
-        ]
+              'css/themes/rubygems.css',
+            ],
+          },
+        ],
       })
       const themeName = await Theme.getThemeName('colony.css')
       expect(themeName).to.equal('colony')
@@ -435,7 +556,7 @@ By default, the title must be shown.
       expect(renderingSettings.safeMode).to.equal('server')
     })
 
-    it('should return \'safe\' if the safe mode is undefined', async () => {
+    it("should return 'safe' if the safe mode is undefined", async () => {
       helper.configureParameters()
 
       const renderingSettings = await Settings.getRenderingSettings()
@@ -459,10 +580,10 @@ By default, the title must be shown.
         expect(renderingSettings.customScript).to.be.undefined()
       })
 
-      it('should return \'after\' if the load directive is undefined', async () => {
+      it("should return 'after' if the load directive is undefined", async () => {
         const params = []
         params[Constants.JS_KEY] = 'alert'
-        params[Constants.CUSTOM_JS_PREFIX + 'alert'] = 'alert();'
+        params[`${Constants.CUSTOM_JS_PREFIX}alert`] = 'alert();'
         helper.configureParameters(params)
 
         const renderingSettings = await Settings.getRenderingSettings()
@@ -473,7 +594,7 @@ By default, the title must be shown.
       it('should return the configured custom script', async () => {
         const params = []
         params[Constants.JS_KEY] = 'alert'
-        params[Constants.CUSTOM_JS_PREFIX + 'alert'] = 'alert();'
+        params[`${Constants.CUSTOM_JS_PREFIX}alert`] = 'alert();'
         params[Constants.JS_LOAD_KEY] = 'before'
         helper.configureParameters(params)
 
@@ -523,7 +644,9 @@ By default, the title must be shown.
     })
 
     beforeEach(() => {
-      const mathjaxConfigElement = document.getElementById('asciidoctor-mathjax-config')
+      const mathjaxConfigElement = document.getElementById(
+        'asciidoctor-mathjax-config',
+      )
       if (mathjaxConfigElement) {
         mathjaxConfigElement.parentNode.removeChild(mathjaxConfigElement)
       }
@@ -542,9 +665,15 @@ By default, the title must be shown.
 
 stem:[\\sin(x^2)]`
 
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
-      expect(document.getElementById('asciidoctor-mathjax-config').dataset.eqnumsValue).to.includes('ams')
+      expect(
+        document.getElementById('asciidoctor-mathjax-config').dataset
+          .eqnumsValue,
+      ).to.includes('ams')
     })
 
     it('should disable equation numbering when eqnums is missing', async () => {
@@ -559,9 +688,15 @@ stem:[\\sin(x^2)]`
 
 stem:[\\sin(x^2)]`
 
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
-      expect(document.getElementById('asciidoctor-mathjax-config').dataset.eqnumsValue).to.includes('none')
+      expect(
+        document.getElementById('asciidoctor-mathjax-config').dataset
+          .eqnumsValue,
+      ).to.includes('none')
     })
 
     it('should configure AMS-style equation numbering when eqnums contains an invalid value', async () => {
@@ -577,9 +712,15 @@ stem:[\\sin(x^2)]`
 
 stem:[\\sin(x^2)]`
 
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
-      expect(document.getElementById('asciidoctor-mathjax-config').dataset.eqnumsValue).to.includes('ams')
+      expect(
+        document.getElementById('asciidoctor-mathjax-config').dataset
+          .eqnumsValue,
+      ).to.includes('ams')
     })
 
     it('should enable equation numbering when eqnums is all', async () => {
@@ -595,9 +736,15 @@ stem:[\\sin(x^2)]`
 
 stem:[\\sin(x^2)]`
 
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
-      expect(document.getElementById('asciidoctor-mathjax-config').dataset.eqnumsValue).to.includes('all')
+      expect(
+        document.getElementById('asciidoctor-mathjax-config').dataset
+          .eqnumsValue,
+      ).to.includes('all')
     })
 
     it('should disable equation numbering when eqnums is none', async () => {
@@ -613,17 +760,23 @@ stem:[\\sin(x^2)]`
 
 stem:[\\sin(x^2)]`
 
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
-      expect(document.getElementById('asciidoctor-mathjax-config').dataset.eqnumsValue).to.includes('none')
+      expect(
+        document.getElementById('asciidoctor-mathjax-config').dataset
+          .eqnumsValue,
+      ).to.includes('none')
     })
   })
 
-  mocha.run(function (failures) {
+  mocha.run((failures) => {
     if (failures > 0) {
       console.error('%d failures', failures)
     }
   })
-})().catch(err => {
-  console.error('Unable to start the browser tests suite: ' + err)
+})().catch((err) => {
+  console.error(`Unable to start the browser tests suite: ${err}`)
 })

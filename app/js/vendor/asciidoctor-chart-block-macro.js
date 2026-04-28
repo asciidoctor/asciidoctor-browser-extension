@@ -8,18 +8,20 @@ asciidoctor.browser.extensions.Chart.process = function (data, labels, attrs) {
   return `${div}`
 }
 
-asciidoctor.browser.extensions.Chart.getHeight = function (attrs) {
+asciidoctor.browser.extensions.Chart.getHeight = (attrs) => {
   const height = attrs.height
   return typeof height === 'string' ? height : '400'
 }
 
-asciidoctor.browser.extensions.Chart.getWidth = function (attrs) {
+asciidoctor.browser.extensions.Chart.getWidth = (attrs) => {
   const width = attrs.width
   return typeof width === 'string' ? width : '600'
 }
 
 asciidoctor.browser.extensions.Chart.getDiv = function (data, labels, attrs) {
-  const series = data.map((value, index) => `data-chart-series-${index}="${value.join(',')}"`)
+  const series = data.map(
+    (value, index) => `data-chart-series-${index}="${value.join(',')}"`,
+  )
   const title = attrs.title ? `<div class="title">${attrs.title}</div>\n` : ''
   return `<div class="openblock">${title}<div class="ct-chart"
                data-chart-height="${this.getHeight(attrs)}"
@@ -31,7 +33,7 @@ asciidoctor.browser.extensions.Chart.getDiv = function (data, labels, attrs) {
                data-chart-height="${this.getHeight(attrs)}"></div></div>`
 }
 
-asciidoctor.browser.extensions.Chart.getType = function (attrs) {
+asciidoctor.browser.extensions.Chart.getType = (attrs) => {
   const type = attrs.type
   if (type === 'bar') {
     return 'Bar'
@@ -46,43 +48,58 @@ asciidoctor.browser.extensions.Chart.getType = function (attrs) {
 // processor is defined in renderer.js
 processor.Extensions.register(function () {
   this.blockMacro(function () {
-    const self = this
+    this.named('chart')
+    this.positionalAttributes(['type', 'width', 'height'])
 
-    self.named('chart')
-    self.positionalAttributes(['type', 'width', 'height'])
-
-    self.process(function (parent, target, attrs) {
+    this.process((parent, target, attrs) => {
       const filePath = parent.normalizeAssetPath(target, 'target')
       try {
-        const fileContent = parent.readAsset(filePath, { warn_on_failure: true, normalize: true })
+        const fileContent = parent.readAsset(filePath, {
+          warn_on_failure: true,
+          normalize: true,
+        })
         const lines = fileContent.split('\n')
         const labels = lines[0].split(',')
         lines.shift()
-        const data = lines.map(line => line.split(','))
-        const html = asciidoctor.browser.extensions.Chart.process(data, labels, attrs)
-        return self.createBlock(parent, 'pass', html, attrs, {})
-      } catch (e) {
-        console.warn(`Cannot read file: ${filePath}. Manifest V3 relies on service workers and cannot use synchronous XMLHttpRequest.`)
-        return self.createBlock(parent, 'pass', `Unsupported directive - chart::${target}[]`, attrs, {})
+        const data = lines.map((line) => line.split(','))
+        const html = asciidoctor.browser.extensions.Chart.process(
+          data,
+          labels,
+          attrs,
+        )
+        return this.createBlock(parent, 'pass', html, attrs, {})
+      } catch (_e) {
+        console.warn(
+          `Cannot read file: ${filePath}. Manifest V3 relies on service workers and cannot use synchronous XMLHttpRequest.`,
+        )
+        return this.createBlock(
+          parent,
+          'pass',
+          `Unsupported directive - chart::${target}[]`,
+          attrs,
+          {},
+        )
       }
     })
   })
 
   this.block(function () {
-    const self = this
+    this.named('chart')
+    this.positionalAttributes(['size', 'width', 'height'])
+    this.$content_model('raw')
+    this.onContext('literal')
 
-    self.named('chart')
-    self.positionalAttributes(['size', 'width', 'height'])
-    self.$content_model('raw')
-    self.onContext('literal')
-
-    self.process(function (parent, reader, attrs) {
+    this.process((parent, reader, attrs) => {
       const lines = reader.getLines()
       const labels = lines[0].split(',')
       lines.shift()
-      const data = lines.map(line => line.split(','))
-      const html = asciidoctor.browser.extensions.Chart.process(data, labels, attrs)
-      return self.createBlock(parent, 'pass', html, attrs, {})
+      const data = lines.map((line) => line.split(','))
+      const html = asciidoctor.browser.extensions.Chart.process(
+        data,
+        labels,
+        attrs,
+      )
+      return this.createBlock(parent, 'pass', html, attrs, {})
     })
   })
 })

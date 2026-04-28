@@ -1,6 +1,5 @@
 /* global chrome, browser */
-// eslint-disable-next-line no-unused-vars
-const webExtension = typeof browser === 'undefined' ? chrome : browser
+const _webExtension = typeof browser === 'undefined' ? chrome : browser
 
 const asciidoctor = {}
 asciidoctor.browser = {}
@@ -21,7 +20,7 @@ asciidoctor.browser.constants = () => {
     JS_KEY: 'JS',
     JS_LOAD_KEY: 'JS_LOAD',
     REMOTE_POLL_FREQUENCY_KEY: 'REMOTE_POLL_FREQUENCY',
-    LOCAL_POLL_FREQUENCY_KEY: 'LOCAL_POLL_FREQUENCY'
+    LOCAL_POLL_FREQUENCY_KEY: 'LOCAL_POLL_FREQUENCY',
   }
   return module
 }

@@ -1,4 +1,3 @@
-/* eslint-env node, es6 */
 const path = require('node:path')
 const puppeteer = require('puppeteer')
 
@@ -16,14 +15,14 @@ const log = async (msg) => {
   }
   log.apply(this, args)
   return args
-};
+}
 
-(async function () {
+;(async () => {
   try {
     const browser = await puppeteer.launch({
       headless: 'new',
       timeout: 10000,
-      args: ['--allow-file-access-from-files', '--no-sandbox']
+      args: ['--allow-file-access-from-files', '--no-sandbox'],
     })
     const page = await browser.newPage()
     await page.exposeFunction('mochaOpts', () => ({ reporter: 'spec' }))
@@ -31,13 +30,17 @@ const log = async (msg) => {
       const args = await log(msg)
       if (args[0] && typeof args[0] === 'string') {
         if (args[0] === '%d failures') {
-          process.exit(parseInt(args[1]))
-        } else if (args[0].startsWith('Unable to start the browser tests suite:')) {
+          process.exit(parseInt(args[1], 10))
+        } else if (
+          args[0].startsWith('Unable to start the browser tests suite:')
+        ) {
           process.exit(1)
         }
       }
     })
-    await page.goto('file://' + path.join(__dirname, 'index.html'), { waitUntil: 'networkidle2' })
+    await page.goto(`file://${path.join(__dirname, 'index.html')}`, {
+      waitUntil: 'networkidle2',
+    })
     await browser.close()
   } catch (err) {
     console.error('Unable to run tests using Puppeteer', err)

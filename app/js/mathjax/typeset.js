@@ -1,1 +1,3 @@
-if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') { window.MathJax.typesetPromise() }
+if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+  window.MathJax.typesetPromise()
+}
