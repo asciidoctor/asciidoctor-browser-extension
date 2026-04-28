@@ -1,6 +1,6 @@
-import { test, expect } from '@playwright/test'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { expect, test } from '@playwright/test'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const testPageURL = `file://${path.join(__dirname, 'test-page.html')}`
@@ -18,25 +18,38 @@ test.describe('Custom script', () => {
       params[Constants.SAFE_MODE_KEY] = 'safe'
       params[Constants.JS_KEY] = 'bar'
       params[Constants.JS_LOAD_KEY] = 'before'
-      params[`${Constants.CUSTOM_JS_PREFIX}bar`] = "document.body.appendChild(document.createElement('strong'));"
+      params[`${Constants.CUSTOM_JS_PREFIX}bar`] =
+        "document.body.appendChild(document.createElement('strong'));"
       helper.configureParameters(params)
 
       document.getElementById('content')?.remove()
-      const response = await Converter.convert(window.location.toString(), '= Hello world')
+      const response = await Converter.convert(
+        window.location.toString(),
+        '= Hello world',
+      )
       await Renderer.updateHTML(response)
     })
 
-    const customJsText = await page.evaluate(() =>
-      Array.from(document.head.children).find((el) => el.id === 'asciidoctor-browser-custom-js')?.innerText,
+    const customJsText = await page.evaluate(
+      () =>
+        Array.from(document.head.children).find(
+          (el) => el.id === 'asciidoctor-browser-custom-js',
+        )?.innerText,
     )
-    expect(customJsText).toBe("document.body.appendChild(document.createElement('strong'));")
+    expect(customJsText).toBe(
+      "document.body.appendChild(document.createElement('strong'));",
+    )
 
     const strongElement = await page.evaluate(() =>
-      Array.from(document.body.children).find((el) => el.tagName.toLowerCase() === 'strong'),
+      Array.from(document.body.children).find(
+        (el) => el.tagName.toLowerCase() === 'strong',
+      ),
     )
     expect(strongElement).toBeUndefined()
 
-    const firstChildId = await page.evaluate(() => document.body.children[0]?.id)
+    const firstChildId = await page.evaluate(
+      () => document.body.children[0]?.id,
+    )
     expect(firstChildId).toBe('content')
   })
 
@@ -48,27 +61,40 @@ test.describe('Custom script', () => {
       params[Constants.SAFE_MODE_KEY] = 'safe'
       params[Constants.JS_KEY] = 'foo'
       params[Constants.JS_LOAD_KEY] = 'after'
-      params[`${Constants.CUSTOM_JS_PREFIX}foo`] = "document.body.appendChild(document.createElement('i'));"
+      params[`${Constants.CUSTOM_JS_PREFIX}foo`] =
+        "document.body.appendChild(document.createElement('i'));"
       helper.configureParameters(params)
 
-      const response = await Converter.convert(window.location.toString(), '= Hello world')
+      const response = await Converter.convert(
+        window.location.toString(),
+        '= Hello world',
+      )
       await Renderer.updateHTML(response)
     })
 
-    const customJsText = await page.evaluate(() =>
-      Array.from(document.head.children).find((el) => el.id === 'asciidoctor-browser-custom-js')?.innerText,
+    const customJsText = await page.evaluate(
+      () =>
+        Array.from(document.head.children).find(
+          (el) => el.id === 'asciidoctor-browser-custom-js',
+        )?.innerText,
     )
-    expect(customJsText).toBe("document.body.appendChild(document.createElement('i'));")
+    expect(customJsText).toBe(
+      "document.body.appendChild(document.createElement('i'));",
+    )
 
     await expect(page.locator('body i')).toHaveCount(1)
 
-    const firstChildId = await page.evaluate(() => document.body.children[0]?.id)
+    const firstChildId = await page.evaluate(
+      () => document.body.children[0]?.id,
+    )
     expect(firstChildId).toBe('content')
   })
 })
 
 test.describe('Highlight.js', () => {
-  test('should append highlight.js if source highlighter is enabled', async ({ page }) => {
+  test('should append highlight.js if source highlighter is enabled', async ({
+    page,
+  }) => {
     await page.evaluate(async () => {
       const params = []
       params[Constants.ENABLE_RENDER_KEY] = 'true'
@@ -85,14 +111,19 @@ test.describe('Highlight.js', () => {
 ----
 console.log('Hello world')
 ----`
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
     })
 
     await expect(page.locator('#code code span')).toHaveCount(2)
   })
 
-  test('should not append highlight.js if source highlighter is disabled', async ({ page }) => {
+  test('should not append highlight.js if source highlighter is disabled', async ({
+    page,
+  }) => {
     await page.evaluate(async () => {
       const params = []
       params[Constants.ENABLE_RENDER_KEY] = 'true'
@@ -108,7 +139,10 @@ console.log('Hello world')
 ----
 console.log('Hello world')
 ----`
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
     })
 
@@ -133,7 +167,10 @@ test.describe('Kroki', () => {
 Bob -> Alice : hello
 ----
 `
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
     })
 
@@ -160,7 +197,10 @@ Bob -> Alice : hello
 Bob -> Alice : hello
 ----
 `
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
     })
 
@@ -170,7 +210,9 @@ Bob -> Alice : hello
     )
   })
 
-  test('should not render a diagram if the extension is disabled', async ({ page }) => {
+  test('should not render a diagram if the extension is disabled', async ({
+    page,
+  }) => {
     await page.evaluate(async () => {
       const params = []
       params[Constants.ENABLE_RENDER_KEY] = 'true'
@@ -186,7 +228,10 @@ Bob -> Alice : hello
 Bob -> Alice : hello
 ----
 `
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
     })
 
@@ -207,7 +252,10 @@ test.describe('Document attributes', () => {
     const { html, fileName } = await page.evaluate(async () => {
       const urlParts = document.location.href.split('/')
       const fileName = urlParts[urlParts.length - 1].split('.')[0]
-      const response = await Converter.convert(document.location.toString(), '= {docname}')
+      const response = await Converter.convert(
+        document.location.toString(),
+        '= {docname}',
+      )
       return { html: response.html, fileName }
     })
     expect(html).toBe(`<h1>${fileName}</h1>\n`)
@@ -215,7 +263,10 @@ test.describe('Document attributes', () => {
 
   test('should set outfilesuffix correct', async ({ page }) => {
     const html = await page.evaluate(async () => {
-      const response = await Converter.convert(document.location.toString(), '= {outfilesuffix}')
+      const response = await Converter.convert(
+        document.location.toString(),
+        '= {outfilesuffix}',
+      )
       return response.html
     })
     expect(html).toBe('<h1>.adoc</h1>\n')
@@ -238,7 +289,10 @@ test.describe('Document attributes', () => {
     const { html, expected } = await page.evaluate(async () => {
       const urlParts = document.location.href.split('/')
       const expected = urlParts[urlParts.length - 1].split('.')[1]
-      const response = await Converter.convert(document.location.toString(), '= {docfilesuffix}')
+      const response = await Converter.convert(
+        document.location.toString(),
+        '= {docfilesuffix}',
+      )
       return { html: response.html, expected }
     })
     expect(html).toBe(`<h1>.${expected}</h1>\n`)
@@ -247,10 +301,15 @@ test.describe('Document attributes', () => {
   test('should set docfile correct', async ({ page }) => {
     const { html, expected } = await page.evaluate(async () => {
       const expected = document.location.href
-      const response = await Converter.convert(window.location.toString(), '= {docfile}')
+      const response = await Converter.convert(
+        window.location.toString(),
+        '= {docfile}',
+      )
       return { html: response.html, expected }
     })
-    expect(html).toBe(`<h1><a href="${expected}" class="bare">${expected}</a></h1>\n`)
+    expect(html).toBe(
+      `<h1><a href="${expected}" class="bare">${expected}</a></h1>\n`,
+    )
   })
 })
 
@@ -271,13 +330,17 @@ test.describe('Decode entities', () => {
 
 test.describe('Escape characters', () => {
   test('should escape characters', async ({ page }) => {
-    const result = await page.evaluate(() => Dom.escape('<script>alert();</script>'))
+    const result = await page.evaluate(() =>
+      Dom.escape('<script>alert();</script>'),
+    )
     expect(result).toBe('&lt;script&gt;alert();&lt;/script&gt;')
   })
 })
 
 test.describe('Update the HTML document', () => {
-  test('should update the HTML document with the AsciiDoc source', async ({ page }) => {
+  test('should update the HTML document with the AsciiDoc source', async ({
+    page,
+  }) => {
     await page.evaluate(async () => {
       const params = []
       params[Constants.ENABLE_RENDER_KEY] = 'true'
@@ -306,18 +369,32 @@ test.describe('Update the HTML document', () => {
         ],
       })
 
-      const response = await Converter.convert(window.location.toString(), '= Hello world')
+      const response = await Converter.convert(
+        window.location.toString(),
+        '= Hello world',
+      )
       await Renderer.updateHTML(response)
     })
 
-    await expect(page.locator('#asciidoctor-browser-chartist-style')).toHaveAttribute('href', 'css/chartist.min.css')
-    await expect(page.locator('#asciidoctor-browser-chartist-default-style')).not.toBeEmpty()
-    await expect(page.locator('#asciidoctor-browser-style')).toHaveAttribute('href', 'css/themes/asciidoctor.css')
-    await expect(page.locator('#asciidoctor-browser-font-awesome-style')).toHaveAttribute('href', 'css/font-awesome.min.css')
+    await expect(
+      page.locator('#asciidoctor-browser-chartist-style'),
+    ).toHaveAttribute('href', 'css/chartist.min.css')
+    await expect(
+      page.locator('#asciidoctor-browser-chartist-default-style'),
+    ).not.toBeEmpty()
+    await expect(page.locator('#asciidoctor-browser-style')).toHaveAttribute(
+      'href',
+      'css/themes/asciidoctor.css',
+    )
+    await expect(
+      page.locator('#asciidoctor-browser-font-awesome-style'),
+    ).toHaveAttribute('href', 'css/font-awesome.min.css')
     await expect(page.locator('#content')).toContainText('Hello world')
   })
 
-  test('should hide the document title when noheader attribute is defined', async ({ page }) => {
+  test('should hide the document title when noheader attribute is defined', async ({
+    page,
+  }) => {
     await page.evaluate(async () => {
       const params = []
       params[Constants.ENABLE_RENDER_KEY] = 'true'
@@ -330,7 +407,10 @@ test.describe('Update the HTML document', () => {
 
 When the noheader attribute is defined, the title must not be shown.
 `
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
     })
 
@@ -349,7 +429,10 @@ When the noheader attribute is defined, the title must not be shown.
 
 By default, the title must be shown.
 `
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
     })
 
@@ -366,7 +449,9 @@ test.describe('Theme module', () => {
     expect(themeName).toBe('asciidoctor')
   })
 
-  test('should get the default theme name when the custom stylesheet does not exist', async ({ page }) => {
+  test('should get the default theme name when the custom stylesheet does not exist', async ({
+    page,
+  }) => {
     const themeName = await page.evaluate(async () => {
       helper.configureParameters()
       return Theme.getThemeName('foo')
@@ -428,7 +513,9 @@ test.describe('Retrieve the rendering settings', () => {
     expect(settings.safeMode).toBe('server')
   })
 
-  test("should return 'safe' if the safe mode is undefined", async ({ page }) => {
+  test("should return 'safe' if the safe mode is undefined", async ({
+    page,
+  }) => {
     const safeMode = await page.evaluate(async () => {
       helper.configureParameters()
       const s = await Settings.getRenderingSettings()
@@ -438,7 +525,9 @@ test.describe('Retrieve the rendering settings', () => {
   })
 
   test.describe('Retrieve the custom script', () => {
-    test('should return undefined if the name is undefined', async ({ page }) => {
+    test('should return undefined if the name is undefined', async ({
+      page,
+    }) => {
       const customScript = await page.evaluate(async () => {
         helper.configureParameters()
         const s = await Settings.getRenderingSettings()
@@ -447,7 +536,9 @@ test.describe('Retrieve the rendering settings', () => {
       expect(customScript).toBeUndefined()
     })
 
-    test('should return undefined if the name is defined but the content is undefined', async ({ page }) => {
+    test('should return undefined if the name is defined but the content is undefined', async ({
+      page,
+    }) => {
       const customScript = await page.evaluate(async () => {
         const params = []
         params[Constants.JS_KEY] = 'alert'
@@ -458,14 +549,19 @@ test.describe('Retrieve the rendering settings', () => {
       expect(customScript).toBeUndefined()
     })
 
-    test("should return 'after' if the load directive is undefined", async ({ page }) => {
+    test("should return 'after' if the load directive is undefined", async ({
+      page,
+    }) => {
       const result = await page.evaluate(async () => {
         const params = []
         params[Constants.JS_KEY] = 'alert'
         params[`${Constants.CUSTOM_JS_PREFIX}alert`] = 'alert();'
         helper.configureParameters(params)
         const s = await Settings.getRenderingSettings()
-        return { content: s.customScript.content, loadDirective: s.customScript.loadDirective }
+        return {
+          content: s.customScript.content,
+          loadDirective: s.customScript.loadDirective,
+        }
       })
       expect(result.content).toBe('alert();')
       expect(result.loadDirective).toBe('after')
@@ -479,7 +575,10 @@ test.describe('Retrieve the rendering settings', () => {
         params[Constants.JS_LOAD_KEY] = 'before'
         helper.configureParameters(params)
         const s = await Settings.getRenderingSettings()
-        return { content: s.customScript.content, loadDirective: s.customScript.loadDirective }
+        return {
+          content: s.customScript.content,
+          loadDirective: s.customScript.loadDirective,
+        }
       })
       expect(result.content).toBe('alert();')
       expect(result.loadDirective).toBe('before')
@@ -488,7 +587,9 @@ test.describe('Retrieve the rendering settings', () => {
 })
 
 test.describe('Extension initialization', () => {
-  test('should fetch the content from the background script using the sendMessage API', async ({ page }) => {
+  test('should fetch the content from the background script using the sendMessage API', async ({
+    page,
+  }) => {
     const result = await page.evaluate(async () => {
       const params = []
       params[Constants.CUSTOM_ATTRIBUTES_KEY] = ''
@@ -509,7 +610,9 @@ test.describe('Extension initialization', () => {
     expect(result.initial).toBe(true)
   })
 
-  test('should not fetch the content from the background script if the extension is disabled', async ({ page }) => {
+  test('should not fetch the content from the background script if the extension is disabled', async ({
+    page,
+  }) => {
     const notCalled = await page.evaluate(async () => {
       const params = []
       params[Constants.ENABLE_RENDER_KEY] = false
@@ -530,7 +633,9 @@ test.describe('STEM', () => {
     })
   })
 
-  test('should configure AMS-style equation numbering when eqnums is empty', async ({ page }) => {
+  test('should configure AMS-style equation numbering when eqnums is empty', async ({
+    page,
+  }) => {
     await page.evaluate(async () => {
       const params = []
       params[Constants.ENABLE_RENDER_KEY] = 'true'
@@ -543,15 +648,24 @@ test.describe('STEM', () => {
 :eqnums:
 
 stem:[\\sin(x^2)]`
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
     })
 
-    const eqnumsValue = await page.evaluate(() => document.getElementById('asciidoctor-mathjax-config')?.dataset.eqnumsValue)
+    const eqnumsValue = await page.evaluate(
+      () =>
+        document.getElementById('asciidoctor-mathjax-config')?.dataset
+          .eqnumsValue,
+    )
     expect(eqnumsValue).toContain('ams')
   })
 
-  test('should disable equation numbering when eqnums is missing', async ({ page }) => {
+  test('should disable equation numbering when eqnums is missing', async ({
+    page,
+  }) => {
     await page.evaluate(async () => {
       const params = []
       params[Constants.ENABLE_RENDER_KEY] = 'true'
@@ -563,15 +677,24 @@ stem:[\\sin(x^2)]`
 :stem: latexmath
 
 stem:[\\sin(x^2)]`
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
     })
 
-    const eqnumsValue = await page.evaluate(() => document.getElementById('asciidoctor-mathjax-config')?.dataset.eqnumsValue)
+    const eqnumsValue = await page.evaluate(
+      () =>
+        document.getElementById('asciidoctor-mathjax-config')?.dataset
+          .eqnumsValue,
+    )
     expect(eqnumsValue).toContain('none')
   })
 
-  test('should configure AMS-style equation numbering when eqnums contains an invalid value', async ({ page }) => {
+  test('should configure AMS-style equation numbering when eqnums contains an invalid value', async ({
+    page,
+  }) => {
     await page.evaluate(async () => {
       const params = []
       params[Constants.ENABLE_RENDER_KEY] = 'true'
@@ -584,15 +707,24 @@ stem:[\\sin(x^2)]`
 :eqnums: invalid
 
 stem:[\\sin(x^2)]`
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
     })
 
-    const eqnumsValue = await page.evaluate(() => document.getElementById('asciidoctor-mathjax-config')?.dataset.eqnumsValue)
+    const eqnumsValue = await page.evaluate(
+      () =>
+        document.getElementById('asciidoctor-mathjax-config')?.dataset
+          .eqnumsValue,
+    )
     expect(eqnumsValue).toContain('ams')
   })
 
-  test('should enable equation numbering when eqnums is all', async ({ page }) => {
+  test('should enable equation numbering when eqnums is all', async ({
+    page,
+  }) => {
     await page.evaluate(async () => {
       const params = []
       params[Constants.ENABLE_RENDER_KEY] = 'true'
@@ -605,15 +737,24 @@ stem:[\\sin(x^2)]`
 :eqnums: all
 
 stem:[\\sin(x^2)]`
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
     })
 
-    const eqnumsValue = await page.evaluate(() => document.getElementById('asciidoctor-mathjax-config')?.dataset.eqnumsValue)
+    const eqnumsValue = await page.evaluate(
+      () =>
+        document.getElementById('asciidoctor-mathjax-config')?.dataset
+          .eqnumsValue,
+    )
     expect(eqnumsValue).toContain('all')
   })
 
-  test('should disable equation numbering when eqnums is none', async ({ page }) => {
+  test('should disable equation numbering when eqnums is none', async ({
+    page,
+  }) => {
     await page.evaluate(async () => {
       const params = []
       params[Constants.ENABLE_RENDER_KEY] = 'true'
@@ -626,11 +767,18 @@ stem:[\\sin(x^2)]`
 :eqnums: none
 
 stem:[\\sin(x^2)]`
-      const response = await Converter.convert(window.location.toString(), source)
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
       await Renderer.updateHTML(response)
     })
 
-    const eqnumsValue = await page.evaluate(() => document.getElementById('asciidoctor-mathjax-config')?.dataset.eqnumsValue)
+    const eqnumsValue = await page.evaluate(
+      () =>
+        document.getElementById('asciidoctor-mathjax-config')?.dataset
+          .eqnumsValue,
+    )
     expect(eqnumsValue).toContain('none')
   })
 })
