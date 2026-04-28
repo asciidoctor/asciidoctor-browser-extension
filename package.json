@@ -1,12 +1,13 @@
 {
   "name": "asciidoctor-browser-extension",
+  "type": "module",
   "description": "Render AsciiDoc (.ad, .adoc, .asc, .asciidoc) as HTML inside your browser!",
   "version": "3.0.1",
   "engines": {
     "node": ">=24"
   },
   "scripts": {
-    "test": "node spec/browser/run.js",
+    "test": "node spec/browser/run.cjs",
     "build:highlightjs": "node tasks/update-highlight-languages.js",
     "build": "npm run lint:code && node tasks/build.js",
     "lint:code": "standard app/js/*.js app/js/module/**.js app/js/vendor/asciidoctor-*.js tasks/**.js spec/**/**.js",
