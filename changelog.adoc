@@ -5,6 +5,8 @@
 * Require Node.js 24 or greater
 * Convert build tasks to ES modules (use `fetch` instead of `https`, top-level `await`, `import.meta.dirname`)
 * Replace ESLint and Standard with Biome for linting and formatting
+* Replace Puppeteer and Mocha/Chai with Playwright for browser tests
+* Rename `lint:firefox` npm script to `validate:firefox`
 
 == 3.0.0 (2025-05-03)
 
