@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Asciidoctor.js tests</title>
   <meta charset="utf-8"/>
-  <link href="../../node_modules/mocha/mocha.css" rel="stylesheet"/>
+  <title>Asciidoctor browser extension test page</title>
 </head>
 <body>
-<div id="mocha"></div>
 <script src="../../node_modules/sinon/pkg/sinon.js"></script>
 <script src="./webextension-api.js"></script>
 <script src="./helper.js"></script>
@@ -24,12 +22,14 @@
 <script src="../../app/js/converter.js"></script>
 <script src="../../app/js/vendor/asciidoctor-chart-block-macro.js"></script>
 <script src="../../app/js/vendor/asciidoctor-emoji-inline-macro.js"></script>
-
-<script src="../../node_modules/mocha/mocha.js"></script>
-<script src="../../node_modules/chai/chai.js"></script>
-<script src="../../node_modules/dirty-chai/lib/dirty-chai.js"></script>
-
-<script src="asciidoctor-extension-spec.js"></script>
+<script>
+  window.Constants = asciidoctor.browser.constants()
+  window.Dom = asciidoctor.browser.dom(document)
+  window.Settings = asciidoctor.browser.settings(browser, Constants)
+  window.Theme = asciidoctor.browser.theme(browser, Settings, Constants)
+  window.Renderer = asciidoctor.browser.renderer(browser, document, Constants, Settings, Dom, Theme)
+  window.Converter = asciidoctor.browser.converter(browser, Constants, Settings)
+  window.Loader = asciidoctor.browser.loader(browser, document, document.location, window.XMLHttpRequest, Settings, Renderer)
+</script>
 </body>
 </html>
-

@@ -1,5 +1,5 @@
 // Define the 'browser' object available in WebExtension environment.
-const _browser = {
+window.browser = {
   storage: {
     local: {
       get: () => {},

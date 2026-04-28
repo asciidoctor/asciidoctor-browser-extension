@@ -48,7 +48,7 @@ function reset() {
   }
 }
 
-const _helper = {
+window.helper = {
   configureParameters,
   reset,
   configureManifest,
