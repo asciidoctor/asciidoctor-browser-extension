@@ -73,7 +73,8 @@ export async function getKrokiServerUrl() {
  * @returns {Promise<boolean>}
  */
 export async function isExtensionEnabled() {
-  return getSetting(Constants.ENABLE_RENDER_KEY)
+  const value = await getSetting(Constants.ENABLE_RENDER_KEY)
+  return value !== false
 }
 
 /**
