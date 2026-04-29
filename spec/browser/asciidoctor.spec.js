@@ -401,19 +401,10 @@ test.describe('Update the HTML document', () => {
       await Renderer.updateHTML(response)
     })
 
-    await expect(
-      page.locator('#asciidoctor-browser-chartist-style'),
-    ).toHaveAttribute('href', 'css/chartist.min.css')
-    await expect(
-      page.locator('#asciidoctor-browser-chartist-default-style'),
-    ).not.toBeEmpty()
-    await expect(page.locator('#asciidoctor-browser-style')).toHaveAttribute(
-      'href',
-      'css/themes/asciidoctor.css',
-    )
-    await expect(
-      page.locator('#asciidoctor-browser-font-awesome-style'),
-    ).toHaveAttribute('href', 'css/font-awesome.min.css')
+    // styles are inserted using `scripting.insertCss` from the background script
+    // - css/chartist.min.css
+    // - css/themes/asciidoctor.css
+    // - css/font-awesome.min.css
     await expect(page.locator('#content')).toContainText('Hello world')
   })
 
