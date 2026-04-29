@@ -163,11 +163,10 @@ function hex (x) {
   return x.join('')
 }
 
-// eslint-disable-next-line no-unused-vars
-function md5 (s) {
-  return hex(md51(s))
-}
-
 function add32 (a, b) {
   return (a + b) & 0xFFFFFFFF
+}
+
+export function md5 (s) {
+  return hex(md51(s))
 }
