@@ -14,8 +14,9 @@ function getErrorInfo(error) {
 }
 
 const webExtension = typeof browser === 'undefined' ? chrome : browser
+const isFirefox = typeof browser !== 'undefined'
 
-// Cache resolved CSS (with absolute URLs) per extension file path
+// Cache resolved CSS (with absolute URLs) per extension file path (Chrome only)
 const cssContentCache = new Map()
 
 function rewriteUrlsToAbsolute(css, baseUrl) {
@@ -94,20 +95,37 @@ webExtension.runtime.onMessage.addListener((request, sender, sendResponse) => {
   } else if (request.action === 'insert-css') {
     const target = { tabId: sender.tab.id }
     if (request.file) {
-      fetchCssWithAbsoluteUrls(request.file)
-        .then((css) => webExtension.scripting.insertCSS({ target, css }))
-        .catch(console.error)
+      if (isFirefox) {
+        // Firefox: use files: mode so the stylesheet gets the extension origin,
+        // allowing @font-face rules to load moz-extension:// font URLs.
+        // (css: mode gives a null principal that blocks extension resource access)
+        webExtension.scripting
+          .insertCSS({ target, files: [request.file] })
+          .catch(console.error)
+      } else {
+        // Chrome: use inline CSS with rewritten absolute URLs because Chrome's
+        // files: mode resolves url() relative to the page instead of the CSS file
+        fetchCssWithAbsoluteUrls(request.file)
+          .then((css) => webExtension.scripting.insertCSS({ target, css }))
+          .catch(console.error)
+      }
     } else {
       webExtension.scripting
         .insertCSS({ target, css: request.css })
         .catch(console.error)
     }
   } else if (request.action === 'remove-css') {
-    const css = cssContentCache.get(request.file)
-    if (css) {
+    if (isFirefox) {
       webExtension.scripting
-        .removeCSS({ target: { tabId: sender.tab.id }, css })
+        .removeCSS({ target: { tabId: sender.tab.id }, files: [request.file] })
         .catch(console.error)
+    } else {
+      const css = cssContentCache.get(request.file)
+      if (css) {
+        webExtension.scripting
+          .removeCSS({ target: { tabId: sender.tab.id }, css })
+          .catch(console.error)
+      }
     }
   }
   // send an empty response to avoid the pesky error "The message port closed before a response was received"
