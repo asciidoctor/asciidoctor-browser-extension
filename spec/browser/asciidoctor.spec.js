@@ -1,12 +1,37 @@
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { expect, test } from '@playwright/test'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const testPageURL = `file://${path.join(__dirname, 'test-page.html')}`
+const testPageURL = 'http://localhost:5678/spec/browser/test-page.html'
 
 test.beforeEach(async ({ page }) => {
   await page.goto(testPageURL)
+  await page.evaluate(async () => {
+    const [
+      { default: Constants },
+      Converter,
+      Renderer,
+      Dom,
+      Settings,
+      Theme,
+      Loader,
+    ] = await Promise.all([
+      import('/app/js/module/constants.js'),
+      import('/app/js/module/converter.js'),
+      import('/app/js/module/page.js'),
+      import('/app/js/module/dom.js'),
+      import('/app/js/module/settings.js'),
+      import('/app/js/module/theme.js'),
+      import('/app/js/main.js'),
+    ])
+    await import('/app/js/vendor/asciidoctor-chart-block-macro.js')
+    await import('/app/js/vendor/asciidoctor-emoji-inline-macro.js')
+    window.Constants = Constants
+    window.Converter = Converter
+    window.Renderer = Renderer
+    window.Dom = Dom
+    window.Settings = Settings
+    window.Theme = Theme
+    window.Loader = Loader
+  })
 })
 
 test.describe('Custom script', () => {
@@ -331,7 +356,7 @@ test.describe('Decode entities', () => {
 test.describe('Escape characters', () => {
   test('should escape characters', async ({ page }) => {
     const result = await page.evaluate(() =>
-      Dom.escape('<script>alert();</script>'),
+      Dom.escapeHtmlEntities('<script>alert();</script>'),
     )
     expect(result).toBe('&lt;script&gt;alert();&lt;/script&gt;')
   })
