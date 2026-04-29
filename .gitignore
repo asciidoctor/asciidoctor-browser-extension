@@ -7,3 +7,6 @@ bower_components/
 public/
 .cache/
 test-results/
+app/js/content-bundle.js
+app/fonts/asciidoctor/
+app/css/asciidoctor-fonts.css

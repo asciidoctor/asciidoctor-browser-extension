@@ -36,6 +36,7 @@
     "bulma": "0.9.4",
     "chartist": "0.11.4",
     "csso": "5.0.5",
+    "esbuild": "^0.28.0",
     "font-awesome": "4.7.0",
     "mathjax": "3.2.2",
     "sass": "1.63.3",
