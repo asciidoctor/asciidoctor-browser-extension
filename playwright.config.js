@@ -6,4 +6,9 @@ export default defineConfig({
   use: {
     headless: true,
   },
+  webServer: {
+    command: 'node tasks/server.js',
+    url: 'http://localhost:5678/spec/browser/test-page.html',
+    reuseExistingServer: !process.env.CI,
+  },
 })

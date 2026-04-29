@@ -5,31 +5,11 @@
   <title>Asciidoctor browser extension test page</title>
 </head>
 <body>
-<script src="../../node_modules/sinon/pkg/sinon.js"></script>
-<script src="./webextension-api.js"></script>
-<script src="./helper.js"></script>
-<script src="../../app/js/vendor/highlight.js/highlight.min.js"></script>
-<script src="../../app/js/vendor/chartist.min.js"></script>
-<script src="../../app/js/vendor/kroki.js"></script>
-<script src="../../app/js/vendor/md5.js"></script>
-<script src="../../app/js/vendor/asciidoctor.js"></script>
-<script src="../../app/js/module/namespace.js"></script>
-<script src="../../app/js/module/settings.js"></script>
-<script src="../../app/js/module/dom.js"></script>
-<script src="../../app/js/module/theme.js"></script>
-<script src="../../app/js/loader.js"></script>
-<script src="../../app/js/renderer.js"></script>
-<script src="../../app/js/converter.js"></script>
-<script src="../../app/js/vendor/asciidoctor-chart-block-macro.js"></script>
-<script src="../../app/js/vendor/asciidoctor-emoji-inline-macro.js"></script>
-<script>
-  window.Constants = asciidoctor.browser.constants()
-  window.Dom = asciidoctor.browser.dom(document)
-  window.Settings = asciidoctor.browser.settings(browser, Constants)
-  window.Theme = asciidoctor.browser.theme(browser, Settings, Constants)
-  window.Renderer = asciidoctor.browser.renderer(browser, document, Constants, Settings, Dom, Theme)
-  window.Converter = asciidoctor.browser.converter(browser, Constants, Settings)
-  window.Loader = asciidoctor.browser.loader(browser, document, document.location, window.XMLHttpRequest, Settings, Renderer)
-</script>
+<script src="/node_modules/sinon/pkg/sinon.js"></script>
+<script src="/spec/browser/webextension-api.js"></script>
+<script src="/spec/browser/helper.js"></script>
+<script src="/app/js/vendor/highlight.js/highlight.min.js"></script>
+<script src="/app/js/vendor/chartist.min.js"></script>
+<script src="/app/js/vendor/kroki.js"></script>
 </body>
 </html>
