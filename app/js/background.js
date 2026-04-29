@@ -1,5 +1,6 @@
 /* global chrome, browser */
 import { convert, fetchAndConvert } from './module/converter.js'
+import { getBrowserInfo } from './module/settings.js'
 
 function getErrorInfo(error) {
   const errorInfo = {}
@@ -14,7 +15,7 @@ function getErrorInfo(error) {
 }
 
 const webExtension = typeof browser === 'undefined' ? chrome : browser
-const isFirefox = typeof browser !== 'undefined'
+const isFirefox = getBrowserInfo().name === 'Firefox'
 
 // Cache resolved CSS (with absolute URLs) per extension file path (Chrome only)
 const cssContentCache = new Map()
