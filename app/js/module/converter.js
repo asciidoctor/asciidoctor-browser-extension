@@ -1,4 +1,5 @@
 /* global chrome, browser, AsciidoctorKroki */
+import '../vendor/kroki.js'
 import asciidoctor from '../vendor/asciidoctor.js'
 import { md5 } from '../vendor/md5.js'
 import executeRequest, { isHtmlContentType } from './fetch.js'
