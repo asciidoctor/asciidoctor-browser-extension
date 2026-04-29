@@ -1,4 +1,7 @@
-/* global processor */
+import asciidoctor from './asciidoctor.js'
+
+const Asciidoctor = asciidoctor()
+
 // https://github.com/jollygoodcode/twemoji/blob/3476e2700600ef2c89ffa34313b11b91e5f9baba/lib/twemoji/data/emoji-unicode.yml
 const emojiMap = {
   mahjong: '1f004',
@@ -1664,8 +1667,7 @@ const emojiMap = {
   shibuya: 'e50a',
 }
 
-// processor is defined in renderer.js
-processor.Extensions.register(function () {
+Asciidoctor.Extensions.register(function () {
   this.inlineMacro(function () {
     this.named('emoji')
     this.positionalAttributes('size')
