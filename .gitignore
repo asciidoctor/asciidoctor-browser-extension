@@ -6,3 +6,4 @@ bower_components/
 *.nex
 public/
 .cache/
+test-results/

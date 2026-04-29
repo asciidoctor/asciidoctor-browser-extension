@@ -30,7 +30,10 @@ asciidoctor.browser.dom = (document) => {
    * @param parent
    * @param stylesheetLinkElementAttributes
    */
-  module.replaceStylesheetLinkElement = (parent, stylesheetLinkElementAttributes) => {
+  module.replaceStylesheetLinkElement = (
+    parent,
+    stylesheetLinkElementAttributes,
+  ) => {
     const element = document.getElementById(stylesheetLinkElementAttributes.id)
     if (element) {
       if (element.href === stylesheetLinkElementAttributes.href) {
@@ -39,7 +42,9 @@ asciidoctor.browser.dom = (document) => {
       }
       element.parentNode.removeChild(element)
     }
-    parent.appendChild(module.createStylesheetLinkElement(stylesheetLinkElementAttributes))
+    parent.appendChild(
+      module.createStylesheetLinkElement(stylesheetLinkElementAttributes),
+    )
   }
 
   /**

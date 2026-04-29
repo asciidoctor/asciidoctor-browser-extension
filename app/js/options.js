@@ -1,5 +1,4 @@
 /* global localStorage, chrome, browser, FileReader, Event */
-'use strict'
 
 const webExtension = typeof browser === 'undefined' ? chrome : browser
 
@@ -7,21 +6,42 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
   const selectTheme = document.getElementById('selectTheme')
   const selectJavaScript = document.getElementById('selectJavaScript')
   const selectSafeMode = document.getElementById('selectSafeMode')
-  const selectLocalPollFrequency = document.getElementById('selectLocalPollFrequency')
-  const selectRemotePollFrequency = document.getElementById('selectRemotePollFrequency')
-  const inputAllowTxtExtension = document.getElementById('inputAllowTxtExtension')
+  const selectLocalPollFrequency = document.getElementById(
+    'selectLocalPollFrequency',
+  )
+  const selectRemotePollFrequency = document.getElementById(
+    'selectRemotePollFrequency',
+  )
+  const inputAllowTxtExtension = document.getElementById(
+    'inputAllowTxtExtension',
+  )
   const inputCustomAttributes = document.getElementById('inputCustomAttributes')
   const inputEnableKroki = document.getElementById('inputEnableKroki')
   const inputKrokiServerURL = document.getElementById('inputKrokiServerURL')
-  const inputLoadJavaScript = Array.from(document.body.querySelectorAll('input[name=optionsLoadJavaScript]'))
+  const inputLoadJavaScript = Array.from(
+    document.body.querySelectorAll('input[name=optionsLoadJavaScript]'),
+  )
 
-  const addCustomThemeNotification = document.getElementById('addCustomThemeNotification')
-  const addCustomJavaScriptNotification = document.getElementById('addCustomJavaScriptNotification')
-  const enablingLocalFileNotification = document.getElementById('enablingLocalFileNotification')
-  const openExtensionsPageLink = document.getElementById('openExtensionsPageLink')
-  const removeCustomStyleSheet = document.getElementById('removeCustomStyleSheet')
+  const addCustomThemeNotification = document.getElementById(
+    'addCustomThemeNotification',
+  )
+  const addCustomJavaScriptNotification = document.getElementById(
+    'addCustomJavaScriptNotification',
+  )
+  const enablingLocalFileNotification = document.getElementById(
+    'enablingLocalFileNotification',
+  )
+  const openExtensionsPageLink = document.getElementById(
+    'openExtensionsPageLink',
+  )
+  const removeCustomStyleSheet = document.getElementById(
+    'removeCustomStyleSheet',
+  )
   const showEnablingLocalFileNotification = () => {
-    openExtensionsPageLink.onclick = () => webExtension.tabs.create({ url: 'chrome://extensions/?id=' + webExtension.runtime.id })
+    openExtensionsPageLink.onclick = () =>
+      webExtension.tabs.create({
+        url: `chrome://extensions/?id=${webExtension.runtime.id}`,
+      })
     initNotification(enablingLocalFileNotification)
     enablingLocalFileNotification.classList.remove('is-hidden')
   }
@@ -42,16 +62,20 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
   }
 
   const optionsChanged = () => {
-    return localStorage.CUSTOM_ATTRIBUTES !== inputCustomAttributes.value ||
+    return (
+      localStorage.CUSTOM_ATTRIBUTES !== inputCustomAttributes.value ||
       localStorage.SAFE_MODE !== selectSafeMode.value ||
       localStorage.LOCAL_POLL_FREQUENCY !== selectLocalPollFrequency.value ||
       localStorage.REMOTE_POLL_FREQUENCY !== selectRemotePollFrequency.value ||
-      localStorage.ALLOW_TXT_EXTENSION !== inputAllowTxtExtension.checked.toString() ||
+      localStorage.ALLOW_TXT_EXTENSION !==
+        inputAllowTxtExtension.checked.toString() ||
       localStorage.ENABLE_KROKI !== inputEnableKroki.checked.toString() ||
       localStorage.KROKI_SERVER_URL !== inputKrokiServerURL.value ||
       localStorage.THEME !== selectTheme.value ||
       localStorage.JS !== selectJavaScript.value ||
-      localStorage.JS_LOAD !== inputLoadJavaScript.find((element) => element.checked).value
+      localStorage.JS_LOAD !==
+        inputLoadJavaScript.find((element) => element.checked).value
+    )
   }
 
   /**
@@ -67,7 +91,9 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
     localStorage.KROKI_SERVER_URL = inputKrokiServerURL.value
     localStorage.THEME = selectTheme.value
     localStorage.JS = selectJavaScript.value
-    localStorage.JS_LOAD = inputLoadJavaScript.find((element) => element.checked).value
+    localStorage.JS_LOAD = inputLoadJavaScript.find(
+      (element) => element.checked,
+    ).value
     webExtension.storage.local.set({
       CUSTOM_ATTRIBUTES: localStorage.CUSTOM_ATTRIBUTES,
       SAFE_MODE: localStorage.SAFE_MODE,
@@ -78,21 +104,23 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
       JS: localStorage.JS,
       JS_LOAD: localStorage.JS_LOAD,
       LOCAL_POLL_FREQUENCY: localStorage.LOCAL_POLL_FREQUENCY,
-      REMOTE_POLL_FREQUENCY: localStorage.REMOTE_POLL_FREQUENCY
+      REMOTE_POLL_FREQUENCY: localStorage.REMOTE_POLL_FREQUENCY,
     })
     const customThemeNames = JSON.parse(localStorage.CUSTOM_THEME_NAMES || '[]')
     if (customThemeNames.length > 0) {
       customThemeNames.forEach((themeName) => {
-        const themeNameKey = 'CUSTOM_THEME_' + themeName
+        const themeNameKey = `CUSTOM_THEME_${themeName}`
         const themeObj = {}
         themeObj[themeNameKey] = localStorage[themeNameKey]
         webExtension.storage.local.set(themeObj)
       })
     }
-    const customJavaScriptNames = JSON.parse(localStorage.CUSTOM_JS_NAMES || '[]')
+    const customJavaScriptNames = JSON.parse(
+      localStorage.CUSTOM_JS_NAMES || '[]',
+    )
     if (customJavaScriptNames.length > 0) {
       customJavaScriptNames.forEach((javaScriptName) => {
-        const javaScriptNameKey = 'CUSTOM_JS_' + javaScriptName
+        const javaScriptNameKey = `CUSTOM_JS_${javaScriptName}`
         const javaScriptObj = {}
         javaScriptObj[javaScriptNameKey] = localStorage[javaScriptNameKey]
         webExtension.storage.local.set(javaScriptObj)
@@ -110,9 +138,16 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
     selectRemotePollFrequency.value = localStorage.REMOTE_POLL_FREQUENCY || '2'
     inputAllowTxtExtension.checked = localStorage.ALLOW_TXT_EXTENSION === 'true'
     inputEnableKroki.checked = localStorage.ENABLE_KROKI === 'true'
-    inputKrokiServerURL.value = localStorage.KROKI_SERVER_URL || 'https://kroki.io'
-    const loadJavaScriptValue = ['before', 'after'].includes(localStorage.JS_LOAD) ? localStorage.JS_LOAD : 'after'
-    inputLoadJavaScript.find((element) => element.value === loadJavaScriptValue).checked = true
+    inputKrokiServerURL.value =
+      localStorage.KROKI_SERVER_URL || 'https://kroki.io'
+    const loadJavaScriptValue = ['before', 'after'].includes(
+      localStorage.JS_LOAD,
+    )
+      ? localStorage.JS_LOAD
+      : 'after'
+    inputLoadJavaScript.find(
+      (element) => element.value === loadJavaScriptValue,
+    ).checked = true
 
     // Themes
     const customThemeNames = JSON.parse(localStorage.CUSTOM_THEME_NAMES || '[]')
@@ -129,7 +164,9 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
     selectTheme.dispatchEvent(new Event('change'))
 
     // JavaScripts
-    const customJavaScriptNames = JSON.parse(localStorage.CUSTOM_JS_NAMES || '[]')
+    const customJavaScriptNames = JSON.parse(
+      localStorage.CUSTOM_JS_NAMES || '[]',
+    )
     if (customJavaScriptNames.length > 0) {
       for (const customJavaScriptName of customJavaScriptNames) {
         const optionElement = document.createElement('option')
@@ -170,12 +207,14 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
     const reader = new FileReader()
     reader.onload = (evt) => {
       const fileString = evt.target.result
-      const customThemeNames = JSON.parse(localStorage.CUSTOM_THEME_NAMES || '[]')
+      const customThemeNames = JSON.parse(
+        localStorage.CUSTOM_THEME_NAMES || '[]',
+      )
       if (!customThemeNames.includes(themeName)) {
         customThemeNames.push(themeName)
         localStorage.CUSTOM_THEME_NAMES = JSON.stringify(customThemeNames)
       }
-      localStorage['CUSTOM_THEME_' + themeName] = fileString
+      localStorage[`CUSTOM_THEME_${themeName}`] = fileString
       saveOptions()
     }
     reader.readAsText(themeFile)
@@ -185,12 +224,14 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
     const reader = new FileReader()
     reader.onload = (evt) => {
       const fileString = evt.target.result
-      const customJavaScriptNames = JSON.parse(localStorage.CUSTOM_JS_NAMES || '[]')
+      const customJavaScriptNames = JSON.parse(
+        localStorage.CUSTOM_JS_NAMES || '[]',
+      )
       if (!customJavaScriptNames.includes(javaScriptName)) {
         customJavaScriptNames.push(javaScriptName)
         localStorage.CUSTOM_JS_NAMES = JSON.stringify(customJavaScriptNames)
       }
-      localStorage['CUSTOM_JS_' + javaScriptName] = fileString
+      localStorage[`CUSTOM_JS_${javaScriptName}`] = fileString
       saveOptions()
     }
     reader.readAsText(javaScriptFile)
@@ -216,13 +257,19 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
 
   const showNotification = (element, notification) => {
     element.classList.add(...notification.classes)
-    element.getElementsByClassName('notification-text').item(0).innerHTML = notification.message
+    element.getElementsByClassName('notification-text').item(0).innerHTML =
+      notification.message
     element.classList.remove('is-hidden')
   }
 
   const resetNotification = (element) => {
     element.classList.add('is-hidden')
-    element.classList.remove('notification', 'is-small', 'is-info', 'is-warning')
+    element.classList.remove(
+      'notification',
+      'is-small',
+      'is-info',
+      'is-warning',
+    )
   }
 
   const selectOpt = (parentElement, name) => {
@@ -231,17 +278,23 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
   }
 
   const initAutoSave = () => {
-    function saving (controlElement) {
+    function saving(controlElement) {
       if (controlElement) {
         controlElement.classList.add('is-loading')
-        controlElement.getElementsByClassName('icon').item(0).classList.add('is-hidden')
+        controlElement
+          .getElementsByClassName('icon')
+          .item(0)
+          .classList.add('is-hidden')
       }
     }
 
-    function saved (controlElement) {
+    function saved(controlElement) {
       if (controlElement) {
         controlElement.classList.remove('is-loading')
-        controlElement.getElementsByClassName('icon').item(0).classList.remove('is-hidden')
+        controlElement
+          .getElementsByClassName('icon')
+          .item(0)
+          .classList.remove('is-hidden')
       }
     }
 
@@ -257,22 +310,37 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
       }
     }
 
-    Array.from(document.body.querySelectorAll('.form-input')).forEach((element) => {
-      if (element.tagName.toLowerCase() === 'input' && element.type === 'text') {
-        const parentElement = element.parentElement
-        let controlElement
-        if (parentElement.classList.contains('has-save-indicator') && parentElement.classList.contains('control')) {
-          controlElement = parentElement
+    Array.from(document.body.querySelectorAll('.form-input')).forEach(
+      (element) => {
+        if (
+          element.tagName.toLowerCase() === 'input' &&
+          element.type === 'text'
+        ) {
+          const parentElement = element.parentElement
+          let controlElement
+          if (
+            parentElement.classList.contains('has-save-indicator') &&
+            parentElement.classList.contains('control')
+          ) {
+            controlElement = parentElement
+          }
+          element.onkeyup =
+            element.oninput =
+            element.onpaste =
+            element.onchange =
+              () => save(controlElement)
+        } else {
+          element.onchange = () => save()
         }
-        element.onkeyup = element.oninput = element.onpaste = element.onchange = () => save(controlElement)
-      } else {
-        element.onchange = () => save()
-      }
-    })
+      },
+    )
   }
   selectTheme.addEventListener('change', () => {
     if (selectTheme.selectedOptions) {
-      if (selectTheme.selectedOptions.length === 1 && selectTheme.selectedOptions[0].parentNode.label !== 'Default') {
+      if (
+        selectTheme.selectedOptions.length === 1 &&
+        selectTheme.selectedOptions[0].parentNode.label !== 'Default'
+      ) {
         removeCustomStyleSheet.classList.remove('is-hidden')
       } else {
         removeCustomStyleSheet.classList.add('is-hidden')
@@ -287,17 +355,24 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
 
   removeCustomStyleSheet.onclick = () => {
     if (selectTheme.selectedOptions) {
-      if (selectTheme.selectedOptions.length === 1 && selectTheme.selectedOptions[0].parentNode.label !== 'Default') {
+      if (
+        selectTheme.selectedOptions.length === 1 &&
+        selectTheme.selectedOptions[0].parentNode.label !== 'Default'
+      ) {
         const themeName = selectTheme.value
-        const customThemeNames = JSON.parse(localStorage.CUSTOM_THEME_NAMES || '[]')
+        const customThemeNames = JSON.parse(
+          localStorage.CUSTOM_THEME_NAMES || '[]',
+        )
         const customThemeFoundIndex = customThemeNames.indexOf(themeName)
         if (customThemeFoundIndex > -1) {
           customThemeNames.splice(customThemeFoundIndex, 1)
           localStorage.CUSTOM_THEME_NAMES = JSON.stringify(customThemeNames)
         }
-        localStorage.removeItem('CUSTOM_THEME_' + themeName)
+        localStorage.removeItem(`CUSTOM_THEME_${themeName}`)
         selectTheme.selectedOptions[0].remove()
-        const customThemeOptGroup = document.getElementById('customThemeOptGroup')
+        const customThemeOptGroup = document.getElementById(
+          'customThemeOptGroup',
+        )
         if (customThemeOptGroup && !customThemeOptGroup.hasChildNodes()) {
           customThemeOptGroup.remove()
         }
@@ -331,7 +406,9 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
     }
   }
 
-  const inputCustomJavaScriptElement = document.getElementById('inputCustomJavaScript')
+  const inputCustomJavaScriptElement = document.getElementById(
+    'inputCustomJavaScript',
+  )
   inputCustomJavaScriptElement.onchange = () => {
     resetNotification(addCustomJavaScriptNotification)
     const files = inputCustomJavaScriptElement.files
@@ -339,9 +416,15 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
       const file = files[0]
       const javaScriptName = getFileNameWithoutExtension(file)
       const options = Array.from(selectJavaScript.querySelectorAll('option'))
-      const maybeJavaScript = options.find((element) => element.value === javaScriptName)
+      const maybeJavaScript = options.find(
+        (element) => element.value === javaScriptName,
+      )
       const javaScriptExists = typeof maybeJavaScript !== 'undefined'
-      const alert = buildNotification(javaScriptExists, javaScriptName, 'JavaScript')
+      const alert = buildNotification(
+        javaScriptExists,
+        javaScriptName,
+        'JavaScript',
+      )
       if (!javaScriptExists) {
         addNewOpt(selectJavaScript, javaScriptName)
       }

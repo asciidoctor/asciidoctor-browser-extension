@@ -1661,21 +1661,19 @@ const emojiMap = {
   nine: '39 - 20e3',
   copyright: 'a9',
   registered_sign: 'ae',
-  shibuya: 'e50a'
+  shibuya: 'e50a',
 }
 
 // processor is defined in renderer.js
 processor.Extensions.register(function () {
   this.inlineMacro(function () {
-    const self = this
-
-    self.named('emoji')
-    self.positionalAttributes('size')
+    this.named('emoji')
+    this.positionalAttributes('size')
 
     const sizeMap = { '1x': 17, lg: 24, '2x': 34, '3x': 50, '4x': 68, '5x': 85 }
     const defaultSize = 24
 
-    self.process(function (parent, target, attrs) {
+    this.process((_parent, target, attrs) => {
       const sizeAttr = attrs.size
       let size
       if (sizeAttr && sizeMap[sizeAttr]) {
@@ -1684,7 +1682,15 @@ processor.Extensions.register(function () {
         size = defaultSize
       }
       const emojiUnicode = emojiMap[target]
-      return '<img class="emoji" draggable="false" height="' + size + 'px" width="' + size + 'px" src="https://twemoji.maxcdn.com/2/svg/' + emojiUnicode + '.svg">'
+      return (
+        '<img class="emoji" draggable="false" height="' +
+        size +
+        'px" width="' +
+        size +
+        'px" src="https://twemoji.maxcdn.com/2/svg/' +
+        emojiUnicode +
+        '.svg">'
+      )
     })
   })
 })

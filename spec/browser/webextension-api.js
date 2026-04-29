@@ -1,22 +1,17 @@
 // Define the 'browser' object available in WebExtension environment.
-// eslint-disable-next-line no-unused-vars
-const browser = {
+window.browser = {
   storage: {
     local: {
-      get: () => {
-      },
-      set: () => {
-      }
-    }
+      get: () => {},
+      set: () => {},
+    },
   },
   runtime: {
-    getURL: path => path,
+    getURL: (path) => path,
     getManifest: () => ({ web_accessible_resources: [] }),
     onMessage: {
-      addListener: () => {
-      }
+      addListener: () => {},
     },
-    sendMessage: (message, callback) => {
-    }
-  }
+    sendMessage: (_message, _callback) => {},
+  },
 }

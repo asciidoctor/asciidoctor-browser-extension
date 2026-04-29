@@ -1,5 +1,4 @@
-const fs = require('node:fs/promises')
-const https = require('node:https')
+import fs from 'node:fs/promises'
 
 const HIGHLIGHT_JS_VERSION = '9.15.6'
 const CDN_BASE_URL = `https://cdnjs.cloudflare.com/ajax/libs/highlight.js/${HIGHLIGHT_JS_VERSION}`
@@ -189,46 +188,29 @@ const LANGUAGES = [
   'xml',
   'xquery',
   'yaml',
-  'zephir'
+  'zephir',
 ]
-/**
- * @param url
- * @returns {Promise<string>}
- */
-const get = (url) =>
-  new Promise((resolve, reject) => {
-    https.get(url, (res) => {
-      if (res.statusCode === 200) {
-        let data = ''
-        res.on('data', (chunk) => {
-          data += chunk
-        })
-        res.on('end', () => resolve(data))
-      } else {
-        reject(new Error(`statusCode is ${res.statusCode}`))
-      }
-    }).on('error', (e) => {
-      console.log(`Unable to GET ${url}`, e)
-      reject(e)
-    })
-  })
 
-;(async () => {
-  try {
-    const content = await get(`${CDN_BASE_URL}/highlight.min.js`)
-    const highlightFile = 'app/js/vendor/highlight.js/highlight.min.js'
-    await fs.writeFile(highlightFile, content, 'utf8')
-    console.log(`wrote ${highlightFile}`)
-    for (const lang of LANGUAGES) {
-      const fileName = `${lang}.min.js`
-      const url = `${CDN_BASE_URL}/languages/${fileName}`
-      const data = await get(url)
-      const dest = `${DEST_DIRECTORY}/${fileName}`
-      await fs.writeFile(dest, data, 'utf8')
-      console.log(`wrote ${dest}`)
-    }
-  } catch (e) {
-    console.log('error', e)
-    process.exit(1)
+const get = async (url) => {
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(`statusCode is ${res.status}`)
+  return res.text()
+}
+
+try {
+  const content = await get(`${CDN_BASE_URL}/highlight.min.js`)
+  const highlightFile = 'app/js/vendor/highlight.js/highlight.min.js'
+  await fs.writeFile(highlightFile, content, 'utf8')
+  console.log(`wrote ${highlightFile}`)
+  for (const lang of LANGUAGES) {
+    const fileName = `${lang}.min.js`
+    const url = `${CDN_BASE_URL}/languages/${fileName}`
+    const data = await get(url)
+    const dest = `${DEST_DIRECTORY}/${fileName}`
+    await fs.writeFile(dest, data, 'utf8')
+    console.log(`wrote ${dest}`)
   }
-})()
+} catch (e) {
+  console.log('error', e)
+  process.exit(1)
+}

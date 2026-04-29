@@ -1,6 +1,13 @@
 /* global asciidoctor, Chartist, hljs */
 // exports
-asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom, Theme) => {
+asciidoctor.browser.renderer = (
+  webExtension,
+  document,
+  Constants,
+  Settings,
+  Dom,
+  Theme,
+) => {
   const module = {}
 
   /**
@@ -42,7 +49,6 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
     const message = `${error.name} : ${error.message}`
     const messageText = `<p>${message}</p>`
     document.body.innerHTML = `<div id="content"><h4>Error</h4>${messageText}</div>`
-    // eslint-disable-next-line no-console
     console.error(error.stack)
   }
 
@@ -50,18 +56,24 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
    * Append MathJax script
    */
   const initializeMathJax = (eqnumsValue) => {
-    Dom.appendOnce(document.head, Dom.createScriptElement({
-      id: 'asciidoctor-mathjax-config',
-      dataset: {
-        eqnumsValue
-      },
-      src: webExtension.runtime.getURL('js/mathjax/config.js')
-    }))
-    Dom.appendOnce(document.head, Dom.createScriptElement({
-      id: 'asciidoctor-mathjax-initialization',
-      src: webExtension.runtime.getURL('vendor/MathJax-3.2.2/startup.js'),
-      async: true
-    }))
+    Dom.appendOnce(
+      document.head,
+      Dom.createScriptElement({
+        id: 'asciidoctor-mathjax-config',
+        dataset: {
+          eqnumsValue,
+        },
+        src: webExtension.runtime.getURL('js/mathjax/config.js'),
+      }),
+    )
+    Dom.appendOnce(
+      document.head,
+      Dom.createScriptElement({
+        id: 'asciidoctor-mathjax-initialization',
+        src: webExtension.runtime.getURL('vendor/MathJax-3.2.2/startup.js'),
+        async: true,
+      }),
+    )
     Dom.removeElement('asciidoctor-mathjax-typesetting')
     /*
     document.head.appendChild(Dom.createScriptElement({
@@ -81,10 +93,15 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
       .then(() => {
         // Highlight
         const highlightTheme = 'github'
-        Dom.appendOnce(document.head, Dom.createStylesheetLinkElement({
-          id: `asciidoctor-browser-${highlightTheme}-highlight-style`,
-          href: webExtension.runtime.getURL(`css/highlight/${highlightTheme}.css`)
-        }))
+        Dom.appendOnce(
+          document.head,
+          Dom.createStylesheetLinkElement({
+            id: `asciidoctor-browser-${highlightTheme}-highlight-style`,
+            href: webExtension.runtime.getURL(
+              `css/highlight/${highlightTheme}.css`,
+            ),
+          }),
+        )
       })
   }
 
@@ -93,10 +110,12 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
    */
   const preprocessing = (customJavaScript) => {
     if (customJavaScript && customJavaScript.loadDirective === 'before') {
-      document.head.appendChild(Dom.createScriptElement({
-        id: 'asciidoctor-browser-custom-js',
-        innerHTML: customJavaScript.content
-      }))
+      document.head.appendChild(
+        Dom.createScriptElement({
+          id: 'asciidoctor-browser-custom-js',
+          innerHTML: customJavaScript.content,
+        }),
+      )
     }
   }
 
@@ -105,10 +124,12 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
    */
   const postprocessing = (customJavaScript) => {
     if (customJavaScript && customJavaScript.loadDirective === 'after') {
-      document.head.appendChild(Dom.createScriptElement({
-        id: 'asciidoctor-browser-custom-js',
-        innerHTML: customJavaScript.content
-      }))
+      document.head.appendChild(
+        Dom.createScriptElement({
+          id: 'asciidoctor-browser-custom-js',
+          innerHTML: customJavaScript.content,
+        }),
+      )
     }
   }
 
@@ -118,14 +139,16 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
     if (themeNames.includes(themeName)) {
       Dom.replaceStylesheetLinkElement(document.head, {
         id: 'asciidoctor-browser-style',
-        href: webExtension.runtime.getURL(`css/themes/${themeName}.css`)
+        href: webExtension.runtime.getURL(`css/themes/${themeName}.css`),
       })
     } else {
-      const customThemeContent = await Settings.getSetting(Constants.CUSTOM_THEME_PREFIX + themeName)
+      const customThemeContent = await Settings.getSetting(
+        Constants.CUSTOM_THEME_PREFIX + themeName,
+      )
       if (customThemeContent) {
         Dom.replaceStyleElement(document.head, {
           id: 'asciidoctor-browser-style',
-          innerHTML: customThemeContent
+          innerHTML: customThemeContent,
         })
       }
     }
@@ -171,7 +194,10 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
     }
     updateContent(converterResponse.html)
     let tocClassNames = ''
-    if (attributes.hasSections && (attributes.tocPosition === 'left' || attributes.tocPosition === 'right')) {
+    if (
+      attributes.hasSections &&
+      (attributes.tocPosition === 'left' || attributes.tocPosition === 'right')
+    ) {
       tocClassNames = ` toc2 toc-${attributes.tocPosition}`
       const tocElement = document.getElementById('toc')
       if (tocElement !== null) {
@@ -248,18 +274,20 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
       const options = {
         height: node.dataset.chartHeight,
         width: node.dataset.chartWidth,
-        colors: node.dataset.chartColors.split(',')
+        colors: node.dataset.chartColors.split(','),
       }
       const dataset = Object.assign({}, node.dataset)
-      const series = Object.values(Object.keys(dataset)
-        .filter(key => key.startsWith('chartSeries-'))
-        .reduce((obj, key) => {
-          obj[key] = dataset[key]
-          return obj
-        }, {})).map(value => value.split(','))
+      const series = Object.values(
+        Object.keys(dataset)
+          .filter((key) => key.startsWith('chartSeries-'))
+          .reduce((obj, key) => {
+            obj[key] = dataset[key]
+            return obj
+          }, {}),
+      ).map((value) => value.split(','))
       const data = {
         labels: node.dataset.chartLabels.split(','),
-        series
+        series,
       }
       Chartist[node.dataset.chartType](node, data, options)
     })
@@ -269,24 +297,34 @@ asciidoctor.browser.renderer = (webExtension, document, Constants, Settings, Dom
    *
    */
   const appendChartistStyle = () => {
-    Dom.appendOnce(document.head, Dom.createStylesheetLinkElement({
-      id: 'asciidoctor-browser-chartist-style',
-      href: webExtension.runtime.getURL('css/chartist.min.css')
-    }))
-    Dom.appendOnce(document.head, Dom.createStyleElement({
-      id: 'asciidoctor-browser-chartist-default-style',
-      innerHTML: '.ct-chart .ct-series.ct-series-a .ct-line {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-line {stroke:#72B3CC} .ct-chart .ct-series.ct-series-a .ct-point {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-point {stroke:#72B3CC}'
-    }))
+    Dom.appendOnce(
+      document.head,
+      Dom.createStylesheetLinkElement({
+        id: 'asciidoctor-browser-chartist-style',
+        href: webExtension.runtime.getURL('css/chartist.min.css'),
+      }),
+    )
+    Dom.appendOnce(
+      document.head,
+      Dom.createStyleElement({
+        id: 'asciidoctor-browser-chartist-default-style',
+        innerHTML:
+          '.ct-chart .ct-series.ct-series-a .ct-line {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-line {stroke:#72B3CC} .ct-chart .ct-series.ct-series-a .ct-point {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-point {stroke:#72B3CC}',
+      }),
+    )
   }
 
   /**
    *
    */
   const appendFontAwesomeStyle = () => {
-    Dom.appendOnce(document.head, Dom.createStylesheetLinkElement({
-      id: 'asciidoctor-browser-font-awesome-style',
-      href: webExtension.runtime.getURL('css/font-awesome.min.css')
-    }))
+    Dom.appendOnce(
+      document.head,
+      Dom.createStylesheetLinkElement({
+        id: 'asciidoctor-browser-font-awesome-style',
+        href: webExtension.runtime.getURL('css/font-awesome.min.css'),
+      }),
+    )
   }
 
   /**
