@@ -239,13 +239,15 @@
         "js/vendor/highlight.js/languages/xquery.min.js",
         "js/vendor/highlight.js/languages/yaml.min.js",
         "js/vendor/highlight.js/languages/zephir.min.js",
-        "js/contentScript.js"
+        "js/content-bundle.js"
       ]
     }
   ],
   "web_accessible_resources": [
     {
       "resources": [
+        "fonts/asciidoctor/*",
+        "css/asciidoctor-fonts.css",
         "fonts/fontawesome-webfont.ttf",
         "fonts/fontawesome-webfont.woff2",
         "fonts/fontawesome-webfont.woff",
@@ -301,7 +303,8 @@
     "storage",
     "tabs",
     "activeTab",
-    "contextMenus"
+    "contextMenus",
+    "scripting"
   ],
   "host_permissions": [
     "*://*/*.ad",

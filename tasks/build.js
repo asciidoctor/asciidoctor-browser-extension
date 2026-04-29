@@ -3,13 +3,57 @@ import { cp, mkdir, rm } from 'node:fs/promises'
 import ospath from 'node:path'
 import archiver from 'archiver'
 import { minify } from 'csso'
+import { build as esbuild } from 'esbuild'
 import { compile } from 'sass'
 
-function uncommentFontsImport() {
+async function downloadFonts() {
+  console.log('download fonts')
+  const fontsDir = 'app/fonts/asciidoctor'
+  await mkdir(fontsDir, { recursive: true })
+  const googleFontsUrl =
+    'https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400,700'
+  const cssResponse = await fetch(googleFontsUrl, {
+    headers: {
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    },
+  })
+  const css = await cssResponse.text()
+  const fontUrls = [
+    ...new Set(
+      [
+        ...css.matchAll(
+          /url\((https:\/\/fonts\.gstatic\.com\/[^)]+\.woff2)\)/g,
+        ),
+      ].map((m) => m[1]),
+    ),
+  ]
+  const urlToLocal = new Map()
+  for (const url of fontUrls) {
+    const filename = new URL(url).pathname.split('/').pop()
+    const fontResponse = await fetch(url)
+    const buffer = await fontResponse.arrayBuffer()
+    fs.writeFileSync(`${fontsDir}/${filename}`, Buffer.from(buffer))
+    urlToLocal.set(url, `../fonts/asciidoctor/${filename}`)
+  }
+  const localCss = css.replace(
+    /url\((https:\/\/fonts\.gstatic\.com\/[^)]+\.woff2)\)/g,
+    (_, url) => `url('${urlToLocal.get(url)}')`,
+  )
+  fs.writeFileSync('app/css/asciidoctor-fonts.css', localCss)
+  console.log(`Downloaded ${fontUrls.length} font files`)
+}
+
+function replaceFontsImport() {
   const path = 'app/css/themes/asciidoctor.css'
   let data = fs.readFileSync(path, 'utf8')
-  console.log('Uncomment fonts @import in asciidoctor.css')
-  data = data.replace(/\/\*(@import "[^"]+";)\*\//g, '$1')
+  console.log(
+    'Replace Google Fonts @import with local fonts in asciidoctor.css',
+  )
+  data = data.replace(
+    /\/\*\s*@import "https:\/\/fonts\.googleapis\.com\/[^"]+";?\s*\*\//g,
+    '@import "../asciidoctor-fonts.css";',
+  )
   fs.writeFileSync(path, data, 'utf8')
 }
 
@@ -38,6 +82,17 @@ async function clean() {
   console.log('clean')
   await rm('dist', { recursive: true, force: true })
   await mkdir('dist', { recursive: true })
+}
+
+async function bundleContentScript() {
+  console.log('bundle content script')
+  await esbuild({
+    entryPoints: ['app/js/contentScript.js'],
+    bundle: true,
+    format: 'iife',
+    outfile: 'app/js/content-bundle.js',
+    platform: 'browser',
+  })
 }
 
 function generateFirefoxManifest() {
@@ -157,9 +212,11 @@ async function copyVendorResources() {
 
 await clean()
 await copyVendorResources()
-uncommentFontsImport()
+await downloadFonts()
+replaceFontsImport()
 replaceImagesURL()
 removeSourceMapReferences()
 compileSass()
+await bundleContentScript()
 generateFirefoxManifest()
 await compress()
