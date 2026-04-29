@@ -14,6 +14,66 @@ function getErrorInfo(error) {
 }
 
 const webExtension = typeof browser === 'undefined' ? chrome : browser
+
+// Cache resolved CSS (with absolute URLs) per extension file path
+const cssContentCache = new Map()
+
+function rewriteUrlsToAbsolute(css, baseUrl) {
+  return css.replace(/url\((['"]?)([^'")]+)\1\)/g, (match, quote, url) => {
+    if (/^(data:|https?:|chrome-extension:|moz-extension:)/.test(url)) {
+      return match
+    }
+    try {
+      return `url(${quote}${new URL(url, baseUrl).href}${quote})`
+    } catch {
+      return match
+    }
+  })
+}
+
+async function resolveImports(css, baseUrl) {
+  const importRegex = /@import\s+"([^"]+)";\s*/g
+  const replacements = [...css.matchAll(importRegex)].map((m) => ({
+    full: m[0],
+    url: m[1],
+  }))
+  let result = css
+  for (const { full, url } of replacements) {
+    try {
+      const absoluteUrl = /^https?:/.test(url)
+        ? url
+        : new URL(url, baseUrl).href
+      const importResponse = await fetch(absoluteUrl)
+      const importBaseUrl = absoluteUrl.substring(
+        0,
+        absoluteUrl.lastIndexOf('/') + 1,
+      )
+      const importedCss = rewriteUrlsToAbsolute(
+        await importResponse.text(),
+        importBaseUrl,
+      )
+      result = result.replace(full, importedCss)
+    } catch {
+      result = result.replace(full, '')
+    }
+  }
+  return result
+}
+
+async function fetchCssWithAbsoluteUrls(file) {
+  if (cssContentCache.has(file)) {
+    return cssContentCache.get(file)
+  }
+  const fileUrl = webExtension.runtime.getURL(file)
+  const response = await fetch(fileUrl)
+  let css = await response.text()
+  const baseUrl = fileUrl.substring(0, fileUrl.lastIndexOf('/') + 1)
+  css = await resolveImports(css, baseUrl)
+  const resolved = rewriteUrlsToAbsolute(css, baseUrl)
+  cssContentCache.set(file, resolved)
+  return resolved
+}
+
 webExtension.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'fetch-convert') {
     fetchAndConvert(sender.tab.url, request.initial)
@@ -31,6 +91,24 @@ webExtension.runtime.onMessage.addListener((request, sender, sendResponse) => {
       .then((result) => sendResponse(result))
       .catch((error) => sendResponse({ error: getErrorInfo(error) }))
     return true
+  } else if (request.action === 'insert-css') {
+    const target = { tabId: sender.tab.id }
+    if (request.file) {
+      fetchCssWithAbsoluteUrls(request.file)
+        .then((css) => webExtension.scripting.insertCSS({ target, css }))
+        .catch(console.error)
+    } else {
+      webExtension.scripting
+        .insertCSS({ target, css: request.css })
+        .catch(console.error)
+    }
+  } else if (request.action === 'remove-css') {
+    const css = cssContentCache.get(request.file)
+    if (css) {
+      webExtension.scripting
+        .removeCSS({ target: { tabId: sender.tab.id }, css })
+        .catch(console.error)
+    }
   }
   // send an empty response to avoid the pesky error "The message port closed before a response was received"
   sendResponse({})
@@ -101,8 +179,12 @@ const disableExtension = (tab) => {
   webExtension.tabs.reload(tab.id)
 }
 
-const notifyTab = (tab, status) => {
-  webExtension.tabs.sendMessage(tab.id, { status })
+const notifyTab = async (tab, status) => {
+  try {
+    await webExtension.tabs.sendMessage(tab.id, { status })
+  } catch {
+    // No content script listener in the tab (Firefox rejects the Promise)
+  }
 }
 
 const findActiveTab = (callback) => {
@@ -123,23 +205,23 @@ const findActiveTab = (callback) => {
 let enableRender = true
 
 function enableDisableRender() {
-  // Save the status of the extension
-  webExtension.storage.local.set({ ENABLE_RENDER: enableRender })
+  // Save the new status of the extension (opposite of current)
+  webExtension.storage.local.set({ ENABLE_RENDER: !enableRender })
   // Update the extension icon
   webExtension.action.setBadgeText({
-    text: enableRender ? '' : 'off',
+    text: enableRender ? 'off' : '',
   })
   webExtension.action.setBadgeBackgroundColor({
     color: '#2f2f2f',
   })
   if (typeof webExtension.action.setTitle === 'function') {
     webExtension.action.setTitle({
-      title: `Asciidoctor.js Preview (${enableRender ? '✔' : '✘'})`,
+      title: `Asciidoctor.js Preview (${enableRender ? '✘' : '✔'})`,
     })
   } else {
     // eslint-disable-next-line no-console
     console.log(
-      `Asciidoctor.js Preview (${enableRender ? 'enabled' : 'disabled'})`,
+      `Asciidoctor.js Preview (${enableRender ? 'disabled' : 'enabled'})`,
     )
   }
 

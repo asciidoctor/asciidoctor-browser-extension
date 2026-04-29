@@ -3,12 +3,8 @@ import Constants from './constants.js'
 import {
   appendOnce,
   createScriptElement,
-  createStyleElement,
-  createStylesheetLinkElement,
   decodeEntities,
   removeElement,
-  replaceStyleElement,
-  replaceStylesheetLinkElement,
 } from './dom.js'
 import { getRenderingSettings, getSetting } from './settings.js'
 import { getDefaultThemeNames, getThemeName } from './theme.js'
@@ -19,6 +15,23 @@ const webExtension =
     : typeof chrome !== 'undefined'
       ? chrome
       : null
+
+const injectedCssFiles = new Set()
+let currentThemeCssFile = null
+
+const insertCssFile = (file) => {
+  if (!injectedCssFiles.has(file)) {
+    injectedCssFiles.add(file)
+    webExtension.runtime.sendMessage({ action: 'insert-css', file })
+  }
+}
+
+const insertInlineCss = (id, css) => {
+  if (!injectedCssFiles.has(id)) {
+    injectedCssFiles.add(id)
+    webExtension.runtime.sendMessage({ action: 'insert-css', css })
+  }
+}
 
 export async function updateHTML(backgroundConverterResponse) {
   try {
@@ -92,15 +105,7 @@ const appendStyles = (stylesheet) => {
     .then(() => {
       // Highlight
       const highlightTheme = 'github'
-      appendOnce(
-        document.head,
-        createStylesheetLinkElement({
-          id: `asciidoctor-browser-${highlightTheme}-highlight-style`,
-          href: webExtension.runtime.getURL(
-            `css/highlight/${highlightTheme}.css`,
-          ),
-        }),
-      )
+      insertCssFile(`css/highlight/${highlightTheme}.css`)
     })
 }
 
@@ -136,19 +141,23 @@ const appendThemeStyle = async (themeName) => {
   const themeNames = getDefaultThemeNames()
   // Check if the theme is packaged in the extension... if not it's a custom theme
   if (themeNames.includes(themeName)) {
-    replaceStylesheetLinkElement(document.head, {
-      id: 'asciidoctor-browser-style',
-      href: webExtension.runtime.getURL(`css/themes/${themeName}.css`),
-    })
+    const file = `css/themes/${themeName}.css`
+    if (currentThemeCssFile !== file) {
+      if (currentThemeCssFile) {
+        webExtension.runtime.sendMessage({
+          action: 'remove-css',
+          file: currentThemeCssFile,
+        })
+      }
+      currentThemeCssFile = file
+      webExtension.runtime.sendMessage({ action: 'insert-css', file })
+    }
   } else {
     const customThemeContent = await getSetting(
       Constants.CUSTOM_THEME_PREFIX + themeName,
     )
     if (customThemeContent) {
-      replaceStyleElement(document.head, {
-        id: 'asciidoctor-browser-style',
-        innerHTML: customThemeContent,
-      })
+      insertInlineCss(`custom-theme-${themeName}`, customThemeContent)
     }
   }
 }
@@ -296,20 +305,10 @@ const drawCharts = () => {
  *
  */
 const appendChartistStyle = () => {
-  appendOnce(
-    document.head,
-    createStylesheetLinkElement({
-      id: 'asciidoctor-browser-chartist-style',
-      href: webExtension.runtime.getURL('css/chartist.min.css'),
-    }),
-  )
-  appendOnce(
-    document.head,
-    createStyleElement({
-      id: 'asciidoctor-browser-chartist-default-style',
-      innerHTML:
-        '.ct-chart .ct-series.ct-series-a .ct-line {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-line {stroke:#72B3CC} .ct-chart .ct-series.ct-series-a .ct-point {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-point {stroke:#72B3CC}',
-    }),
+  insertCssFile('css/chartist.min.css')
+  insertInlineCss(
+    'chartist-default',
+    '.ct-chart .ct-series.ct-series-a .ct-line {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-line {stroke:#72B3CC} .ct-chart .ct-series.ct-series-a .ct-point {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-point {stroke:#72B3CC}',
   )
 }
 
@@ -317,13 +316,7 @@ const appendChartistStyle = () => {
  *
  */
 const appendFontAwesomeStyle = () => {
-  appendOnce(
-    document.head,
-    createStylesheetLinkElement({
-      id: 'asciidoctor-browser-font-awesome-style',
-      href: webExtension.runtime.getURL('css/font-awesome.min.css'),
-    }),
-  )
+  insertCssFile('css/font-awesome.min.css')
 }
 
 /**
