@@ -53,17 +53,7 @@ function generateFirefoxManifest() {
     '*',
   ]
   delete manifest.background.service_worker
-  manifest.background.scripts = [
-    'js/vendor/md5.js',
-    'js/vendor/asciidoctor.js',
-    'js/vendor/kroki.js',
-    'js/module/namespace.js',
-    'js/module/settings.js',
-    'js/converter.js',
-    'js/background.js',
-    'js/vendor/asciidoctor-chart-block-macro.js',
-    'js/vendor/asciidoctor-emoji-inline-macro.js',
-  ]
+  manifest.background.scripts = ['js/background.js']
   fs.writeFileSync(
     ospath.join(import.meta.dirname, '..', 'dist', 'manifest-firefox.json'),
     JSON.stringify(manifest, null, 2),
