@@ -7,11 +7,10 @@
   ],
   packageRules: [
     {
-      // TypeError: source.charCodeAt is not a function in css-tree/cjs/parser/create.cjs:145
-      "matchPackagePatterns": [
-        "csso"
+      enabled: false,
+      matchPackageNames: [
+        '/csso/',
       ],
-      "enabled": false
     },
     {
       matchManagers: [
