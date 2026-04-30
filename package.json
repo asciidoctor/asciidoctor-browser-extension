@@ -30,8 +30,8 @@
     "@asciidoctor/core": "3.0.4",
     "@biomejs/biome": "^2.4.13",
     "@playwright/test": "^1.59.1",
-    "addons-linter": "10.3.0",
-    "archiver": "5.3.1",
+    "addons-linter": "10.4.0",
+    "archiver": "5.3.2",
     "asciidoctor-kroki": "0.18.1",
     "bulma": "0.9.4",
     "chartist": "0.11.4",
@@ -39,8 +39,8 @@
     "esbuild": "^0.28.0",
     "font-awesome": "4.7.0",
     "mathjax": "3.2.2",
-    "sass": "1.63.3",
-    "sinon": "15.1.0"
+    "sass": "1.99.0",
+    "sinon": "15.2.0"
   },
   "keywords": [
     "browser",
@@ -52,6 +52,6 @@
     "asciidoctor"
   ],
   "volta": {
-    "node": "24.14.1"
+    "node": "24.15.0"
   }
 }
