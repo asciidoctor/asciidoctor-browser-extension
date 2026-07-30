@@ -35,10 +35,10 @@ const webExtension =
       : null
 if (webExtension) {
   webExtension.runtime.onMessage.addListener(
-    function handleMessage(message, sender) {
+    async function handleMessage(message, sender) {
       if (sender.id === webExtension.runtime.id) {
         if (message.status === 'extension-enabled') {
-          load().then()
+          await load()
         }
       }
     },
@@ -59,11 +59,11 @@ function displayContentAsPlainText(text) {
   document.body.appendChild(preElement)
 }
 
-function showResponse(response) {
+async function showResponse(response) {
   if (response) {
     setViewport()
     if (response.html) {
-      updateHTML(response).then()
+      await updateHTML(response)
     } else if (response.text) {
       displayContentAsPlainText(response.text)
     } else if (response.error) {
@@ -77,9 +77,9 @@ function fetchContent() {
   webExtension.runtime.sendMessage(
     { action: 'fetch-convert', initial: true },
     async (response) => {
-      showResponse(response)
+      await showResponse(response)
       if (response) {
-        startAutoReload().then()
+        await startAutoReload()
       }
     },
   )

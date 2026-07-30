@@ -96,17 +96,15 @@ const initializeMathJax = (eqnumsValue) => {
 
 /**
  * Append styles
- * @param doc
+ * @param stylesheet
  */
-const appendStyles = (stylesheet) => {
+async function appendStyles(stylesheet) {
   // Theme
-  return getThemeName(stylesheet)
-    .then(appendThemeStyle)
-    .then(() => {
-      // Highlight
-      const highlightTheme = 'github'
-      insertCssFile(`css/highlight/${highlightTheme}.css`)
-    })
+  const theme = await getThemeName(stylesheet)
+  await appendThemeStyle(theme)
+  // Highlight
+  const highlightTheme = 'github'
+  insertCssFile(`css/highlight/${highlightTheme}.css`)
 }
 
 /**
@@ -137,7 +135,7 @@ const postprocessing = (customJavaScript) => {
   }
 }
 
-const appendThemeStyle = async (themeName) => {
+async function appendThemeStyle(themeName) {
   const themeNames = getDefaultThemeNames()
   // Check if the theme is packaged in the extension... if not it's a custom theme
   if (themeNames.includes(themeName)) {

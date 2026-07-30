@@ -46,15 +46,14 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
     enablingLocalFileNotification.classList.remove('is-hidden')
   }
 
-  const initEnablingLocalFileAlert = () => {
+  const initEnablingLocalFileAlert = async () => {
     // This API is currently only implemented in Firefox and Firefox Mobile.
     // Reference: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/getBrowserInfo
     if (typeof webExtension.runtime.getBrowserInfo === 'function') {
-      webExtension.runtime.getBrowserInfo().then((info) => {
-        if (info.name.includes('Chrome') || info.name.includes('Opera')) {
-          showEnablingLocalFileNotification()
-        }
-      })
+      const info = await webExtension.runtime.getBrowserInfo()
+      if (info.name.includes('Chrome') || info.name.includes('Opera')) {
+        showEnablingLocalFileNotification()
+      }
     } else {
       // Assume that we are running Chrome or Opera (even if it can be Edge)
       showEnablingLocalFileNotification()

@@ -15,17 +15,13 @@ const webExtension =
  * @returns {Promise<String>}
  */
 export async function getThemeName(stylesheetAttribute) {
-  if (
-    typeof stylesheetAttribute !== 'undefined' &&
-    stylesheetAttribute !== ''
-  ) {
-    const themeName = stylesheetAttribute.replace(/\.css$/, '')
-    return hasTheme(themeName).then((result) => {
-      if (result) {
-        return Promise.resolve(themeName)
-      }
-      return getThemeNameFromSettings()
-    })
+  if (stylesheetAttribute) {
+    const themeName = stylesheetAttribute?.replace(/\.css$/, '')
+    const result = await hasTheme(themeName)
+    if (result) {
+      return themeName
+    }
+    return getThemeNameFromSettings()
   }
   return getThemeNameFromSettings()
 }
@@ -54,16 +50,14 @@ export function getDefaultThemeNames() {
  * @returns {Promise<boolean>}
  */
 async function hasTheme(themeName) {
-  return new Promise((resolve) => {
-    const themeNames = getDefaultThemeNames()
-    if (themeNames.includes(themeName)) {
-      resolve(true)
-      return
-    }
-    getSetting(Constants.CUSTOM_THEME_PREFIX + themeName).then(
-      (customThemeContent) => resolve(!!customThemeContent),
-    )
-  })
+  const themeNames = getDefaultThemeNames()
+  if (themeNames.includes(themeName)) {
+    return true
+  }
+  const customThemeContent = await getSetting(
+    Constants.CUSTOM_THEME_PREFIX + themeName,
+  )
+  return !!customThemeContent
 }
 
 /**
@@ -71,10 +65,6 @@ async function hasTheme(themeName) {
  * @returns {Promise<String>}
  */
 async function getThemeNameFromSettings() {
-  return new Promise((resolve) => {
-    webExtension.storage.local.get(Constants.THEME_KEY, (settings) => {
-      const theme = settings[Constants.THEME_KEY] || 'asciidoctor'
-      resolve(theme)
-    })
-  })
+  const settings = await webExtension.storage.local.get(Constants.THEME_KEY)
+  return settings[Constants.THEME_KEY] || 'asciidoctor'
 }
