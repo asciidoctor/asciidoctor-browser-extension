@@ -53,6 +53,7 @@
         "file://*/*.txt.*"
       ],
       "js": [
+        "js/vendor/chartist.min.js",
         "js/vendor/highlight.js/highlight.min.js",
         "js/vendor/highlight.js/languages/1c.min.js",
         "js/vendor/highlight.js/languages/abnf.min.js",
@@ -321,7 +322,23 @@
     "*://*/*.asciidoc.*",
     "*://*/*.txt",
     "*://*/*.txt?*",
-    "*://*/*.txt.*"
+    "*://*/*.txt.*",
+    "file://*/*.ad",
+    "file://*/*.ad?*",
+    "file://*/*.ad.*",
+    "file://*/*.adoc",
+    "file://*/*.adoc?*",
+    "file://*/*.adoc.*",
+    "file://*/*.asc",
+    "file://*/*.asc?*",
+    "file://*/*.asc.*",
+    "file://*/*.asciidoc",
+    "file://*/*.asciidoc?*",
+    "file://*/*.asciidoc.*",
+    "file://*/*.txt",
+    "file://*/*.txt?*",
+    "file://*/*.txt.*",
+    "file://*/*"
   ],
   "action": {
     "default_title": "Asciidoctor.js Preview"
