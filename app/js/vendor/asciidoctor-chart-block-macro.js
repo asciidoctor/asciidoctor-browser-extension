@@ -48,6 +48,7 @@ export function register(registry) {
     this.process((parent, target, attrs) => {
       const filePath = parent.normalizeAssetPath(target, 'target')
       try {
+        // FIXME readAsset does not support file:// URLs (the leading / is lost), see https://github.com/asciidoctor/asciidoctor.js/pull/1865
         const fileContent = parent.readAsset(filePath, {
           warn_on_failure: true,
           normalize: true,
@@ -59,8 +60,11 @@ export function register(registry) {
         const html = process(data, labels, attrs)
         return this.createBlock(parent, 'pass', html, attrs, {})
       } catch (_e) {
-        console.warn(
-          `Cannot read file: ${filePath}. Manifest V3 relies on service workers and cannot use synchronous XMLHttpRequest.`,
+        const doc = parent.getDocument()
+        doc.getLogger().warn(
+          doc.messageWithContext(`Cannot read file: ${filePath}`, {
+            source_location: parent.getSourceLocation?.() ?? null,
+          }),
         )
         return this.createBlock(
           parent,
