@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import { cp, mkdir, rm } from 'node:fs/promises'
 import ospath from 'node:path'
-import archiver from 'archiver'
+import { ZipArchive } from 'archiver'
 import { minify } from 'csso'
 import { build as esbuild } from 'esbuild'
 import { compile } from 'sass'
@@ -155,7 +155,9 @@ async function compress() {
 function createZip(outputPath, addFiles) {
   return new Promise((resolve, reject) => {
     const output = fs.createWriteStream(outputPath)
-    const archive = archiver('zip', { zlib: { level: 9 } })
+    const archive = new ZipArchive({
+      zlib: { level: 9 },
+    })
     output.on('close', () => {
       console.log(`${outputPath}: ${archive.pointer()} bytes`)
       resolve()
@@ -184,11 +186,11 @@ async function copyVendorResources() {
   console.log('copy vendor resources')
   await Promise.all([
     cp(
-      'node_modules/@asciidoctor/core/dist/browser/asciidoctor.js',
+      'node_modules/@asciidoctor/core/build/browser/index.js',
       'app/js/vendor/asciidoctor.js',
     ),
     cp(
-      'node_modules/asciidoctor-kroki/dist/browser/asciidoctor-kroki.js',
+      'node_modules/asciidoctor-kroki/build/browser/index.js',
       'app/js/vendor/kroki.js',
     ),
     cp(
@@ -196,7 +198,15 @@ async function copyVendorResources() {
       'app/js/vendor/chartist.min.js',
     ),
     cp(
-      'node_modules/@asciidoctor/core/dist/css/asciidoctor.css',
+      'node_modules/asciidoctor-emoji/src/asciidoctor-emoji.js',
+      'app/js/vendor/asciidoctor-emoji-inline-macro.js',
+    ),
+    cp(
+      'node_modules/asciidoctor-emoji/src/twemoji-map.js',
+      'app/js/vendor/twemoji-map.js',
+    ),
+    cp(
+      'node_modules/@asciidoctor/core/data/asciidoctor-default.css',
       'app/css/themes/asciidoctor.css',
     ),
     cp(
