@@ -1,5 +1,5 @@
 // Define the 'browser' object available in WebExtension environment.
-window.browser = {
+export const browser = {
   storage: {
     local: {
       get: () => {},
