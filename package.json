@@ -33,13 +33,11 @@
     "archiver": "8.0.0",
     "asciidoctor-emoji": "^1.0.0",
     "asciidoctor-kroki": "1.0.1",
-    "bulma": "0.9.4",
     "chartist": "1.5.0",
     "csso": "5.0.5",
     "esbuild": "^0.28.1",
     "font-awesome": "4.7.0",
     "mathjax": "3.2.2",
-    "sass": "1.63.3",
     "sinon": "22.1.0"
   },
   "keywords": [

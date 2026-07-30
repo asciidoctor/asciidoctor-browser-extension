@@ -4,7 +4,6 @@ import ospath from 'node:path'
 import { ZipArchive } from 'archiver'
 import { minify } from 'csso'
 import { build as esbuild } from 'esbuild'
-import { compile } from 'sass'
 
 async function downloadFonts() {
   console.log('download fonts')
@@ -176,13 +175,12 @@ function createZip(outputPath, addFiles) {
   })
 }
 
-function compileSass() {
-  console.log('compile Sass')
-  const source = 'src/sass/options.scss'
+function minifyOptionsCss() {
+  const source = 'src/css/options.css'
   const destination = 'app/css/options.min.css'
-  console.log(`compile and minify: ${source} -> ${destination}`)
-  const result = compile(source, { loadPaths: ['node_modules'] })
-  const minified = minify(result.css)
+  console.log(`minify: ${source} -> ${destination}`)
+  const css = fs.readFileSync(source, 'utf-8')
+  const minified = minify(css)
   fs.writeFileSync(destination, minified.css, 'utf-8')
 }
 
@@ -226,7 +224,7 @@ await bundleChartist()
 await downloadFonts()
 replaceFontsImport()
 replaceImagesURL()
-compileSass()
+minifyOptionsCss()
 await bundleContentScript()
 generateFirefoxManifest()
 await compress()

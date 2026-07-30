@@ -1,0 +1,523 @@
+/*
+ * Stylesheet for the options page.
+ * Hand-written (no Bulma/Sass) — only the styles the options page markup actually needs.
+ */
+
+html {
+  box-sizing: border-box;
+  font-size: 14px;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-size-adjust: 100%;
+  min-width: 30rem;
+  background-color: transparent; /* Firefox does not use a white background */
+  overflow: auto; /* no scrollbar on Firefox */
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body,
+button,
+input,
+optgroup,
+select {
+  font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+    "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+}
+
+button,
+input,
+select {
+  margin: 0;
+}
+
+body {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #363636;
+}
+
+a {
+  color: #485fc7;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+strong {
+  font-weight: 700;
+}
+
+code {
+  background-color: #f5f5f5;
+  color: #ff3860;
+  padding: 0.25em 0.5em;
+  font-size: 0.875em;
+}
+
+/* Layout */
+
+.section {
+  padding: 1rem 1rem;
+}
+
+@media screen and (min-width: 1024px) {
+  .section {
+    padding: 3rem 3rem;
+  }
+}
+
+.container {
+  margin: 0 auto;
+  width: auto;
+}
+
+/* Fields, labels, help text */
+
+.field:not(:last-child) {
+  margin-bottom: 2rem;
+}
+
+.field.is-grouped {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.field.is-grouped > .control:not(:last-child) {
+  margin-right: 0.75rem;
+}
+
+.label {
+  color: #363636;
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.label:not(:last-child) {
+  margin-bottom: 0.5em;
+}
+
+.help {
+  display: block;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  color: #737373;
+}
+
+/* Inputs, selects, buttons share the same base sizing */
+
+.input,
+.select select,
+.button {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  align-items: center;
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+  box-shadow: none;
+  display: inline-flex;
+  font-size: 1rem;
+  height: 2.5em;
+  justify-content: flex-start;
+  line-height: 1.5;
+  padding: calc(0.5em - 1px) calc(0.75em - 1px);
+  vertical-align: top;
+}
+
+.input,
+.select select {
+  background-color: #fff;
+  color: #363636;
+  box-shadow: inset 0 0.0625em 0.125em rgba(10, 10, 10, 0.05);
+  max-width: 100%;
+  width: 100%;
+}
+
+.input::placeholder {
+  color: rgba(54, 54, 54, 0.3);
+}
+
+.input:hover,
+.select select:hover {
+  border-color: #b5b5b5;
+}
+
+.input:focus,
+.select select:focus {
+  border-color: #485fc7;
+  box-shadow: 0 0 0 0.125em rgba(72, 95, 199, 0.25);
+  outline: none;
+}
+
+/* Select (custom dropdown arrow) */
+
+.select {
+  display: inline-block;
+  max-width: 100%;
+  position: relative;
+  vertical-align: top;
+}
+
+.select:not(.is-loading)::after {
+  border: 3px solid transparent;
+  border-right: 0;
+  border-top: 0;
+  border-radius: 2px;
+  border-color: #485fc7;
+  content: " ";
+  display: block;
+  height: 0.625em;
+  width: 0.625em;
+  margin-top: -0.4375em;
+  pointer-events: none;
+  position: absolute;
+  right: 1.125em;
+  top: 50%;
+  transform: rotate(-45deg);
+  z-index: 4;
+}
+
+.select:not(.is-loading):hover::after {
+  border-color: #363636;
+}
+
+.select select {
+  cursor: pointer;
+  display: block;
+  max-width: 100%;
+  outline: none;
+  padding-right: 2.5em;
+}
+
+/* Buttons */
+
+.button {
+  background-color: #fff;
+  border-color: #dbdbdb;
+  color: #363636;
+  cursor: pointer;
+  justify-content: center;
+  padding-left: 1em;
+  padding-right: 1em;
+  text-align: center;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.button:hover {
+  border-color: #b5b5b5;
+}
+
+.button.is-danger {
+  background-color: #f14668;
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-danger:hover {
+  background-color: #f03a5f;
+}
+
+.button.is-danger:active {
+  background-color: #ef2e55;
+}
+
+.button.is-danger:focus:not(:active) {
+  box-shadow: 0 0 0 0.125em rgba(241, 70, 104, 0.25);
+}
+
+/* Checkboxes and radios */
+
+.checkbox,
+.radio {
+  cursor: pointer;
+  display: inline-block;
+  line-height: 1.25;
+  position: relative;
+}
+
+.checkbox input,
+.radio input {
+  cursor: pointer;
+}
+
+/* Icons inside a control (e.g. an input with a validation icon) */
+
+.control {
+  box-sizing: border-box;
+  clear: both;
+  font-size: 1rem;
+  position: relative;
+  text-align: inherit;
+}
+
+.control.is-expanded {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.icon {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.icon.is-small {
+  height: 1rem;
+  width: 1rem;
+}
+
+.control.has-icons-left .icon,
+.control.has-icons-right .icon {
+  color: #dbdbdb;
+  height: 2.5em;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  width: 2.5em;
+  z-index: 4;
+}
+
+.control.has-icons-left .input,
+.control.has-icons-left .select select {
+  padding-left: 2.5em;
+}
+
+.control.has-icons-left .icon.is-left {
+  left: 0;
+}
+
+.control.has-icons-right .input,
+.control.has-icons-right .select select {
+  padding-right: 2.5em;
+}
+
+.control.has-icons-right .icon.is-right {
+  right: 0;
+}
+
+/* Save indicator spinner, shown on .control.is-loading while options are being saved */
+
+@keyframes spinAround {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+.control.is-loading::after {
+  animation: spinAround 500ms infinite linear;
+  border: 2px solid #dbdbdb;
+  border-radius: 9999px;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  content: "";
+  display: block;
+  height: 1em;
+  width: 1em;
+  position: absolute !important;
+  right: 0.625em;
+  top: 0.625em;
+  z-index: 4;
+}
+
+/* File input */
+
+.file {
+  align-items: stretch;
+  display: flex;
+  justify-content: flex-start;
+  position: relative;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.file.is-small {
+  font-size: 0.75rem;
+}
+
+.file-label {
+  align-items: stretch;
+  display: flex;
+  cursor: pointer;
+  justify-content: flex-start;
+  overflow: hidden;
+  position: relative;
+  user-select: none;
+}
+
+.file-label:hover .file-cta {
+  background-color: #eeeeee;
+  color: #363636;
+}
+
+.file-label:active .file-cta {
+  background-color: #e8e8e8;
+  color: #363636;
+}
+
+.file-input {
+  height: 100%;
+  left: 0;
+  opacity: 0;
+  outline: none;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  cursor: pointer;
+}
+
+.file-cta {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background-color: #f5f5f5;
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+  color: #4a4a4a;
+  font-size: 1em;
+  padding: 0.25rem 1em;
+  white-space: nowrap;
+}
+
+.file-icon {
+  align-items: center;
+  display: flex;
+  height: 1em;
+  justify-content: center;
+  margin-right: 0.5em;
+  width: 1em;
+}
+
+/* Notifications */
+
+.notification {
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  position: relative;
+  padding: 1.25rem 2.5rem 1.25rem 1.5rem;
+}
+
+.notification a:not(.button) {
+  color: currentColor;
+  text-decoration: underline;
+}
+
+.notification strong {
+  color: currentColor;
+}
+
+.notification code {
+  background: #fff;
+  white-space: nowrap;
+}
+
+.notification.is-small {
+  font-size: 0.9rem;
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+}
+
+.notification.is-info {
+  background-color: #3e8ed0;
+  color: #fff;
+}
+
+.notification.is-warning {
+  background-color: #ffe08a;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+/* Close ("x") button used on notifications */
+
+.delete {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: rgba(10, 10, 10, 0.2);
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  display: inline-block;
+  flex-grow: 0;
+  flex-shrink: 0;
+  font-size: 0;
+  height: 20px;
+  max-height: 20px;
+  max-width: 20px;
+  min-height: 20px;
+  min-width: 20px;
+  outline: none;
+  position: relative;
+  vertical-align: top;
+  width: 20px;
+  user-select: none;
+}
+
+.delete::before,
+.delete::after {
+  background-color: #fff;
+  content: "";
+  display: block;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%) rotate(45deg);
+  transform-origin: center center;
+}
+
+.delete::before {
+  height: 2px;
+  width: 50%;
+}
+
+.delete::after {
+  height: 50%;
+  width: 2px;
+}
+
+.delete:hover,
+.delete:focus {
+  background-color: rgba(10, 10, 10, 0.3);
+}
+
+.delete:active {
+  background-color: rgba(10, 10, 10, 0.4);
+}
+
+.notification > .delete {
+  right: 0.5rem;
+  position: absolute;
+  top: 0.5rem;
+}
+
+/* Utility */
+
+.is-hidden {
+  display: none !important;
+}
+
+/* Options page specific layout */
+
+fieldset {
+  padding: 1rem;
+  border: 1px solid #cccccc;
+  margin-bottom: 1.5rem;
+}
+
+fieldset .field:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+fieldset legend {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
