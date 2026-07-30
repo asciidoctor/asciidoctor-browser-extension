@@ -12,7 +12,7 @@
     "build": "npm run lint && node tasks/build.js",
     "lint": "biome check",
     "format": "biome format --write",
-    "validate:firefox": "addons-linter dist/asciidoctor-browser-extension-firefox-*.zip"
+    "validate:firefox": "npx -y addons-linter dist/asciidoctor-browser-extension-firefox-*.zip"
   },
   "homepage": "https://github.com/asciidoctor/asciidoctor-browser-extension",
   "author": {
@@ -20,27 +20,27 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:asciidoctor/asciidoctor-browser-extension.git"
+    "url": "git+ssh://git@github.com/asciidoctor/asciidoctor-browser-extension.git"
   },
   "bugs": {
     "url": "https://github.com/asciidoctor/asciidoctor-browser-extension/issues"
   },
   "license": "MIT",
   "devDependencies": {
-    "@asciidoctor/core": "3.0.4",
-    "@biomejs/biome": "^2.4.13",
-    "@playwright/test": "^1.59.1",
-    "addons-linter": "10.3.0",
-    "archiver": "5.3.1",
-    "asciidoctor-kroki": "0.18.1",
+    "@asciidoctor/core": "4.0.6",
+    "@biomejs/biome": "^2.5.6",
+    "@playwright/test": "^1.62.0",
+    "archiver": "8.0.0",
+    "asciidoctor-emoji": "^1.0.0",
+    "asciidoctor-kroki": "1.0.1",
     "bulma": "0.9.4",
     "chartist": "0.11.4",
     "csso": "5.0.5",
-    "esbuild": "^0.28.0",
+    "esbuild": "^0.28.1",
     "font-awesome": "4.7.0",
     "mathjax": "3.2.2",
     "sass": "1.63.3",
-    "sinon": "15.1.0"
+    "sinon": "22.1.0"
   },
   "keywords": [
     "browser",
