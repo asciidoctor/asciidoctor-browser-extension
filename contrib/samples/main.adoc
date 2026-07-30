@@ -140,7 +140,7 @@ https://github.com/asciidoctor[Asciidoctor @ *GitHub*]
 This is a {link}[link]. This is another link http://www.google.fr[Google]
 
 .Table Title
-[cols="2*", options="header"]
+[cols="3*", options="header"]
 |===
 |Name of Column 1 |Name of Column 2 |Name of Column 3
 
@@ -194,9 +194,9 @@ Refer to <<chapter-1.adoc#_section_b,Section B>> for more information.
 
 A statement.footnote:[Clarification about this statement.]
 
-A bold statement.footnoteref:[disclaimer,Opinions are my own.]
+A bold statement.footnote:disclaimer[Opinions are my own.]
 
-Another bold statement.footnoteref:[disclaimer]
+Another bold statement.footnote:disclaimer[]
 
 == Custom attributes
 
