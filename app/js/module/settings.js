@@ -37,11 +37,8 @@ class CustomJavaScript {
  * @returns {Promise<any>}
  */
 export async function getSetting(key) {
-  return new Promise((resolve) => {
-    webExtension.storage.local.get(key, (items) => {
-      resolve(items[key])
-    })
-  })
+  const items = await webExtension.storage.local.get(key)
+  return items[key]
 }
 
 /**
@@ -161,11 +158,7 @@ const getCustomScriptContent = async (customJavaScriptName) =>
  * @returns {Promise<any>}
  */
 export async function getSettings(keys) {
-  return new Promise((resolve) => {
-    webExtension.storage.local.get(keys, (settings) => {
-      resolve(settings)
-    })
-  })
+  return webExtension.storage.local.get(keys)
 }
 
 export function getBrowserInfo() {

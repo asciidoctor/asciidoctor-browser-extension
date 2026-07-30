@@ -16,12 +16,12 @@ const inject = async (source) => {
       } catch (e) {
         response.error = e
       }
-      showResponse(response)
+      await showResponse(response)
     } else {
       webExtension.runtime.sendMessage(
         { action: 'convert', source },
-        (response) => {
-          showResponse(response)
+        async (response) => {
+          await showResponse(response)
         },
       )
     }
@@ -29,10 +29,10 @@ const inject = async (source) => {
   }
 }
 
-const showResponse = (response) => {
+const showResponse = async (response) => {
   if (response) {
     if (response.html) {
-      updateHTML(response).then()
+      await updateHTML(response)
     } else if (response.error) {
       showError(response.error)
     }
