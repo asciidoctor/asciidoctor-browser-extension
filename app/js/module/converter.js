@@ -1,6 +1,9 @@
-/* global chrome, browser, AsciidoctorKroki */
-import '../vendor/kroki.js'
-import asciidoctor from '../vendor/asciidoctor.js'
+/* global chrome, browser */
+
+import { Extensions, load } from '../vendor/asciidoctor.js'
+import { register as registerChartExtension } from '../vendor/asciidoctor-chart-block-macro.js'
+import { register as registerEmojiExtension } from '../vendor/asciidoctor-emoji-inline-macro.js'
+import KrokiExtension from '../vendor/kroki.js'
 import { md5 } from '../vendor/md5.js'
 import executeRequest, { isHtmlContentType } from './fetch.js'
 import {
@@ -9,8 +12,6 @@ import {
   isExtensionEnabled,
 } from './settings.js'
 
-const Asciidoctor = asciidoctor()
-const Extensions = Asciidoctor.Extensions
 const webExtension =
   typeof browser !== 'undefined'
     ? browser
@@ -45,7 +46,7 @@ function isStemEnabled(doc) {
 export async function convert(url, source) {
   const settings = await getRenderingSettings()
   const options = buildAsciidoctorOptions(settings, url)
-  const doc = Asciidoctor.load(source, options)
+  const doc = await load(source, options)
   if (showTitle(doc)) {
     doc.removeAttribute('notitle')
     doc.setAttribute('showtitle')
@@ -64,9 +65,9 @@ export async function convert(url, source) {
     eqnumsValue = 'ams'
   }
   return {
-    html: doc.convert(),
+    html: await doc.convert(),
     text: source,
-    title: doc.getDoctitle({ use_fallback: true }),
+    title: doc.getDocumentTitle({ use_fallback: true }),
     doctype: doc.getDoctype(),
     attributes: {
       hasSections: doc.hasSections(),
@@ -185,20 +186,36 @@ export function buildAsciidoctorOptions(settings, url) {
   attributes.push('kroki-fetch-diagram!')
   const registry = Extensions.create()
   if (settings.krokiEnabled) {
-    AsciidoctorKroki.register(registry, {
+    KrokiExtension.register(registry, {
       vfs: {
-        read: (path) => {
-          console.warn(
-            `Cannot read file: ${path}. Manifest V3 relies on service workers and cannot use synchronous XMLHttpRequest.`,
-          )
-          return ''
+        read: async (path, encoding = 'utf8') => {
+          const absolutePath =
+            path.startsWith('file://') ||
+            path.startsWith('http://') ||
+            path.startsWith('https://')
+              ? path
+              : `${pwd}/${path}`
+          const response = await fetch(absolutePath)
+          if (!(response.status === 200 || response.status === 0)) {
+            throw new Error(`No such file: ${absolutePath}`)
+          }
+          if (encoding === 'binary') {
+            const buffer = await response.arrayBuffer()
+            return String.fromCharCode(...new Uint8Array(buffer))
+          }
+          return response.text()
         },
         exists: (_) => false,
-        dirname: (_) => {},
+        parse: (path) => ({
+          dir: path.substring(0, path.lastIndexOf('/')),
+          path,
+        }),
         add: (_) => {},
       },
     })
   }
+  registerEmojiExtension(registry)
+  registerChartExtension(registry)
   return {
     safe: safeMode,
     extension_registry: registry,

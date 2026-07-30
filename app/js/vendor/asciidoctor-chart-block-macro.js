@@ -1,7 +1,3 @@
-import asciidoctor from './asciidoctor.js'
-
-const Asciidoctor = asciidoctor()
-
 function process(data, labels, attrs) {
   const div = getDiv(data, labels, attrs)
   return `${div}`
@@ -44,8 +40,8 @@ function getType(attrs) {
   }
 }
 
-Asciidoctor.Extensions.register(function () {
-  this.blockMacro(function () {
+export function register(registry) {
+  registry.blockMacro(function () {
     this.named('chart')
     this.positionalAttributes(['type', 'width', 'height'])
 
@@ -77,10 +73,10 @@ Asciidoctor.Extensions.register(function () {
     })
   })
 
-  this.block(function () {
+  registry.block(function () {
     this.named('chart')
     this.positionalAttributes(['size', 'width', 'height'])
-    this.$content_model('raw')
+    this.contentModel('raw')
     this.onContext('literal')
 
     this.process((parent, reader, attrs) => {
@@ -92,4 +88,4 @@ Asciidoctor.Extensions.register(function () {
       return this.createBlock(parent, 'pass', html, attrs, {})
     })
   })
-})
+}
