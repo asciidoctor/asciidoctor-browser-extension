@@ -4,9 +4,7 @@ function configureParameters(params) {
     params = []
   }
   sinon.spy(browser.storage.local, 'set')
-  sinon.stub(browser.storage.local, 'get').callsFake((_name, callback) => {
-    callback(params)
-  })
+  sinon.stub(browser.storage.local, 'get').resolves(params)
 }
 
 function configureManifest(manifest) {
