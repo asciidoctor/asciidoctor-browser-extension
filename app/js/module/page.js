@@ -295,7 +295,7 @@ const drawCharts = () => {
       labels: node.dataset.chartLabels.split(','),
       series,
     }
-    Chartist[node.dataset.chartType](node, data, options)
+    new Chartist[node.dataset.chartType](node, data, options)
   })
 }
 

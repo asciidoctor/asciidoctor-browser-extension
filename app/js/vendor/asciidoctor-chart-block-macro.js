@@ -31,12 +31,12 @@ function getDiv(data, labels, attrs) {
 function getType(attrs) {
   const type = attrs.type
   if (type === 'bar') {
-    return 'Bar'
+    return 'BarChart'
   } else if (type === 'line') {
-    return 'Line'
+    return 'LineChart'
   } else {
     // By default, chart line
-    return 'Line'
+    return 'LineChart'
   }
 }
 

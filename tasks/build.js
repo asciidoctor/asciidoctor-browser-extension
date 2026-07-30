@@ -70,12 +70,16 @@ function replaceImagesURL() {
   }
 }
 
-function removeSourceMapReferences() {
-  const path = 'app/js/vendor/chartist.min.js'
-  let data = fs.readFileSync(path, 'utf8')
-  console.log(`Remove sourcemap in ${path}`)
-  data = data.replace(/\n\/\/# sourceMappingURL=(.*)/, '')
-  fs.writeFileSync(path, data, 'utf8')
+async function bundleChartist() {
+  console.log('bundle vendor: chartist')
+  await esbuild({
+    entryPoints: ['node_modules/chartist/dist/index.umd.js'],
+    minify: true,
+    outfile: 'app/js/vendor/chartist.min.js',
+  })
+  const css = fs.readFileSync('node_modules/chartist/dist/index.css', 'utf-8')
+  const minified = minify(css)
+  fs.writeFileSync('app/css/chartist.min.css', minified.css, 'utf-8')
 }
 
 async function clean() {
@@ -194,10 +198,6 @@ async function copyVendorResources() {
       'app/js/vendor/kroki.js',
     ),
     cp(
-      'node_modules/chartist/dist/chartist.min.js',
-      'app/js/vendor/chartist.min.js',
-    ),
-    cp(
       'node_modules/asciidoctor-emoji/src/asciidoctor-emoji.js',
       'app/js/vendor/asciidoctor-emoji-inline-macro.js',
     ),
@@ -222,10 +222,10 @@ async function copyVendorResources() {
 
 await clean()
 await copyVendorResources()
+await bundleChartist()
 await downloadFonts()
 replaceFontsImport()
 replaceImagesURL()
-removeSourceMapReferences()
 compileSass()
 await bundleContentScript()
 generateFirefoxManifest()
