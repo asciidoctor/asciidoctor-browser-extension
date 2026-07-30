@@ -1,11 +1,10 @@
-skinparam monochrome true
 skinparam ranksep 20
-skinparam dpi 150
-skinparam arrowThickness 0.7
-skinparam packageTitleAlignment left
-skinparam usecaseBorderThickness 0.4
-skinparam defaultFontSize 12
-skinparam rectangleBorderThickness 1
+skinparam dpi 125
+<style>
+  rectangle {
+    HorizontalAlignment: left;
+  }
+</style>
 
 rectangle "Main" {
   (main.view)
