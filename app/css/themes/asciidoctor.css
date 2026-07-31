@@ -438,7 +438,7 @@ h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h
 #content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#f0a08f}
 #header>h1:first-child,#header .details span.email a,#header .details br+span.author::before{color:rgba(255,255,255,.85)}
 #content>h1:first-child:not([class]){color:rgba(255,255,255,.85);border-bottom-color:#444}
-#header>h1:first-child+#toc,#header>h1:only-child,#header .details,#toc{border-color:#444}
+#header>h1:first-child+#toc,#header>h1:only-child,#header .details,#toc,body.toc2 #header>h1:nth-last-child(2){border-color:#444}
 #header .details{color:rgba(255,255,255,.6)}
 #toctitle{color:#e2775f}
 #content #toc,#toc.toc2{background:#181818;border-color:#333}
@@ -452,6 +452,7 @@ kbd{background:#2a2a2a;border-color:#555;box-shadow:0 1px 0 rgba(0,0,0,.4),inset
 .keyseq{color:rgba(221,221,221,.8)}
 table{background:#1e1e1e}
 table thead,table tfoot,tbody tr th{background:#2a2a2a}
+table tr.even,table tr.alt,table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#262626}
 table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td,table tr th,table tr td{color:rgba(255,255,255,.8)}
 tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(255,255,255,.8)}
 table.tableblock,th.tableblock,td.tableblock{border-color:#444}
@@ -461,6 +462,11 @@ blockquote,blockquote p,.quoteblock blockquote,.quoteblock p{color:rgba(255,255,
 .quoteblock .attribution cite,.verseblock .attribution cite{color:rgba(255,255,255,.6)}
 .verseblock pre{color:rgba(255,255,255,.85)}
 .admonitionblock>table td.content{border-left-color:#444;color:rgba(255,255,255,.6)}
+.admonitionblock td.icon .icon-note::before{color:#6cb6ff}
+.admonitionblock td.icon .icon-tip::before{color:#f0d264;text-shadow:1px 1px 2px rgba(0,0,0,.6)}
+.admonitionblock td.icon .icon-warning::before{color:#ffa94d}
+.admonitionblock td.icon .icon-caution::before{color:#ff7452}
+.admonitionblock td.icon .icon-important::before{color:#ff5c5c}
 .exampleblock>.content{background:#262626;border-color:#444;box-shadow:none}
 .sidebarblock{background:#262626;border-color:#444}
 .sidebarblock>.content>.title{color:#e2775f}

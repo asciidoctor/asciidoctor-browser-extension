@@ -1,0 +1,23 @@
+/*
+Dark-mode syntax highlighting, applied on top of github.css when the
+reader's OS-level prefers-color-scheme is dark. Selectors are prefixed
+with "html" (rather than relying on stylesheet load order, which isn't
+guaranteed between the two files) to reliably win the cascade.
+
+Theme: atom-one-dark (c) 2016 Daniel Gamage, MIT License
+https://github.com/highlightjs/highlight.js/blob/main/LICENSE
+*/
+@media screen and (prefers-color-scheme:dark){
+html .hljs{display:block;overflow-x:auto;padding:.5em;color:#abb2bf;background:transparent}
+html .hljs-comment,html .hljs-quote{color:#5c6370;font-style:italic}
+html .hljs-doctag,html .hljs-keyword,html .hljs-formula{color:#c678dd}
+html .hljs-section,html .hljs-name,html .hljs-selector-tag,html .hljs-deletion,html .hljs-subst{color:#e06c75}
+html .hljs-literal{color:#56b6c2}
+html .hljs-string,html .hljs-regexp,html .hljs-addition,html .hljs-attribute,html .hljs-meta-string{color:#98c379}
+html .hljs-built_in,html .hljs-class .hljs-title{color:#e6c07b}
+html .hljs-attr,html .hljs-variable,html .hljs-template-variable,html .hljs-type,html .hljs-selector-class,html .hljs-selector-attr,html .hljs-selector-pseudo,html .hljs-number{color:#d19a66}
+html .hljs-symbol,html .hljs-bullet,html .hljs-link,html .hljs-meta,html .hljs-selector-id,html .hljs-title{color:#61aeee}
+html .hljs-emphasis{font-style:italic}
+html .hljs-strong{font-weight:bold}
+html .hljs-link{text-decoration:underline}
+}

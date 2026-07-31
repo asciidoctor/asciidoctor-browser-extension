@@ -105,6 +105,10 @@ async function appendStyles(stylesheet) {
   // Highlight
   const highlightTheme = 'github'
   insertCssFile(`css/highlight/${highlightTheme}.css`)
+  if (highlightTheme === 'github') {
+    // Dark-mode overrides (self-scoped to prefers-color-scheme: dark, so this is a no-op in light mode)
+    insertCssFile('css/highlight/github-dark.css')
+  }
 }
 
 /**
