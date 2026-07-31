@@ -45,14 +45,16 @@ export function register(registry) {
     this.named('chart')
     this.positionalAttributes(['type', 'width', 'height'])
 
-    this.process((parent, target, attrs) => {
+    this.process(async (parent, target, attrs) => {
       const filePath = parent.normalizeAssetPath(target, 'target')
       try {
-        // FIXME readAsset does not support file:// URLs (the leading / is lost), see https://github.com/asciidoctor/asciidoctor.js/pull/1865
-        const fileContent = parent.readAsset(filePath, {
-          warn_on_failure: true,
+        const fileContent = await parent.readAsset(filePath, {
+          warnOnFailure: false,
           normalize: true,
         })
+        if (fileContent == null) {
+          throw new Error(`Cannot read file: ${filePath}`)
+        }
         const lines = fileContent.split('\n')
         const labels = lines[0].split(',')
         lines.shift()
