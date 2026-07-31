@@ -42,9 +42,9 @@ export async function updateHTML(backgroundConverterResponse) {
     detectLiveReloadJs(scripts)
     const settings = await getRenderingSettings()
     const customJavaScript = settings.customScript
-    preprocessing(customJavaScript)
+    await preprocessing(customJavaScript)
     await updateBodyHTML(backgroundConverterResponse, scripts)
-    postprocessing(customJavaScript)
+    await postprocessing(customJavaScript)
     return true
   } catch (error) {
     showError(error)
@@ -110,29 +110,47 @@ async function appendStyles(stylesheet) {
 /**
  * @param customJavaScript
  */
-const preprocessing = (customJavaScript) => {
+const preprocessing = async (customJavaScript) => {
   if (customJavaScript && customJavaScript.loadDirective === 'before') {
-    document.head.appendChild(
-      createScriptElement({
-        id: 'asciidoctor-browser-custom-js',
-        innerHTML: customJavaScript.content,
-      }),
-    )
+    await appendCustomScript(customJavaScript.content)
   }
 }
 
 /**
  * @param customJavaScript
  */
-const postprocessing = (customJavaScript) => {
+const postprocessing = async (customJavaScript) => {
   if (customJavaScript && customJavaScript.loadDirective === 'after') {
-    document.head.appendChild(
-      createScriptElement({
-        id: 'asciidoctor-browser-custom-js',
-        innerHTML: customJavaScript.content,
-      }),
-    )
+    await appendCustomScript(customJavaScript.content)
   }
+}
+
+/**
+ * Run the user-provided custom script via the background script, using
+ * chrome.scripting.executeScript in the page's MAIN world. This is required
+ * (rather than appending a <script> from the content script directly) so the
+ * script is exempt from the page's Content-Security-Policy: neither an inline
+ * script appended from a content script, nor a Blob URL created in the
+ * content script's isolated world (which gets an opaque "null" origin that
+ * never matches 'self'), reliably run on pages with a strict CSP.
+ * @param content The JavaScript source to execute
+ * @returns {Promise<void>} Resolves once the script has run
+ */
+const appendCustomScript = (content) => {
+  return new Promise((resolve, reject) => {
+    webExtension.runtime.sendMessage(
+      { action: 'run-custom-script', content },
+      (response) => {
+        if (webExtension.runtime.lastError) {
+          reject(new Error(webExtension.runtime.lastError.message))
+        } else if (response?.error) {
+          reject(new Error(response.error.message || response.error))
+        } else {
+          resolve()
+        }
+      },
+    )
+  })
 }
 
 async function appendThemeStyle(themeName) {

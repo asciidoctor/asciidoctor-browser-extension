@@ -128,6 +128,41 @@ webExtension.runtime.onMessage.addListener((request, sender, sendResponse) => {
           .catch(console.error)
       }
     }
+  } else if (request.action === 'run-custom-script') {
+    // Run in the page's own MAIN world (rather than from the content script's
+    // isolated world) via the scripting API, which is exempt from the page's CSP.
+    // The script is loaded from a Blob URL (not set as inline content) so the
+    // resulting <script> element still needs to satisfy CSP as an external
+    // script source; creating the Blob in the MAIN world gives it the page's
+    // real origin (isolated-world Blobs get an opaque "null" origin that
+    // never matches 'self').
+    webExtension.scripting
+      .executeScript({
+        target: { tabId: sender.tab.id },
+        world: 'MAIN',
+        func: (id, content) =>
+          new Promise((resolve, reject) => {
+            const url = URL.createObjectURL(
+              new Blob([content], { type: 'text/javascript' }),
+            )
+            const script = document.createElement('script')
+            script.id = id
+            script.src = url
+            script.onload = () => {
+              URL.revokeObjectURL(url)
+              resolve()
+            }
+            script.onerror = () => {
+              URL.revokeObjectURL(url)
+              reject(new Error('Unable to load the custom script'))
+            }
+            document.head.appendChild(script)
+          }),
+        args: ['asciidoctor-browser-custom-js', request.content],
+      })
+      .then(() => sendResponse({}))
+      .catch((error) => sendResponse({ error: getErrorInfo(error) }))
+    return true
   }
   // send an empty response to avoid the pesky error "The message port closed before a response was received"
   sendResponse({})

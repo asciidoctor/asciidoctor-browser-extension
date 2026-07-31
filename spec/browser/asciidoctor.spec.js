@@ -55,15 +55,13 @@ test.describe('Custom script', () => {
       await Renderer.updateHTML(response)
     })
 
-    const customJsText = await page.evaluate(
+    const customJsSrc = await page.evaluate(
       () =>
         Array.from(document.head.children).find(
           (el) => el.id === 'asciidoctor-browser-custom-js',
-        )?.innerText,
+        )?.src,
     )
-    expect(customJsText).toBe(
-      "document.body.appendChild(document.createElement('strong'));",
-    )
+    expect(customJsSrc).toMatch(/^blob:/)
 
     const strongElement = await page.evaluate(() =>
       Array.from(document.body.children).find(
@@ -97,15 +95,13 @@ test.describe('Custom script', () => {
       await Renderer.updateHTML(response)
     })
 
-    const customJsText = await page.evaluate(
+    const customJsSrc = await page.evaluate(
       () =>
         Array.from(document.head.children).find(
           (el) => el.id === 'asciidoctor-browser-custom-js',
-        )?.innerText,
+        )?.src,
     )
-    expect(customJsText).toBe(
-      "document.body.appendChild(document.createElement('i'));",
-    )
+    expect(customJsSrc).toMatch(/^blob:/)
 
     await expect(page.locator('body i')).toHaveCount(1)
 

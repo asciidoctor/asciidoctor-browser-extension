@@ -10,6 +10,7 @@
 * Remove Bulma and Sass, replace the generated options page stylesheet with a small hand-written CSS file
 * Restructure `contrib/samples` into a single coherent multi-chapter sample book instead of a set of disconnected syntax snippets
 * Modernize `fade-navigation.js` and `navigation.js`, add a new `dark-mode-before-render.js` example, and move all three from `contrib` into the Antora documentation as downloadable examples of the JavaScript "before"/"after" load hooks
+* Fix custom JavaScript being blocked on pages with a strict Content-Security-Policy: run it in the page's main world via `chrome.scripting.executeScript`, loaded from a `Blob` URL script `src`, instead of appending an inline `<script>` from the content script
 
 == 3.0.0 (2025-05-03)
 

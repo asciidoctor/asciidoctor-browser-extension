@@ -12,6 +12,29 @@ export const browser = {
     onMessage: {
       addListener: () => {},
     },
-    sendMessage: (_message, _callback) => {},
+    // Simulate the background script's handling of 'run-custom-script'
+    // (normally run via chrome.scripting.executeScript in the page's MAIN
+    // world) since there is no real extension context in these tests.
+    sendMessage: (message, callback) => {
+      if (message?.action === 'run-custom-script') {
+        const url = URL.createObjectURL(
+          new Blob([message.content], { type: 'text/javascript' }),
+        )
+        const script = document.createElement('script')
+        script.id = 'asciidoctor-browser-custom-js'
+        script.src = url
+        script.onload = () => {
+          URL.revokeObjectURL(url)
+          callback?.({})
+        }
+        script.onerror = () => {
+          URL.revokeObjectURL(url)
+          callback?.({ error: 'Unable to load the custom script' })
+        }
+        document.head.appendChild(script)
+      } else {
+        callback?.({})
+      }
+    },
   },
 }
