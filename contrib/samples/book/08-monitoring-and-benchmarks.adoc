@@ -1,0 +1,40 @@
+= Monitoring and Benchmarks
+
+== Throughput
+
+.Requests per minute, sampled over a deploy window
+[chart,line]
+....
+09:00,12:00,15:00
+28,48,40
+65,59,80
+....
+
+.Full week, pulled from the metrics export (last week vs. this week)
+chart::assets/throughput.csv[bar,800,500]
+
+== Job Status at a Glance
+
+Ferry's dashboard uses a small set of icons consistently across the CLI, the web UI, and alert
+messages, so on-call engineers only have to learn them once:
+
+[cols="1,3", options="header"]
+|===
+|Status |Meaning
+
+|icon:check-circle[role=green] `succeeded`
+|The handler returned without raising.
+
+|icon:sync[role=blue] `running`
+|A worker currently holds the lease.
+
+|icon:exclamation-triangle[role=yellow] `retrying`
+|Handler raised and Ferry rescheduled it, retries remain.
+
+|icon:times-circle[role=red] `dead-lettered`
+|Handler raised and Ferry ran out of retries.
+|===
+
+TIP: A healthy cluster shows almost nothing but icon:check-circle[role=green]. If
+icon:exclamation-triangle[role=yellow] rows start dominating your dashboard, check
+<<_troubleshooting_and_faq>> before you check the retry count.

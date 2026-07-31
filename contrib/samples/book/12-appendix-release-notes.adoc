@@ -1,0 +1,23 @@
+[appendix]
+= Release Notes
+
+== 3.4.0 — 2026-07-18
+
+* emoji:rocket[] Added per-queue concurrency limits (`FERRY_MAX_CONCURRENCY` is now per-queue, not
+  global — see <<_configuration_reference>>)
+* Dashboard now shows p50/p95/p99 latency per queue
+* Fixed a race in lease renewal that could double-dispatch a job under heavy load
+
+== 3.3.1 — 2026-06-02
+
+* Fixed dead-letter queue purge ignoring `FERRY_RETENTION_DAYS`
+
+== 3.3.0 — 2026-05-14
+
+* Added the ReasonML and Scilab community bindings to the docs (see
+  <<_installation_and_client_libraries>>)
+* Dropped support for Postgres 12
+
+== 3.0.0 — 2026-02-01
+
+* Initial public release

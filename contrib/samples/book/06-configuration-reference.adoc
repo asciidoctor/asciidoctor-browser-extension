@@ -1,0 +1,55 @@
+= Configuration Reference
+
+Ferry is configured with environment variables or a `ferry.toml` file. Server flags always win
+over the config file, which always wins over environment variables.
+
+== Core Settings
+
+[cols="2,1,3", options="header"]
+|===
+|Setting |Default |Description
+
+|`FERRY_DATABASE_URL`
+|_(required)_
+|Postgres connection string. See <<_storage_engine_and_data_model>>.
+
+|`FERRY_MAX_CONCURRENCY`
+|`10`
+|Maximum jobs a single worker process runs at once.
+
+|`FERRY_POLL_INTERVAL`
+|`500ms`
+|How often an idle worker checks for new jobs.
+
+|`FERRY_RETENTION_DAYS`
+|`30`
+|How long completed job records are kept before being purged.
+|===
+
+NOTE: Lowering `FERRY_POLL_INTERVAL` reduces latency for sporadic workloads, at the cost of more
+idle-poll queries against Postgres. See <<_capacity_planning>> before going below `100ms`.
+
+TIP: Set `FERRY_MAX_CONCURRENCY` to roughly `(CPU cores - 1)` for CPU-bound handlers, or much
+higher (50-200) for I/O-bound handlers like webhook delivery.
+
+IMPORTANT: `FERRY_RETENTION_DAYS` only affects *completed* jobs. Failed jobs in the dead-letter
+queue are kept until you explicitly clear them.
+
+WARNING: Changing `FERRY_DATABASE_URL` on a running cluster without draining workers first can
+strand in-flight jobs. Always drain (`ferryd drain`) before a database migration.
+
+CAUTION: `FERRY_MAX_CONCURRENCY` above a few hundred per process is rarely useful and mostly just
+exhausts Postgres connections — use more worker processes instead.
+
+== Advanced Options
+
+[%collapsible]
+====
+These settings exist, but you shouldn't need them outside of very high-throughput deployments:
+
+`FERRY_BATCH_SIZE`:: How many jobs a worker claims per poll. Default `1`; raising it trades
+latency for throughput on very short jobs.
+
+`FERRY_LEASE_TIMEOUT`:: How long a claimed job can run before Ferry assumes the worker died and
+reschedules it. Must be longer than your slowest handler.
+====

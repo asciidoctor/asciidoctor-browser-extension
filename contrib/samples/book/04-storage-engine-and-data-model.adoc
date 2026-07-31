@@ -1,0 +1,63 @@
+= Storage Engine and Data Model
+
+Ferry stores everything in Postgres. There's no separate broker process to operate or lose data
+from — the same database that stores your job history also acts as the queue.
+
+== Schema
+
+.Core tables
+[erd]
+----
+[Queue]
+*id
+name
+concurrency_limit
+
+[Job]
+*id
++queue_id
+status
+payload
+attempts
+run_at
+
+[Worker]
+*id
+hostname
+last_heartbeat_at
+
+Queue *--1 Job
+Worker *--1 Job
+----
+
+== Storage Engine Module Dependencies
+
+Internally, the storage engine is split into a handful of packages so the write-ahead log and the
+query layer can evolve independently:
+
+.Package dependency graph
+[graphviz]
+----
+digraph D {
+  subgraph cluster_p {
+    label = "Ferry";
+    subgraph cluster_c1 {
+      label = "storage";
+      subgraph cluster_gc_1 {
+        label = "wal";
+        Append;
+        Fsync;
+      }
+      subgraph cluster_gc_2 {
+        label = "query";
+        Planner;
+        Executor;
+      }
+    }
+    subgraph cluster_c2 {
+      label = "client";
+      Drivers;
+    }
+  }
+}
+----

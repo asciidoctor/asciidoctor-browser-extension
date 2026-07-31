@@ -1,0 +1,83 @@
+= Troubleshooting and FAQ
+
+Before filing a bug, double check the same prerequisites from installation — most "Ferry is
+broken" tickets turn out to be one of these:
+
+include::_partials/prerequisites.adoc[]
+
+== Debugging a Stuck Queue
+
+When jobs pile up in `retrying` (see <<_monitoring_and_benchmarks>>), trace the request the way
+support does:
+
+.Client, Ferry, and the worker that holds the lease
+[ditaa]
+----
+      +--------+
+      |        |
+      | Client |
+      |        |
+      +--------+
+          ^
+  submit  |
+          v
+  +-------------+
+  |             |
+  |    Ferry    |
+  |             |---+
+  +-------------+   |
+       ^  ^         | lease
+       |  |         |
+       v  +---------+
+  +-------------+
+  |             |
+  |   Worker    |
+  |             |----+
+  +-------------+    |
+             ^       | retry
+             |       |
+             +-------+
+----
+
+If that diagram doesn't help, rule out the obvious first — a surprising number of "stuck queue"
+tickets turn out to be a worker that lost its network link:
+
+[svgbob]
+----
+                  .-,(  ),-.
+   ___  _      .-(          )-.
+  [___]|=| -->(                )      __________
+  /::/ |_|     '-(          ).-' --->[_...__... ]
+                  '-.( ).-'
+                          \      ____   __
+                           '--->|    | |==|
+                                |____| |  |
+                                /::::/ |__|
+----
+
+== Frequently Asked Questions
+
+[%collapsible]
+.Why did my job run twice?
+====
+Ferry guarantees at-least-once delivery. If your worker crashes after finishing the handler but
+before acknowledging the lease, Ferry reschedules the job. Use the idempotency key on `enqueue` so
+your handler can safely no-op on the second run.footnote:[This is the single most common support
+question we get — see the "Idempotency" page in the API reference for the full pattern.]
+====
+
+[%collapsible]
+.Can I reorder jobs already in the queue?
+====
+Not directly. Cancel the job and re-enqueue it at the priority you want; Ferry doesn't support
+in-place reordering because it would break the ordering guarantees within a queue.
+====
+
+[%collapsible]
+.Is there a hard limit on payload size?
+====
+Yes, 256 KB per job.footnote:disclaimer[Limits are enforced per plan; contact support if you need
+this raised.] Store larger payloads in object storage and pass a reference instead.
+====
+
+Support response times are best-effort outside business hours.footnote:disclaimer[]

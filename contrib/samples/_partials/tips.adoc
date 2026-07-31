@@ -1,3 +1,0 @@
-This repository contains samples.
-
-include::../tip-version.adoc[]

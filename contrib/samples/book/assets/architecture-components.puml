@@ -1,0 +1,24 @@
+skinparam ranksep 20
+skinparam dpi 125
+<style>
+  rectangle {
+    HorizontalAlignment: left;
+  }
+</style>
+
+rectangle "Edge" {
+  (API Gateway)
+  (Auth Middleware)
+}
+rectangle "Core" {
+  (Scheduler)
+  (Worker Pool)
+  (Storage Engine)
+}
+rectangle "<b>ferryd</b>" as ferryd
+
+(Scheduler) ..> (Storage Engine)
+ferryd ==> (API Gateway)
+(API Gateway) --> (Auth Middleware)
+(API Gateway) ...> (Scheduler)
+(Scheduler) ---> (Worker Pool)

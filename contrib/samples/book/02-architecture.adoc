@@ -1,0 +1,67 @@
+= Architecture
+
+Ferry has four moving parts: the *API Gateway* that accepts job submissions, the *Scheduler* that
+decides which worker gets which job next, the *Worker Pool* that actually runs your handler code,
+and the *Storage Engine* that durably records everything in between (see
+<<_storage_engine_and_data_model>> for the schema).
+
+== Component Overview
+
+.Ferry's core components
+plantuml::assets/architecture-components.puml[]
+
+== System Context
+
+.Ferry in context
+[c4plantuml]
+----
+@startuml
+!include C4_Context.puml
+
+title System Context diagram for Ferry
+
+Person(developer, "Application Developer", "Submits jobs and reads results from Ferry.")
+System(ferry, "Ferry Job Queue", "Accepts, schedules, and runs background jobs.")
+
+System_Ext(email_provider, "Email Provider", "Delivers transactional email on Ferry's behalf.")
+System_Ext(monitoring, "Monitoring Stack", "Scrapes metrics and receives alerts from Ferry.")
+
+Rel(developer, ferry, "Submits jobs to, reads results from")
+Rel(ferry, email_provider, "Calls", "HTTPS")
+Rel(ferry, monitoring, "Exposes metrics to", "HTTPS")
+Rel_Back(monitoring, developer, "Pages")
+@enduml
+----
+
+== Request Flow
+
+When a client submits a job, the API Gateway hands it to the Scheduler, which assigns it to the
+next available worker:
+
+.Submitting a job
+[seqdiag]
+----
+seqdiag {
+  client  -> gateway [label = "POST /jobs"];
+  gateway  -> scheduler [label = "enqueue(job)"];
+  scheduler  -> worker [label = "dispatch(job)"];
+  gateway <-- scheduler [label = "202 Accepted"];
+  client <-- gateway;
+}
+----
+
+== Job Lifecycle
+
+A job moves through a small state machine from submission to its final, terminal state:
+
+.Job state machine
+[mermaid,width=640,height=480]
+----
+graph TD
+  A[ Submitted ] -->|Scheduler picks up| B( Running )
+  B --> C{ Handler result? }
+  C -->|Success | D[ Succeeded ]
+  C -->|Error, retries left | E[ Retrying ]
+  C -->|Error, no retries left | F[ Dead-lettered ]
+  E --> B
+----

@@ -1,0 +1,46 @@
+= Ferry: Distributed Job Queue User Guide
+Renée Dubois <renee@ferryqueue.example>
+v3.4, 2026-07-31
+:doctype: book
+:toc: left
+:toclevels: 2
+:sectnums:
+:icons: font
+:source-highlighter: prettier
+:highlightjs-languages: scilab, reasonml
+:stem:
+:kroki-fetch-diagram:
+
+[abstract]
+--
+Ferry is a lightweight, horizontally scalable job queue for background work: sending email,
+resizing images, calling webhooks, and anything else you'd rather not run inside a web request.
+This guide covers architecture, deployment, client libraries, capacity planning, and day-to-day
+operations.
+--
+
+include::01-introduction.adoc[]
+
+include::02-architecture.adoc[]
+
+include::03-deployment-topology.adoc[]
+
+include::04-storage-engine-and-data-model.adoc[]
+
+include::05-installation-and-client-libraries.adoc[]
+
+include::06-configuration-reference.adoc[]
+
+include::07-capacity-planning.adoc[]
+
+include::08-monitoring-and-benchmarks.adoc[]
+
+include::09-troubleshooting-and-faq.adoc[]
+
+include::10-appendix-js-client-internals.adoc[]
+
+include::11-appendix-style-guide.adoc[]
+
+include::12-appendix-release-notes.adoc[]
+
+include::13-colophon.adoc[]

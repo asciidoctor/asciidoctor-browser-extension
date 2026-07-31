@@ -1,0 +1,14 @@
+[appendix]
+= JavaScript Client Internals
+
+The official JavaScript client does more than serialize JSON over HTTP: on hot paths (a worker
+processing thousands of short jobs per minute), V8's own execution pipeline matters as much as
+Ferry's. This is roughly what happens to your handler function between the first call and the
+thousandth:
+
+excalidraw::assets/js-execution-pipeline-excalidraw.json[]
+
+If a handler is a bottleneck, look at whether it ever gets past "Compile and Optimize" — a handler
+whose shape (argument types, object structure) changes on every call forces V8 to keep
+de-optimizing and re-optimizing it, which shows up as CPU time that doesn't correspond to anything
+in your own code.

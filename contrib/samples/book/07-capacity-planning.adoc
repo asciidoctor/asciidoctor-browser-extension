@@ -1,0 +1,54 @@
+= Capacity Planning
+
+Ferry's throughput is governed by ordinary queueing theory, so you can size a cluster with a
+calculator instead of a load test.
+
+== Utilization
+
+A worker with service rate stem:[\mu] jobs/second handling an arrival rate stem:[\lambda]
+jobs/second has utilization stem:[\rho = \lambda / \mu]. Keep stem:[\rho] under about 0.7 in
+production; above that, queueing delay grows much faster than throughput does.
+
+== Little's Law
+
+[stem]
+++++
+L = \lambda W
+++++
+
+The average number of jobs in the system (stem:[L]), the arrival rate (stem:[\lambda]), and the
+average time a job spends in the system (stem:[W]) are related by Little's Law. This is why
+<<_configuration_reference,`FERRY_MAX_CONCURRENCY`>> alone doesn't fix latency: if stem:[\lambda]
+keeps growing, stem:[W] grows too unless you also add workers.
+
+== A Worked Example
+
+Splitting a fixed worker budget between a priority queue (stem:[x] workers) and a standard queue
+(stem:[y] workers) so both queues hit their latency target reduces to a small system of equations,
+solvable with the asciimath syntax Ferry's own runbook templates use:
+
+Given the constraints asciimath:[{(2x,+,17y,=,23),(x,-,y,=,5):}] for a two-tier deployment, the
+priority queue gets the larger share of the budget.
+
+Written the equivalent way in LaTeX, as it might appear in a postmortem doc:
+latexmath:[2x + 17y = 23,\ x - y = 5].
+
+== Long-Run Behavior
+
+As the observation window grows, the total number of jobs processed approaches:
+
+[stem]
+++++
+\lim_{N \to \infty} \sum_{i=0}^{N} \text{jobs}_i
+++++
+
+A recurrence like this one shows up surprisingly often when modeling exponential-backoff jitter
+across retries:
+
+[latexmath]
+++++
+k_{n+1} = n^2 + k_n^2 - k_{n-1}
+++++
+
+Keep the arrival rate λ~in~ comfortably below the service rate μ~out~ — the gap between them is
+your safety margin during traffic spikes.

@@ -1,0 +1,7 @@
+= Sample Documents
+
+`book/book.adoc` is a small, self-contained AsciiDoc "book" that exercises the extension's
+supported syntax and macros (diagrams, math, charts, admonitions, includes, footnotes, etc.) as
+one coherent set of docs, rather than as a disconnected list of syntax snippets.
+
+To try it, load the extension unpacked and open `book/book.adoc` in the browser.
