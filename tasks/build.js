@@ -56,6 +56,16 @@ function replaceFontsImport() {
   fs.writeFileSync(path, data, 'utf8')
 }
 
+function appendDarkModeStyles() {
+  const path = 'app/css/themes/asciidoctor.css'
+  console.log('Append dark mode overrides to asciidoctor.css')
+  const darkModeCss = fs.readFileSync(
+    'src/css/asciidoctor-dark-mode.css',
+    'utf8',
+  )
+  fs.appendFileSync(path, `\n${darkModeCss}`)
+}
+
 function replaceImagesURL() {
   for (const themeName of ['github', 'golo', 'maker', 'riak']) {
     const path = `app/css/themes/${themeName}.css`
@@ -223,6 +233,7 @@ await copyVendorResources()
 await bundleChartist()
 await downloadFonts()
 replaceFontsImport()
+appendDarkModeStyles()
 replaceImagesURL()
 minifyOptionsCss()
 await bundleContentScript()

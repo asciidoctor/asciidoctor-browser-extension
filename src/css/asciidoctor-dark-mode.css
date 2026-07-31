@@ -1,0 +1,43 @@
+/* Dark mode overrides for the default asciidoctor theme, matching the
+ * reader's OS-level prefers-color-scheme. Appended to
+ * app/css/themes/asciidoctor.css during the build, after that file is
+ * copied fresh from @asciidoctor/core on every build. */
+@media screen and (prefers-color-scheme:dark){
+html{color-scheme:dark}
+body{background:#1e1e1e;color:rgba(255,255,255,.8)}
+a{color:#6cb6ff}
+a:hover,a:focus{color:#8cc8ff}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{color:#e2775f}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{color:#c98f83}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#e2775f}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#f0a08f}
+#header>h1:first-child,#header .details span.email a,#header .details br+span.author::before{color:rgba(255,255,255,.85)}
+#content>h1:first-child:not([class]){color:rgba(255,255,255,.85);border-bottom-color:#444}
+#header>h1:first-child+#toc,#header>h1:only-child,#header .details,#toc{border-color:#444}
+#header .details{color:rgba(255,255,255,.6)}
+#toctitle{color:#e2775f}
+#content #toc,#toc.toc2{background:#181818;border-color:#333}
+hr,abbr[title]{border-color:#444}
+.paragraph.lead>p,#preamble>.sectionbody>[class=paragraph]:first-of-type p{color:rgba(255,255,255,.85)}
+code,pre,kbd{color:rgba(255,255,255,.9)}
+:not(pre):not([class^=L])>code,.prettyprint{background:#2a2a2a}
+p a>code:hover{color:rgba(255,255,255,.9)}
+.literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class=highlight],.listingblock>.content>pre[class^="highlight "]{background:#2a2a2a}
+kbd{background:#2a2a2a;border-color:#555;box-shadow:0 1px 0 rgba(0,0,0,.4),inset 0 0 0 .1em #333}
+.keyseq{color:rgba(221,221,221,.8)}
+table{background:#1e1e1e}
+table thead,table tfoot,tbody tr th{background:#2a2a2a}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td,table tr th,table tr td{color:rgba(255,255,255,.8)}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(255,255,255,.8)}
+table.tableblock,th.tableblock,td.tableblock{border-color:#444}
+blockquote{border-left-color:#444}
+blockquote,blockquote p,.quoteblock blockquote,.quoteblock p{color:rgba(255,255,255,.85)}
+.quoteblock blockquote::before{color:#e2775f}
+.quoteblock .attribution cite,.verseblock .attribution cite{color:rgba(255,255,255,.6)}
+.verseblock pre{color:rgba(255,255,255,.85)}
+.admonitionblock>table td.content{border-left-color:#444;color:rgba(255,255,255,.6)}
+.exampleblock>.content{background:#262626;border-color:#444;box-shadow:none}
+.sidebarblock{background:#262626;border-color:#444}
+.sidebarblock>.content>.title{color:#e2775f}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{color:#e2775f}
+}

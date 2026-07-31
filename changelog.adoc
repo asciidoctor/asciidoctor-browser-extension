@@ -13,6 +13,7 @@
 * Fix custom JavaScript being blocked on pages with a strict Content-Security-Policy: run it in the page's main world via `chrome.scripting.executeScript`, loaded from a `Blob` URL script `src`, instead of appending an inline `<script>` from the content script
 * Prevent a flash of unstyled/light content while the document is being fetched and converted: hide the page at `document_start` (matching the reader's OS-level dark/light preference) and reveal it once rendering finishes
 * Add a "Remove" button next to the JavaScript dropdown in the options page, to delete a previously added custom script, and fix the existing theme "Remove" button to also clear the entry from `browser.storage.local` (it was only clearing `localStorage`, leaking the stylesheet content indefinitely)
+* Make the default `asciidoctor` theme dark-mode compatible, matching the reader's OS-level `prefers-color-scheme`
 
 == 3.0.0 (2025-05-03)
 
