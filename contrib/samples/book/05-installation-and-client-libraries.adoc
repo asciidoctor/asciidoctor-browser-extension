@@ -1,0 +1,100 @@
+= Installation and Client Libraries
+
+include::_partials/prerequisites.adoc[]
+
+== Installing the Server
+
+. Provision a Postgres 14+ database and note the connection string
+. Download the `ferryd` binary for your platform
+. Run the migrations: `ferryd migrate`
+. Start the server: `ferryd serve --db "$FERRY_DATABASE_URL"`
+
+== Submitting Your First Job
+
+.JavaScript client
+[source,js]
+----
+import { Ferry } from "@ferryqueue/client";
+
+const ferry = new Ferry({ apiKey: process.env.FERRY_API_KEY });
+
+await ferry.enqueue("send-welcome-email", { userId: "usr_123" });
+----
+
+Official clients also exist for Java and Kotlin:
+
+.Java client
+[source,java,tabsize=2]
+----
+Ferry ferry = Ferry.builder()
+	.apiKey(System.getenv("FERRY_API_KEY"))
+	.build();
+
+ferry.enqueue("send-welcome-email", Map.of("userId", "usr_123"));
+----
+
+.Kotlin client
+[source,kotlin,indent=0]
+----
+    val ferry = Ferry(apiKey = System.getenv("FERRY_API_KEY"))
+
+    ferry.enqueue("send-welcome-email", mapOf("userId" to "usr_123"))
+----
+
+[NOTE]
+====
+The Java and Kotlin snippets above are pasted verbatim from customer codebases with different
+indentation conventions. `tabsize` and `indent` on the `source` block let the docs keep each
+team's original formatting instead of forcing everything to match.
+====
+
+== Community Bindings
+
+Ferry's HTTP API is deliberately plain, so the community has built bindings we don't officially
+maintain. Two examples that show up in support tickets often enough to document here:
+
+.Scilab, used by a couple of teams enqueuing simulation jobs over a serial bridge
+[source,scilab]
+----
+s1 = serial(Port = "COM1", BaudRate = 4800);
+sopen(s1);
+sput(s1, "*IDN?");
+out = sget(s1)
+sclose(s1);
+sdelete(s1);
+clear s1;
+----
+
+.ReasonML, contributed by a team running Ferry alongside a ReasonReact frontend
+[source,reasonml]
+----
+type jobStatus = Queued | Running | Succeeded | Failed(string);
+
+let describe = status =>
+  switch (status) {
+  | Queued => "Waiting for a worker"
+  | Running => "In progress"
+  | Succeeded => "Done"
+  | Failed(reason) => "Failed: " ++ reason
+  };
+----
+
+== Submission Workflow
+
+.From handler code to a result
+[actdiag]
+----
+actdiag {
+  write -> submit -> result
+
+  lane developer {
+    label = "Developer"
+    write [label = "Write handler"];
+    result [label = "Check result"];
+  }
+  lane ferry {
+    label = "Ferry"
+    submit [label = "Queue + run job"];
+  }
+}
+----

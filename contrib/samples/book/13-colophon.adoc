@@ -1,0 +1,22 @@
+[colophon]
+= Colophon
+
+This guide is built with Asciidoctor.js inside the browser extension itself — no server-side
+render step. The values below are a few built-in attributes, useful for confirming your local
+build matches what shipped:
+
+asciidoctor-version:: {asciidoctor-version}
+docname:: {docname}
+outfilesuffix:: {outfilesuffix}
+safe-mode-name:: {safe-mode-name}
+
+[TIP]
+====
+Ferry's real documentation pipeline injects environment-specific values at build time — the
+staging build points at a sandbox API, production doesn't. You can reproduce that locally by
+setting custom attributes in the extension's *Options* page and reloading this file:
+
+environment name:: {env-name}
+API base URL:: {api-base-url}
+support contact:: {support-contact}
+====

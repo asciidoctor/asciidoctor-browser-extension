@@ -1,0 +1,34 @@
+= Introduction
+
+Ferry is a lightweight, horizontally scalable job queue for background work: sending email,
+resizing images, calling webhooks, and anything else you'd rather not run inside a web request.
+This guide walks through Ferry's architecture, how to deploy and configure it, and how to keep it
+healthy in production.
+
+[.lead]
+If you only read one page, read <<_architecture>> and <<_capacity_planning>> — together they cover
+the two questions everyone asks first: "how does it work" and "how big do I need to make it".
+
+[quote, Priya Shah, Staff Engineer at a Ferry adopter]
+____
+We replaced three different cron scripts and a homegrown retry loop with Ferry in an afternoon.
+The dashboard alone paid for the migration.
+____
+
+== What Ferry Gives You
+
+* At-least-once delivery, with idempotency keys so *your* handler can be exactly-once
+* Priority queues and per-queue concurrency limits
+* A web dashboard and a `ferry` CLI for inspecting and replaying jobs
+* Official clients for Java, Kotlin, and JavaScript, plus a plain HTTP API for everyone else
+
+== How This Guide Is Organized
+
+. <<_architecture>> — the moving parts and how a job flows through them
+. _capacity_planning_deployment-topology>> — where those parts live on your network
+. <<_storage_engine_and_data_model>> — what's actually in the database
+. <<_installation_and_client_libraries>> — getting a worker running
+. <<_configuration_reference>> — every setting, and when to touch it
+. <<_capacity_planning>> — sizing a cluster with a bit of queueing theory
+. <<_monitoring_and_benchmarks>> — what "healthy" looks like on a dashboard
+. <<_troubleshooting_and_faq>> — what to do when it isn't

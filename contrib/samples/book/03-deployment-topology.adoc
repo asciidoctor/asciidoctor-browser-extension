@@ -1,0 +1,50 @@
+= Deployment Topology
+
+A production Ferry cluster typically spans two network segments: a DMZ that terminates public
+traffic, and an internal network where the Scheduler, workers, and database actually live.
+
+== Network Topology
+
+.DMZ and internal network layout
+[nwdiag]
+----
+nwdiag {
+  network dmz {
+    address = "10.0.0.x/24"
+
+    gw01 [address = "10.0.0.1"];
+    gw02 [address = "10.0.0.2"];
+  }
+  network internal {
+    address = "10.0.1.x/24";
+
+    gw01 [address = "10.0.1.1"];
+    gw02 [address = "10.0.1.2"];
+    worker01;
+    worker02;
+    db01;
+  }
+}
+----
+
+== Infrastructure Building Blocks
+
+At a higher level, each Ferry deployment is just three things wired together:
+
+:action: schedules
+
+.The whole system in one block diagram
+[blockdiag,block-diag,svg,subs=+attributes]
+----
+blockdiag {
+  Ferry -> {action} -> "Background jobs";
+  Ferry -> is -> "boring, on purpose!";
+
+  Ferry [color = "greenyellow"];
+  "Background jobs" [color = "pink"];
+  "boring, on purpose!" [color = "orange"];
+}
+----
+
+TIP: "Boring" is a feature. Ferry deliberately avoids exotic consensus protocols — a single
+Postgres instance with a hot standby handles most workloads up to a few thousand jobs per second.

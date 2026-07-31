@@ -1,0 +1,9 @@
+[NOTE]
+.Before you begin
+====
+You'll need:
+
+* A Postgres 14 or later database Ferry can create tables in
+* Outbound network access from your workers to that database
+* Ferry v3.0 or later, if you're upgrading an existing cluster
+====

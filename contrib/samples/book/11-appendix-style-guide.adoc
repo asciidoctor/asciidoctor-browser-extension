@@ -1,0 +1,50 @@
+[appendix]
+= Documentation Style Guide
+
+Notes for anyone contributing to this guide.
+
+== Text Formatting
+
+Use *bold* for UI labels and literal setting names, _italic_ for terms on first use, and
+`monospace` for anything the reader will type or see on screen. Combine bold and italic sparingly:
+*_only when both are genuinely warranted_*.
+
+Superscript and subscript exist but are rarely needed outside footnote-style markers^1^ or
+variable names like λ~in~ in the <<_capacity_planning>> chapter.
+
+[.lead]
+A `[.lead]` paragraph, like this one, is reserved for the single opening sentence of a chapter —
+don't use it mid-document, it reads as shouting.
+
+== Admonitions
+
+Use them in this order of severity, and don't skip straight to WARNING for something that's just a
+TIP:
+
+NOTE: Background information the reader can skip.
+
+TIP: A suggestion that makes the reader's life easier.
+
+IMPORTANT: Something the reader is likely to miss and will regret missing.
+
+WARNING: Data loss or downtime if ignored.
+
+CAUTION: Rarely used here; reserve it for physical or security hazards, which Ferry's docs don't
+really have.
+
+== Showing Literal AsciiDoc
+
+To show AsciiDoc syntax as an example (like the admonitions above), fence it as a `source` block
+with the `asciidoc` language rather than letting it render:
+
+[source,asciidoc]
+----
+NOTE: This renders as a callout box.
+
+TIP: So does this.
+----
+
+== Collapsible Content
+
+Use `[%collapsible]` for genuinely optional detail — advanced config, long FAQ answers — never for
+information every reader needs. If in doubt, leave it expanded.
