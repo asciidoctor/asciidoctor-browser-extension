@@ -42,6 +42,7 @@ blockquote,blockquote p,.quoteblock blockquote,.quoteblock p{color:rgba(255,255,
 .admonitionblock td.icon .icon-warning::before{color:#ffa94d}
 .admonitionblock td.icon .icon-caution::before{color:#ff7452}
 .admonitionblock td.icon .icon-important::before{color:#ff5c5c}
+.imageblock.kroki svg,.kroki svg{filter:invert(1) hue-rotate(180deg)}
 .exampleblock>.content{background:#262626;border-color:#444;box-shadow:none}
 .sidebarblock{background:#262626;border-color:#444}
 .sidebarblock>.content>.title{color:#e2775f}
