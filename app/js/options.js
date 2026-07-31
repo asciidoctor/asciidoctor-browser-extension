@@ -391,6 +391,7 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
         selectTheme.value = 'asciidoctor'
         selectTheme.dispatchEvent(new Event('change'))
         addCustomThemeNotification.classList.add('is-hidden')
+        saveOptions()
       }
     }
   }
