@@ -1,0 +1,15 @@
+/* Injected at document_start, before the browser paints the raw file, to avoid a
+ * flash of unstyled/light content while the extension fetches and converts it. */
+html {
+  background-color: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    background-color: #1e1e1e;
+  }
+}
+
+html:not(.asciidoctor-ready) body {
+  visibility: hidden;
+}

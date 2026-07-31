@@ -134,6 +134,15 @@ export function escapeHtmlEntities(value) {
 }
 
 /**
+ * Reveal the page after it was hidden by css/pre-render.css (injected at
+ * document_start to avoid a flash of unstyled/light content while the
+ * extension fetches and converts the document).
+ */
+export function revealPage() {
+  document.documentElement.classList.add('asciidoctor-ready')
+}
+
+/**
  * Set the appropriate viewport <meta> tag
  */
 export function setViewport() {

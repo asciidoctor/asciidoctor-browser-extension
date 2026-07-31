@@ -11,6 +11,7 @@
 * Restructure `contrib/samples` into a single coherent multi-chapter sample book instead of a set of disconnected syntax snippets
 * Modernize `fade-navigation.js` and `navigation.js`, add a new `dark-mode-before-render.js` example, and move all three from `contrib` into the Antora documentation as downloadable examples of the JavaScript "before"/"after" load hooks
 * Fix custom JavaScript being blocked on pages with a strict Content-Security-Policy: run it in the page's main world via `chrome.scripting.executeScript`, loaded from a `Blob` URL script `src`, instead of appending an inline `<script>` from the content script
+* Prevent a flash of unstyled/light content while the document is being fetched and converted: hide the page at `document_start` (matching the reader's OS-level dark/light preference) and reveal it once rendering finishes
 
 == 3.0.0 (2025-05-03)
 

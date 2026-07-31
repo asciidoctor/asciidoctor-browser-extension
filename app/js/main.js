@@ -1,5 +1,5 @@
 /* global chrome, browser */
-import { setViewport } from './module/dom.js'
+import { revealPage, setViewport } from './module/dom.js'
 import { showError, updateHTML } from './module/page.js'
 import {
   getLocalPollFrequency,
@@ -8,10 +8,17 @@ import {
   isTxtExtAllowed,
 } from './module/settings.js'
 
+// Safety net for css/pre-render.css, which hides the page at document_start:
+// if nothing reveals it within a few seconds (unexpected error, missed code
+// path), reveal it anyway rather than leaving it permanently hidden.
+setTimeout(revealPage, 3000)
+
 export async function init() {
   // Extension is enabled ?
   if (await isExtensionEnabled()) {
     await load()
+  } else {
+    revealPage()
   }
 }
 
@@ -21,6 +28,8 @@ async function load() {
     // .txt extension should be allowed ?
     if (await isTxtExtAllowed()) {
       fetchContent()
+    } else {
+      revealPage()
     }
   } else {
     fetchContent()
@@ -70,6 +79,7 @@ async function showResponse(response) {
       showError(response.error)
     }
   }
+  revealPage()
 }
 
 function fetchContent() {
