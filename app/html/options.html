@@ -194,15 +194,20 @@
         </div>
         <div class="field">
           <label class="label" for="selectJavaScript">JavaScript</label>
-          <div class="control has-icons-left">
-            <div class="select">
-              <select id="selectJavaScript" class="form-input">
-                <option value=""></option>
-              </select>
+          <div class="field is-grouped">
+            <div class="control has-icons-left">
+              <div class="select">
+                <select id="selectJavaScript" class="form-input">
+                  <option value=""></option>
+                </select>
+              </div>
+              <div class="icon is-small is-left">
+                <i class="fa fa-code"></i>
+              </div>
             </div>
-            <div class="icon is-small is-left">
-              <i class="fa fa-code"></i>
-            </div>
+            <p class="control">
+              <a class="button is-danger is-hidden" id="removeCustomJavaScript"> Remove </a>
+            </p>
           </div>
           <p class="help">
             Add a custom JavaScript to the rendered HTML.

@@ -37,6 +37,9 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
   const removeCustomStyleSheet = document.getElementById(
     'removeCustomStyleSheet',
   )
+  const removeCustomJavaScript = document.getElementById(
+    'removeCustomJavaScript',
+  )
   const showEnablingLocalFileNotification = () => {
     openExtensionsPageLink.onclick = () =>
       webExtension.tabs.create({
@@ -175,6 +178,7 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
       }
     }
     selectJavaScript.value = localStorage.JS
+    selectJavaScript.dispatchEvent(new Event('change'))
   }
 
   const initNotification = (element) => {
@@ -346,6 +350,13 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
       }
     }
   })
+  selectJavaScript.addEventListener('change', () => {
+    if (selectJavaScript.value) {
+      removeCustomJavaScript.classList.remove('is-hidden')
+    } else {
+      removeCustomJavaScript.classList.add('is-hidden')
+    }
+  })
   restoreOptions()
 
   initNotification(addCustomThemeNotification)
@@ -368,6 +379,7 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
           localStorage.CUSTOM_THEME_NAMES = JSON.stringify(customThemeNames)
         }
         localStorage.removeItem(`CUSTOM_THEME_${themeName}`)
+        webExtension.storage.local.remove(`CUSTOM_THEME_${themeName}`)
         selectTheme.selectedOptions[0].remove()
         const customThemeOptGroup = document.getElementById(
           'customThemeOptGroup',
@@ -381,6 +393,30 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
         addCustomThemeNotification.classList.add('is-hidden')
       }
     }
+  }
+
+  removeCustomJavaScript.onclick = () => {
+    const javaScriptName = selectJavaScript.value
+    if (!javaScriptName) {
+      return
+    }
+    const customJavaScriptNames = JSON.parse(
+      localStorage.CUSTOM_JS_NAMES || '[]',
+    )
+    const customJavaScriptFoundIndex =
+      customJavaScriptNames.indexOf(javaScriptName)
+    if (customJavaScriptFoundIndex > -1) {
+      customJavaScriptNames.splice(customJavaScriptFoundIndex, 1)
+      localStorage.CUSTOM_JS_NAMES = JSON.stringify(customJavaScriptNames)
+    }
+    localStorage.removeItem(`CUSTOM_JS_${javaScriptName}`)
+    webExtension.storage.local.remove(`CUSTOM_JS_${javaScriptName}`)
+    selectJavaScript.selectedOptions[0].remove()
+    localStorage.JS = ''
+    selectJavaScript.value = ''
+    selectJavaScript.dispatchEvent(new Event('change'))
+    addCustomJavaScriptNotification.classList.add('is-hidden')
+    saveOptions()
   }
 
   const inputCustomThemeElement = document.getElementById('inputCustomTheme')
