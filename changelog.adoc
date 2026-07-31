@@ -9,6 +9,7 @@
 * Rename `lint:firefox` npm script to `validate:firefox`
 * Remove Bulma and Sass, replace the generated options page stylesheet with a small hand-written CSS file
 * Restructure `contrib/samples` into a single coherent multi-chapter sample book instead of a set of disconnected syntax snippets
+* Modernize `fade-navigation.js` and `navigation.js`, add a new `dark-mode-before-render.js` example, and move all three from `contrib` into the Antora documentation as downloadable examples of the JavaScript "before"/"after" load hooks
 
 == 3.0.0 (2025-05-03)
 

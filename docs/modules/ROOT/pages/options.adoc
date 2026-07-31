@@ -105,5 +105,5 @@ xref:javascript-option.adoc[id=javascript]
 
 |Load the JavaScript...
 |Before or after the document has loaded.
-|Before
+|After
 |====

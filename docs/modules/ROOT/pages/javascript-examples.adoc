@@ -1,0 +1,61 @@
+= JavaScript Examples
+:navtitle: Examples
+
+Ready to use JavaScript routines that show what you can do with the xref:javascript-option.adoc[JavaScript] and xref:load-the-javascript-option.adoc[Load the JavaScript] options.
+
+Each script below is tagged with the load directive it's written for:
+
+Before::
+Runs before the document is rendered, by being appended to `<head>` first.
+Use *Before* when the script must take effect before any content appears, such as applying a theme so readers never see a flash of the wrong one.
+
+After (Default)::
+Runs after the document is rendered.
+Use *After* when the script needs to find and manipulate elements from the rendered content, such as headings or sections.
+
+== How to use an example
+
+. Open the {project-name} options and go to xref:javascript-option.adoc#add-a-javascript[Add a JavaScript].
+. Paste the content of one of the scripts below (or xref:attachment$fade-navigation.js[download] it) and save it.
+. Select the script from the xref:javascript-option.adoc#select-javascript[JavaScript] dropdown.
+. Set xref:load-the-javascript-option.adoc[Load the JavaScript] to *Before* or *After*, matching the example.
+
+[#dark-mode-before-render]
+== Apply a dark theme without a flash (Before)
+
+Prevent a flash of light content by applying a dark theme *before* the document is rendered, based on the reader's OS-level `prefers-color-scheme` setting.
+Because the load directive is set to *Before*, the theme class and styles are already in place by the time the page paints -- there's nothing to flash from.
+
+.dark-mode-before-render.js
+[,js]
+----
+include::attachment$dark-mode-before-render.js[]
+----
+
+TIP: Download this script from xref:attachment$dark-mode-before-render.js[dark-mode-before-render.js]
+
+== Scroll to headings with the keyboard (After)
+
+Use kbd:[Up] and kbd:[Down] to smoothly scroll between headings (`h1` to `h5`).
+This needs the headings to already exist in the rendered document, so the load directive is set to *After*.
+
+.navigation.js
+[,js]
+----
+include::attachment$navigation.js[]
+----
+
+TIP: Download this script from xref:attachment$navigation.js[navigation.js]
+
+== Fade between sections like slides (After)
+
+Turn each top-level section into a slide, and use kbd:[Up] and kbd:[Down] to fade between them.
+Like the previous example, this needs the sections to already exist, so the load directive is set to *After*.
+
+.fade-navigation.js
+[,js]
+----
+include::attachment$fade-navigation.js[]
+----
+
+TIP: Download this script from xref:attachment$fade-navigation.js[fade-navigation.js]
