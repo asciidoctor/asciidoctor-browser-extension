@@ -50,6 +50,22 @@ export async function isTxtExtAllowed() {
 }
 
 /**
+ * Is the .ad extension allowed ?
+ * @returns {Promise<boolean>}
+ */
+export async function isAdExtAllowed() {
+  return (await getSetting(Constants.ALLOW_AD_EXTENSION_KEY)) === 'true'
+}
+
+/**
+ * Is the .asc extension allowed ?
+ * @returns {Promise<boolean>}
+ */
+export async function isAscExtAllowed() {
+  return (await getSetting(Constants.ALLOW_ASC_EXTENSION_KEY)) === 'true'
+}
+
+/**
  * Is the Kroki extension enabled ?
  * @returns {Promise<boolean>}
  */

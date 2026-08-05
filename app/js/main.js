@@ -4,6 +4,8 @@ import { showError, updateHTML } from './module/page.js'
 import {
   getLocalPollFrequency,
   getRemotePollFrequency,
+  isAdExtAllowed,
+  isAscExtAllowed,
   isExtensionEnabled,
   isTxtExtAllowed,
 } from './module/settings.js'
@@ -22,11 +24,21 @@ export async function init() {
   }
 }
 
+// .ad and .asc are matched with a boundary (end of string, "?" or ".") right
+// after the extension so they don't also match .adoc/.asciidoc, which are
+// always allowed and not gated by an opt-in setting like .txt/.ad/.asc are.
+const optInExtensions = [
+  { regex: /\.txt(?:[.?]|$)/, isAllowed: isTxtExtAllowed },
+  { regex: /\.ad(?:[.?]|$)/, isAllowed: isAdExtAllowed },
+  { regex: /\.asc(?:[.?]|$)/, isAllowed: isAscExtAllowed },
+]
+
 async function load() {
-  const txtExtensionRegex = /\.txt[.|?]?.*?$/
-  if (location.href.match(txtExtensionRegex)) {
-    // .txt extension should be allowed ?
-    if (await isTxtExtAllowed()) {
+  const optInExtension = optInExtensions.find(({ regex }) =>
+    location.href.match(regex),
+  )
+  if (optInExtension) {
+    if (await optInExtension.isAllowed()) {
       fetchContent()
     } else {
       revealPage()

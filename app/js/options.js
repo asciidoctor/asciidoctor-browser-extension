@@ -15,6 +15,10 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
   const inputAllowTxtExtension = document.getElementById(
     'inputAllowTxtExtension',
   )
+  const inputAllowAdExtension = document.getElementById('inputAllowAdExtension')
+  const inputAllowAscExtension = document.getElementById(
+    'inputAllowAscExtension',
+  )
   const inputCustomAttributes = document.getElementById('inputCustomAttributes')
   const inputEnableKroki = document.getElementById('inputEnableKroki')
   const inputKrokiServerURL = document.getElementById('inputKrokiServerURL')
@@ -71,6 +75,10 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
       localStorage.REMOTE_POLL_FREQUENCY !== selectRemotePollFrequency.value ||
       localStorage.ALLOW_TXT_EXTENSION !==
         inputAllowTxtExtension.checked.toString() ||
+      localStorage.ALLOW_AD_EXTENSION !==
+        inputAllowAdExtension.checked.toString() ||
+      localStorage.ALLOW_ASC_EXTENSION !==
+        inputAllowAscExtension.checked.toString() ||
       localStorage.ENABLE_KROKI !== inputEnableKroki.checked.toString() ||
       localStorage.KROKI_SERVER_URL !== inputKrokiServerURL.value ||
       localStorage.THEME !== selectTheme.value ||
@@ -89,6 +97,8 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
     localStorage.LOCAL_POLL_FREQUENCY = selectLocalPollFrequency.value
     localStorage.REMOTE_POLL_FREQUENCY = selectRemotePollFrequency.value
     localStorage.ALLOW_TXT_EXTENSION = inputAllowTxtExtension.checked
+    localStorage.ALLOW_AD_EXTENSION = inputAllowAdExtension.checked
+    localStorage.ALLOW_ASC_EXTENSION = inputAllowAscExtension.checked
     localStorage.ENABLE_KROKI = inputEnableKroki.checked
     localStorage.KROKI_SERVER_URL = inputKrokiServerURL.value
     localStorage.THEME = selectTheme.value
@@ -100,6 +110,8 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
       CUSTOM_ATTRIBUTES: localStorage.CUSTOM_ATTRIBUTES,
       SAFE_MODE: localStorage.SAFE_MODE,
       ALLOW_TXT_EXTENSION: localStorage.ALLOW_TXT_EXTENSION,
+      ALLOW_AD_EXTENSION: localStorage.ALLOW_AD_EXTENSION,
+      ALLOW_ASC_EXTENSION: localStorage.ALLOW_ASC_EXTENSION,
       ENABLE_KROKI: localStorage.ENABLE_KROKI,
       KROKI_SERVER_URL: localStorage.KROKI_SERVER_URL,
       THEME: localStorage.THEME,
@@ -139,6 +151,8 @@ const webExtension = typeof browser === 'undefined' ? chrome : browser
     selectLocalPollFrequency.value = localStorage.LOCAL_POLL_FREQUENCY || '2'
     selectRemotePollFrequency.value = localStorage.REMOTE_POLL_FREQUENCY || '2'
     inputAllowTxtExtension.checked = localStorage.ALLOW_TXT_EXTENSION === 'true'
+    inputAllowAdExtension.checked = localStorage.ALLOW_AD_EXTENSION === 'true'
+    inputAllowAscExtension.checked = localStorage.ALLOW_ASC_EXTENSION === 'true'
     inputEnableKroki.checked = localStorage.ENABLE_KROKI === 'true'
     inputKrokiServerURL.value =
       localStorage.KROKI_SERVER_URL || 'https://kroki.io'
