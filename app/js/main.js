@@ -68,16 +68,45 @@ function displayContentAsPlainText(text) {
   document.body.appendChild(preElement)
 }
 
+// Last content actually rendered, so a poll tick that returns the same
+// content can skip the DOM update. Rebuilding the DOM on every tick (even
+// when nothing changed) resets the page, which drops any text selection the
+// user was in the middle of making (particularly painful for the plain-text
+// rendering, where selecting/copying the raw source is the whole point).
+let lastRenderedContent
+
+function isSameAsLastRendered(response) {
+  if (response.html) {
+    return (
+      lastRenderedContent?.type === 'html' &&
+      lastRenderedContent.value === response.html
+    )
+  }
+  if (response.text) {
+    return (
+      lastRenderedContent?.type === 'text' &&
+      lastRenderedContent.value === response.text
+    )
+  }
+  return false
+}
+
+async function applyResponse(response) {
+  if (response.html) {
+    lastRenderedContent = { type: 'html', value: response.html }
+    await updateHTML(response)
+  } else if (response.text) {
+    lastRenderedContent = { type: 'text', value: response.text }
+    displayContentAsPlainText(response.text)
+  } else if (response.error) {
+    showError(response.error)
+  }
+}
+
 async function showResponse(response) {
   if (response) {
     setViewport()
-    if (response.html) {
-      await updateHTML(response)
-    } else if (response.text) {
-      displayContentAsPlainText(response.text)
-    } else if (response.error) {
-      showError(response.error)
-    }
+    await applyResponse(response)
   }
   revealPage()
 }
@@ -112,15 +141,9 @@ async function startAutoReload() {
     try {
       webExtension.runtime.sendMessage(
         { action: 'fetch-convert' },
-        (response) => {
-          if (response) {
-            if (response.html) {
-              updateHTML(response)
-            } else if (response.text) {
-              displayContentAsPlainText(response.text)
-            } else if (response.error) {
-              showError(response.error)
-            }
+        async (response) => {
+          if (response && !isSameAsLastRendered(response)) {
+            await applyResponse(response)
           }
         },
       )

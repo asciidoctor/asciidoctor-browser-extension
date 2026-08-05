@@ -19,6 +19,7 @@
 * Add support for the `:favicon:` document attribute (#688)
 * Fix the "Render selection" context menu action, which was broken: `inject.html` referenced JavaScript files that no longer exist (`namespace.js`, `converter.js`, `renderer.js`, leftovers from before the switch to ES modules) and loaded `inject.js` as a classic script even though it uses `import`
 * Merge `module/fetch.js` into `module/converter.js`, its only caller
+* Fix auto-reload rebuilding the whole page on every poll tick even when the fetched content hadn't changed, which reset the page and dropped any in-progress text selection (most noticeable in the plain-text rendering, where selecting/copying the source is the whole point); skip the DOM update when the content is unchanged
 
 == 3.0.0 (2025-05-03)
 
