@@ -19,17 +19,42 @@ const webExtension =
 const injectedCssFiles = new Set()
 let currentThemeCssFile = null
 
+// Extension-owned pages (e.g. inject.html, used by the "Render selection"
+// feature) aren't subject to a remote page's CSP and can't be targeted by
+// chrome.scripting -- Chrome rejects scripting calls against
+// chrome-extension:// tabs ("Extension manifest must request permission to
+// access this host"). Apply CSS directly to the document in that case
+// instead of round-tripping through the background script.
+const isExtensionPage =
+  location.protocol === 'chrome-extension:' ||
+  location.protocol === 'moz-extension:'
+
 const insertCssFile = (file) => {
   if (!injectedCssFiles.has(file)) {
     injectedCssFiles.add(file)
-    webExtension.runtime.sendMessage({ action: 'insert-css', file })
+    if (isExtensionPage) {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.dataset.cssFile = file
+      link.href = webExtension.runtime.getURL(file)
+      document.head.appendChild(link)
+    } else {
+      webExtension.runtime.sendMessage({ action: 'insert-css', file })
+    }
   }
 }
 
 const insertInlineCss = (id, css) => {
   if (!injectedCssFiles.has(id)) {
     injectedCssFiles.add(id)
-    webExtension.runtime.sendMessage({ action: 'insert-css', css })
+    if (isExtensionPage) {
+      const style = document.createElement('style')
+      style.id = id
+      style.textContent = css
+      document.head.appendChild(style)
+    } else {
+      webExtension.runtime.sendMessage({ action: 'insert-css', css })
+    }
   }
 }
 
@@ -137,10 +162,20 @@ const postprocessing = async (customJavaScript) => {
  * script appended from a content script, nor a Blob URL created in the
  * content script's isolated world (which gets an opaque "null" origin that
  * never matches 'self'), reliably run on pages with a strict CSP.
+ *
+ * On an extension-owned page (e.g. inject.html) there is no way to run this:
+ * chrome.scripting can't target chrome-extension:// tabs at all, and the
+ * default extension_pages CSP forbids both 'unsafe-eval' and blob:/inline
+ * script sources, with no supported way to relax it for blob: (Chrome
+ * rejects "script-src 'self' blob:" outright as an insecure CSP value).
+ * So the custom script is simply skipped on those pages.
  * @param content The JavaScript source to execute
- * @returns {Promise<void>} Resolves once the script has run
+ * @returns {Promise<void>} Resolves once the script has run (or is skipped)
  */
 const appendCustomScript = (content) => {
+  if (isExtensionPage) {
+    return Promise.resolve()
+  }
   return new Promise((resolve, reject) => {
     webExtension.runtime.sendMessage(
       { action: 'run-custom-script', content },
@@ -164,10 +199,17 @@ async function appendThemeStyle(themeName) {
     const file = `css/themes/${themeName}.css`
     if (currentThemeCssFile !== file) {
       if (currentThemeCssFile) {
-        webExtension.runtime.sendMessage({
-          action: 'remove-css',
-          file: currentThemeCssFile,
-        })
+        if (isExtensionPage) {
+          document.head
+            .querySelector(`link[data-css-file="${currentThemeCssFile}"]`)
+            ?.remove()
+          injectedCssFiles.delete(currentThemeCssFile)
+        } else {
+          webExtension.runtime.sendMessage({
+            action: 'remove-css',
+            file: currentThemeCssFile,
+          })
+        }
       }
       currentThemeCssFile = file
       webExtension.runtime.sendMessage({ action: 'insert-css', file })
