@@ -21,6 +21,7 @@
 * Merge `module/fetch.js` into `module/converter.js`, its only caller
 * Fix auto-reload rebuilding the whole page on every poll tick even when the fetched content hadn't changed, which reset the page and dropped any in-progress text selection (most noticeable in the plain-text rendering, where selecting/copying the source is the whole point); skip the DOM update when the content is unchanged
 * Fix a custom theme being silently shadowed by a built-in theme of the same name (e.g. a user-uploaded `asciidoctor.css`): a custom theme now takes precedence over a built-in one when both share a name (#304)
+* Stop polling for changes while the tab is hidden, so a backgrounded tab doesn't keep fetching and converting the document on every tick (#232)
 
 == 3.0.0 (2025-05-03)
 

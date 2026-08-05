@@ -139,6 +139,11 @@ async function startAutoReload() {
   }
   autoReloadInterval = setInterval(async () => {
     try {
+      // Skip the fetch entirely while the tab isn't visible, so a background
+      // tab doesn't keep polling on every tick (see #232).
+      if (document.hidden) {
+        return
+      }
       webExtension.runtime.sendMessage(
         { action: 'fetch-convert' },
         async (response) => {

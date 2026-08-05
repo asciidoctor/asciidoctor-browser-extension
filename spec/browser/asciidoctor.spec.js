@@ -753,6 +753,51 @@ test.describe('Extension initialization', () => {
     expect(result.initial).toBe(true)
   })
 
+  test('should stop polling for changes while the tab is hidden', async ({
+    page,
+  }) => {
+    const result = await page.evaluate(async () => {
+      const params = []
+      params[Constants.ENABLE_RENDER_KEY] = true
+      helper.configureParameters(params)
+
+      const flush = () => new Promise((resolve) => setTimeout(resolve, 0))
+      const clock = sinon.useFakeTimers({
+        toFake: ['setInterval', 'clearInterval'],
+      })
+      try {
+        await Loader.init()
+        await flush()
+
+        const spy = sinon.spy(browser.runtime, 'sendMessage')
+
+        Object.defineProperty(document, 'hidden', {
+          configurable: true,
+          get: () => true,
+        })
+        await clock.tickAsync(2100)
+        await flush()
+        const calledWhileHidden = spy.called
+
+        spy.resetHistory()
+        Object.defineProperty(document, 'hidden', {
+          configurable: true,
+          get: () => false,
+        })
+        await clock.tickAsync(2100)
+        await flush()
+        const calledWhileVisible = spy.called
+
+        return { calledWhileHidden, calledWhileVisible }
+      } finally {
+        clock.restore()
+        delete document.hidden
+      }
+    })
+    expect(result.calledWhileHidden).toBe(false)
+    expect(result.calledWhileVisible).toBe(true)
+  })
+
   test('should not fetch the content from the background script if the extension is disabled', async ({
     page,
   }) => {
