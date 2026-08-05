@@ -60,11 +60,19 @@
         <legend>Files extension</legend>
         <div class="field">
           <label class="checkbox">
+            <input id="inputAllowAdExtension" type="checkbox" class="form-input">
+            Preview files with <code>ad</code> extension
+          </label>
+          <label class="checkbox">
+            <input id="inputAllowAscExtension" type="checkbox" class="form-input">
+            Preview files with <code>asc</code> extension
+          </label>
+          <label class="checkbox">
             <input id="inputAllowTxtExtension" type="checkbox" class="form-input">
             Preview files with <code>txt</code> extension
           </label>
           <span class="help">
-            By default, the extension will render <code>ad</code>, <code>adoc</code>, <code>asc</code> and <code>asciidoc</code> files.
+            By default, the extension will only render <code>adoc</code> and <code>asciidoc</code> files.
           </span>
         </div>
       </fieldset>

@@ -4,7 +4,7 @@
 Enjoy AsciiDoc everywhere your browser goes with the {project-name}.
 
 An AsciiDoc File Viewer, the {project-name} uses xref:asciidoctor.js::index.adoc[Asciidoctor.js]
-to view xref:asciidoc::index.adoc[AsciiDoc] files (.ad, .adoc, .asc, .asciidoc, and optionally .txt)
+to view xref:asciidoc::index.adoc[AsciiDoc] files (.adoc, .asciidoc, and optionally .ad, .asc, .txt)
 as HTML inside Chrome, Brave, Firefox, Opera, Microsoft Edge and other Chromium-based browsers.
 
 The {project-name} brings all the features of simple AsciiDoc markup directly to the browser such as: attributes (akin to variables), include files, conditional statements, admonitions, icons, stylesheets, automatic numbering of sections and lists, and more.

@@ -24,6 +24,7 @@
 * Fix a custom theme being silently shadowed by a built-in theme of the same name (e.g. a user-uploaded `asciidoctor.css`): a custom theme now takes precedence over a built-in one when both share a name (#304)
 * Stop polling for changes while the tab is hidden, so a backgrounded tab doesn't keep fetching and converting the document on every tick (#232)
 * Add a keyboard shortcut (`Alt+Shift+R` by default, configurable at `browser://extensions/shortcuts`) to toggle between the rendered and raw view (#186)
+* *Behavior change*: only `.adoc` and `.asciidoc` files are rendered by default now; `.ad` and `.asc` join `.txt` as opt-in extensions, each with their own checkbox on the options page (#677)
 
 == 3.0.0 (2025-05-03)
 

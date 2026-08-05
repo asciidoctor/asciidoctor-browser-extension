@@ -52,9 +52,17 @@ http://asciidoctor.org/docs/user-manual/#running-asciidoctor-securely[Learn more
 
 3+h|
 [[files-extension]]Files extension
+|Preview files with `ad` extension
+|By default, the extension will only render `adoc` and `asciidoc` files.
+Enable this to also preview files with the `ad` extension.
+|Unchecked
+
+|Preview files with `asc` extension
+|Enable this to also preview files with the `asc` extension.
+|Unchecked
+
 |Preview files with `txt` extension
-|By default, the extension will render ad, adoc, asc and asciidoc files.
-Useful when viewing raw text files with AsciiDoc content from hosted git providers or your local machine.
+|Useful when viewing raw text files with AsciiDoc content from hosted git providers or your local machine.
 |Unchecked
 
 3+h|
