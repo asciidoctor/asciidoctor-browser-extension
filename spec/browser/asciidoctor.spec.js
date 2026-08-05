@@ -450,6 +450,99 @@ By default, the title must be shown.
 
     await expect(page.locator('h1')).toHaveText('Hello world')
   })
+
+  test('should render the author and revision info in a #header block', async ({
+    page,
+  }) => {
+    await page.evaluate(async () => {
+      const params = []
+      params[Constants.ENABLE_RENDER_KEY] = 'true'
+      params[Constants.CUSTOM_ATTRIBUTES_KEY] = ''
+      params[Constants.SAFE_MODE_KEY] = 'safe'
+      helper.configureParameters(params)
+
+      const source = `= Hello world
+John Doe <john@example.com>; Jane Roe <jane@example.com>
+v1.2, 2024-01-15: Initial release
+
+Content.
+`
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
+      await Renderer.updateHTML(response)
+    })
+
+    await expect(page.locator('#header > h1')).toHaveText('Hello world')
+    await expect(page.locator('#header .details #author')).toHaveText(
+      'John Doe',
+    )
+    await expect(page.locator('#header .details #email a')).toHaveAttribute(
+      'href',
+      'mailto:john@example.com',
+    )
+    await expect(page.locator('#header .details #author2')).toHaveText(
+      'Jane Roe',
+    )
+    await expect(page.locator('#header .details #revnumber')).toHaveText(
+      'version 1.2,',
+    )
+    await expect(page.locator('#header .details #revdate')).toHaveText(
+      '2024-01-15',
+    )
+    await expect(page.locator('#header .details #revremark')).toHaveText(
+      'Initial release',
+    )
+  })
+
+  test('should not wrap the title in a #header block when there is no author or revision info', async ({
+    page,
+  }) => {
+    await page.evaluate(async () => {
+      const params = []
+      params[Constants.ENABLE_RENDER_KEY] = 'true'
+      params[Constants.CUSTOM_ATTRIBUTES_KEY] = ''
+      params[Constants.SAFE_MODE_KEY] = 'safe'
+      helper.configureParameters(params)
+
+      const response = await Converter.convert(
+        window.location.toString(),
+        '= Hello world',
+      )
+      await Renderer.updateHTML(response)
+    })
+
+    await expect(page.locator('#header')).toHaveCount(0)
+    await expect(page.locator('#content > h1')).toHaveText('Hello world')
+  })
+
+  test('should set the favicon from the :favicon: attribute', async ({
+    page,
+  }) => {
+    await page.evaluate(async () => {
+      const params = []
+      params[Constants.ENABLE_RENDER_KEY] = 'true'
+      params[Constants.CUSTOM_ATTRIBUTES_KEY] = ''
+      params[Constants.SAFE_MODE_KEY] = 'safe'
+      helper.configureParameters(params)
+
+      const source = `= Hello world
+:favicon: favicon.png
+
+Content.
+`
+      const response = await Converter.convert(
+        window.location.toString(),
+        source,
+      )
+      await Renderer.updateHTML(response)
+    })
+
+    await expect(
+      page.locator('link#asciidoctor-browser-favicon'),
+    ).toHaveAttribute('href', /favicon\.png$/)
+  })
 })
 
 test.describe('Theme module', () => {

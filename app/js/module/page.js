@@ -200,6 +200,107 @@ const updateContent = (html) => {
 }
 
 /**
+ * Update (or remove) the page's favicon from the :favicon: document attribute.
+ * The href is resolved by the browser against the current tab URL, the same
+ * way relative image references in the document already are.
+ * @param favicon The :favicon: attribute value, or a falsy value to remove it
+ */
+const updateFavicon = (favicon) => {
+  const id = 'asciidoctor-browser-favicon'
+  let link = document.getElementById(id)
+  if (!favicon) {
+    if (link) {
+      link.remove()
+    }
+    return
+  }
+  if (!link) {
+    link = document.createElement('link')
+    link.id = id
+    link.rel = 'icon'
+    document.head.appendChild(link)
+  }
+  link.href = favicon
+}
+
+/**
+ * Build the <div class="details"> block (author(s) + revision info), matching
+ * the markup Asciidoctor's standalone <div id="header"> template produces.
+ * The embeddable output used by this extension never includes it, so it has
+ * to be reconstructed here (see asciidoctor/asciidoctor-browser-extension#460).
+ * @param authors
+ * @param revisionInfo
+ * @returns {HTMLDivElement}
+ */
+const createDetailsElement = (authors, revisionInfo) => {
+  const details = document.createElement('div')
+  details.className = 'details'
+  authors.forEach((author, index) => {
+    const suffix = index === 0 ? '' : `${index + 1}`
+    const authorSpan = document.createElement('span')
+    authorSpan.id = `author${suffix}`
+    authorSpan.className = 'author'
+    authorSpan.textContent = author.name
+    details.appendChild(authorSpan)
+    details.appendChild(document.createElement('br'))
+    if (author.email) {
+      const emailSpan = document.createElement('span')
+      emailSpan.id = `email${suffix}`
+      emailSpan.className = 'email'
+      const emailLink = document.createElement('a')
+      emailLink.href = `mailto:${author.email}`
+      emailLink.textContent = author.email
+      emailSpan.appendChild(emailLink)
+      details.appendChild(emailSpan)
+      details.appendChild(document.createElement('br'))
+    }
+  })
+  if (revisionInfo) {
+    if (revisionInfo.number) {
+      const revnumberSpan = document.createElement('span')
+      revnumberSpan.id = 'revnumber'
+      revnumberSpan.textContent = `version ${revisionInfo.number}${revisionInfo.date ? ',' : ''}`
+      details.appendChild(revnumberSpan)
+    }
+    if (revisionInfo.date) {
+      const revdateSpan = document.createElement('span')
+      revdateSpan.id = 'revdate'
+      revdateSpan.textContent = revisionInfo.date
+      details.appendChild(revdateSpan)
+    }
+    if (revisionInfo.remark) {
+      details.appendChild(document.createElement('br'))
+      const revremarkSpan = document.createElement('span')
+      revremarkSpan.id = 'revremark'
+      revremarkSpan.textContent = revisionInfo.remark
+      details.appendChild(revremarkSpan)
+    }
+  }
+  return details
+}
+
+/**
+ * Wrap the document title (rendered by Asciidoctor as a bare <h1> at the root
+ * of #content in embeddable output) together with the author/revision details
+ * block in a <div id="header">, so the existing theme stylesheets — written
+ * against Asciidoctor's standalone #header markup — style it correctly.
+ * @param authors
+ * @param revisionInfo
+ */
+const wrapHeader = (authors, revisionInfo) => {
+  const contentElement = document.getElementById('content')
+  const titleElement = contentElement?.querySelector(':scope > h1:first-child')
+  if (!titleElement) {
+    return
+  }
+  const headerElement = document.createElement('div')
+  headerElement.id = 'header'
+  titleElement.replaceWith(headerElement)
+  headerElement.appendChild(titleElement)
+  headerElement.appendChild(createDetailsElement(authors, revisionInfo))
+}
+
+/**
  * Update the HTML document with the Asciidoctor document
  * @param converterResponse The response sent by the converter
  * @param scripts The scripts to restore
@@ -221,6 +322,10 @@ const updateBodyHTML = async (converterResponse, scripts) => {
     document.body.style.maxWidth = maxWidth
   }
   updateContent(converterResponse.html)
+  updateFavicon(attributes.favicon)
+  if (attributes.authors.length > 0 || attributes.revisionInfo) {
+    wrapHeader(attributes.authors, attributes.revisionInfo)
+  }
   let tocClassNames = ''
   if (
     attributes.hasSections &&
