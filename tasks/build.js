@@ -66,6 +66,16 @@ function appendDarkModeStyles() {
   fs.appendFileSync(path, `\n${darkModeCss}`)
 }
 
+function appendEmbeddableOverrides() {
+  const path = 'app/css/themes/asciidoctor.css'
+  console.log('Append embeddable-output overrides to asciidoctor.css')
+  const embeddableCss = fs.readFileSync(
+    'src/css/asciidoctor-embeddable-overrides.css',
+    'utf8',
+  )
+  fs.appendFileSync(path, `\n${embeddableCss}`)
+}
+
 function replaceImagesURL() {
   for (const themeName of ['github', 'golo', 'maker', 'riak']) {
     const path = `app/css/themes/${themeName}.css`
@@ -234,6 +244,7 @@ await bundleChartist()
 await downloadFonts()
 replaceFontsImport()
 appendDarkModeStyles()
+appendEmbeddableOverrides()
 replaceImagesURL()
 minifyOptionsCss()
 await bundleContentScript()

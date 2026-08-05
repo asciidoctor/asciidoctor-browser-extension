@@ -1,0 +1,15 @@
+/* Overrides for the default asciidoctor theme needed because the extension
+ * renders Asciidoctor's embeddable output (header_footer: false), which
+ * never includes a #footer. Appended to app/css/themes/asciidoctor.css
+ * during the build, after that file is copied fresh from
+ * @asciidoctor/core on every build. */
+
+/* The base stylesheet sets #content #footnotes's padding-bottom to .75em
+ * (via the "padding: .75em 0" shorthand) to avoid double-spacing before
+ * #footer. Without a #footer, that leaves the page ending too close to the
+ * last footnote (asciidoctor-browser-extension#120). Matching the base
+ * rule's #content #footnotes specificity (rather than just #footnotes) so
+ * this reliably wins the cascade regardless of source order. */
+#content #footnotes:last-child {
+  padding-bottom: 1.25em;
+}
