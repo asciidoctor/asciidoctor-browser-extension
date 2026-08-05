@@ -17,6 +17,8 @@
 * Fix removing a custom theme not reliably restoring the default `asciidoctor` theme (even after a refresh): the reset relied on a debounced autosave that could be skipped or lost, so save it immediately instead
 * Render the author(s) and revision info (number, date, remark) in a `#header` block above the table of contents, matching Asciidoctor's standalone output, since the embeddable output the extension uses never included them (#460)
 * Add support for the `:favicon:` document attribute (#688)
+* Fix the "Render selection" context menu action, which was broken: `inject.html` referenced JavaScript files that no longer exist (`namespace.js`, `converter.js`, `renderer.js`, leftovers from before the switch to ES modules) and loaded `inject.js` as a classic script even though it uses `import`
+* Merge `module/fetch.js` into `module/converter.js`, its only caller
 
 == 3.0.0 (2025-05-03)
 
