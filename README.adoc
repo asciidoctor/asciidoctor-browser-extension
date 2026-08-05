@@ -48,7 +48,7 @@ image::docs/modules/ROOT/images/hero.webp[]
 . Install the Extension on your browser using the image links below.
 +
 image:{url-chrome-webstore-image}["Image link to the extension in the Chrome webstore.",212,64,link={url-chrome-webstore}, title="Chrome Web Store"]
-image:{url-mozilla-addon-image}[Image link to the extension in the Firefox webstore,184,64,link={url-mozilla-addon, title="Firefox Add-ons"]
+image:{url-mozilla-addon-image}[Image link to the extension in the Firefox webstore,184,64,link={url-mozilla-addon}, title="Firefox Add-ons"]
 image:{url-opera-addon-image}[Image link to the extension in the Opera webstore,227,64,link={url-opera-addon}, title="Opera Add-ons"]
 image:{url-edge-webstore-image}[Image link to the extension in the Microsoft Edge webstore,177,64,link={url-edge-webstore}, title="Edge Add-ons"]
 +
