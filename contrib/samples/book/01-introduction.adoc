@@ -25,7 +25,7 @@ ____
 == How This Guide Is Organized
 
 . <<_architecture>> — the moving parts and how a job flows through them
-. _capacity_planning_deployment-topology>> — where those parts live on your network
+. <<_deployment_topology>> — where those parts live on your network
 . <<_storage_engine_and_data_model>> — what's actually in the database
 . <<_installation_and_client_libraries>> — getting a worker running
 . <<_configuration_reference>> — every setting, and when to touch it
