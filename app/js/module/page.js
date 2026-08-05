@@ -193,8 +193,17 @@ const appendCustomScript = (content) => {
 }
 
 async function appendThemeStyle(themeName) {
+  // A custom theme takes precedence over a built-in one of the same name
+  // (e.g. a user-uploaded "asciidoctor.css"), rather than being silently
+  // shadowed by it.
+  const customThemeContent = await getSetting(
+    Constants.CUSTOM_THEME_PREFIX + themeName,
+  )
+  if (customThemeContent) {
+    insertInlineCss(`custom-theme-${themeName}`, customThemeContent)
+    return
+  }
   const themeNames = getDefaultThemeNames()
-  // Check if the theme is packaged in the extension... if not it's a custom theme
   if (themeNames.includes(themeName)) {
     const file = `css/themes/${themeName}.css`
     if (currentThemeCssFile !== file) {
@@ -213,13 +222,6 @@ async function appendThemeStyle(themeName) {
       }
       currentThemeCssFile = file
       webExtension.runtime.sendMessage({ action: 'insert-css', file })
-    }
-  } else {
-    const customThemeContent = await getSetting(
-      Constants.CUSTOM_THEME_PREFIX + themeName,
-    )
-    if (customThemeContent) {
-      insertInlineCss(`custom-theme-${themeName}`, customThemeContent)
     }
   }
 }
