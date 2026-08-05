@@ -15,6 +15,8 @@
 * Add a "Remove" button next to the JavaScript dropdown in the options page, to delete a previously added custom script, and fix the existing theme "Remove" button to also clear the entry from `browser.storage.local` (it was only clearing `localStorage`, leaking the stylesheet content indefinitely)
 * Make the default `asciidoctor` theme dark-mode compatible, matching the reader's OS-level `prefers-color-scheme`: dark syntax highlighting (`atom-one-dark`, when the `github` highlight theme is in use), fix table row striping and admonition icon colors that a specificity conflict in the base theme had left unstyled or too dark, and restyle inline Kroki `<svg>` diagrams (`filter: invert(1) hue-rotate(180deg)`) for documents that opt in with `:kroki-default-options: inline` (requires an `asciidoctor-kroki` version with the browser `toDataUri` fix)
 * Fix removing a custom theme not reliably restoring the default `asciidoctor` theme (even after a refresh): the reset relied on a debounced autosave that could be skipped or lost, so save it immediately instead
+* Render the author(s) and revision info (number, date, remark) in a `#header` block above the table of contents, matching Asciidoctor's standalone output, since the embeddable output the extension uses never included them (#460)
+* Add support for the `:favicon:` document attribute (#688)
 
 == 3.0.0 (2025-05-03)
 

@@ -43,11 +43,41 @@ function isStemEnabled(doc) {
   return doc.isAttribute('stem')
 }
 
+/**
+ * Get the document authors, if any.
+ * @param doc
+ * @returns {Array<{name: string, email: string|null}>}
+ */
+function getAuthors(doc) {
+  return doc.getAuthors().map((author) => ({
+    name: author.getName(),
+    email: author.getEmail(),
+  }))
+}
+
+/**
+ * Get the document revision info (number, date, remark), if any is defined.
+ * @param doc
+ * @returns {{number: string|null, date: string|null, remark: string|null}|undefined}
+ */
+function getRevisionInfo(doc) {
+  const revisionInfo = doc.getRevisionInfo()
+  if (revisionInfo.isEmpty()) {
+    return undefined
+  }
+  return {
+    number: revisionInfo.getNumber() || null,
+    date: revisionInfo.getDate(),
+    remark: revisionInfo.getRemark(),
+  }
+}
+
 export async function convert(url, source) {
   const settings = await getRenderingSettings()
   const options = buildAsciidoctorOptions(settings, url)
   const doc = await load(source, options)
-  if (showTitle(doc)) {
+  const displayHeader = showTitle(doc)
+  if (displayHeader) {
     doc.removeAttribute('notitle')
     doc.setAttribute('showtitle')
   }
@@ -78,6 +108,9 @@ export async function convert(url, source) {
       maxWidth: doc.getAttribute('max-width'),
       eqnumsValue,
       stylesheet: doc.getAttribute('stylesheet'),
+      authors: displayHeader ? getAuthors(doc) : [],
+      revisionInfo: displayHeader ? getRevisionInfo(doc) : undefined,
+      favicon: doc.getAttribute('favicon'),
     },
   }
 }
