@@ -26,6 +26,7 @@
 * Add a keyboard shortcut (`Alt+Shift+R` by default, configurable at `browser://extensions/shortcuts`) to toggle between the rendered and raw view (#186)
 * *Behavior change*: only `.adoc` and `.asciidoc` files are rendered by default now; `.ad` and `.asc` join `.txt` as opt-in extensions, each with their own checkbox on the options page (#677)
 * Fix the bottom padding being too tight when a document has footnotes: the base stylesheet zeroes it out to avoid double-spacing before `#footer`, but the extension's embeddable output never renders a `#footer` (#120)
+* Open the quickstart guide in a new tab the first time the extension is installed (#528)
 
 == 3.0.0 (2025-05-03)
 
