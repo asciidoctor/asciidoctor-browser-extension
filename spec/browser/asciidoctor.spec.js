@@ -404,6 +404,44 @@ test.describe('Update the HTML document', () => {
     await expect(page.locator('#content')).toContainText('Hello world')
   })
 
+  test('should prefer a custom theme over a built-in theme of the same name', async ({
+    page,
+  }) => {
+    const insertCssMessages = await page.evaluate(async () => {
+      const params = []
+      params[Constants.ENABLE_RENDER_KEY] = 'true'
+      params[Constants.CUSTOM_ATTRIBUTES_KEY] = ''
+      params[Constants.SAFE_MODE_KEY] = 'safe'
+      params[`${Constants.CUSTOM_THEME_PREFIX}asciidoctor`] =
+        'h1 { color: red; }'
+      helper.configureParameters(params)
+      helper.configureManifest({
+        web_accessible_resources: [
+          { resources: ['css/themes/asciidoctor.css'] },
+        ],
+      })
+
+      const spy = sinon.spy(browser.runtime, 'sendMessage')
+      const response = await Converter.convert(
+        window.location.toString(),
+        '= Hello world',
+      )
+      await Renderer.updateHTML(response)
+      return spy
+        .getCalls()
+        .map((call) => call.args[0])
+        .filter((message) => message.action === 'insert-css')
+    })
+    expect(
+      insertCssMessages.some((message) => message.css === 'h1 { color: red; }'),
+    ).toBe(true)
+    expect(
+      insertCssMessages.some(
+        (message) => message.file === 'css/themes/asciidoctor.css',
+      ),
+    ).toBe(false)
+  })
+
   test('should hide the document title when noheader attribute is defined', async ({
     page,
   }) => {

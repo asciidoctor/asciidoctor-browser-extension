@@ -20,6 +20,7 @@
 * Fix the "Render selection" context menu action, which was broken in several ways: `inject.html` referenced JavaScript files that no longer exist (`namespace.js`, `converter.js`, `renderer.js`, leftovers from before the switch to ES modules) and loaded `inject.js` as a classic script even though it uses `import`; the context menu handler used `tabs.executeScript` and `extension.getViews`, both removed in Manifest V3; and applying the theme CSS failed too because `chrome.scripting` can't target the extension's own pages -- CSS is now applied directly to the document in that case, and a configured custom JavaScript is skipped there since there's no CSP-compliant way to run it on an extension page (#113)
 * Merge `module/fetch.js` into `module/converter.js`, its only caller
 * Fix auto-reload rebuilding the whole page on every poll tick even when the fetched content hadn't changed, which reset the page and dropped any in-progress text selection (most noticeable in the plain-text rendering, where selecting/copying the source is the whole point); skip the DOM update when the content is unchanged
+* Fix a custom theme being silently shadowed by a built-in theme of the same name (e.g. a user-uploaded `asciidoctor.css`): a custom theme now takes precedence over a built-in one when both share a name (#304)
 
 == 3.0.0 (2025-05-03)
 

@@ -50,14 +50,16 @@ export function getDefaultThemeNames() {
  * @returns {Promise<boolean>}
  */
 async function hasTheme(themeName) {
-  const themeNames = getDefaultThemeNames()
-  if (themeNames.includes(themeName)) {
-    return true
-  }
+  // A custom theme takes precedence over a built-in one of the same name,
+  // matching appendThemeStyle() in page.js.
   const customThemeContent = await getSetting(
     Constants.CUSTOM_THEME_PREFIX + themeName,
   )
-  return !!customThemeContent
+  if (customThemeContent) {
+    return true
+  }
+  const themeNames = getDefaultThemeNames()
+  return themeNames.includes(themeName)
 }
 
 /**
