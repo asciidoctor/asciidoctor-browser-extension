@@ -39,7 +39,10 @@ const showResponse = async (response) => {
   }
 }
 
-// eslint-disable-next-line no-unused-vars
-window.inject = inject
-
 document.getElementById('content').innerHTML += 'Rendering...'
+
+webExtension.runtime.sendMessage({ action: 'get-selection' }, (response) => {
+  if (response?.text) {
+    inject(response.text)
+  }
+})

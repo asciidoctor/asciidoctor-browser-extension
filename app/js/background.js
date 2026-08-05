@@ -163,6 +163,11 @@ webExtension.runtime.onMessage.addListener((request, sender, sendResponse) => {
       .then(() => sendResponse({}))
       .catch((error) => sendResponse({ error: getErrorInfo(error) }))
     return true
+  } else if (request.action === 'get-selection') {
+    const text = pendingSelections.get(sender.tab.id) || ''
+    pendingSelections.delete(sender.tab.id)
+    sendResponse({ text })
+    return
   }
   // send an empty response to avoid the pesky error "The message port closed before a response was received"
   sendResponse({})
@@ -172,8 +177,9 @@ const matchesTabUrl =
   webExtension.runtime.getManifest().content_scripts[0].matches
 const renderSelectionMenuItemId = 'renderSelectionMenuItem'
 
-let injectTabId
-let injectText
+// Selected text waiting to be picked up by the inject.html tab it was opened
+// for, keyed by that tab's id (see the 'get-selection' message below).
+const pendingSelections = new Map()
 
 webExtension.runtime.onInstalled.addListener(() => {
   if (webExtension.contextMenus) {
@@ -183,49 +189,34 @@ webExtension.runtime.onInstalled.addListener(() => {
       contexts: ['selection'],
     })
 
-    webExtension.contextMenus.onClicked.addListener((info) => {
-      if (info.menuItemId === renderSelectionMenuItemId) {
-        const funcToInject = () => {
-          const selection = window.getSelection()
-          return selection.rangeCount > 0 ? selection.toString() : ''
+    webExtension.contextMenus.onClicked.addListener(async (info, tab) => {
+      if (info.menuItemId === renderSelectionMenuItemId && tab) {
+        let results
+        try {
+          results = await webExtension.scripting.executeScript({
+            target: { tabId: tab.id, allFrames: true },
+            func: () => {
+              const selection = window.getSelection()
+              return selection.rangeCount > 0 ? selection.toString() : ''
+            },
+          })
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(`error:${error.message}`)
+          return
         }
-        const javascriptCode = `;(${funcToInject})();`
-        webExtension.tabs.executeScript(
-          {
-            code: javascriptCode,
-            allFrames: true,
-          },
-          (selectedTextPerFrame) => {
-            if (webExtension.runtime.lastError) {
-              // eslint-disable-next-line no-console
-              console.error(`error:${webExtension.runtime.lastError.message}`)
-            } else if (
-              selectedTextPerFrame.length > 0 &&
-              typeof selectedTextPerFrame[0] === 'string'
-            ) {
-              injectText = selectedTextPerFrame[0]
-              webExtension.tabs.create(
-                {
-                  url: webExtension.extension.getURL('html/inject.html'),
-                  active: true,
-                },
-                (tab) => {
-                  injectTabId = tab.id
-                },
-              )
-            }
-          },
-        )
+        const selectedText = results.find(
+          (frameResult) => frameResult.result,
+        )?.result
+        if (selectedText) {
+          const injectTab = await webExtension.tabs.create({
+            url: webExtension.runtime.getURL('html/inject.html'),
+            active: true,
+          })
+          pendingSelections.set(injectTab.id, selectedText)
+        }
       }
     })
-  }
-})
-
-webExtension.tabs.onUpdated.addListener((tabId, changeInfo) => {
-  if (changeInfo.status === 'complete' && tabId === injectTabId) {
-    const tabs = webExtension.extension.getViews({ type: 'tab' })
-    // Get the latest tab opened
-    tabs[tabs.length - 1].inject(injectText)
   }
 })
 
