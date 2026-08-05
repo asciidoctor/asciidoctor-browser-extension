@@ -316,7 +316,6 @@
         "js/module/constants.js",
         "js/module/converter.js",
         "js/module/dom.js",
-        "js/module/fetch.js",
         "js/module/page.js",
         "js/module/settings.js",
         "js/module/theme.js",

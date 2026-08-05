@@ -5,7 +5,6 @@ import { register as registerChartExtension } from '../vendor/asciidoctor-chart-
 import { register as registerEmojiExtension } from '../vendor/asciidoctor-emoji-inline-macro.js'
 import KrokiExtension from '../vendor/kroki.js'
 import { md5 } from '../vendor/md5.js'
-import executeRequest, { isHtmlContentType } from './fetch.js'
 import {
   getRenderingSettings,
   getSetting,
@@ -19,6 +18,21 @@ const webExtension =
       ? chrome
       : null
 const eqnumValidValues = ['none', 'all', 'ams']
+
+function executeRequest(url) {
+  return fetch(url, {
+    method: 'GET',
+    headers: {
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      Accept: 'text/plain, */*',
+    },
+  })
+}
+
+function isHtmlContentType(response) {
+  const contentType = response.headers.get('content-type')
+  return contentType && contentType.indexOf('html') > -1
+}
 
 // REMIND: notitle attribute is automatically set when header_footer equals false.
 function showTitle(doc) {
