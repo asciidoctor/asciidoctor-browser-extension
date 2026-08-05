@@ -181,7 +181,12 @@ const renderSelectionMenuItemId = 'renderSelectionMenuItem'
 // for, keyed by that tab's id (see the 'get-selection' message below).
 const pendingSelections = new Map()
 
-webExtension.runtime.onInstalled.addListener(() => {
+webExtension.runtime.onInstalled.addListener((details) => {
+  if (details.reason === 'install') {
+    webExtension.tabs.create({
+      url: 'https://docs.asciidoctor.org/browser-extension/quickstart/',
+    })
+  }
   if (webExtension.contextMenus) {
     webExtension.contextMenus.create({
       id: renderSelectionMenuItemId,
