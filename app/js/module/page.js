@@ -295,6 +295,15 @@ const wrapHeader = (authors, revisionInfo) => {
   }
   const headerElement = document.createElement('div')
   headerElement.id = 'header'
+  // In standalone output, this gap comes from the theme's `#content { margin-top: 1.25em }`
+  // rule, since #header and #content are siblings there. Here #header ends up nested inside
+  // #content instead (see comment above), so that rule no longer separates it from what follows.
+  headerElement.style.marginBottom = '1.25em'
+  // Themes style `#header, #content, #footnotes, #footer` as one combined selector, including
+  // left/right padding, meant for siblings each carrying their own. Nested inside #content,
+  // #header would otherwise get that padding a second time and sit indented past the body text.
+  headerElement.style.paddingLeft = '0'
+  headerElement.style.paddingRight = '0'
   titleElement.replaceWith(headerElement)
   headerElement.appendChild(titleElement)
   headerElement.appendChild(createDetailsElement(authors, revisionInfo))
