@@ -7,6 +7,7 @@
 * Replace ESLint and Standard with Biome for linting and formatting
 * Replace Puppeteer and Mocha/Chai with Playwright for browser tests
 * Rename `lint:firefox` npm script to `validate:firefox`
+* Mark `changelog.adoc` with a `merge=union` git attribute, so parallel branches that each append an entry to the "Unreleased" section merge automatically instead of conflicting
 * Remove Bulma and Sass, replace the generated options page stylesheet with a small hand-written CSS file
 * Restructure `contrib/samples` into a single coherent multi-chapter sample book instead of a set of disconnected syntax snippets
 * Modernize `navigation.js`, add new `restore-scroll-position.js` and `toc-scrollspy.js` examples, and move all three from `contrib` into the Antora documentation as downloadable examples of the JavaScript "before"/"after" load hooks
