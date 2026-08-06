@@ -52,12 +52,11 @@ ERROR [launcher]: Cannot start ChromeHeadless
 	ERROR:zygote_host_impl_linux.cc(89)] Running as root without --no-sandbox is not supported. See https://crbug.com/638180.
 ....
 +
-To workaround this issue you can run the following command instead:
+To work around this issue you can run the following command instead:
 
  $ npm run test:nosandbox
 +
 It will launch a Chromium instance with the `--no-sandbox` argument.
-====
 --
 
 . Check your code against the code rules.
