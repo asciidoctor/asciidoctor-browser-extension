@@ -12,3 +12,4 @@
 * xref:use-cases.adoc[]
 * xref:firefox-known-issues.adoc[Known Firefox issues]
 * xref:safari-known-issues.adoc[Known Safari issues]
+* xref:privacy.adoc[]

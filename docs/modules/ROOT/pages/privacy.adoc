@@ -1,0 +1,62 @@
+= Privacy Policy
+:description: Why the {project-name} requests each browser permission, and what happens to your data.
+:page-toclevels: 1
+
+Everything the {project-name} does happens locally, in your browser, on the AsciiDoc content you choose to view.
+The only exception is the optional xref:diagrams-extension-option.adoc[diagrams extension], which sends diagram *source text* (not your AsciiDoc document) to a Kroki server when you explicitly enable it.
+
+This page explains the extension's single purpose, how it handles your data, and why each browser permission is requested, so you can verify all of that for yourself.
+
+== Single purpose
+
+The {project-name}'s single purpose is to render AsciiDoc content as HTML directly in your browser, and to let you export or share that rendered output.
+When active, it reads the content of the current tab (or your text selection) and converts it to HTML.
+That conversion happens entirely client-side; the AsciiDoc source is never sent off your device.
+
+== Data collection and use
+
+* We do not collect, store or transmit any personal data, and we do not sell or transfer user data to third parties, outside of the case described in <<third-party-services>>.
+* We do not use or transfer user data for any purpose unrelated to the extension's single purpose described above.
+* We do not use or transfer user data to determine creditworthiness or for lending purposes.
+* We do not use analytics, telemetry or third-party trackers.
+
+== Why the extension requests each permission
+
+`storage`::
+Used to save your settings from the xref:options.adoc[options page] (custom attributes, theme, JavaScript, etc.) so they persist between browser sessions.
+Settings are stored locally by the browser and are never sent anywhere.
+
+`activeTab`::
+Used to run the JavaScript that reads the AsciiDoc text you've selected on a page, so it can be converted to HTML when you use *Render selection*.
+This access is limited to the tab you're actively interacting with, and only when you trigger the action.
+
+`scripting`::
+Used to inject the rendered HTML, and the selected theme's CSS, into the current page so the AsciiDoc source is replaced with a styled preview.
+It's also used to build and style the preview opened in a new tab for the *Render selection* action, and, if you've configured one on the xref:options.adoc[options page], to run your own custom JavaScript against the rendered page — exactly as if you had added that script yourself.
+This permission is never used to inject or run code unrelated to rendering your AsciiDoc content.
+
+`tabs`::
+Used to refresh the current tab when you disable the extension (so the page reverts to raw AsciiDoc), to open a new tab for the *Render selection* action, and to let the extension's popup/content scripts communicate with its background script.
+
+`contextMenus`::
+Adds the *Render selection* entry to the right-click menu, letting you select a portion of AsciiDoc text on any page, right-click, and open it rendered as HTML in a new tab.
+
+`downloads`::
+Used only by the *Export as HTML* feature (right-click menu or kbd:[Alt+Shift+E]).
+The extension builds a standalone HTML file locally and uses this permission to trigger the browser's native *Save As* dialog.
+No file is ever uploaded to, or downloaded from, a remote server as part of this feature.
+
+Host permissions (`*.ad`, `*.adoc`, `*.asc`, `*.asciidoc`, `*.txt`)::
+The extension needs to run on pages whose URL matches one of these AsciiDoc-related extensions in order to detect and fetch the AsciiDoc content to render.
+`.txt` support is optional and disabled by default; you can enable it, along with `.ad` and `.asc`, on the xref:options.adoc[options page].
+
+[#third-party-services]
+== Third-party services
+
+The extension talks to a third-party service in one case only: the xref:diagrams-extension-option.adoc[diagrams extension].
+When you enable it, diagram source text (not your AsciiDoc document) is sent to a Kroki server for conversion to an image — by default the public https://kroki.io instance, or a server of your own choosing.
+This feature is disabled by default, and enabling it without changing the default server URL requires explicit acknowledgement that your diagrams will be sent to that public instance.
+
+== Questions
+
+If you have questions about this policy, please open an issue on the {project-name} {url-project-issues}[issue tracker].
