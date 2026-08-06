@@ -31,6 +31,18 @@ Trigger the export either from:
 
 NOTE: This feature relies on the `downloads` API, which isn't available in every browser (e.g. Safari, Firefox for Android), so it isn't offered there.
 
+== Custom favicon
+
+Set the `:favicon:` document attribute to change the browser tab's icon while previewing the document:
+
+[,asciidoc]
+----
+:favicon: images/icon.png
+----
+
+The href is resolved against the current page URL, the same way a relative image reference in the document would be.
+Remove the attribute (or reload without it) to restore the tab's original icon.
+
 == Auto reload
 
 If the content of the page is changed, the rendered view is automatically refreshed.
