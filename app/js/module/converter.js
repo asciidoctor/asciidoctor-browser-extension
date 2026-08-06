@@ -148,6 +148,49 @@ export async function convert(url, source) {
   }
 }
 
+/**
+ * Convert a document to a standalone HTML5 page (full <html>/<head>/<body>
+ * document, with Asciidoctor's default stylesheet embedded, or the document's
+ * own :stylesheet: if it sets one) -- the same output `asciidoctor file.adoc
+ * -o file.html` would produce. Unlike `convert()`, this doesn't apply the
+ * "always show the title" override, since the standalone template already
+ * shows it by default (that override only exists to work around the
+ * embedded template hiding it).
+ */
+export async function convertStandalone(url, source) {
+  const settings = await getRenderingSettings()
+  const options = buildAsciidoctorOptions(settings, url)
+  // `standalone` has to be set at load/parse time (not just passed to
+  // `convert()`): it's what makes the parser default `notitle` to unset
+  // (so the title shows) and set `stylesheet`/`iconfont-remote`/`copycss`
+  // to their standalone defaults (embedded default stylesheet, remote
+  // Font Awesome). Passing it only to `convert()` picks the document vs.
+  // embedded template but leaves those parse-time attribute defaults
+  // untouched, e.g. `stylesheet` ends up unset and no CSS is embedded.
+  const doc = await load(source, { ...options, standalone: true })
+  if (isSourceHighlighterEnabled(doc)) {
+    // Force the source highlighter to Highlight.js (since we only support Highlight.js)
+    doc.setAttribute('source-highlighter', 'highlight.js')
+  }
+  return {
+    html: await doc.convert({ standalone: true }),
+  }
+}
+
+export async function fetchAndConvertStandalone(url) {
+  const response = await executeRequest(url)
+  if (isHtmlContentType(response)) {
+    // content is not plain-text!
+    return undefined
+  }
+  if (response.status !== 200 && response.status !== 0) {
+    // unsuccessful request!
+    return undefined
+  }
+  const source = await response.text()
+  return convertStandalone(url, source)
+}
+
 export async function fetchAndConvert(url, initial) {
   const response = await executeRequest(url)
   if (isHtmlContentType(response)) {

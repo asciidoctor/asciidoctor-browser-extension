@@ -337,7 +337,8 @@
     "tabs",
     "activeTab",
     "contextMenus",
-    "scripting"
+    "scripting",
+    "downloads"
   ],
   "host_permissions": [
     "*://*/*.ad",
@@ -381,6 +382,12 @@
         "default": "Alt+Shift+R"
       },
       "description": "Toggle between the rendered and raw view"
+    },
+    "export-html": {
+      "suggested_key": {
+        "default": "Alt+Shift+E"
+      },
+      "description": "Export the current page as a standalone HTML file"
     }
   },
   "background": {

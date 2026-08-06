@@ -32,6 +32,7 @@
 * Document that local `file://` documents aren't supported in Safari, a platform limitation with no current workaround (`docs/modules/ROOT/pages/safari-known-issues.adoc`)
 * Add a Safari app extension Xcode project (`safari/`) that references `app/` directly instead of a duplicated copy, so the same source builds the Chrome, Firefox, and Safari packages; bundle `background.js` (an ES module) into a self-contained script and load it via `background.scripts` rather than `background.service_worker` (Safari's MV3 service worker mode can silently fail to start at all), and generate a Safari-specific manifest that drops the `extension_ids` key and `file://` match pattern from `web_accessible_resources`, both of which Safari rejects outright, taking every listed resource down with them (including the on/off toolbar icons)
 * Fix Asciidoctor `WARNING` messages (e.g. an unterminated block) showing up as errors in the browser console: they're now logged with `console.warn`, reserving `console.error` for actual `ERROR`/`FATAL` messages
+* Add an "Export as HTML" feature (right-click menu on a rendered page, or the `Alt+Shift+E` keyboard shortcut) that saves the document as a standalone HTML file, matching what `asciidoctor file.adoc -o file.html` would produce; not available where the `downloads` API is missing (Safari, Firefox for Android) (#148)
 
 == 3.0.0 (2025-05-03)
 
