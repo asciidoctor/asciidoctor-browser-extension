@@ -20,6 +20,17 @@ Reproduce this example yourself by following the instructions in the xref:quicks
 
 image::{url-asciidoctor-sc-image}["Screen capture of two screens, showing raw AsciiDoc and rendered as HTML5"]
 
+== Export as HTML
+
+Save the rendered document as a standalone HTML file, matching what running `asciidoctor file.adoc -o file.html` on the command line would produce.
+
+Trigger the export either from:
+
+* the right-click menu on a rendered page, by selecting *Export as HTML*
+* the `Alt+Shift+E` keyboard shortcut
+
+NOTE: This feature relies on the `downloads` API, which isn't available in every browser (e.g. Safari, Firefox for Android), so it isn't offered there.
+
 == Auto reload
 
 If the content of the page is changed, the rendered view is automatically refreshed.
