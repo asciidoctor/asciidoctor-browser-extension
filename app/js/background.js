@@ -82,7 +82,12 @@ async function fetchCssWithAbsoluteUrls(file) {
 
 webExtension.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'fetch-convert') {
-    fetchAndConvert(sender.tab.url, request.initial)
+    fetchAndConvert(
+      sender.tab.url,
+      request.initial,
+      request.source,
+      sender.tab.id,
+    )
       .then((result) => {
         if (result) {
           sendResponse(result)
@@ -211,7 +216,22 @@ async function exportHtml(tab) {
     return
   }
   try {
-    const result = await fetchAndConvertStandalone(tab.url)
+    let source
+    if (isFirefox && tab.url.startsWith('file://')) {
+      // Firefox refuses to let the background page fetch() a file:// URL
+      // (same restriction as the main render path, see module/converter.js
+      // fetchAndConvert), so ask the content script -- which runs
+      // same-origin with the document -- for the source instead.
+      try {
+        source = await webExtension.tabs.sendMessage(tab.id, {
+          action: 'get-file-source',
+        })
+      } catch {
+        // no content script listening in the tab; fall through and let
+        // fetchAndConvertStandalone attempt (and fail) its own fetch
+      }
+    }
+    const result = await fetchAndConvertStandalone(tab.url, source, tab.id)
     if (!result) {
       return
     }
