@@ -1,6 +1,6 @@
 = Changelog
 
-== Unreleased
+== 4.0.0 (2026-08-06)
 
 * Require Node.js 24 or greater
 * Convert build tasks to ES modules (use `fetch` instead of `https`, top-level `await`, `import.meta.dirname`)
