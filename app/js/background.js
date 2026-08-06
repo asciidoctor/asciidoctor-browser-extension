@@ -1,5 +1,9 @@
 /* global chrome, browser */
-import { convert, fetchAndConvert } from './module/converter.js'
+import {
+  convert,
+  fetchAndConvert,
+  fetchAndConvertStandalone,
+} from './module/converter.js'
 import { getBrowserInfo } from './module/settings.js'
 
 function getErrorInfo(error) {
@@ -176,10 +180,51 @@ webExtension.runtime.onMessage.addListener((request, sender, sendResponse) => {
 const matchesTabUrl =
   webExtension.runtime.getManifest().content_scripts[0].matches
 const renderSelectionMenuItemId = 'renderSelectionMenuItem'
+const exportHtmlMenuItemId = 'exportHtmlMenuItem'
 
 // Selected text waiting to be picked up by the inject.html tab it was opened
 // for, keyed by that tab's id (see the 'get-selection' message below).
 const pendingSelections = new Map()
+
+function suggestedHtmlFilename(url) {
+  try {
+    const basename = decodeURIComponent(
+      new URL(url).pathname.split('/').pop() || '',
+    )
+    if (basename) {
+      return basename.replace(/\.[^./]+$/, '.html')
+    }
+  } catch {
+    // fall through to the generic filename below
+  }
+  return 'document.html'
+}
+
+function toDataUrl(html) {
+  // btoa needs a byte string; round-tripping through encodeURIComponent/unescape
+  // turns the UTF-8 HTML (e.g. curly quotes) into one before base64-encoding it.
+  return `data:text/html;charset=utf-8;base64,${btoa(unescape(encodeURIComponent(html)))}`
+}
+
+async function exportHtml(tab) {
+  if (!tab?.url) {
+    return
+  }
+  try {
+    const result = await fetchAndConvertStandalone(tab.url)
+    if (!result) {
+      return
+    }
+    await webExtension.downloads.download({
+      url: toDataUrl(result.html),
+      filename: suggestedHtmlFilename(tab.url),
+      saveAs: true,
+    })
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(error)
+  }
+}
 
 webExtension.runtime.onInstalled.addListener(async (details) => {
   // Safari fires onInstalled with reason "install" every time the extension
@@ -203,7 +248,22 @@ webExtension.runtime.onInstalled.addListener(async (details) => {
       contexts: ['selection'],
     })
 
+    // The downloads API isn't available in every browser (e.g. Safari,
+    // Firefox for Android), so only expose the menu item where it works.
+    if (webExtension.downloads) {
+      webExtension.contextMenus.create({
+        id: exportHtmlMenuItemId,
+        title: 'Export as HTML',
+        contexts: ['page'],
+        documentUrlPatterns: matchesTabUrl,
+      })
+    }
+
     webExtension.contextMenus.onClicked.addListener(async (info, tab) => {
+      if (info.menuItemId === exportHtmlMenuItemId && tab) {
+        await exportHtml(tab)
+        return
+      }
       if (info.menuItemId === renderSelectionMenuItemId && tab) {
         let results
         try {
@@ -259,6 +319,14 @@ const findActiveTab = (callback) => {
       },
     )
   }
+}
+
+if (webExtension.commands && webExtension.downloads) {
+  webExtension.commands.onCommand.addListener((command) => {
+    if (command === 'export-html') {
+      findActiveTab((tab) => exportHtml(tab))
+    }
+  })
 }
 
 // Read the current status from storage.local (rather than keeping it in a

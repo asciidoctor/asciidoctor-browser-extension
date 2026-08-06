@@ -334,6 +334,30 @@ test.describe('Document attributes', () => {
   })
 })
 
+test.describe('Standalone HTML export', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.evaluate(() => {
+      helper.configureParameters()
+    })
+  })
+
+  test('should produce a full HTML5 document with the default stylesheet embedded', async ({
+    page,
+  }) => {
+    const html = await page.evaluate(async () => {
+      const response = await Converter.convertStandalone(
+        document.location.toString(),
+        '= Document Title\n\nfoo',
+      )
+      return response.html
+    })
+    expect(html).toContain('<!DOCTYPE html>')
+    expect(html).toContain('<div id="header">')
+    expect(html).toContain('<h1>Document Title</h1>')
+    expect(html).toContain('Asciidoctor default stylesheet')
+  })
+})
+
 test.describe('Decode entities', () => {
   test('should decode entities', async ({ page }) => {
     const results = await page.evaluate(() => ({
