@@ -3,6 +3,7 @@
 == Unreleased
 
 * Build a dedicated Opera package that excludes `changelog.adoc` and `README.adoc`, since Opera's add-on validator rejects the whole package over the unrecognized `.adoc` file type
+* Remove the `fontawesome-webfont.ttf` and `fontawesome-webfont.woff` entries from the manifest's `web_accessible_resources`: only the `.woff2` file is actually bundled, and the Edge Add-ons validator rejects the package when a listed resource doesn't exist in the archive
 
 == 4.0.0 (2026-08-06)
 

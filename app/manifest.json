@@ -285,9 +285,7 @@
       "resources": [
         "fonts/asciidoctor/*",
         "css/asciidoctor-fonts.css",
-        "fonts/fontawesome-webfont.ttf",
         "fonts/fontawesome-webfont.woff2",
-        "fonts/fontawesome-webfont.woff",
         "css/themes/asciidoctor.css",
         "css/themes/colony.css",
         "css/themes/foundation.css",
