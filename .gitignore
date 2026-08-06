@@ -11,6 +11,7 @@ safari/**/xcuserdata/
 safari/**/*.xcuserstate
 safari/**/DerivedData/
 app/js/content-bundle.js
+app/js/background-bundle.js
 app/fonts/asciidoctor/
 app/css/asciidoctor-fonts.css
 /.mcp.json

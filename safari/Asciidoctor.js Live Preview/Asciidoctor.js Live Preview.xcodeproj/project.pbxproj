@@ -1,0 +1,621 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F0893BB33023A3C800E671E2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0893BB23023A3C800E671E2 /* AppDelegate.swift */; };
+		F0893BB73023A3C800E671E2 /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = F0893BB53023A3C800E671E2 /* Main.html */; };
+		F0893BB93023A3C800E671E2 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F0893BB83023A3C800E671E2 /* Icon.png */; };
+		F0893BBB3023A3C800E671E2 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = F0893BBA3023A3C800E671E2 /* Style.css */; };
+		F0893BBD3023A3C800E671E2 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = F0893BBC3023A3C800E671E2 /* Script.js */; };
+		F0893BBF3023A3C800E671E2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0893BBE3023A3C800E671E2 /* ViewController.swift */; };
+		F0893BC23023A3C800E671E2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F0893BC03023A3C800E671E2 /* Main.storyboard */; };
+		F0893BC43023A3C900E671E2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0893BC33023A3C900E671E2 /* Assets.xcassets */; };
+		F0893BCB3023A3C900E671E2 /* Asciidoctor.js Live Preview Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = F0893BCA3023A3C900E671E2 /* Asciidoctor.js Live Preview Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F0893BD03023A3C900E671E2 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0893BCF3023A3C900E671E2 /* SafariWebExtensionHandler.swift */; };
+		F0893BE33023A3CA00E671E2 /* css in Resources */ = {isa = PBXBuildFile; fileRef = F0893BDC3023A3CA00E671E2 /* css */; };
+		F0893BE43023A3CA00E671E2 /* js in Resources */ = {isa = PBXBuildFile; fileRef = F0893BDD3023A3CA00E671E2 /* js */; };
+		F0893BE53023A3CA00E671E2 /* html in Resources */ = {isa = PBXBuildFile; fileRef = F0893BDE3023A3CA00E671E2 /* html */; };
+		F0893BE63023A3CA00E671E2 /* img in Resources */ = {isa = PBXBuildFile; fileRef = F0893BDF3023A3CA00E671E2 /* img */; };
+		F0893BE73023A3CA00E671E2 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = F0893BE03023A3CA00E671E2 /* manifest.json */; };
+		F0893BE83023A3CA00E671E2 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = F0893BE13023A3CA00E671E2 /* fonts */; };
+		F0893BE93023A3CA00E671E2 /* vendor in Resources */ = {isa = PBXBuildFile; fileRef = F0893BE23023A3CA00E671E2 /* vendor */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F0893BCC3023A3C900E671E2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0893BA73023A3C800E671E2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F0893BC93023A3C900E671E2;
+			remoteInfo = "Asciidoctor.js Live Preview Extension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		F0893BD73023A3C900E671E2 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				F0893BCB3023A3C900E671E2 /* Asciidoctor.js Live Preview Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		F0893BAF3023A3C800E671E2 /* Asciidoctor.js Live Preview.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Asciidoctor.js Live Preview.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0893BB23023A3C800E671E2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		F0893BB63023A3C800E671E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = Base.lproj/Main.html; sourceTree = "<group>"; };
+		F0893BB83023A3C800E671E2 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		F0893BBA3023A3C800E671E2 /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
+		F0893BBC3023A3C800E671E2 /* Script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Script.js; sourceTree = "<group>"; };
+		F0893BBE3023A3C800E671E2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		F0893BC13023A3C800E671E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		F0893BC33023A3C900E671E2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F0893BC53023A3C900E671E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F0893BCA3023A3C900E671E2 /* Asciidoctor.js Live Preview Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Asciidoctor.js Live Preview Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0893BCF3023A3C900E671E2 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+		F0893BD13023A3C900E671E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F0893BDC3023A3CA00E671E2 /* css */ = {isa = PBXFileReference; lastKnownFileType = folder; name = css; path = ../../../app/css; sourceTree = "<group>"; };
+		F0893BDD3023A3CA00E671E2 /* js */ = {isa = PBXFileReference; lastKnownFileType = folder; name = js; path = ../../../app/js; sourceTree = "<group>"; };
+		F0893BDE3023A3CA00E671E2 /* html */ = {isa = PBXFileReference; lastKnownFileType = folder; name = html; path = ../../../app/html; sourceTree = "<group>"; };
+		F0893BDF3023A3CA00E671E2 /* img */ = {isa = PBXFileReference; lastKnownFileType = folder; name = img; path = ../../../app/img; sourceTree = "<group>"; };
+		F0893BE03023A3CA00E671E2 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../../../dist/manifest.json; sourceTree = "<group>"; };
+		F0893BE13023A3CA00E671E2 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = fonts; path = ../../../app/fonts; sourceTree = "<group>"; };
+		F0893BE23023A3CA00E671E2 /* vendor */ = {isa = PBXFileReference; lastKnownFileType = folder; name = vendor; path = ../../../app/vendor; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F0893BAC3023A3C800E671E2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0893BC73023A3C900E671E2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F0893BA63023A3C800E671E2 = {
+			isa = PBXGroup;
+			children = (
+				F0893BB13023A3C800E671E2 /* Asciidoctor.js Live Preview */,
+				F0893BCE3023A3C900E671E2 /* Asciidoctor.js Live Preview Extension */,
+				F0893BB03023A3C800E671E2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F0893BB03023A3C800E671E2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F0893BAF3023A3C800E671E2 /* Asciidoctor.js Live Preview.app */,
+				F0893BCA3023A3C900E671E2 /* Asciidoctor.js Live Preview Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F0893BB13023A3C800E671E2 /* Asciidoctor.js Live Preview */ = {
+			isa = PBXGroup;
+			children = (
+				F0893BB23023A3C800E671E2 /* AppDelegate.swift */,
+				F0893BBE3023A3C800E671E2 /* ViewController.swift */,
+				F0893BC03023A3C800E671E2 /* Main.storyboard */,
+				F0893BC33023A3C900E671E2 /* Assets.xcassets */,
+				F0893BC53023A3C900E671E2 /* Info.plist */,
+				F0893BB43023A3C800E671E2 /* Resources */,
+			);
+			path = "Asciidoctor.js Live Preview";
+			sourceTree = "<group>";
+		};
+		F0893BB43023A3C800E671E2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F0893BB53023A3C800E671E2 /* Main.html */,
+				F0893BB83023A3C800E671E2 /* Icon.png */,
+				F0893BBA3023A3C800E671E2 /* Style.css */,
+				F0893BBC3023A3C800E671E2 /* Script.js */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		F0893BCE3023A3C900E671E2 /* Asciidoctor.js Live Preview Extension */ = {
+			isa = PBXGroup;
+			children = (
+				F0893BDB3023A3CA00E671E2 /* Resources */,
+				F0893BCF3023A3C900E671E2 /* SafariWebExtensionHandler.swift */,
+				F0893BD13023A3C900E671E2 /* Info.plist */,
+			);
+			path = "Asciidoctor.js Live Preview Extension";
+			sourceTree = "<group>";
+		};
+		F0893BDB3023A3CA00E671E2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F0893BDC3023A3CA00E671E2 /* css */,
+				F0893BDD3023A3CA00E671E2 /* js */,
+				F0893BDE3023A3CA00E671E2 /* html */,
+				F0893BDF3023A3CA00E671E2 /* img */,
+				F0893BE03023A3CA00E671E2 /* manifest.json */,
+				F0893BE13023A3CA00E671E2 /* fonts */,
+				F0893BE23023A3CA00E671E2 /* vendor */,
+			);
+			name = Resources;
+			path = "Asciidoctor.js Live Preview Extension";
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F0893BAE3023A3C800E671E2 /* Asciidoctor.js Live Preview */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F0893BD83023A3C900E671E2 /* Build configuration list for PBXNativeTarget "Asciidoctor.js Live Preview" */;
+			buildPhases = (
+				F0893BAB3023A3C800E671E2 /* Sources */,
+				F0893BAC3023A3C800E671E2 /* Frameworks */,
+				F0893BAD3023A3C800E671E2 /* Resources */,
+				F0893BD73023A3C900E671E2 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F0893BCD3023A3C900E671E2 /* PBXTargetDependency */,
+			);
+			name = "Asciidoctor.js Live Preview";
+			packageProductDependencies = (
+			);
+			productName = "Asciidoctor.js Live Preview";
+			productReference = F0893BAF3023A3C800E671E2 /* Asciidoctor.js Live Preview.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F0893BC93023A3C900E671E2 /* Asciidoctor.js Live Preview Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F0893BD43023A3C900E671E2 /* Build configuration list for PBXNativeTarget "Asciidoctor.js Live Preview Extension" */;
+			buildPhases = (
+				F0893BC63023A3C900E671E2 /* Sources */,
+				F0893BC73023A3C900E671E2 /* Frameworks */,
+				F0893BC83023A3C900E671E2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Asciidoctor.js Live Preview Extension";
+			packageProductDependencies = (
+			);
+			productName = "Asciidoctor.js Live Preview Extension";
+			productReference = F0893BCA3023A3C900E671E2 /* Asciidoctor.js Live Preview Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F0893BA73023A3C800E671E2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2660;
+				LastUpgradeCheck = 2660;
+				TargetAttributes = {
+					F0893BAE3023A3C800E671E2 = {
+						CreatedOnToolsVersion = 26.6;
+					};
+					F0893BC93023A3C900E671E2 = {
+						CreatedOnToolsVersion = 26.6;
+					};
+				};
+			};
+			buildConfigurationList = F0893BAA3023A3C800E671E2 /* Build configuration list for PBXProject "Asciidoctor.js Live Preview" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F0893BA63023A3C800E671E2;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = F0893BB03023A3C800E671E2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F0893BAE3023A3C800E671E2 /* Asciidoctor.js Live Preview */,
+				F0893BC93023A3C900E671E2 /* Asciidoctor.js Live Preview Extension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F0893BAD3023A3C800E671E2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F0893BB93023A3C800E671E2 /* Icon.png in Resources */,
+				F0893BC23023A3C800E671E2 /* Main.storyboard in Resources */,
+				F0893BBD3023A3C800E671E2 /* Script.js in Resources */,
+				F0893BB73023A3C800E671E2 /* Main.html in Resources */,
+				F0893BC43023A3C900E671E2 /* Assets.xcassets in Resources */,
+				F0893BBB3023A3C800E671E2 /* Style.css in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0893BC83023A3C900E671E2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F0893BE63023A3CA00E671E2 /* img in Resources */,
+				F0893BE93023A3CA00E671E2 /* vendor in Resources */,
+				F0893BE33023A3CA00E671E2 /* css in Resources */,
+				F0893BE73023A3CA00E671E2 /* manifest.json in Resources */,
+				F0893BE83023A3CA00E671E2 /* fonts in Resources */,
+				F0893BE53023A3CA00E671E2 /* html in Resources */,
+				F0893BE43023A3CA00E671E2 /* js in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F0893BAB3023A3C800E671E2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F0893BBF3023A3C800E671E2 /* ViewController.swift in Sources */,
+				F0893BB33023A3C800E671E2 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0893BC63023A3C900E671E2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F0893BD03023A3C900E671E2 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F0893BCD3023A3C900E671E2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F0893BC93023A3C900E671E2 /* Asciidoctor.js Live Preview Extension */;
+			targetProxy = F0893BCC3023A3C900E671E2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		F0893BB53023A3C800E671E2 /* Main.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F0893BB63023A3C800E671E2 /* Base */,
+			);
+			name = Main.html;
+			sourceTree = "<group>";
+		};
+		F0893BC03023A3C800E671E2 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F0893BC13023A3C800E671E2 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F0893BD23023A3C900E671E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		F0893BD33023A3C900E671E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		F0893BD53023A3C900E671E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Asciidoctor.js Live Preview Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Asciidoctor.js Live Preview Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 3.0.1;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.asciidoctor.browser-extension.Extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		F0893BD63023A3C900E671E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Asciidoctor.js Live Preview Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Asciidoctor.js Live Preview Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 3.0.1;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.asciidoctor.browser-extension.Extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		F0893BD93023A3C900E671E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Asciidoctor.js Live Preview/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Asciidoctor.js Live Preview";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 3.0.1;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.asciidoctor.browser-extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		F0893BDA3023A3C900E671E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Asciidoctor.js Live Preview/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Asciidoctor.js Live Preview";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 3.0.1;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.asciidoctor.browser-extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F0893BAA3023A3C800E671E2 /* Build configuration list for PBXProject "Asciidoctor.js Live Preview" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F0893BD23023A3C900E671E2 /* Debug */,
+				F0893BD33023A3C900E671E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F0893BD43023A3C900E671E2 /* Build configuration list for PBXNativeTarget "Asciidoctor.js Live Preview Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F0893BD53023A3C900E671E2 /* Debug */,
+				F0893BD63023A3C900E671E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F0893BD83023A3C900E671E2 /* Build configuration list for PBXNativeTarget "Asciidoctor.js Live Preview" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F0893BD93023A3C900E671E2 /* Debug */,
+				F0893BDA3023A3C900E671E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F0893BA73023A3C800E671E2 /* Project object */;
+}

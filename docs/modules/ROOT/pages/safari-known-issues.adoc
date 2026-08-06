@@ -1,0 +1,11 @@
+= Known Safari Issues
+
+These are the known Safari issues.
+
+Local `file://` documents are not supported: ::
++
+Safari Web Extensions do not support the `file://` scheme at all -- there is no Safari equivalent of Chrome's "Allow access to file URLs" setting.
+A `file://` match pattern in the manifest is either silently ignored or, in the case of `web_accessible_resources`, rejected outright by Safari.
+As a result, opening a local AsciiDoc file directly in Safari does not trigger a preview; only remote `http://` and `https://` documents are supported.
++
+See the https://developer.apple.com/forums/thread/654933[Apple Developer Forums thread] requesting this feature.
