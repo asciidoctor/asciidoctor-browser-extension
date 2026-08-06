@@ -12,7 +12,9 @@
     "build": "npm run lint && node tasks/build.js",
     "lint": "biome check",
     "format": "biome format --write",
-    "validate:firefox": "npx -y addons-linter dist/asciidoctor-browser-extension-firefox-*.zip"
+    "validate:firefox": "npx -y addons-linter dist/asciidoctor-browser-extension-firefox-*.zip",
+    "build:safari": "npm run build && xcodebuild -project \"safari/Asciidoctor.js Live Preview/Asciidoctor.js Live Preview.xcodeproj\" -scheme \"Asciidoctor.js Live Preview\" -configuration Release build",
+    "open:safari": "open \"safari/Asciidoctor.js Live Preview/Asciidoctor.js Live Preview.xcodeproj\""
   },
   "homepage": "https://github.com/asciidoctor/asciidoctor-browser-extension",
   "author": {

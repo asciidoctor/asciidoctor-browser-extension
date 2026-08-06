@@ -27,6 +27,10 @@
 * *Behavior change*: only `.adoc` and `.asciidoc` files are rendered by default now; `.ad` and `.asc` join `.txt` as opt-in extensions, each with their own checkbox on the options page (#677)
 * Fix the bottom padding being too tight when a document has footnotes: the base stylesheet zeroes it out to avoid double-spacing before `#footer`, but the extension's embeddable output never renders a `#footer` (#120)
 * Open the quickstart guide in a new tab the first time the extension is installed (#528)
+* Fix the quickstart guide reopening every time the extension is turned off and back on in Safari's Extensions preferences: Safari fires `runtime.onInstalled` with reason `install` on every re-enable there, not just on a true first install, so guard it with a persisted flag instead of trusting the reason alone
+* Fix the on/off toolbar toggle getting stuck once the background script has been restarted since the last click (e.g. after the browser reclaims an idle MV3 background context, which Safari does aggressively): the toggle tracked its enabled/disabled status in a module-level variable that silently reset on every restart instead of reading it back from `storage.local`, so a click could flip the wrong way without any error
+* Document that local `file://` documents aren't supported in Safari, a platform limitation with no current workaround (`docs/modules/ROOT/pages/safari-known-issues.adoc`)
+* Add a Safari app extension Xcode project (`safari/`) that references `app/` directly instead of a duplicated copy, so the same source builds the Chrome, Firefox, and Safari packages; bundle `background.js` (an ES module) into a self-contained script and load it via `background.scripts` rather than `background.service_worker` (Safari's MV3 service worker mode can silently fail to start at all), and generate a Safari-specific manifest that drops the `extension_ids` key and `file://` match pattern from `web_accessible_resources`, both of which Safari rejects outright, taking every listed resource down with them (including the on/off toolbar icons)
 
 == 3.0.0 (2025-05-03)
 

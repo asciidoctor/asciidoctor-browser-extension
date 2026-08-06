@@ -66,6 +66,22 @@ It will launch a Chromium instance with the `--no-sandbox` argument.
 
  $ npm run lint:code
 
+== Safari
+
+The Safari app extension lives in [.path]_safari/_ as a thin Xcode project: it references the files in [.path]_app/_ directly (no copy), so [.path]_app/_ remains the single source of truth for the extension's code and assets, shared with the Chrome/Firefox builds.
+
+. Build the web extension assets first
++
+ $ npm run build
+
+. Build the Safari app (requires Xcode and macOS)
++
+ $ npm run build:safari
++
+Or open the project in Xcode with `npm run open:safari` to run/debug it directly.
+
+NOTE: Archiving and submitting to the Mac App Store is currently done manually from Xcode's Organizer (Product > Archive > Distribute App), since it requires interactively selecting your Apple Developer team, provisioning, and validating the submission.
+
 == Add-on Linter
 
 Mozilla provides a Node.js package to validate an add-on.

@@ -118,6 +118,22 @@ async function bundleContentScript() {
   })
 }
 
+async function bundleBackgroundScript() {
+  console.log('bundle background script')
+  await esbuild({
+    entryPoints: ['app/js/background.js'],
+    bundle: true,
+    format: 'iife',
+    outfile: 'app/js/background-bundle.js',
+    platform: 'browser',
+    // asciidoctor.js's browser build still contains Node-only dynamic
+    // imports (node:fs/promises, node:path) behind a runtime environment
+    // check for when it's loaded under Node.js; they're never reached in
+    // the browser, but esbuild needs them marked external to bundle at all.
+    external: ['node:*'],
+  })
+}
+
 function generateFirefoxManifest() {
   const manifestPath = ospath.join(
     import.meta.dirname,
@@ -131,9 +147,44 @@ function generateFirefoxManifest() {
     '*',
   ]
   delete manifest.background.service_worker
-  manifest.background.scripts = ['js/background.js']
+  manifest.background.scripts = ['js/background-bundle.js']
   fs.writeFileSync(
     ospath.join(import.meta.dirname, '..', 'dist', 'manifest-firefox.json'),
+    JSON.stringify(manifest, null, 2),
+  )
+}
+
+function generateSafariManifest() {
+  const manifestPath = ospath.join(
+    import.meta.dirname,
+    '..',
+    'app',
+    'manifest.json',
+  )
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
+  // Safari doesn't support the file: scheme in match patterns; a
+  // web_accessible_resources entry containing one is rejected wholesale
+  // ("Entrée « web_accessible_resources » du manifeste non valide"), taking
+  // down every resource it lists (fonts, themes, JS modules, the on/off
+  // toolbar icons) with it.
+  manifest.web_accessible_resources[0].matches =
+    manifest.web_accessible_resources[0].matches.filter(
+      (pattern) => !pattern.startsWith('file://'),
+    )
+  // Safari's MV3 service_worker background mode is unreliable -- it can
+  // silently fail to start at all, with no error surfaced anywhere. Use the
+  // non-module scripts form instead (same as the Firefox manifest), which
+  // is the workaround documented across multiple Apple Developer Forum
+  // threads for this exact symptom.
+  delete manifest.background.service_worker
+  manifest.background.scripts = ['js/background-bundle.js']
+  // The Xcode project references this file (via a PBXFileReference whose
+  // path is dist/manifest.json) to get copied into the .appex bundle as a
+  // Copy Resources build phase, which uses the file's real basename -- not
+  // the file reference's display name -- so it must literally be named
+  // manifest.json for Safari to recognize it.
+  fs.writeFileSync(
+    ospath.join(import.meta.dirname, '..', 'dist', 'manifest.json'),
     JSON.stringify(manifest, null, 2),
   )
 }
@@ -248,5 +299,7 @@ appendEmbeddableOverrides()
 replaceImagesURL()
 minifyOptionsCss()
 await bundleContentScript()
+await bundleBackgroundScript()
 generateFirefoxManifest()
+generateSafariManifest()
 await compress()

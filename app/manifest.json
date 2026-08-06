@@ -329,9 +329,6 @@
       "matches": [
         "*://*/*",
         "file://*/*"
-      ],
-      "extension_ids": [
-        "eaipbfaoeebofnjdmpkkadmhhimnalbh"
       ]
     }
   ],
@@ -387,7 +384,6 @@
     }
   },
   "background": {
-    "service_worker": "js/background.js",
-    "type": "module"
+    "service_worker": "js/background-bundle.js"
   }
 }

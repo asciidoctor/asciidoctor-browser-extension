@@ -10,4 +10,5 @@
 ** xref:javascript-examples.adoc[]
 * xref:diagrams-extension-quickstart.adoc[]
 * xref:use-cases.adoc[]
-* xref:firefox-known-issues.adoc[Known issues]
+* xref:firefox-known-issues.adoc[Known Firefox issues]
+* xref:safari-known-issues.adoc[Known Safari issues]

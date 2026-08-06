@@ -181,11 +181,20 @@ const renderSelectionMenuItemId = 'renderSelectionMenuItem'
 // for, keyed by that tab's id (see the 'get-selection' message below).
 const pendingSelections = new Map()
 
-webExtension.runtime.onInstalled.addListener((details) => {
+webExtension.runtime.onInstalled.addListener(async (details) => {
+  // Safari fires onInstalled with reason "install" every time the extension
+  // is turned off and back on again in Safari's Extensions preferences, not
+  // just on a true first install as the other browsers (and the spec) do.
+  // Guard with a persisted flag so the quickstart tab only ever opens once.
   if (details.reason === 'install') {
-    webExtension.tabs.create({
-      url: 'https://docs.asciidoctor.org/browser-extension/quickstart/',
-    })
+    const { QUICKSTART_SHOWN } =
+      await webExtension.storage.local.get('QUICKSTART_SHOWN')
+    if (!QUICKSTART_SHOWN) {
+      await webExtension.storage.local.set({ QUICKSTART_SHOWN: true })
+      webExtension.tabs.create({
+        url: 'https://docs.asciidoctor.org/browser-extension/quickstart/',
+      })
+    }
   }
   if (webExtension.contextMenus) {
     webExtension.contextMenus.create({
@@ -252,41 +261,44 @@ const findActiveTab = (callback) => {
   }
 }
 
-let enableRender = true
-
-function enableDisableRender() {
-  // Save the new status of the extension (opposite of current)
-  webExtension.storage.local.set({ ENABLE_RENDER: !enableRender })
+// Read the current status from storage.local (rather than keeping it in a
+// module-level variable) so this stays correct even when the background
+// context has been restarted since the last click: MV3 background scripts
+// aren't guaranteed to stay alive between events (this is especially
+// aggressive in Safari, where the background page can be torn down within
+// seconds), and a module-level flag would silently reset to its initial
+// value on every restart, desyncing from the real persisted state.
+async function enableDisableRender() {
+  const { ENABLE_RENDER } =
+    await webExtension.storage.local.get('ENABLE_RENDER')
+  const wasEnabled = ENABLE_RENDER !== false
+  const enabled = !wasEnabled
+  // Save the new status of the extension
+  await webExtension.storage.local.set({ ENABLE_RENDER: enabled })
   // Update the extension icon
   webExtension.action.setBadgeText({
-    text: enableRender ? 'off' : '',
+    text: enabled ? '' : 'off',
   })
   webExtension.action.setBadgeBackgroundColor({
     color: '#2f2f2f',
   })
   if (typeof webExtension.action.setTitle === 'function') {
     webExtension.action.setTitle({
-      title: `Asciidoctor.js Preview (${enableRender ? '✘' : '✔'})`,
+      title: `Asciidoctor.js Preview (${enabled ? '✔' : '✘'})`,
     })
   } else {
     // eslint-disable-next-line no-console
-    console.log(
-      `Asciidoctor.js Preview (${enableRender ? 'disabled' : 'enabled'})`,
-    )
+    console.log(`Asciidoctor.js Preview (${enabled ? 'enabled' : 'disabled'})`)
   }
 
   // Reload the active tab in the current windows that matches
   findActiveTab((activeTab) => {
-    if (enableRender) {
-      // opposite action, the extension was enabled, so we disable!
-      disableExtension(activeTab)
-    } else {
+    if (enabled) {
       notifyTab(activeTab, 'extension-enabled')
+    } else {
+      disableExtension(activeTab)
     }
   })
-
-  // Switch the flag
-  enableRender = !enableRender
 }
 
 webExtension.action.onClicked.addListener(enableDisableRender)
