@@ -19,18 +19,19 @@ Caused by an open Firefox bug to fix this limitation.
 Firefox bug tracker https://bugzilla.mozilla.org/show_bug.cgi?id=1266960[bugzilla.mozilla.org#1266960].
 Last updated 2023-02-22 as at 2023-04-31].
 
-The `include::` directive (or any other `file://` to `file://` request) silently fails: ::
+The `include::` directive (or any other `file://` to `file://` request) fails with a CORS or security error: ::
 +
-Firefox isolates every `file://` page into its own unique origin (`privacy.file_unique_origin`), which blocks requests from one `file://` document to a sibling `file://` resource -- for example an `include::` target in the same folder or a subfolder.
+Firefox isolates every `file://` page into its own unique origin, which blocks requests from one `file://` document to a sibling `file://` resource -- for example an `include::` target in the same folder or a subfolder. Two separate preferences both need to be relaxed for this to work: `privacy.file_unique_origin` (origin isolation between `file://` pages) and `security.fileuri.strict_origin_policy` (stricter same-origin enforcement specifically for `file://` requests) -- disabling only one of the two is not enough.
 +
 To work around this:
 +
 . In a new tab, type or paste `about:config` in the address bar and press kbd:[Enter]. Accept the risk warning.
-. In the search box, type or paste `uniq` and pause while the list filters.
-. Double-click the `privacy.file_unique_origin` preference to switch it from `true` (secure) to `false` (insecure).
+. In the search box, type or paste `privacy.file_unique_origin` and pause while the list filters. Double-click the preference to switch it from `true` (secure) to `false` (insecure).
+. Repeat for `security.fileuri.strict_origin_policy`, also switching it from `true` to `false`.
+. Restart Firefox for the changes to take effect.
 +
 CAUTION: This relaxes origin isolation for all `file://` pages, not just this extension.
 +
-NOTE: This was originally observed with `XMLHttpRequest`, which the extension and Asciidoctor.js used for all content loading through extension version 3.0. Starting with the upcoming 4.0 release, both switch to `fetch()` instead. It's unconfirmed whether Firefox's origin isolation restricts `fetch()` requests between `file://` origins the same way it restricts `XMLHttpRequest` -- if not, this limitation may no longer apply once 4.0 ships.
+NOTE: This was originally observed with `XMLHttpRequest`, which the extension and Asciidoctor.js used for all content loading through extension version 3.0. Starting with the 4.0 release, both switch to `fetch()` instead -- confirmed to still be restricted by this same origin isolation, so the workaround above remains necessary.
 +
 See https://github.com/asciidoctor/asciidoctor-browser-extension/issues/302[#302].
