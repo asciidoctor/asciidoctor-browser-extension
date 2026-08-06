@@ -1,5 +1,9 @@
 = Changelog
 
+== Unreleased
+
+* Build a dedicated Opera package that excludes `changelog.adoc` and `README.adoc`, since Opera's add-on validator rejects the whole package over the unrecognized `.adoc` file type
+
 == 4.0.0 (2026-08-06)
 
 * Require Node.js 24 or greater

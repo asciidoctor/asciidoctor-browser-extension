@@ -106,7 +106,7 @@ Follow these steps to make a release.
 .. Update the package
 .. Publish the new version
 . Connect to the https://addons.opera.com/developer[Opera Add-ons developer dashboard]
-.. Update the package
+.. Update the package with [.path]_dist/asciidoctor-browser-extension-opera-<version>.zip_ (the Opera validator rejects the default package over the `.adoc` files it doesn't recognize)
 .. Publish the new version
 . Connect to the https://partner.microsoft.com/fr-fr/dashboard/microsoftedge/overview[Microsoft Partner Center]
 .. Update the package

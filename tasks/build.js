@@ -209,6 +209,17 @@ async function compress() {
       },
     ),
     createZip(
+      `dist/asciidoctor-browser-extension-opera-${version}.zip`,
+      (archive) => {
+        // Opera's addon validator rejects the whole package when it
+        // encounters a file extension it doesn't recognize ("type de
+        // fichier inconnu"), so .adoc files (changelog.adoc, README.adoc)
+        // are left out here.
+        archive.file('LICENSE')
+        archive.directory('app/', false)
+      },
+    ),
+    createZip(
       `dist/asciidoctor-browser-extension-firefox-${version}.zip`,
       (archive) => {
         archive.file('LICENSE')
