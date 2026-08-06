@@ -1,6 +1,6 @@
 /* global chrome, browser */
 
-import { Extensions, load } from '../vendor/asciidoctor.js'
+import { Extensions, Logger, load } from '../vendor/asciidoctor.js'
 import { register as registerChartExtension } from '../vendor/asciidoctor-chart-block-macro.js'
 import { register as registerEmojiExtension } from '../vendor/asciidoctor-emoji-inline-macro.js'
 import KrokiExtension from '../vendor/kroki.js'
@@ -18,6 +18,45 @@ const webExtension =
       ? chrome
       : null
 const eqnumValidValues = ['none', 'all', 'ams']
+
+// Asciidoctor's default logger always writes to console.error, regardless of
+// severity, so WARNING messages (e.g. "unterminated example block") show up
+// as red errors in the browser console. Route by severity instead, so only
+// ERROR/FATAL use console.error.
+const LogSeverity = {
+  DEBUG: 0,
+  INFO: 1,
+  WARN: 2,
+  ERROR: 3,
+  FATAL: 4,
+  UNKNOWN: 5,
+}
+
+class BrowserConsoleLogger extends Logger {
+  add(severity, message, progname) {
+    this.lastSeverity =
+      typeof severity === 'number'
+        ? severity
+        : (LogSeverity[String(severity).toUpperCase()] ?? LogSeverity.UNKNOWN)
+    return super.add(severity, message, progname)
+  }
+
+  _writeln(line) {
+    const text = line.replace(/\n$/, '')
+    if (this.lastSeverity >= LogSeverity.ERROR) {
+      console.error(text)
+    } else if (this.lastSeverity === LogSeverity.WARN) {
+      console.warn(text)
+    } else {
+      console.info(text)
+    }
+  }
+}
+
+// A single instance is reused across conversions: it's stateless between log
+// calls (severity is tracked per-call, not accumulated), and `load()` scopes
+// it to each conversion via `withLogger()` regardless.
+const browserConsoleLogger = new BrowserConsoleLogger()
 
 function executeRequest(url) {
   return fetch(url, {
@@ -268,5 +307,6 @@ export function buildAsciidoctorOptions(settings, url) {
     extension_registry: registry,
     backend: 'html5', // Force backend to html5
     attributes: attributes.join(' '), // Pass attributes as String
+    logger: browserConsoleLogger,
   }
 }
