@@ -6,6 +6,7 @@ import { register as registerEmojiExtension } from '../vendor/asciidoctor-emoji-
 import KrokiExtension from '../vendor/kroki.js'
 import { md5 } from '../vendor/md5.js'
 import {
+  getBrowserInfo,
   getRenderingSettings,
   getSetting,
   isExtensionEnabled,
@@ -17,7 +18,64 @@ const webExtension =
     : typeof chrome !== 'undefined'
       ? chrome
       : null
+const isFirefox = getBrowserInfo().name === 'Firefox'
 const eqnumValidValues = ['none', 'all', 'ams']
+
+// Firefox refuses to let the background page itself fetch() a file:// URL
+// (see fetchAndConvert below) -- and that restriction applies just as much
+// to the fetch() calls Asciidoctor.js makes internally while resolving
+// include::/Kroki-local-file targets during load()/convert(). Route those
+// file:// requests through the content script for the duration of a single
+// conversion by temporarily substituting the global fetch. Conversions are
+// serialized through fileUriRoutingQueue so two file:// tabs converting
+// around the same time can never see each other's patched fetch.
+let fileUriRoutingQueue = Promise.resolve()
+
+async function relayFileFetch(tabId, url) {
+  let text
+  try {
+    text = await webExtension.tabs.sendMessage(tabId, {
+      action: 'get-file-source',
+      url,
+    })
+  } catch (error) {
+    // no content script listening, or the content script's own fetch
+    // failed (e.g. Firefox's file:// origin isolation, see #302)
+    // eslint-disable-next-line no-console
+    console.warn(`get-file-source relay failed for ${url}:`, error)
+    text = undefined
+  }
+  return text === undefined
+    ? new Response(null, { status: 404 })
+    : new Response(text, { status: 200 })
+}
+
+function withFileUriRouting(tabId, fn) {
+  const run = async () => {
+    const realFetch = globalThis.fetch
+    globalThis.fetch = (input, init) => {
+      const url = typeof input === 'string' ? input : input.url
+      return url.startsWith('file://')
+        ? relayFileFetch(tabId, url)
+        : realFetch(input, init)
+    }
+    try {
+      return await fn()
+    } finally {
+      globalThis.fetch = realFetch
+    }
+  }
+  const result = fileUriRoutingQueue.then(run, run)
+  fileUriRoutingQueue = result.then(
+    () => {},
+    () => {},
+  )
+  return result
+}
+
+function needsFileUriRouting(url, tabId) {
+  return isFirefox && tabId !== undefined && url.startsWith('file://')
+}
 
 // Asciidoctor's default logger always writes to console.error, regardless of
 // severity, so WARNING messages (e.g. "unterminated example block") show up
@@ -51,6 +109,19 @@ function executeRequest(url) {
 function isHtmlContentType(response) {
   const contentType = response.headers.get('content-type')
   return contentType && contentType.indexOf('html') > -1
+}
+
+// A same-page anchor click (e.g. a ToC entry) updates the tab's URL with a
+// #fragment without reloading the page, so a later auto-reload poll tick (or
+// "Export as HTML") sees a tab.url carrying that fragment. Unlike http(s),
+// fetch() doesn't strip the fragment before making a file:// request, and
+// Chrome refuses it outright: "'file:' URLs are treated as unique security
+// origins." Strip it before it reaches fetch(), or the docfile/docname
+// attributes, or the md5 cache key (which would otherwise treat the same
+// document as changed every time the reader jumps to a different anchor).
+function stripFragment(url) {
+  const hashIndex = url.indexOf('#')
+  return hashIndex === -1 ? url : url.slice(0, hashIndex)
 }
 
 // REMIND: notitle attribute is automatically set when header_footer equals false.
@@ -105,47 +176,52 @@ function getRevisionInfo(doc) {
   }
 }
 
-export async function convert(url, source) {
+export async function convert(url, source, tabId) {
   const settings = await getRenderingSettings()
   const options = buildAsciidoctorOptions(settings, url)
-  const doc = await load(source, options)
-  const displayHeader = showTitle(doc)
-  if (displayHeader) {
-    doc.removeAttribute('notitle')
-    doc.setAttribute('showtitle')
+  const buildResult = async () => {
+    const doc = await load(source, options)
+    const displayHeader = showTitle(doc)
+    if (displayHeader) {
+      doc.removeAttribute('notitle')
+      doc.setAttribute('showtitle')
+    }
+    if (isSourceHighlighterEnabled(doc)) {
+      // Force the source highlighter to Highlight.js (since we only support Highlight.js)
+      doc.setAttribute('source-highlighter', 'highlight.js')
+    }
+    let eqnumsValue = doc.getAttribute('eqnums', 'none').toLowerCase()
+    if (eqnumsValue.trim().length === 0) {
+      // empty value is an alias for AMS-style equation numbering
+      eqnumsValue = 'ams'
+    }
+    if (!eqnumValidValues.includes(eqnumsValue)) {
+      // invalid values are not allowed, use AMS-style equation numbering
+      eqnumsValue = 'ams'
+    }
+    return {
+      html: await doc.convert(),
+      text: source,
+      title: doc.getDocumentTitle({ use_fallback: true }),
+      doctype: doc.getDoctype(),
+      attributes: {
+        hasSections: doc.hasSections(),
+        tocPosition: doc.getAttribute('toc-position'),
+        isSourceHighlighterEnabled: isSourceHighlighterEnabled(doc),
+        isStemEnabled: isStemEnabled(doc),
+        isFontIcons: doc.getAttribute('icons') === 'font',
+        maxWidth: doc.getAttribute('max-width'),
+        eqnumsValue,
+        stylesheet: doc.getAttribute('stylesheet'),
+        authors: displayHeader ? getAuthors(doc) : [],
+        revisionInfo: displayHeader ? getRevisionInfo(doc) : undefined,
+        favicon: doc.getAttribute('favicon'),
+      },
+    }
   }
-  if (isSourceHighlighterEnabled(doc)) {
-    // Force the source highlighter to Highlight.js (since we only support Highlight.js)
-    doc.setAttribute('source-highlighter', 'highlight.js')
-  }
-  let eqnumsValue = doc.getAttribute('eqnums', 'none').toLowerCase()
-  if (eqnumsValue.trim().length === 0) {
-    // empty value is an alias for AMS-style equation numbering
-    eqnumsValue = 'ams'
-  }
-  if (!eqnumValidValues.includes(eqnumsValue)) {
-    // invalid values are not allowed, use AMS-style equation numbering
-    eqnumsValue = 'ams'
-  }
-  return {
-    html: await doc.convert(),
-    text: source,
-    title: doc.getDocumentTitle({ use_fallback: true }),
-    doctype: doc.getDoctype(),
-    attributes: {
-      hasSections: doc.hasSections(),
-      tocPosition: doc.getAttribute('toc-position'),
-      isSourceHighlighterEnabled: isSourceHighlighterEnabled(doc),
-      isStemEnabled: isStemEnabled(doc),
-      isFontIcons: doc.getAttribute('icons') === 'font',
-      maxWidth: doc.getAttribute('max-width'),
-      eqnumsValue,
-      stylesheet: doc.getAttribute('stylesheet'),
-      authors: displayHeader ? getAuthors(doc) : [],
-      revisionInfo: displayHeader ? getRevisionInfo(doc) : undefined,
-      favicon: doc.getAttribute('favicon'),
-    },
-  }
+  return needsFileUriRouting(url, tabId)
+    ? withFileUriRouting(tabId, buildResult)
+    : buildResult()
 }
 
 /**
@@ -157,7 +233,7 @@ export async function convert(url, source) {
  * shows it by default (that override only exists to work around the
  * embedded template hiding it).
  */
-export async function convertStandalone(url, source) {
+export async function convertStandalone(url, source, tabId) {
   const settings = await getRenderingSettings()
   const options = buildAsciidoctorOptions(settings, url)
   // `standalone` has to be set at load/parse time (not just passed to
@@ -167,41 +243,59 @@ export async function convertStandalone(url, source) {
   // Font Awesome). Passing it only to `convert()` picks the document vs.
   // embedded template but leaves those parse-time attribute defaults
   // untouched, e.g. `stylesheet` ends up unset and no CSS is embedded.
-  const doc = await load(source, { ...options, standalone: true })
-  if (isSourceHighlighterEnabled(doc)) {
-    // Force the source highlighter to Highlight.js (since we only support Highlight.js)
-    doc.setAttribute('source-highlighter', 'highlight.js')
+  const buildResult = async () => {
+    const doc = await load(source, { ...options, standalone: true })
+    if (isSourceHighlighterEnabled(doc)) {
+      // Force the source highlighter to Highlight.js (since we only support Highlight.js)
+      doc.setAttribute('source-highlighter', 'highlight.js')
+    }
+    return {
+      html: await doc.convert({ standalone: true }),
+    }
   }
-  return {
-    html: await doc.convert({ standalone: true }),
-  }
+  return needsFileUriRouting(url, tabId)
+    ? withFileUriRouting(tabId, buildResult)
+    : buildResult()
 }
 
-export async function fetchAndConvertStandalone(url) {
-  const response = await executeRequest(url)
-  if (isHtmlContentType(response)) {
-    // content is not plain-text!
-    return undefined
+export async function fetchAndConvertStandalone(url, source, tabId) {
+  url = stripFragment(url)
+  // `source` is provided by the content script for file:// documents on
+  // Firefox, see fetchAndConvert below for why.
+  if (source === undefined) {
+    const response = await executeRequest(url)
+    if (isHtmlContentType(response)) {
+      // content is not plain-text!
+      return undefined
+    }
+    if (response.status !== 200 && response.status !== 0) {
+      // unsuccessful request!
+      return undefined
+    }
+    source = await response.text()
   }
-  if (response.status !== 200 && response.status !== 0) {
-    // unsuccessful request!
-    return undefined
-  }
-  const source = await response.text()
-  return convertStandalone(url, source)
+  return convertStandalone(url, source, tabId)
 }
 
-export async function fetchAndConvert(url, initial) {
-  const response = await executeRequest(url)
-  if (isHtmlContentType(response)) {
-    // content is not plain-text!
-    return undefined
+export async function fetchAndConvert(url, initial, source, tabId) {
+  url = stripFragment(url)
+  // `source` is provided by the content script for file:// documents:
+  // Firefox refuses to let the background page itself fetch() a file:// URL
+  // ("Security Error: Content at moz-extension://... may not load or link
+  // to file://..."), so the content script -- which runs same-origin with
+  // the file:// document -- fetches it instead and passes the text along.
+  if (source === undefined) {
+    const response = await executeRequest(url)
+    if (isHtmlContentType(response)) {
+      // content is not plain-text!
+      return undefined
+    }
+    if (response.status !== 200 && response.status !== 0) {
+      // unsuccessful request!
+      return undefined
+    }
+    source = await response.text()
   }
-  if (response.status !== 200 && response.status !== 0) {
-    // unsuccessful request!
-    return undefined
-  }
-  const source = await response.text()
   if (await isExtensionEnabled()) {
     const md5key = `md5${url}`
     if (!initial) {
@@ -212,7 +306,7 @@ export async function fetchAndConvert(url, initial) {
       }
     }
     // content has changed...
-    const result = await convert(url, source)
+    const result = await convert(url, source, tabId)
     // Update md5sum
     const value = {}
     value[md5key] = md5(source)

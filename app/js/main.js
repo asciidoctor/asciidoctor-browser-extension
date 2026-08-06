@@ -2,6 +2,7 @@
 import { revealPage, setViewport } from './module/dom.js'
 import { showError, updateHTML } from './module/page.js'
 import {
+  getBrowserInfo,
   getLocalPollFrequency,
   getRemotePollFrequency,
   isAdExtAllowed,
@@ -60,6 +61,13 @@ if (webExtension) {
       if (sender.id === webExtension.runtime.id) {
         if (message.status === 'extension-enabled') {
           await load()
+        } else if (message.action === 'get-file-source') {
+          // Used by the background script on Firefox to fetch a file:// URL
+          // it can't reach itself (see fetchLocalSource): the tab's own
+          // document (Export as HTML, no `url` given) or an include::
+          // target elsewhere under the same file:// origin (`url` given,
+          // see module/converter.js's file URI routing).
+          return fetchLocalSource(message.url || location.href)
         }
       }
     },
@@ -123,10 +131,63 @@ async function showResponse(response) {
   revealPage()
 }
 
-function fetchContent() {
-  // fetch and convert via background script (avoids page CSP restrictions)
+// Firefox refuses to let the background page fetch() a file:// URL
+// ("Security Error: Content at moz-extension://... may not load or link to
+// file://..."), even though the content script itself -- running
+// same-origin with the file:// document -- can. So on Firefox, fetch here
+// and hand the source to the background script instead of asking it to
+// fetch. (Chrome is the opposite: fetching file:// from the content script
+// fails there -- "origin 'null' has been blocked by CORS policy" -- so it
+// must keep going through the background script, which Chrome allows once
+// "Allow access to file URLs" is granted.) Returns undefined if the fetch
+// failed or the content turned out to be HTML rather than plain text.
+const isFirefox = getBrowserInfo().name === 'Firefox'
+
+// A same-page anchor click (e.g. a ToC entry) updates location.href with a
+// #fragment without reloading the page, so a later auto-reload poll tick
+// sees a fragment here too. Strip it before fetching: fetch() doesn't strip
+// fragments for file:// the way it does for http(s), and browsers may
+// refuse the request outright as a result (Chrome: "'file:' URLs are
+// treated as unique security origins").
+async function fetchLocalSource(url) {
+  const hashIndex = url.indexOf('#')
+  if (hashIndex !== -1) {
+    url = url.slice(0, hashIndex)
+  }
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      Accept: 'text/plain, */*',
+    },
+  })
+  const contentType = response.headers.get('content-type')
+  if (contentType?.indexOf('html') > -1) {
+    // eslint-disable-next-line no-console
+    console.warn(`fetchLocalSource: ${url} looks like HTML, skipping`)
+    return undefined
+  }
+  if (response.status !== 200 && response.status !== 0) {
+    // eslint-disable-next-line no-console
+    console.warn(`fetchLocalSource: ${url} returned status ${response.status}`)
+    return undefined
+  }
+  return response.text()
+}
+
+async function fetchContent() {
+  const needsLocalFetch = isFirefox && location.protocol === 'file:'
+  const source = needsLocalFetch
+    ? await fetchLocalSource(location.href)
+    : undefined
+  if (needsLocalFetch && source === undefined) {
+    revealPage()
+    return
+  }
+  // fetch (remote documents) and convert via background script (avoids page
+  // CSP restrictions)
   webExtension.runtime.sendMessage(
-    { action: 'fetch-convert', initial: true },
+    { action: 'fetch-convert', initial: true, source },
     async (response) => {
       await showResponse(response)
       if (response) {
@@ -156,8 +217,15 @@ async function startAutoReload() {
       if (document.hidden) {
         return
       }
+      const needsLocalFetch = isFirefox && location.protocol === 'file:'
+      const source = needsLocalFetch
+        ? await fetchLocalSource(location.href)
+        : undefined
+      if (needsLocalFetch && source === undefined) {
+        return
+      }
       webExtension.runtime.sendMessage(
-        { action: 'fetch-convert' },
+        { action: 'fetch-convert', source },
         async (response) => {
           if (response && !isSameAsLastRendered(response)) {
             await applyResponse(response)
