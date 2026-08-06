@@ -1,4 +1,4 @@
-var version = "4.0.7";
+var version = "4.0.8";
 const packageJson = {
 	version: version};
 
@@ -1576,6 +1576,18 @@ async function withLogger(logger, fn) {
 
 /** Standard logger that writes formatted messages to stderr or a custom pipe. */
 class Logger {
+  /**
+   * @param {Object} [opts]
+   * @param {string} [opts.progname]
+   * @param {number} [opts.level]
+   * @param {{call: Function}} [opts.formatter]
+   * @param {{write: (line: string) => void}|((line: string, severity: number) => void)|null} [opts.pipe] -
+   *   Destination for formatted output lines, mirroring Ruby's `Logger.new(logdev)`.
+   *   Accepts anything with a `write(line)` method (e.g. a Node stream), or a plain
+   *   function called as `(line, severity)` — the numeric severity lets a function-style
+   *   pipe route by level (e.g. console.error for ERROR+, console.warn for WARN) without
+   *   overriding add(). Defaults to `process.stderr`/`console.error` when omitted.
+   */
   constructor(opts = {}) {
     this.progname = opts.progname ?? 'asciidoctor';
     this.level = opts.level ?? Severity.WARN;
@@ -1584,7 +1596,7 @@ class Logger {
     /** @internal */
     this._formatter = opts.formatter ?? new Logger.BasicFormatter();
     /** @internal */
-    this._pipe = opts.pipe ?? null; // null → write via _writeln
+    this._pipe = opts.pipe ?? null; // null → write via default _writeln destination
   }
 
   /** getter/setter so custom logger impls can access this.formatter */
@@ -1685,7 +1697,7 @@ class Logger {
       message ?? (typeof progname === 'function' ? progname() : progname);
     const label = SEVERITY_LABEL[severity] ?? 'ANY';
     const line = this._formatter.call(label, null, this.progname, text);
-    this._writeln(line);
+    this._writeln(line, severity);
     return true
   }
 
@@ -1750,14 +1762,24 @@ class Logger {
   }
 
   /**
-   * Write a formatted line to stderr or console.error.
+   * Write a formatted line to the configured pipe, or fall back to stderr/console.error.
    * @param {string} line
+   * @param {number} severity - Numeric severity, forwarded to a function-style pipe so
+   *   it can route by level (e.g. console.error vs console.warn) without overriding add().
+   *   Not passed to an object-style pipe's write(), to stay compatible with Node's
+   *   Writable#write(chunk, encoding) signature.
    * @internal
    */
-  _writeln(line) {
-    if (typeof process !== 'undefined' && process.stderr?.write) {
+  _writeln(line, severity) {
+    if (this._pipe) {
+      typeof this._pipe.write === 'function'
+        ? this._pipe.write(line)
+        : this._pipe(line, severity);
+    } else if (typeof process !== 'undefined' && process.stderr?.write) {
       process.stderr.write(line);
     } else {
+      // Unlike stream.write(), console.error() appends its own line terminator,
+      // so the formatter's trailing \n must be stripped to avoid a blank line.
       console.error(line.replace(/\n$/, ''));
     }
   }
@@ -25550,4 +25572,4 @@ const manpage = /*#__PURE__*/Object.freeze({
   default: ManPageConverter
 });
 
-export { AbstractBlock, AbstractNode, Author, Block, BlockMacroProcessor, BlockProcessor, ContentModel, ConverterBase, CustomFactory$1 as ConverterCustomFactory, Converter as ConverterFactory, Cursor, DefaultFactory$1 as DefaultConverterFactory, DefaultFactory as DefaultSyntaxHighlighterFactory, DocinfoProcessor, Document, DocumentTitle, Extensions, Footnote, Html5Converter, HttpCache, HttpCacheManager, ImageReference, IncludeProcessor, Inline, InlineMacroProcessor, List, ListItem, LogMessage, Logger, LoggerManager, MemoryHttpCache, MemoryLogger, NullLogger, Postprocessor, Preprocessor, Processor, ProcessorExtension, Reader, Registry, RevisionInfo, SafeMode, Section, SyntaxHighlighter, SyntaxHighlighterBase, Timings, TreeProcessor, convert, deriveBackendTraits, getCoreVersion, getVersion, load };
+export { AbstractBlock, AbstractNode, Author, Block, BlockMacroProcessor, BlockProcessor, ContentModel, ConverterBase, CustomFactory$1 as ConverterCustomFactory, Converter as ConverterFactory, Cursor, DefaultFactory$1 as DefaultConverterFactory, DefaultFactory as DefaultSyntaxHighlighterFactory, DocinfoProcessor, Document, DocumentTitle, Extensions, Footnote, Html5Converter, HttpCache, HttpCacheManager, ImageReference, IncludeProcessor, Inline, InlineMacroProcessor, List, ListItem, LogMessage, Logger, LoggerManager, MemoryHttpCache, MemoryLogger, NullLogger, Postprocessor, Preprocessor, Processor, ProcessorExtension, Reader, Registry, RevisionInfo, SafeMode, Section, Severity, SyntaxHighlighter, SyntaxHighlighterBase, Timings, TreeProcessor, convert, deriveBackendTraits, getCoreVersion, getVersion, load };
