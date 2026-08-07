@@ -76,6 +76,22 @@ function appendEmbeddableOverrides() {
   fs.appendFileSync(path, `\n${embeddableCss}`)
 }
 
+function restrictFontAwesomeToWoff2() {
+  const path = 'app/css/font-awesome.min.css'
+  console.log('Restrict font-awesome.min.css @font-face src to woff2 only')
+  const data = fs.readFileSync(path, 'utf8')
+  const updated = data.replace(
+    /src:url\('[^']+\.eot[^']*'\);src:url\('[^']+\.eot[^']*'\) format\('embedded-opentype'\),url\('([^']+\.woff2[^']*)'\) format\('woff2'\),url\('[^']+\.woff[^']*'\) format\('woff'\),url\('[^']+\.ttf[^']*'\) format\('truetype'\),url\('[^']+\.svg[^']*'\) format\('svg'\);/,
+    "src:url('$1') format('woff2');",
+  )
+  if (updated === data) {
+    throw new Error(
+      `Could not restrict @font-face src in ${path} to woff2 (font-awesome package format may have changed)`,
+    )
+  }
+  fs.writeFileSync(path, updated, 'utf8')
+}
+
 function replaceImagesURL() {
   for (const themeName of ['github', 'golo', 'maker', 'riak']) {
     const path = `app/css/themes/${themeName}.css`
@@ -302,6 +318,7 @@ async function copyVendorResources() {
 
 await clean()
 await copyVendorResources()
+restrictFontAwesomeToWoff2()
 await bundleChartist()
 await downloadFonts()
 replaceFontsImport()
