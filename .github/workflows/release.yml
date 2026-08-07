@@ -1,0 +1,140 @@
+name: Release
+run-name: Release ${{ inputs.version }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g. 4.0.1)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    name: Bump version and tag
+    if: github.ref_name == 'main' && github.repository_owner == 'asciidoctor'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Bump app/manifest.json and the Safari Xcode project
+        run: node tasks/version.js ${{ inputs.version }}
+      - name: Roll the changelog's "Unreleased" section
+        run: node tasks/changelog.js release ${{ inputs.version }}
+      - name: Commit the manifest/changelog changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore: prepare ${{ inputs.version }} release"
+      # Bumps package.json/package-lock.json and, since the working tree is
+      # a git repo, also creates its own commit and a "v<version>" tag.
+      - name: Bump package.json/package-lock.json, commit and tag
+        run: npm version ${{ inputs.version }} -m "%s"
+      - name: Push
+        run: git push origin main --follow-tags
+
+  build:
+    name: Build extension packages
+    needs: tag
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: v${{ inputs.version }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Install dependencies
+        run: npm ci
+      - name: Cache Playwright browsers
+        uses: actions/cache@v6
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+      - name: Lint, build and test
+        run: |
+          npm run build
+          npm t
+      - name: Validate Firefox extension
+        run: npm run validate:firefox
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/*.zip
+          retention-days: 7
+
+  sign-firefox:
+    name: Sign Firefox extension for self-distribution
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      AMO_CONFIGURED: ${{ secrets.AMO_JWT_ISSUER != '' && secrets.AMO_JWT_SECRET != '' }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+      - name: Unpack the Firefox package
+        if: ${{ env.AMO_CONFIGURED == 'true' }}
+        run: unzip -q "dist/asciidoctor-browser-extension-firefox-${{ inputs.version }}.zip" -d firefox-unpacked
+      # Firefox refuses to install an extension outside addons.mozilla.org
+      # unless it's signed by Mozilla, even for self-distribution -- sign it
+      # here on the "unlisted" channel so the resulting .xpi installs
+      # manually without going through the public AMO listing. Skipped
+      # (rather than failing the release) when the AMO secrets aren't set.
+      - name: Sign with addons.mozilla.org
+        if: ${{ env.AMO_CONFIGURED == 'true' }}
+        env:
+          WEB_EXT_API_KEY: ${{ secrets.AMO_JWT_ISSUER }}
+          WEB_EXT_API_SECRET: ${{ secrets.AMO_JWT_SECRET }}
+        run: |
+          npx -y web-ext@latest sign \
+            --source-dir firefox-unpacked \
+            --channel unlisted \
+            --artifacts-dir signed
+      - name: Upload signed extension
+        if: ${{ env.AMO_CONFIGURED == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: firefox-signed
+          path: signed/*.xpi
+          retention-days: 7
+
+  release:
+    name: Publish GitHub release
+    needs: [build, sign-firefox]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: v${{ inputs.version }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+      - name: Download signed Firefox extension
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: firefox-signed
+          path: dist
+      - name: Generate release notes
+        run: node tasks/changelog.js notes ${{ inputs.version }} > RELEASE_NOTES.md
+      - name: Create release and upload assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "v${{ inputs.version }}" \
+            --title "${{ inputs.version }}" \
+            --notes-file RELEASE_NOTES.md \
+            dist/*

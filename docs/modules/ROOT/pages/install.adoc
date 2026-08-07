@@ -53,6 +53,9 @@ Local installations are for users and developers when:
 
 Load your local copy of the extension to your browser using the appropriate section below.
 
+TIP: Each {url-project-repo}/releases[GitHub release] also has pre-built packages attached as assets, so you don't need to build the extension yourself to install a specific released version locally.
+The Firefox package is signed by addons.mozilla.org so it can be installed from the `.xpi` asset without going through `about:debugging`'s temporary add-on flow (which only lasts until the browser restarts).
+
 === {chromium-browser-list}
 
 1. Open the `chrome://extensions` page and enable the *Developer mode* option
