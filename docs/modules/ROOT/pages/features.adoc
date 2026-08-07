@@ -29,8 +29,6 @@ Trigger the export either from:
 * the right-click menu on a rendered page, by selecting *Export as HTML*
 * the `Alt+Shift+E` keyboard shortcut
 
-NOTE: This feature relies on the `downloads` API, which isn't available in every browser (e.g. Safari, Firefox for Android), so it isn't offered there.
-
 == Custom favicon
 
 Set the `:favicon:` document attribute to change the browser tab's icon while previewing the document:
