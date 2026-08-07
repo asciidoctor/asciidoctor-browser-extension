@@ -489,3 +489,13 @@ blockquote,blockquote p,.quoteblock blockquote,.quoteblock p{color:rgba(255,255,
 #content #footnotes:last-child {
   padding-bottom: 1.25em;
 }
+
+/* The base stylesheet underlines the title when it's followed by exactly one
+ * more element inside #header, e.g. an author/revision .details block on a
+ * wide (toc2) screen. That's on top of the #header block's own bottom
+ * margin, so it reads as a redundant extra separator between the
+ * title/author block and the ToC/body that follows. */
+body.toc2 #header > h1:nth-last-child(2) {
+  border-bottom: none;
+  padding-bottom: 0;
+}
