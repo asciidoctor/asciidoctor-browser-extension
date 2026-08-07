@@ -10,6 +10,7 @@
 * Add a Privacy Policy page to the documentation, explaining what each browser permission is used for and confirming no data is collected, sold, or sent to third parties (except diagram source text, when the diagrams extension is explicitly enabled) (`docs/modules/ROOT/pages/privacy.adoc`)
 * Build a dedicated Opera package that excludes `changelog.adoc` and `README.adoc`, since Opera's add-on validator rejects the whole package over the unrecognized `.adoc` file type
 * Remove the `fontawesome-webfont.ttf` and `fontawesome-webfont.woff` entries from the manifest's `web_accessible_resources`: only the `.woff2` file is actually bundled, and the Edge Add-ons validator rejects the package when a listed resource doesn't exist in the archive
+* Remove the `downloads` permission: "Export as HTML" now triggers the download through a hidden `<a download>` link injected into the page instead of `chrome.downloads.download()`, which also makes the feature available on Safari and Firefox for Android, where the `downloads` API doesn't exist (#722)
 
 == 4.0.0 (2026-08-06)
 

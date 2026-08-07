@@ -205,12 +205,6 @@ function suggestedHtmlFilename(url) {
   return 'document.html'
 }
 
-function toDataUrl(html) {
-  // btoa needs a byte string; round-tripping through encodeURIComponent/unescape
-  // turns the UTF-8 HTML (e.g. curly quotes) into one before base64-encoding it.
-  return `data:text/html;charset=utf-8;base64,${btoa(unescape(encodeURIComponent(html)))}`
-}
-
 async function exportHtml(tab) {
   if (!tab?.url) {
     return
@@ -235,10 +229,25 @@ async function exportHtml(tab) {
     if (!result) {
       return
     }
-    await webExtension.downloads.download({
-      url: toDataUrl(result.html),
-      filename: suggestedHtmlFilename(tab.url),
-      saveAs: true,
+    // Trigger the download from the page itself (rather than via
+    // chrome.downloads.download) so the extension doesn't need the
+    // "downloads" permission -- a blob URL clicked through a hidden <a
+    // download> follows the browser's own download settings (including its
+    // "ask where to save" prompt, if the user has that turned on).
+    await webExtension.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: (html, filename) => {
+        const url = URL.createObjectURL(new Blob([html], { type: 'text/html' }))
+        const link = document.createElement('a')
+        link.href = url
+        link.download = filename
+        link.style.display = 'none'
+        document.body.appendChild(link)
+        link.click()
+        link.remove()
+        URL.revokeObjectURL(url)
+      },
+      args: [result.html, suggestedHtmlFilename(tab.url)],
     })
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -268,16 +277,12 @@ webExtension.runtime.onInstalled.addListener(async (details) => {
       contexts: ['selection'],
     })
 
-    // The downloads API isn't available in every browser (e.g. Safari,
-    // Firefox for Android), so only expose the menu item where it works.
-    if (webExtension.downloads) {
-      webExtension.contextMenus.create({
-        id: exportHtmlMenuItemId,
-        title: 'Export as HTML',
-        contexts: ['page'],
-        documentUrlPatterns: matchesTabUrl,
-      })
-    }
+    webExtension.contextMenus.create({
+      id: exportHtmlMenuItemId,
+      title: 'Export as HTML',
+      contexts: ['page'],
+      documentUrlPatterns: matchesTabUrl,
+    })
 
     webExtension.contextMenus.onClicked.addListener(async (info, tab) => {
       if (info.menuItemId === exportHtmlMenuItemId && tab) {
@@ -341,7 +346,7 @@ const findActiveTab = (callback) => {
   }
 }
 
-if (webExtension.commands && webExtension.downloads) {
+if (webExtension.commands) {
   webExtension.commands.onCommand.addListener((command) => {
     if (command === 'export-html') {
       findActiveTab((tab) => exportHtml(tab))

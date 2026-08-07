@@ -335,8 +335,7 @@
     "tabs",
     "activeTab",
     "contextMenus",
-    "scripting",
-    "downloads"
+    "scripting"
   ],
   "host_permissions": [
     "*://*/*.ad",
