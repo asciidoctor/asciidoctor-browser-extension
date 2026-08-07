@@ -46,6 +46,7 @@ Adds the *Render selection* entry to the right-click menu, letting you select a 
 Host permissions (`*.ad`, `*.adoc`, `*.asc`, `*.asciidoc`, `*.txt`)::
 The extension needs to run on pages whose URL matches one of these AsciiDoc-related extensions in order to detect and fetch the AsciiDoc content to render.
 `.txt` support is optional and disabled by default; you can enable it, along with `.ad` and `.asc`, on the xref:options.adoc[options page].
+A local document's `include::` directive or `chart::` block macro can also point at a local file with a different extension (for example a `.csv` file used as chart data) — reading that file relies on the same local file access already covered above, rather than a separate permission.
 
 [#third-party-services]
 == Third-party services
