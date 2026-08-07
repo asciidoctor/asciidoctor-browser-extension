@@ -2,6 +2,8 @@
 
 == Unreleased
 
+== 4.1.0 (2026-08-07)
+
 * Add a `Release` GitHub Actions workflow (`workflow_dispatch`, pass a version) that bumps the version everywhere it's recorded (`package.json`, `app/manifest.json`, the Safari Xcode project), rolls this changelog's "Unreleased" section into a dated one, builds and tests the extension, signs the Firefox package with addons.mozilla.org so it can be installed manually outside the store, and publishes a GitHub release with the Chrome/Opera/Firefox zips and the signed Firefox `.xpi` as assets
 
 * Remove the redundant broad `file://*/*` entry from the manifest's `host_permissions`: reading a local file with a non-AsciiDoc extension (e.g. an `include::` or `chart::` target like a `.csv` chart data file) already works through the `file://*/*` access already granted via `web_accessible_resources`, so declaring it a second time in `host_permissions` had no effect other than showing up in the install-time permission list
