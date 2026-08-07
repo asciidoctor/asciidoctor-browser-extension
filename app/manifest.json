@@ -367,8 +367,7 @@
     "file://*/*.asciidoc.*",
     "file://*/*.txt",
     "file://*/*.txt?*",
-    "file://*/*.txt.*",
-    "file://*/*"
+    "file://*/*.txt.*"
   ],
   "action": {
     "default_title": "Asciidoctor.js Preview"
