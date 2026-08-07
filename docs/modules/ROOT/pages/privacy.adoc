@@ -33,6 +33,8 @@ This access is limited to the tab you're actively interacting with, and only whe
 `scripting`::
 Used to inject the rendered HTML, and the selected theme's CSS, into the current page so the AsciiDoc source is replaced with a styled preview.
 It's also used to build and style the preview opened in a new tab for the *Render selection* action, and, if you've configured one on the xref:options.adoc[options page], to run your own custom JavaScript against the rendered page — exactly as if you had added that script yourself.
+It's also what powers the *Export as HTML* feature (right-click menu or kbd:[Alt+Shift+E]): the extension builds a standalone HTML file locally and triggers your browser's normal download behavior for it, the same as clicking a download link on any page.
+No file is ever uploaded to, or downloaded from, a remote server as part of this feature.
 This permission is never used to inject or run code unrelated to rendering your AsciiDoc content.
 
 `tabs`::
@@ -40,11 +42,6 @@ Used to refresh the current tab when you disable the extension (so the page reve
 
 `contextMenus`::
 Adds the *Render selection* entry to the right-click menu, letting you select a portion of AsciiDoc text on any page, right-click, and open it rendered as HTML in a new tab.
-
-`downloads`::
-Used only by the *Export as HTML* feature (right-click menu or kbd:[Alt+Shift+E]).
-The extension builds a standalone HTML file locally and uses this permission to trigger the browser's native *Save As* dialog.
-No file is ever uploaded to, or downloaded from, a remote server as part of this feature.
 
 Host permissions (`*.ad`, `*.adoc`, `*.asc`, `*.asciidoc`, `*.txt`)::
 The extension needs to run on pages whose URL matches one of these AsciiDoc-related extensions in order to detect and fetch the AsciiDoc content to render.
