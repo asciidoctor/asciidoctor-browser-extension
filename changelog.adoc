@@ -11,6 +11,7 @@
 * Build a dedicated Opera package that excludes `changelog.adoc` and `README.adoc`, since Opera's add-on validator rejects the whole package over the unrecognized `.adoc` file type
 * Remove the `fontawesome-webfont.ttf` and `fontawesome-webfont.woff` entries from the manifest's `web_accessible_resources`: only the `.woff2` file is actually bundled, and the Edge Add-ons validator rejects the package when a listed resource doesn't exist in the archive
 * Remove the `downloads` permission: "Export as HTML" now triggers the download through a hidden `<a download>` link injected into the page instead of `chrome.downloads.download()`, which also makes the feature available on Safari and Firefox for Android, where the `downloads` API doesn't exist (#722)
+* Fix a Chrome console error ("Denying load of .../fontawesome-webfont.woff... Resources must be listed in the web_accessible_resources manifest key") on every page: the vendored Font Awesome stylesheet still declared `@font-face` fallbacks (`.eot`, `.woff`, `.ttf`, `.svg`) for font files that were dropped from the extension a decade ago, so the browser kept trying to load them; the build now rewrites the stylesheet to only reference the bundled `.woff2` file
 
 == 4.0.0 (2026-08-06)
 
