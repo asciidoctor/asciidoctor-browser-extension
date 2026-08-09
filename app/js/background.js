@@ -81,6 +81,15 @@ async function fetchCssWithAbsoluteUrls(file) {
 }
 
 webExtension.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (!sender.tab) {
+    // Every action below assumes sender.tab is populated, which isn't
+    // always true: e.g. on Firefox, a file:// document set as the browser's
+    // start page can have its content script send a message before the tab
+    // is fully registered with the extension messaging API, leaving
+    // sender.tab undefined and crashing the whole listener (#734).
+    sendResponse({})
+    return
+  }
   if (request.action === 'fetch-convert') {
     fetchAndConvert(
       sender.tab.url,
