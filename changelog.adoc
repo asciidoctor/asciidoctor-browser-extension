@@ -2,6 +2,8 @@
 
 == Unreleased
 
+* Fix `chart::` macro charts being unreadable in dark mode: Chartist's default stylesheet hardcodes grid lines and axis labels to a fixed black-based color, so they were nearly invisible against the dark-mode background; both now switch to a light color under `prefers-color-scheme: dark`
+
 == 4.1.1 (2026-08-12)
 
 * Fix a crash (`TypeError: can't access property "url", sender.tab is undefined`) breaking rendering and every `include::` resolution on Firefox when a `file://` document is opened in a tab that isn't yet fully registered with the extension messaging API, e.g. set as the browser's start page (#734)

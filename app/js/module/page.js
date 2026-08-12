@@ -488,6 +488,15 @@ const appendChartistStyle = () => {
     'chartist-default',
     '.ct-chart .ct-series.ct-series-a .ct-line {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-line {stroke:#72B3CC} .ct-chart .ct-series.ct-series-a .ct-point {stroke:#8EB33B} .ct-chart .ct-series.ct-series-b .ct-point {stroke:#72B3CC}',
   )
+  // chartist.min.css hardcodes .ct-label/.ct-grid to a fixed black-based
+  // rgba(), so they become unreadable against the dark-mode body background.
+  // Inserted after chartist.min.css (rather than folded into
+  // asciidoctor-dark-mode.css) so it wins the cascade regardless of load
+  // order between the theme stylesheet and this one.
+  insertInlineCss(
+    'chartist-dark-mode',
+    '@media screen and (prefers-color-scheme:dark){.ct-label{fill:rgba(255,255,255,.6);color:rgba(255,255,255,.6)}.ct-grid{stroke:rgba(255,255,255,.2)}}',
+  )
 }
 
 /**
