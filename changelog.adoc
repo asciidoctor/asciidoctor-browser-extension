@@ -2,6 +2,8 @@
 
 == Unreleased
 
+== 4.1.1 (2026-08-12)
+
 * Fix a crash (`TypeError: can't access property "url", sender.tab is undefined`) breaking rendering and every `include::` resolution on Firefox when a `file://` document is opened in a tab that isn't yet fully registered with the extension messaging API, e.g. set as the browser's start page (#734)
 
 == 4.1.0 (2026-08-07)
